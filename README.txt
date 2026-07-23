@@ -1,17 +1,6 @@
-SKY'S BRIDGE — VERSION 4
+SKY'S BRIDGE — GITHUB WEBSITE
 
-This version no longer uses skys-bridge-hero.png.
-The bridge, water and stars are built directly into the website, so there is no duplicate logo or image text.
+Upload all files individually to the ROOT of your GitHub repository. Do not upload only the ZIP file.
 
-Replace these files in the GitHub repository root:
-- index.html
-- styles.css
-- script.js
-- privacy.html
-- community-guidelines.html
-
-You may delete skys-bridge-hero.png afterward, because this version does not use it.
-
-Keep:
-- CNAME
-- GitHub Pages: main / (root)
+GitHub Pages: Settings -> Pages -> Deploy from a branch -> main -> /(root)
+Custom domain: skysbridge.org
