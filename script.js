@@ -1,27 +1,16 @@
-const header = document.querySelector('.site-header');
-const menuButton = document.querySelector('.menu-button');
-const nav = document.querySelector('.main-nav');
-const navLinks = document.querySelectorAll('.main-nav a');
-const year = document.getElementById('year');
+const menuButton = document.querySelector(".menu-button");
+const mainNav = document.querySelector(".main-nav");
 
-function updateHeader() {
-  header.classList.toggle('scrolled', window.scrollY > 24);
-}
-
-window.addEventListener('scroll', updateHeader, { passive: true });
-updateHeader();
-
-menuButton.addEventListener('click', () => {
-  const open = menuButton.getAttribute('aria-expanded') === 'true';
-  menuButton.setAttribute('aria-expanded', String(!open));
-  nav.classList.toggle('open', !open);
-});
-
-navLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    nav.classList.remove('open');
-    menuButton.setAttribute('aria-expanded', 'false');
+if (menuButton && mainNav) {
+  menuButton.addEventListener("click", () => {
+    const isOpen = mainNav.classList.toggle("open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
   });
-});
 
-year.textContent = new Date().getFullYear();
+  mainNav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mainNav.classList.remove("open");
+      menuButton.setAttribute("aria-expanded", "false");
+    });
+  });
+}

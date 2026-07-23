@@ -1,15 +1,24 @@
-Sky's Bridge Website
+SKY'S BRIDGE — CLEAN WEBSITE PACKAGE
 
-Files:
+This version is designed to work without an assets folder.
+
+Keep these files in the repository root:
 - index.html
 - styles.css
 - script.js
-- assets/skys-bridge-hero.png
+- privacy.html
+- community-guidelines.html
+- CNAME
+- skys-bridge-hero.png  (your existing image)
 
-Upload all files and the assets folder to the public folder of your web host.
-Keep the folder structure unchanged so the logo loads correctly.
+IMPORTANT:
+The homepage expects the image path:
+skys-bridge-hero.png
 
-Main email currently used:
-hello@skysbridge.org
+Upload/replace index.html, styles.css and script.js in GitHub.
+Do not create an assets folder.
+GitHub Pages should publish from:
+main / (root)
 
-You can edit that address inside index.html if needed.
+Custom domain:
+skysbridge.org
