@@ -1,0 +1,38 @@
+SKY'S BRIDGE — START HERE
+
+This package is the first functional platform version.
+
+WHAT ALREADY WORKS
+- Premium responsive homepage
+- Contact email: together@skysbridge.org
+- Registration and login interface
+- Email confirmation flow
+- Protected member panel
+- Memorial submission form
+- Public Wall of Stars design
+- Privacy-first database policies
+
+WHAT YOU MUST DO ONCE
+1. Create a free Supabase account and a new project.
+2. In Supabase, open Project Settings > API.
+3. Copy:
+   - Project URL
+   - anon public key
+4. Open config.js and replace:
+   YOUR_SUPABASE_PROJECT_URL
+   YOUR_SUPABASE_ANON_KEY
+5. In Supabase, open SQL Editor.
+6. Paste the complete contents of supabase-schema.sql and click Run.
+7. In Authentication > URL Configuration:
+   Site URL: https://skysbridge.org
+   Redirect URL: https://skysbridge.org
+8. Upload all website files individually to the ROOT of the GitHub repository.
+9. Commit the changes.
+
+EMAIL
+The website now uses together@skysbridge.org.
+The mailbox itself must be created in GoDaddy Email & Office / Microsoft 365.
+
+IMPORTANT
+Never place a Supabase service-role key in config.js.
+Only use the anon public key there.
