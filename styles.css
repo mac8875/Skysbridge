@@ -92,7 +92,7 @@ a {
   align-items: center;
   gap: 24px;
   color: rgba(255,255,255,0.84);
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
@@ -136,72 +136,106 @@ a {
 .hero {
   position: relative;
   min-height: 92vh;
-  display: grid;
-  align-items: end;
+  display: flex;
+  align-items: center;
   overflow: hidden;
   background: var(--navy);
 }
 
 .hero-image {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
   object-fit: cover;
+  object-position: center;
+  filter: saturate(0.78) brightness(0.58);
+  transform: scale(1.04);
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgba(6,19,38,0.97) 0%, rgba(6,19,38,0.42) 48%, rgba(6,19,38,0.12) 100%),
-    linear-gradient(to right, rgba(6,19,38,0.72), transparent 60%);
+    radial-gradient(circle at 50% 27%, rgba(213,181,109,0.14), transparent 27%),
+    linear-gradient(to bottom, rgba(6,19,38,0.32) 0%, rgba(6,19,38,0.55) 58%, rgba(6,19,38,0.96) 100%);
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  width: min(760px, calc(100% - 40px));
+  width: min(980px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 160px 0 88px;
+  padding: 126px 0 68px;
+  text-align: center;
   color: var(--white);
 }
 
-.eyebrow,
-.section-kicker {
-  margin: 0 0 12px;
-  color: var(--gold);
-  font-size: 0.78rem;
+.hero-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto 54px;
+  text-shadow: 0 6px 24px rgba(0,0,0,0.35);
+}
+
+.hero-logo-star {
+  color: var(--gold-light);
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.hero-logo-name {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3rem, 8vw, 6.2rem);
   font-weight: 600;
-  letter-spacing: 0.16em;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+}
+
+.hero-logo-wings {
+  margin-top: 12px;
+  color: rgba(234,216,167,0.92);
+  font-family: Georgia, serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+  letter-spacing: 0.38em;
+  transform: translateX(0.19em);
+}
+
+.hero-logo-tagline {
+  margin-top: 14px;
+  color: rgba(255,255,255,0.78);
+  font-size: clamp(0.68rem, 1.6vw, 0.9rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
-.hero h1,
-.section h2,
-.cta-section h2 {
-  margin: 0;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  line-height: 1.02;
-  font-weight: 600;
+.hero-message {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 30px 30px 0;
+  border-top: 1px solid rgba(255,255,255,0.18);
 }
 
 .hero h1 {
-  font-size: clamp(3.4rem, 9vw, 6.7rem);
+  font-size: clamp(2.8rem, 7vw, 5.2rem);
 }
 
 .hero-copy {
   max-width: 650px;
-  margin: 24px 0 0;
-  color: rgba(255,255,255,0.87);
-  font-size: clamp(1rem, 2vw, 1.22rem);
+  margin: 20px auto 0;
+  color: rgba(255,255,255,0.86);
+  font-size: clamp(1rem, 2vw, 1.2rem);
 }
 
 .hero-actions {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 32px;
+  margin-top: 30px;
 }
 
 .button {
@@ -477,12 +511,20 @@ blockquote {
   }
 
   .hero {
-    min-height: 82vh;
+    min-height: 88vh;
   }
 
   .hero-content {
-    width: min(100% - 28px, 760px);
-    padding-bottom: 54px;
+    width: min(100% - 26px, 980px);
+    padding: 108px 0 46px;
+  }
+
+  .hero-logo {
+    margin-bottom: 38px;
+  }
+
+  .hero-message {
+    padding: 24px 4px 0;
   }
 
   .section {
@@ -517,4 +559,110 @@ blockquote {
   .hero-actions {
     display: grid;
   }
+}
+
+.hero-image {
+  position: absolute;
+  inset: -3%;
+  width: 106%;
+  height: 106%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.78) brightness(0.58);
+  transform: scale(1.04);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 27%, rgba(213,181,109,0.14), transparent 27%),
+    linear-gradient(to bottom, rgba(6,19,38,0.32) 0%, rgba(6,19,38,0.55) 58%, rgba(6,19,38,0.96) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(980px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 126px 0 68px;
+  text-align: center;
+  color: var(--white);
+}
+
+.hero-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto 54px;
+  text-shadow: 0 6px 24px rgba(0,0,0,0.35);
+}
+
+.hero-logo-star {
+  color: var(--gold-light);
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.hero-logo-name {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3rem, 8vw, 6.2rem);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+}
+
+.hero-logo-wings {
+  margin-top: 12px;
+  color: rgba(234,216,167,0.92);
+  font-family: Georgia, serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+  letter-spacing: 0.38em;
+  transform: translateX(0.19em);
+}
+
+.hero-logo-tagline {
+  margin-top: 14px;
+  color: rgba(255,255,255,0.78);
+  font-size: clamp(0.68rem, 1.6vw, 0.9rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hero-message {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 30px 30px 0;
+  border-top: 1px solid rgba(255,255,255,0.18);
+}
+
+.hero h1 {
+  font-size: clamp(2.8rem, 7vw, 5.2rem);
+}
+
+.hero-copy {
+  max-width: 650px;
+  margin: 20px auto 0;
+  color: rgba(255,255,255,0.86);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+}
+
+.hero h1,
+.section h2,
+.cta-section h2 {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  line-height: 1.02;
+  font-weight: 600;
 }

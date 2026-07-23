@@ -1,24 +1,19 @@
-SKY'S BRIDGE — CLEAN WEBSITE PACKAGE
+SKY'S BRIDGE — VERSION 3
 
-This version is designed to work without an assets folder.
+This version uses:
+- the existing skys-bridge-hero.png as a subtle background
+- a clean transparent text logo over the image
+- a smaller, centered brand presentation
+- improved mobile layout
 
-Keep these files in the repository root:
+Upload/replace these files in the GitHub repository root:
 - index.html
 - styles.css
 - script.js
-- privacy.html
-- community-guidelines.html
-- CNAME
-- skys-bridge-hero.png  (your existing image)
 
-IMPORTANT:
-The homepage expects the image path:
-skys-bridge-hero.png
+Keep this file in the root:
+- skys-bridge-hero.png
 
-Upload/replace index.html, styles.css and script.js in GitHub.
-Do not create an assets folder.
-GitHub Pages should publish from:
-main / (root)
-
-Custom domain:
-skysbridge.org
+GitHub Pages:
+- Branch: main
+- Folder: /(root)
