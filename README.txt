@@ -1,6 +1,19 @@
-SKY'S BRIDGE — GITHUB WEBSITE
+SKY'S BRIDGE — PREMIUM GITHUB WEBSITE V5
 
-Upload all files individually to the ROOT of your GitHub repository. Do not upload only the ZIP file.
+Upload every file from this folder individually to the ROOT of your GitHub repository.
 
-GitHub Pages: Settings -> Pages -> Deploy from a branch -> main -> /(root)
-Custom domain: skysbridge.org
+Required files:
+- index.html
+- styles.css
+- script.js
+- skys-bridge-hero.png
+- skys-bridge-header-logo.jpg
+- privacy.html
+- community-guidelines.html
+- CNAME
+
+GitHub Pages:
+Settings > Pages > Deploy from a branch > main > /(root)
+
+Important:
+Do not upload only this ZIP archive. GitHub does not extract ZIP files automatically.

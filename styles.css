@@ -1,4 +1,193 @@
 
-:root{--navy:#061426;--ink:#10213a;--cream:#f5ead8;--gold:#e9ad49;--gold-light:#ffd887;--white:#fffdf8;--line:rgba(255,255,255,.15);--shadow:0 22px 60px rgba(0,0,0,.28)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--white);background:var(--navy);line-height:1.6}img{max-width:100%;display:block}a{color:inherit;text-decoration:none}h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;line-height:1.05;margin:0}.site-header{position:fixed;inset:0 0 auto 0;z-index:50;display:grid;grid-template-columns:minmax(180px,260px) 1fr auto;align-items:center;gap:28px;padding:14px 4vw;background:linear-gradient(180deg,rgba(4,14,28,.96),rgba(4,14,28,.72),transparent);transition:.3s}.site-header.scrolled{background:rgba(5,18,34,.96);box-shadow:0 10px 30px rgba(0,0,0,.28);backdrop-filter:blur(12px)}.brand img{width:230px;height:74px;object-fit:cover;object-position:center 58%;mix-blend-mode:screen}.main-nav{display:flex;justify-content:center;gap:25px;align-items:center;font-size:14px}.main-nav a{position:relative;padding:10px 0}.main-nav a::after{content:"";position:absolute;left:0;right:100%;bottom:1px;height:1px;background:var(--gold);transition:.25s}.main-nav a:hover::after,.main-nav a.active::after{right:0}.header-actions{display:flex;gap:12px}.button{display:inline-flex;align-items:center;justify-content:center;padding:11px 22px;border-radius:12px;font-weight:600;border:1px solid transparent;transition:.25s}.button:hover{transform:translateY(-2px)}.button-ghost{border-color:rgba(255,255,255,.42);background:rgba(2,10,22,.28)}.button-gold{color:#1c2230;background:linear-gradient(135deg,var(--gold-light),var(--gold));box-shadow:0 10px 24px rgba(233,173,73,.22)}.button-large{padding:15px 33px;border-radius:14px}.menu-toggle{display:none;background:none;border:0;padding:8px}.menu-toggle span{display:block;width:25px;height:2px;background:#fff;margin:5px 0}.hero{min-height:760px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;background-image:url("skys-bridge-logo.png");background-size:cover;background-position:center top;padding:150px 20px 110px}.hero-overlay{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(3,14,29,.08),rgba(3,14,29,.28) 44%,rgba(3,14,29,.78) 100%),linear-gradient(180deg,rgba(4,13,26,.15) 0%,rgba(4,13,26,.02) 52%,rgba(5,18,34,.96) 100%)}.hero-content{position:relative;z-index:2;max-width:800px;margin-top:-60px}.eyebrow,.section-label{text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--gold-light);font-weight:600}.hero h1{font-size:clamp(58px,7.5vw,102px);text-shadow:0 10px 40px rgba(0,0,0,.32)}.hero-lead{font-size:clamp(18px,2vw,26px);margin:18px 0}.hero-divider{display:flex;align-items:center;gap:14px;justify-content:center;margin:18px auto 28px;color:var(--gold)}.hero-divider span{width:80px;height:1px;background:var(--gold)}.learn-more{display:block;margin-top:14px;color:var(--gold-light)}.feature-wrap{max-width:1120px;margin:-105px auto 0;position:relative;z-index:5;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:0 24px 34px}.feature-card{min-height:260px;padding:34px 28px;text-align:center;border-radius:22px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(145deg,rgba(14,40,67,.92),rgba(5,22,40,.94));box-shadow:var(--shadow)}.icon{font-size:56px;color:var(--gold);line-height:1}.feature-card h2{font-size:34px;margin:16px 0 10px}.feature-card p{color:#d8e1e9;margin:0 0 18px}.feature-card a{color:var(--gold-light);font-weight:600}.mission{display:grid;grid-template-columns:1fr 1.2fr;min-height:560px;background:var(--cream);color:var(--ink)}.mission-copy{padding:76px 7vw;display:flex;flex-direction:column;justify-content:center}.mission-copy h2{font-size:clamp(44px,5vw,70px);margin:12px 0 25px}.mission-copy p:not(.section-label){max-width:620px;font-size:17px;margin-bottom:28px}.mission-copy .button{align-self:flex-start}.mission-visual{position:relative;overflow:hidden;background:radial-gradient(circle at 70% 70%,rgba(255,183,74,.28),transparent 18%),linear-gradient(180deg,rgba(255,201,123,.25),rgba(6,20,38,.5)),url("skys-bridge-logo.png") center 45%/cover no-repeat}.mission-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--cream),transparent 32%),linear-gradient(180deg,transparent 56%,rgba(3,13,25,.5))}.lantern{position:absolute;width:18px;height:24px;border:2px solid var(--gold-light);border-radius:5px;background:rgba(255,189,82,.7);box-shadow:0 0 26px var(--gold-light);z-index:2}.lantern.one{right:18%;bottom:18%;transform:scale(2.3)}.lantern.two{right:42%;bottom:29%}.lantern.three{right:58%;bottom:21%;transform:scale(.8)}.values{margin:-42px auto 0;max-width:1180px;border-radius:28px 28px 0 0;background:radial-gradient(circle at 90% 15%,rgba(233,173,73,.12),transparent 18%),linear-gradient(145deg,#09213c,#041426);padding:50px 56px 44px;position:relative;z-index:6;box-shadow:var(--shadow)}.values-top{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding-bottom:36px;border-bottom:1px solid var(--line)}.values-quote{display:flex;gap:28px;align-items:center}.heart-mark{font-size:72px;color:var(--gold)}.values-quote p{font-family:"Cormorant Garamond",serif;font-size:38px;line-height:1.05;margin:0}.values-join{padding-left:42px;border-left:1px solid var(--line)}.values-join p{font-size:20px;margin-top:0}.value-grid{display:grid;grid-template-columns:repeat(4,1fr);padding-top:38px}.value-item{text-align:center;padding:12px 24px}.value-item+.value-item{border-left:1px solid var(--line)}.value-icon{font-size:42px;color:var(--gold)}.value-item h3{font-size:28px;margin:10px 0 6px}.value-item p{color:#cad6e1;margin:0;font-size:14px}.contact{display:flex;justify-content:space-between;align-items:center;gap:30px;padding:84px 7vw;background:#f7efe3;color:var(--ink)}.contact h2{font-size:56px;margin:10px 0}.contact p:not(.section-label){max-width:670px}footer{display:grid;grid-template-columns:1fr auto auto;gap:30px;align-items:center;padding:34px 5vw;background:#03101f;color:#c9d4df;border-top:1px solid var(--line)}footer strong{font-family:"Cormorant Garamond",serif;font-size:26px;color:white}footer p{margin:3px 0}.footer-links{display:flex;gap:22px}.copyright{font-size:13px}.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}.reveal.visible{opacity:1;transform:none}.legal{max-width:850px;margin:0 auto;padding:100px 24px}.legal h1{font-size:56px}
-@media(max-width:1050px){.site-header{grid-template-columns:1fr auto}.main-nav{position:fixed;top:0;right:-100%;height:100vh;width:min(82vw,360px);background:#061426;display:flex;flex-direction:column;justify-content:center;transition:.3s;box-shadow:-20px 0 60px rgba(0,0,0,.4)}.main-nav.open{right:0}.menu-toggle{display:block;z-index:2}.header-actions{display:none}.feature-wrap{grid-template-columns:1fr;max-width:680px;margin-top:-70px}.mission{grid-template-columns:1fr}.mission-visual{min-height:430px}.value-grid{grid-template-columns:repeat(2,1fr)}.value-item:nth-child(3){border-left:0}.value-item:nth-child(n+3){border-top:1px solid var(--line);padding-top:30px}}
-@media(max-width:700px){.site-header{padding:10px 18px}.brand img{width:175px;height:56px}.hero{min-height:650px;background-position:center top;padding-top:130px}.hero-content{margin-top:-15px}.hero h1{font-size:57px}.hero-lead{font-size:18px}.feature-wrap{margin-top:-55px;padding-left:16px;padding-right:16px}.mission-copy{padding:58px 24px}.mission-copy h2{font-size:45px}.values{margin-top:0;border-radius:0;padding:45px 22px}.values-top{grid-template-columns:1fr}.values-join{border-left:0;border-top:1px solid var(--line);padding:28px 0 0}.value-grid{grid-template-columns:1fr}.value-item+.value-item{border-left:0;border-top:1px solid var(--line);padding-top:28px}.contact{flex-direction:column;align-items:flex-start;padding:60px 24px}.contact h2{font-size:44px}footer{grid-template-columns:1fr;align-items:start}.footer-links{flex-wrap:wrap}}
+:root{
+  --navy:#041426;
+  --navy-soft:#09213a;
+  --navy-card:#0b2542;
+  --cream:#f5ead8;
+  --ink:#10213a;
+  --white:#fffdf7;
+  --muted:#c9d5e1;
+  --gold:#e6a943;
+  --gold-light:#ffd681;
+  --line:rgba(255,255,255,.16);
+  --shadow:0 24px 70px rgba(0,0,0,.32);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--navy);color:var(--white);font-family:Inter,Arial,sans-serif;line-height:1.6}
+body.menu-open{overflow:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;line-height:1.02;margin:0}
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:grid;grid-template-columns:minmax(200px,265px) 1fr auto;
+  gap:24px;align-items:center;padding:14px 3.5vw;
+  background:linear-gradient(180deg,rgba(2,12,24,.96),rgba(2,12,24,.62),transparent);
+  transition:.3s ease;
+}
+.site-header.scrolled{background:rgba(3,15,29,.96);box-shadow:0 12px 38px rgba(0,0,0,.28);backdrop-filter:blur(12px)}
+.brand img{width:245px;height:74px;object-fit:cover;object-position:center 60%;mix-blend-mode:screen}
+.navigation{display:flex;align-items:center;justify-content:center;gap:23px;font-size:14px}
+.navigation a{position:relative;padding:10px 0;white-space:nowrap}
+.navigation a::after{content:"";position:absolute;left:0;right:100%;bottom:2px;height:1px;background:var(--gold);transition:.25s}
+.navigation a:hover::after,.navigation a.active::after{right:0}
+.header-actions{display:flex;gap:12px;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:11px 21px;border-radius:11px;border:1px solid transparent;font-weight:600;transition:.25s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-outline{border-color:rgba(255,255,255,.45);background:rgba(3,14,27,.32)}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#172033;box-shadow:0 10px 26px rgba(230,169,67,.22)}
+.btn-large{padding:15px 29px;font-size:16px}
+.menu-button{display:none;border:0;background:none;padding:8px;z-index:51}
+.menu-button span{display:block;width:25px;height:2px;background:white;margin:5px 0;transition:.25s}
+
+.hero{
+  position:relative;min-height:820px;display:flex;align-items:center;
+  background:url("skys-bridge-hero.png") center top/cover no-repeat;
+  padding:150px 6vw 180px;
+}
+.hero-shade{position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(2,12,24,.84) 0%,rgba(2,12,24,.40) 40%,rgba(2,12,24,.08) 72%),
+  linear-gradient(180deg,rgba(2,12,24,.15),transparent 52%,rgba(4,20,38,.96) 100%)}
+.hero-copy{position:relative;z-index:2;max-width:580px;margin-top:-20px}
+.kicker,.section-label{text-transform:uppercase;letter-spacing:.19em;font-size:12px;font-weight:600;color:var(--gold-light)}
+.hero h1{font-size:clamp(68px,8vw,112px);margin:13px 0 18px;text-shadow:0 12px 45px rgba(0,0,0,.35)}
+.hero-copy>p:not(.kicker){font-size:21px;margin:0 0 24px}
+.gold-rule{display:flex;align-items:center;gap:12px;color:var(--gold);margin:0 0 26px}
+.gold-rule span{height:1px;width:120px;background:var(--gold)}
+.learn-link{display:block;margin-top:15px;color:var(--gold-light)}
+
+.gateway{
+  position:relative;z-index:7;max-width:1140px;margin:-190px auto 0;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:0 24px 38px;
+}
+.gateway-card{min-height:250px;text-align:center;padding:32px 28px;border-radius:18px;
+  background:linear-gradient(145deg,rgba(15,43,72,.94),rgba(5,22,40,.96));
+  border:1px solid rgba(255,255,255,.18);box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+.line-icon{color:var(--gold);font-size:58px;line-height:1}
+.gateway-card h2{font-size:34px;margin:15px 0 9px}
+.gateway-card p{color:#d9e2eb;margin:0 0 17px}
+.gateway-card a{color:var(--gold-light);font-weight:600}
+
+.mission{display:grid;grid-template-columns:1fr 1.14fr;min-height:570px;background:var(--cream);color:var(--ink)}
+.mission-copy{padding:80px 7vw;display:flex;flex-direction:column;justify-content:center}
+.mission-copy h2{font-size:clamp(43px,4.9vw,68px);margin:13px 0 25px}
+.mission-copy p:not(.section-label){font-size:17px;max-width:620px;margin:0 0 28px}
+.mission-copy .btn{align-self:flex-start}
+.mission-image{position:relative;overflow:hidden;background:
+  linear-gradient(90deg,var(--cream) 0%,rgba(245,234,216,.5) 18%,transparent 45%),
+  radial-gradient(circle at 72% 72%,rgba(255,184,73,.26),transparent 16%),
+  url("skys-bridge-hero.png") center 57%/cover no-repeat}
+.mission-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,181,76,.08),rgba(4,20,38,.42))}
+.lantern{position:absolute;width:18px;height:25px;border:2px solid var(--gold-light);border-radius:5px;background:rgba(255,194,89,.8);box-shadow:0 0 28px rgba(255,209,119,.95);z-index:2}
+.l1{right:16%;bottom:17%;transform:scale(2.2)}
+.l2{right:43%;bottom:28%}
+.l3{right:57%;bottom:21%;transform:scale(.75)}
+
+.wall{position:relative;overflow:hidden;padding:100px 6vw 90px;background:
+  radial-gradient(circle at 50% 52%,rgba(25,76,119,.28),transparent 38%),
+  linear-gradient(180deg,#06172b,#020d1b)}
+.wall::before{content:"";position:absolute;inset:0;background-image:
+  radial-gradient(circle at 12% 20%,#fff 0 1px,transparent 1.5px),
+  radial-gradient(circle at 32% 78%,#ffd98b 0 1px,transparent 1.5px),
+  radial-gradient(circle at 64% 28%,#fff 0 1px,transparent 1.5px),
+  radial-gradient(circle at 84% 66%,#ffd98b 0 1px,transparent 1.5px);
+  background-size:110px 110px,150px 150px,135px 135px,180px 180px;opacity:.42}
+.wall-heading{position:relative;z-index:2;max-width:760px;text-align:center;margin:0 auto 42px}
+.wall-heading h2{font-size:clamp(45px,5.4vw,72px);margin:12px 0 20px}
+.wall-heading>p:not(.section-label){color:#d5e0eb;font-size:17px}
+.star-field{position:relative;z-index:2;max-width:1060px;height:390px;margin:0 auto;border:1px solid rgba(255,255,255,.13);border-radius:28px;background:
+  radial-gradient(circle at center,rgba(14,55,91,.38),rgba(2,13,27,.84));
+  box-shadow:inset 0 0 80px rgba(24,85,132,.15),var(--shadow)}
+.memory-star{position:absolute;width:18px;height:18px;border:0;border-radius:50%;background:#fff2bc;box-shadow:0 0 9px #fff,0 0 25px #f5bd54,0 0 55px rgba(245,189,84,.65);cursor:pointer}
+.memory-star::before,.memory-star::after{content:"";position:absolute;left:50%;top:50%;background:rgba(255,224,146,.82);transform:translate(-50%,-50%)}
+.memory-star::before{width:54px;height:1px}
+.memory-star::after{width:1px;height:54px}
+.memory-star span{position:absolute;top:28px;left:50%;transform:translateX(-50%);width:max-content;max-width:155px;color:var(--gold-light);font-size:13px;opacity:0;transition:.25s}
+.memory-star:hover span,.memory-star:focus span{opacity:1}
+.s1{left:18%;top:28%;transform:scale(1.35)}
+.s2{left:39%;top:59%;transform:scale(.78)}
+.s3{left:61%;top:33%;transform:scale(.95)}
+.s4{left:78%;top:65%;transform:scale(.7)}
+.s5{left:87%;top:22%;transform:scale(.85)}
+.constellation{position:absolute;left:17%;top:26%;width:68%;height:40%;border-top:1px dashed rgba(230,169,67,.55);border-radius:50%;transform:rotate(7deg)}
+.wall-actions{position:relative;z-index:2;display:flex;justify-content:center;align-items:center;gap:25px;margin-top:34px}
+.wall-actions p{color:#c7d5e2;margin:0;font-size:14px}
+
+.story{background:linear-gradient(180deg,#071a30,#031120);padding:0 5vw 80px}
+.story-card{max-width:1160px;margin:0 auto;transform:translateY(-25px);display:grid;grid-template-columns:auto 1.25fr 1fr;gap:30px;align-items:center;padding:36px 43px;border-radius:18px;background:
+  radial-gradient(circle at 88% 40%,rgba(230,169,67,.12),transparent 18%),
+  linear-gradient(145deg,#09233f,#06172b);
+  border:1px solid rgba(255,255,255,.16);box-shadow:var(--shadow)}
+.heart-symbol{font-size:74px;color:var(--gold)}
+.story-card h2{font-size:43px}
+.story-join{padding-left:34px;border-left:1px solid var(--line)}
+.story-join p{font-size:18px}
+.principles{max-width:1160px;margin:30px auto 0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.principle{text-align:center;padding:38px 25px}
+.principle+.principle{border-left:1px solid var(--line)}
+.principle span{color:var(--gold);font-size:43px}
+.principle h3{font-size:29px;margin:9px 0 4px}
+.principle p{color:#c9d6e2;margin:0;font-size:14px}
+
+.contact{display:flex;align-items:center;justify-content:space-between;gap:35px;padding:80px 7vw;background:var(--cream);color:var(--ink)}
+.contact h2{font-size:clamp(45px,5vw,65px);margin:12px 0}
+.contact p:not(.section-label){font-size:17px}
+
+footer{display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:34px;padding:58px 5vw 28px;background:#020d1b;color:#c9d5e1;border-top:1px solid var(--line)}
+.footer-brand img{width:240px;height:78px;object-fit:cover;object-position:center 60%;mix-blend-mode:screen}
+.footer-column{display:flex;flex-direction:column;gap:8px}
+.footer-column h3{font-family:Inter,sans-serif;font-size:14px;color:white;margin-bottom:8px}
+.footer-column a{font-size:13px}
+.footer-bottom{grid-column:1/-1;display:flex;justify-content:center;gap:25px;border-top:1px solid var(--line);padding-top:24px;margin-top:14px;font-size:12px}
+.footer-bottom span{color:var(--gold)}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .75s ease,transform .75s ease}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:1080px){
+  .site-header{grid-template-columns:1fr auto}
+  .header-actions{display:none}
+  .menu-button{display:block}
+  .navigation{position:fixed;right:-100%;top:0;width:min(84vw,380px);height:100vh;background:#041426;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding-left:55px;gap:24px;box-shadow:-20px 0 60px rgba(0,0,0,.45);transition:.3s}
+  .navigation.open{right:0}
+  .gateway{grid-template-columns:1fr;max-width:650px;margin-top:-145px}
+  .mission{grid-template-columns:1fr}
+  .mission-image{min-height:460px}
+  .principles{grid-template-columns:repeat(2,1fr)}
+  .principle:nth-child(3){border-left:0}
+  .principle:nth-child(n+3){border-top:1px solid var(--line)}
+  footer{grid-template-columns:repeat(2,1fr)}
+  .footer-brand{grid-column:1/-1}
+}
+@media(max-width:700px){
+  .site-header{padding:9px 18px;background:rgba(3,15,29,.95)}
+  .brand img{width:180px;height:56px}
+  .hero{min-height:720px;padding:130px 25px 180px;background-position:center top}
+  .hero-shade{background:linear-gradient(180deg,rgba(2,12,24,.23),rgba(2,12,24,.28) 45%,rgba(4,20,38,.97) 100%)}
+  .hero-copy{text-align:center;margin:auto;align-self:flex-start;margin-top:80px}
+  .hero h1{font-size:62px}
+  .hero-copy>p:not(.kicker){font-size:18px}
+  .gold-rule{justify-content:center}
+  .gold-rule span{width:75px}
+  .gateway{margin-top:-115px;padding:0 15px 30px}
+  .gateway-card{min-height:220px;padding:27px 22px}
+  .mission-copy{padding:62px 25px}
+  .mission-copy h2{font-size:46px}
+  .mission-image{min-height:390px}
+  .wall{padding:75px 20px}
+  .wall-heading h2{font-size:45px}
+  .star-field{height:350px;border-radius:20px}
+  .wall-actions{flex-direction:column;text-align:center}
+  .story{padding:0 16px 60px}
+  .story-card{grid-template-columns:1fr;text-align:center;padding:32px 23px}
+  .heart-symbol{font-size:60px}
+  .story-card h2{font-size:38px}
+  .story-join{padding:24px 0 0;border-left:0;border-top:1px solid var(--line)}
+  .principles{grid-template-columns:1fr}
+  .principle+.principle{border-left:0;border-top:1px solid var(--line)}
+  .contact{flex-direction:column;align-items:flex-start;padding:62px 25px}
+  footer{grid-template-columns:1fr;padding:48px 25px 25px}
+  .footer-brand{grid-column:auto}
+  .footer-bottom{justify-content:flex-start;flex-wrap:wrap}
+}
