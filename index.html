@@ -3,151 +3,163 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#061326">
-  <title>Sky’s Bridge Foundation — Building Bridges Through Grief</title>
-  <meta name="description" content="A compassionate, protected community for parents and families after the loss of a child.">
+  <meta name="theme-color" content="#07172a">
+  <meta name="description" content="Sky's Bridge is a compassionate, protected community for parents and families after the loss of a child.">
+  <title>Sky's Bridge — Building Bridges Through Grief</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="site-header" id="top">
-    <div class="wrap nav-wrap">
-      <a class="brand" href="#top" aria-label="Sky’s Bridge Foundation home">
-        <img src="skysbridge-logo.png" alt="Sky’s Bridge Foundation logo">
+    <div class="nav-wrap">
+      <a class="brand" href="#top" aria-label="Sky's Bridge home">
+        <span class="brand-star">✦</span>
+        <span>Sky's Bridge</span>
       </a>
-      <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+
+      <button class="menu-button" aria-expanded="false" aria-controls="main-nav">
+        <span></span><span></span><span></span>
+        <span class="sr-only">Open navigation</span>
+      </button>
+
       <nav id="main-nav" class="main-nav" aria-label="Main navigation">
         <a href="#about">About</a>
         <a href="#community">Community</a>
-        <a href="#wall">Wall of Stars</a>
-        <a href="#safety">Safety</a>
+        <a href="#stars">Wall of Stars</a>
+        <a href="#resources">Resources</a>
         <a href="#contact">Contact</a>
-        <a class="button button-outline" href="#join">Join our community</a>
+        <a class="nav-login" href="#contact">Log in</a>
+        <a class="button button-small" href="#community">Join Our Community</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="stars" aria-hidden="true"></div>
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <p class="kicker">A safe place after child loss</p>
-          <h1>You are not alone.<br>We walk with you.</h1>
-          <p class="intro">Sky’s Bridge brings bereaved parents and families together to share, listen, remember and find a path forward—without ever leaving their child behind.</p>
-          <div class="actions">
-            <a class="button button-gold" href="#community">Find support</a>
-            <a class="button button-ghost" href="#about">Our mission</a>
-          </div>
-        </div>
-        <div class="hero-mark">
-          <img src="skysbridge-logo.png" alt="Sky’s Bridge Foundation — Building Bridges Through Grief">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-image" src="assets/skys-bridge-hero.png" alt="Sky's Bridge logo with a golden bridge, calm water and a guiding star">
+      <div class="hero-shade"></div>
+      <div class="hero-content">
+        <p class="eyebrow">A protected space for love, memory and hope</p>
+        <h1 id="hero-title">You are not alone.</h1>
+        <p>
+          A compassionate community for parents and families who have experienced
+          the loss of a child.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#community">Join Our Community</a>
+          <a class="button button-outline" href="#about">Learn More</a>
         </div>
       </div>
-      <div class="feature-band">
-        <div class="wrap feature-grid">
-          <article><span>✦</span><div><h3>Compassionate community</h3><p>Connect with parents who understand.</p></div></article>
-          <article><span>◌</span><div><h3>Protected spaces</h3><p>Choose when and how much to share.</p></div></article>
-          <article><span>✧</span><div><h3>Honor & remember</h3><p>Give every Sternenkind a name and place.</p></div></article>
-          <article><span>⌁</span><div><h3>Hope for tomorrow</h3><p>Move forward while keeping love alive.</p></div></article>
-        </div>
+      <a class="scroll-cue" href="#about" aria-label="Scroll to learn more">⌄</a>
+    </section>
+
+    <section class="intro section" id="about">
+      <div class="section-heading">
+        <p class="eyebrow">Building bridges through grief</p>
+        <h2>A place where every child has a name and every family has a voice.</h2>
+      </div>
+      <div class="intro-grid">
+        <p class="intro-lead">
+          Sky's Bridge brings grieving parents and families together in a calm,
+          respectful and protected online community.
+        </p>
+        <p>
+          Members can join private rooms, share their stories at their own pace,
+          find people who understand, and choose whether to honour their child on
+          the Wall of Stars.
+        </p>
       </div>
     </section>
 
-    <section class="section light" id="about">
-      <div class="wrap split">
-        <div>
-          <p class="kicker gold">Our mission</p>
-          <h2>No parent should lose their partner after losing a child.</h2>
-        </div>
-        <div class="copy">
-          <p>Grief can isolate couples and families even when they love one another deeply. Sky’s Bridge exists to create bridges of understanding, dignity and hope.</p>
-          <p>Our vision is an international platform where parents can first arrive quietly, enter protected rooms, meet others with similar experiences and—only when they are ready—honor their child on the Wall of Stars.</p>
-        </div>
+    <section class="features section" id="community">
+      <article class="feature-card">
+        <div class="feature-icon">◈</div>
+        <h3>Safe & Private</h3>
+        <p>A secure space where you decide what to share, when to share it, and with whom.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon">◎</div>
+        <h3>Community Support</h3>
+        <p>Connect with others who understand because they have walked a similar path.</p>
+      </article>
+      <article class="feature-card" id="stars">
+        <div class="feature-icon">✦</div>
+        <h3>Wall of Stars</h3>
+        <p>Honour your child by sharing their name, story and light in a meaningful memorial.</p>
+      </article>
+      <article class="feature-card" id="resources">
+        <div class="feature-icon">⌁</div>
+        <h3>Resources & Hope</h3>
+        <p>Find practical guidance, professional resources and moments of comfort along the way.</p>
+      </article>
+    </section>
+
+    <section class="story section">
+      <div class="story-image" role="img" aria-label="A quiet starry sky reflected over water"></div>
+      <div class="story-copy">
+        <p class="eyebrow">Remembering Sky</p>
+        <h2>One small star can guide many people home.</h2>
+        <p>
+          Sky's Bridge was created from love. It exists so that children who are no
+          longer physically with us are never forgotten, and so their parents do not
+          have to carry their grief alone.
+        </p>
+        <a class="text-link" href="#contact">Read our story <span>→</span></a>
       </div>
     </section>
 
-    <section class="section navy" id="community">
-      <div class="wrap">
-        <div class="section-heading">
-          <p class="kicker">Protected community</p>
-          <h2>Different rooms for different moments.</h2>
-          <p>Members may read quietly, use a chosen community name and enter only the spaces that feel right.</p>
-        </div>
-        <div class="card-grid">
-          <article class="card"><span class="lock">Private</span><h3>The first weeks</h3><p>For parents facing immediate shock, practical questions and the first days of grief.</p></article>
-          <article class="card"><span class="lock">Approval</span><h3>Partners & relationships</h3><p>For couples grieving differently and trying to understand one another without blame.</p></article>
-          <article class="card"><span class="lock">Private</span><h3>Fathers’ room</h3><p>A space for fathers and partners whose grief is often unseen.</p></article>
-          <article class="card"><span class="lock">Private</span><h3>Mothers’ room</h3><p>Support for the physical and emotional dimensions of loss.</p></article>
-          <article class="card"><span class="lock">Approval</span><h3>Pregnancy after loss</h3><p>A place for hope, fear and conflicting emotions during a later pregnancy.</p></article>
-          <article class="card"><span class="lock">Private</span><h3>Years later</h3><p>Because love and grief do not follow a schedule.</p></article>
-        </div>
+    <section class="rooms section">
+      <div class="section-heading">
+        <p class="eyebrow">Choose your space</p>
+        <h2>Support that meets you where you are.</h2>
+      </div>
+      <div class="room-grid">
+        <article>
+          <span>01</span>
+          <h3>Private Rooms</h3>
+          <p>Small protected groups for specific experiences, stages of grief and family situations.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Shared Community</h3>
+          <p>A wider space for conversations, remembrance, encouragement and mutual understanding.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Wall of Stars</h3>
+          <p>A permanent place of honour, entered only when a family feels ready.</p>
+        </article>
       </div>
     </section>
 
-    <section class="section wall-section" id="wall">
-      <div class="wrap">
-        <div class="section-heading centered">
-          <p class="kicker gold">Wall of Stars</p>
-          <h2>Every star carries a name.</h2>
-          <p>Families decide whether a memorial is public, shared only with members, opened by private link or kept entirely private.</p>
-        </div>
-        <div class="star-grid">
-          <article class="star-card"><div class="star-symbol">✦</div><h3>Sky</h3><p class="visibility">Public memorial</p><blockquote>“You were here. You are loved. You will always have a name.”</blockquote></article>
-          <article class="star-card"><div class="star-symbol">✦</div><h3>Mila</h3><p class="visibility">Members only</p><blockquote>“Loved before we met, remembered every day.”</blockquote></article>
-          <article class="star-card"><div class="star-symbol">✦</div><h3>Little Lion</h3><p class="visibility">Private link</p><blockquote>“A family nickname can protect privacy while preserving identity.”</blockquote></article>
-          <article class="star-card add-card"><div class="star-symbol">＋</div><h3>Add a star</h3><p class="visibility">You decide who sees it</p><blockquote>Create privately and publish only when you are ready.</blockquote></article>
-        </div>
+    <section class="cta" id="contact">
+      <div>
+        <p class="eyebrow">A gentle first step</p>
+        <h2>Find connection, understanding and hope.</h2>
       </div>
-    </section>
-
-    <section class="section light" id="safety">
-      <div class="wrap split safety-split">
-        <div>
-          <p class="kicker gold">Safety by design</p>
-          <h2>Trust must come before growth.</h2>
-          <p>The community will be developed with professional review of privacy, safeguarding, moderation and crisis procedures.</p>
-        </div>
-        <div class="check-list">
-          <div><span>✓</span><p><strong>Consent controls</strong><br>Every memorial has clear visibility settings.</p></div>
-          <div><span>✓</span><p><strong>Human moderation</strong><br>Reports and urgent concerns are reviewed by people.</p></div>
-          <div><span>✓</span><p><strong>Right to remove</strong><br>Parents can edit, hide or delete their memorial.</p></div>
-          <div><span>✓</span><p><strong>Professional boundaries</strong><br>Community support does not replace medical care.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section join-section" id="join">
-      <div class="wrap join-box">
-        <div>
-          <p class="kicker">The first bridge</p>
-          <h2>Help shape the founding community.</h2>
-          <p>The first pilot will be small, carefully moderated and built together with bereaved parents and qualified professionals.</p>
-        </div>
-        <form class="join-form" name="early-access" method="POST" action="/thank-you.html" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="early-access">
-          <p class="hidden"><label>Do not fill this out: <input name="bot-field"></label></p>
-          <label>Name or chosen community name<input name="name" required></label>
-          <label>Email<input type="email" name="email" required></label>
-          <label>What would help you most?<textarea name="message" rows="3"></textarea></label>
-          <button class="button button-gold" type="submit">Request early access</button>
-        </form>
+      <div class="cta-actions">
+        <a class="button" href="mailto:hello@skysbridge.org">Contact Sky's Bridge</a>
+        <a class="button button-outline" href="#community">Explore the Community</a>
       </div>
     </section>
   </main>
 
-  <footer id="contact">
-    <div class="wrap footer-grid">
-      <div class="footer-brand"><img src="skysbridge-logo.png" alt=""><p>Building bridges through grief.</p></div>
-      <div><h3>Platform</h3><a href="#community">Protected rooms</a><a href="#wall">Wall of Stars</a><a href="#safety">Safety</a></div>
-      <div><h3>Policies</h3><a href="privacy.html">Privacy principles</a><a href="community-guidelines.html">Community guidelines</a></div>
-      <div><h3>Contact</h3><a href="mailto:together@skysbridge.org">together@skysbridge.org</a><p>Dubai · International community</p></div>
+  <footer>
+    <a class="brand footer-brand" href="#top">
+      <span class="brand-star">✦</span>
+      <span>Sky's Bridge</span>
+    </a>
+    <p>Building Bridges Through Grief</p>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Community Guidelines</a>
+      <a href="#">Terms</a>
     </div>
-    <div class="wrap fineprint">© 2026 Sky’s Bridge Foundation. This website is an initial public prototype. Emergency resources must be localized before the community platform launches.</div>
+    <p class="copyright">© <span id="year"></span> Sky's Bridge. All rights reserved.</p>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
