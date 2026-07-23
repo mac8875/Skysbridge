@@ -1,256 +1,131 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#061326">
-  <meta name="description" content="Sky's Bridge is a gentle, private community for families living with pregnancy and infant loss.">
-  <title>Sky's Bridge — Building Bridges Through Grief</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sky’s Bridge Foundation — Building Bridges Through Grief</title>
+<meta name="description" content="A protected international community for parents and couples after the loss of a child.">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header" id="top">
-    <div class="nav-shell">
-      <a class="brand" href="#home" aria-label="Sky's Bridge home">
-        <span class="brand-star">✦</span>
-        <span>Sky's Bridge</span>
-      </a>
+<header class="site-header">
+  <div class="container navbar">
+    <a class="brand" href="index.html"><img src="assets/skysbridge-logo.png" alt="Sky’s Bridge Foundation logo"><span>Sky’s Bridge Foundation</span></a>
+    <button class="menu" onclick="toggleMenu()">Menu</button>
+    <nav>
+      <a href="#purpose">Our purpose</a>
+      <a href="#rooms">Safe rooms</a>
+      <a href="#wall">Wall of Stars</a>
+      <a href="#safety">Safety</a>
+      <button class="btn btn-primary" onclick="openJoin()">Join safely</button>
+    </nav>
+  </div>
+</header>
 
-      <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav">
-        <span></span><span></span><span></span>
-        <span class="sr-only">Open navigation</span>
-      </button>
-
-      <nav class="main-nav" id="main-nav" aria-label="Main navigation">
-        <a href="#about">About</a>
-        <a href="#community">Community</a>
-        <a href="#wall">Wall of Stars</a>
-        <a href="#resources">Resources</a>
-        <a href="#contact">Contact</a>
-        <a class="nav-cta" href="#community">Join the Community</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero" id="home" aria-labelledby="hero-title">
-      <div class="sky" aria-hidden="true">
-        <span class="star star-1"></span>
-        <span class="star star-2"></span>
-        <span class="star star-3"></span>
-        <span class="star star-4"></span>
-        <span class="star star-5"></span>
-        <span class="star star-6"></span>
-        <span class="shooting-star"></span>
-
-        <svg class="bridge-art" viewBox="0 0 1600 760" preserveAspectRatio="xMidYMax slice" role="img" aria-label="">
-          <defs>
-            <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#0c3151"/>
-              <stop offset="100%" stop-color="#04101f"/>
-            </linearGradient>
-            <linearGradient id="bridgeGlow" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#9c7a35"/>
-              <stop offset="50%" stop-color="#f1d188"/>
-              <stop offset="100%" stop-color="#9c7a35"/>
-            </linearGradient>
-            <filter id="softGlow">
-              <feGaussianBlur stdDeviation="5" result="blur"/>
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-
-          <rect x="0" y="505" width="1600" height="255" fill="url(#water)"/>
-          <ellipse cx="800" cy="570" rx="460" ry="38" fill="#e8c46d" opacity=".12"/>
-          <ellipse cx="800" cy="610" rx="340" ry="20" fill="#e8c46d" opacity=".08"/>
-
-          <g opacity=".92">
-            <rect x="250" y="260" width="34" height="300" rx="7" fill="#b99a5d"/>
-            <rect x="1316" y="260" width="34" height="300" rx="7" fill="#b99a5d"/>
-            <rect x="265" y="220" width="5" height="350" fill="#f0d697" opacity=".7"/>
-            <rect x="1331" y="220" width="5" height="350" fill="#f0d697" opacity=".7"/>
-            <path d="M267 270 C460 455 605 490 800 490 C995 490 1140 455 1333 270"
-                  fill="none" stroke="url(#bridgeGlow)" stroke-width="9" filter="url(#softGlow)"/>
-            <path d="M267 300 C460 440 605 465 800 465 C995 465 1140 440 1333 300"
-                  fill="none" stroke="#e9cb82" stroke-width="3" opacity=".8"/>
-            <path d="M235 525 H1365" fill="none" stroke="#d1af67" stroke-width="12"/>
-            <path d="M235 537 H1365" fill="none" stroke="#3b2c1b" stroke-width="8"/>
-          </g>
-
-          <g stroke="#e7c879" stroke-width="2.2" opacity=".8">
-            <path d="M333 327 L333 525"/>
-            <path d="M430 392 L430 525"/>
-            <path d="M535 437 L535 525"/>
-            <path d="M650 467 L650 525"/>
-            <path d="M950 467 L950 525"/>
-            <path d="M1065 437 L1065 525"/>
-            <path d="M1170 392 L1170 525"/>
-            <path d="M1267 327 L1267 525"/>
-          </g>
-
-          <g fill="#f3d38b" filter="url(#softGlow)">
-            <circle cx="333" cy="327" r="5"/>
-            <circle cx="430" cy="392" r="5"/>
-            <circle cx="535" cy="437" r="5"/>
-            <circle cx="650" cy="467" r="5"/>
-            <circle cx="800" cy="490" r="6"/>
-            <circle cx="950" cy="467" r="5"/>
-            <circle cx="1065" cy="437" r="5"/>
-            <circle cx="1170" cy="392" r="5"/>
-            <circle cx="1267" cy="327" r="5"/>
-          </g>
-        </svg>
-      </div>
-
-      <div class="hero-shade"></div>
-
-      <div class="hero-inner">
-        <div class="hero-logo reveal">
-          <span class="hero-symbol">✦</span>
-          <span class="hero-name">Sky's Bridge</span>
-          <span class="hero-wings">⌁ ︵ ⌁</span>
-          <span class="hero-tagline">Building Bridges Through Grief</span>
-        </div>
-
-        <div class="hero-message reveal">
-          <p class="eyebrow">A gentle place for love, memory and connection</p>
-          <h1 id="hero-title">You are not alone.</h1>
-          <p>
-            A private and compassionate community for parents and families living with pregnancy and infant loss.
-          </p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="#community">Join Our Community</a>
-            <a class="button button-secondary" href="#about">Learn More</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-light" id="about">
-      <div class="wrap narrow reveal">
-        <p class="section-kicker">Building bridges through grief</p>
-        <h2>A place where every child has a name, and every family has a voice.</h2>
-        <p class="lead">
-          Sky's Bridge brings grieving parents and families together in a calm, protected space.
-          Share only what feels right, connect with people who understand, and remember your child in your own way.
-        </p>
-      </div>
-
-      <div class="wrap cards">
-        <article class="card reveal">
-          <span class="card-icon">◌</span>
-          <h3>Safe &amp; Private</h3>
-          <p>Choose what you share and where you share it. Privacy and emotional safety come first.</p>
-        </article>
-        <article class="card reveal">
-          <span class="card-icon">∞</span>
-          <h3>Community Support</h3>
-          <p>Meet people who understand grief without asking you to explain or minimise it.</p>
-        </article>
-        <article class="card reveal">
-          <span class="card-icon">★</span>
-          <h3>Wall of Stars</h3>
-          <p>Create a lasting, respectful place for your child's name, story and memory.</p>
-        </article>
-        <article class="card reveal">
-          <span class="card-icon">✧</span>
-          <h3>Resources &amp; Hope</h3>
-          <p>Find guidance, organisations and practical support for days when grief feels overwhelming.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section story-section">
-      <div class="wrap story-grid">
-        <div class="story-copy reveal">
-          <p class="section-kicker">Remembering Sky</p>
-          <h2>One small star can guide many people home.</h2>
-          <p>
-            Sky's Bridge began with one child, one family and one enduring love. Sky's light became the beginning
-            of a place where other families can feel seen, heard and less alone.
-          </p>
-          <p>This community is built with tenderness, dignity and the belief that every child matters.</p>
-        </div>
-        <div class="story-quote reveal">
-          <div class="quote-star">✦</div>
-          <blockquote>“Grief changes shape, but love remains.”</blockquote>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-dark" id="community">
-      <div class="wrap narrow reveal">
-        <p class="section-kicker">Choose your space</p>
-        <h2>Support that meets you where you are.</h2>
-      </div>
-
-      <div class="wrap room-grid">
-        <article class="room reveal">
-          <span>01</span>
-          <h3>Private Rooms</h3>
-          <p>Small spaces for parents with similar experiences, timelines or needs.</p>
-        </article>
-        <article class="room reveal">
-          <span>02</span>
-          <h3>Shared Community</h3>
-          <p>Open conversations, remembrance and gentle connection across the wider community.</p>
-        </article>
-        <article class="room reveal" id="wall">
-          <span>03</span>
-          <h3>Wall of Stars</h3>
-          <p>A permanent place of honour for names, memories and stories shared with consent.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-light" id="resources">
-      <div class="wrap resource-grid">
-        <div class="reveal">
-          <p class="section-kicker">Resources</p>
-          <h2>Gentle guidance for difficult days.</h2>
-        </div>
-        <div class="resource-list reveal">
-          <a href="#contact"><span>Finding professional support</span><span>→</span></a>
-          <a href="#contact"><span>Supporting a grieving partner</span><span>→</span></a>
-          <a href="#contact"><span>Remembering anniversaries</span><span>→</span></a>
-          <a href="#contact"><span>Helping family and friends understand</span><span>→</span></a>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta-section" id="contact">
-      <div class="wrap cta-inner reveal">
-        <div>
-          <p class="section-kicker">A space with care</p>
-          <h2>Find connection without pressure.</h2>
-          <p>Join when you are ready. Read quietly, share gently, or simply remember.</p>
-        </div>
-        <a class="button button-primary" href="mailto:hello@skysbridge.org">Join Our Community</a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap footer-grid">
-      <div>
-        <div class="footer-brand">✦ Sky's Bridge</div>
-        <p>Building bridges through grief.</p>
-      </div>
-      <div class="footer-links">
-        <a href="privacy.html">Privacy</a>
-        <a href="community-guidelines.html">Community Guidelines</a>
-        <a href="mailto:hello@skysbridge.org">Contact</a>
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <p class="eyebrow">A protected community after child loss</p>
+      <h1>Your child has a name.<br>Your story has a place.</h1>
+      <p class="lead">Sky’s Bridge gives parents and couples a safe place to talk, listen, find support and—only when they feel ready—honour their child on the Wall of Stars.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="openJoin()">Enter the community</button>
+        <a class="btn btn-secondary" href="#wall">Visit the Wall of Stars</a>
       </div>
     </div>
-    <div class="wrap footer-bottom">© 2026 Sky's Bridge. All rights reserved.</div>
-  </footer>
+    <div class="hero-logo"><img src="assets/skysbridge-logo.png" alt="Sky’s Bridge Foundation — Building Bridges Through Grief"></div>
+  </div>
+</section>
 
-  <script src="script.js"></script>
+<div class="trust-strip">
+  <div class="container trust-grid">
+    <div>Anonymous participation possible</div>
+    <div>Parent-controlled visibility</div>
+    <div>Human moderation planned</div>
+    <div>No advertising around grief</div>
+  </div>
+</div>
+
+<section class="section" id="purpose">
+  <div class="container center">
+    <p class="eyebrow">Why this exists</p>
+    <h2>No child should be reduced to a statistic. No parent should grieve alone.</h2>
+    <p class="muted">Members may first observe quietly, enter protected rooms and decide for themselves how much they want to share. The Wall of Stars is an invitation—not an obligation.</p>
+    <div class="cards">
+      <article class="card"><div class="icon">🕊️</div><h3>Arrive quietly</h3><p>Create a private profile and begin by reading. No one has to tell their story before they are ready.</p></article>
+      <article class="card"><div class="icon">🤝</div><h3>Find your room</h3><p>Join moderated spaces for couples, fathers, mothers, recent loss, IVF, pregnancy after loss and long-term grief.</p></article>
+      <article class="card"><div class="icon">✦</div><h3>Name your star</h3><p>When it feels right, create a memorial and decide exactly who may see it.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section rooms" id="rooms">
+  <div class="container">
+    <p class="eyebrow">Protected community</p>
+    <h2>Different rooms for different moments.</h2>
+    <p class="muted">Every room can have its own moderators, entry rules and visibility. Members may use their real name or a chosen community name.</p>
+    <div class="room-grid">
+      <article class="room"><span class="badge">🔒 Members only</span><h3>The first weeks</h3><p>For parents living through the immediate shock and practical realities after loss.</p></article>
+      <article class="room"><span class="badge">🔒 Approval required</span><h3>Partners & relationships</h3><p>For couples grieving differently and trying to understand one another without blame.</p></article>
+      <article class="room"><span class="badge">🔒 Members only</span><h3>Fathers’ room</h3><p>A quieter place for fathers and partners whose grief is often overlooked.</p></article>
+      <article class="room"><span class="badge">🔒 Members only</span><h3>Mothers’ room</h3><p>Shared experience and space for the physical and emotional dimensions of loss.</p></article>
+      <article class="room"><span class="badge">🔒 Approval required</span><h3>Pregnancy after loss</h3><p>For hope, fear and conflicting emotions during a later pregnancy.</p></article>
+      <article class="room"><span class="badge">🔒 Members only</span><h3>Years later</h3><p>Because love and grief do not follow a schedule.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section wall" id="wall">
+  <div class="container">
+    <p class="eyebrow">Wall of Stars</p>
+    <h2>Every star carries a name.</h2>
+    <p class="lead">Families decide whether a memorial is public, visible only to members, shared by private link or kept entirely private.</p>
+    <div class="wall-grid">
+      <article class="memory" onclick="showStar('Sky','Thirteen weeks of love. Forever part of our family.','Public memorial')"><div class="star">✦</div><h3>Sky</h3><span class="visibility">Public memorial</span><p>“You were here. You are loved. You will always have a name.”</p></article>
+      <article class="memory" onclick="showStar('Mila','Loved before we met, remembered every day.','Members only')"><div class="star">✦</div><h3>Mila</h3><span class="visibility">Members only</span><p>A private story shared with the community.</p></article>
+      <article class="memory" onclick="showStar('Little Lion','A family nickname can protect privacy while preserving identity.','Private link')"><div class="star">✦</div><h3>Little Lion</h3><span class="visibility">Private link</span><p>Names, nicknames and stories are always chosen by the family.</p></article>
+      <article class="memory" onclick="openStar()"><div class="star">＋</div><h3>Add a star</h3><span class="visibility">You decide who sees it</span><p>Create, preview, save privately and publish only when you are ready.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="safety">
+  <div class="container safety-grid">
+    <div>
+      <p class="eyebrow">Safety by design</p>
+      <h2>Trust must come before growth.</h2>
+      <p class="muted">The live platform should launch only after professional review of privacy, safeguarding, moderation and crisis procedures.</p>
+    </div>
+    <div class="checks">
+      <div class="check"><span>✓</span><div><strong>Consent controls</strong><br><span class="muted">Every memorial has explicit visibility settings.</span></div></div>
+      <div class="check"><span>✓</span><div><strong>Human moderation</strong><br><span class="muted">Reports and crisis signals require trained people, not only automation.</span></div></div>
+      <div class="check"><span>✓</span><div><strong>Right to remove</strong><br><span class="muted">Parents can edit, hide or delete their memorial and account.</span></div></div>
+      <div class="check"><span>✓</span><div><strong>Professional boundaries</strong><br><span class="muted">Community support does not replace medical or psychological care.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container cta">
+    <div>
+      <p class="eyebrow">The first bridge</p>
+      <h2>Help shape the founding community.</h2>
+      <p class="muted">The first pilot should be small, carefully moderated and built together with bereaved parents and qualified professionals.</p>
+    </div>
+    <button class="btn btn-primary" onclick="openJoin()">Request early access</button>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><img src="assets/skysbridge-logo.png" alt="" style="width:130px;border-radius:14px;margin-bottom:14px"><p>Building bridges through grief.</p></div>
+    <div><h4>Platform</h4><a href="#rooms">Safe rooms</a><a href="#wall">Wall of Stars</a><a href="#safety">Safety</a></div>
+    <div><h4>Policies</h4><a href="privacy.html">Privacy principles</a><a href="community-guidelines.html">Community guidelines</a></div>
+  </div>
+  <div class="container fineprint">© 2026 Sky’s Bridge Foundation. Prototype website for skysbridge.org. Emergency and crisis resources must be localized before public launch.</div>
+</footer>
+
+<div class="modal" id="modal"><div class="modal-card"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
+<script src="app.js"></script>
 </body>
 </html>
