@@ -266,3 +266,33 @@ footer img{height:76px;max-width:min(330px,100%)}
   .member-panel{padding-left:24px;padding-right:24px}
   .signout-btn{width:100%;max-width:210px}
 }
+
+
+/* v10 final: gold Exit button and refined four-point Sky star */
+.signout-btn{
+  color:#07182d!important;
+  background:linear-gradient(135deg,#ffd47b 0%,#f4bc53 52%,#e9a93c 100%)!important;
+  border:1px solid rgba(255,226,164,.95)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 12px 28px rgba(214,145,34,.24)!important;
+  font-weight:700!important;
+}
+.signout-btn svg{stroke:#07182d!important;stroke-width:1.9!important}
+.signout-btn:hover,.signout-btn:focus-visible{
+  background:linear-gradient(135deg,#ffe19a 0%,#f7c766 52%,#efb34a 100%)!important;
+  border-color:#ffe6ae!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 16px 34px rgba(214,145,34,.32)!important;
+}
+.sky-star-shape{
+  width:72px!important;
+  height:72px!important;
+  filter:drop-shadow(0 0 2px rgba(255,250,226,.72)) drop-shadow(0 0 8px rgba(232,170,67,.38))!important;
+}
+.sky-star-rays{opacity:.96}
+.star.sky span{top:78px!important}
+.star.community-star{opacity:.62!important;filter:drop-shadow(0 0 3px rgba(255,255,255,.45)) drop-shadow(0 0 8px rgba(232,170,67,.38))!important}
+.star.community-star::before{opacity:.52!important;transform:scale(.78)}
+@media(max-width:700px){
+  .sky-star-shape{width:64px!important;height:64px!important}
+  .star.sky{width:64px!important;height:64px!important}
+  .star.sky span{top:68px!important}
+}

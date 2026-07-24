@@ -1,9 +1,12 @@
-Upload all files to GitHub and overwrite the existing versions.
+SKY’S BRIDGE — FINAL GITHUB UPLOAD
 
-Most important changed files:
-- index.html
-- styles.css
-- community-guidelines.html
-- skys-bridge-wordmark.svg
+Upload all files and folders in this package to the root of your GitHub repository and overwrite existing files.
 
-Netlify will deploy automatically after the commit.
+Key changes in this version:
+- Gold member-area button labeled “Exit”
+- Refined, thin four-point Sky star in the Wall of Stars
+- Other memorial stars are quieter and less prominent
+- New SVG Sky’s Bridge wordmark used in header and footer
+- Existing Supabase, Netlify, login, memorial and memory functionality retained
+
+Netlify should deploy automatically after the commit to main.
