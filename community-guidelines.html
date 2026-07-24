@@ -2,66 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#061326">
   <meta name="description" content="Community Guidelines for Sky's Bridge.">
   <title>Community Guidelines — Sky's Bridge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root{--navy:#041326;--navy2:#082441;--cream:#fff7e9;--cream2:#f8ead5;--gold:#d99b2b;--ink:#10233c;--white:#f8fbff}
+    *{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:hidden}body{font-family:Inter,sans-serif;color:var(--white);background:radial-gradient(circle at 50% 14%,#123a61 0,transparent 30%),linear-gradient(180deg,var(--navy2),var(--navy));min-height:100vh}
+    a{color:inherit}.page-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px clamp(18px,5vw,54px);border-bottom:1px solid rgba(255,255,255,.1);background:rgba(3,15,29,.82)}
+    .page-header img{display:block;width:clamp(190px,36vw,325px);height:auto;max-width:70vw}.home-link{color:#f4c46a;text-decoration:none;font-weight:600;white-space:nowrap}
+    main{width:min(930px,100%);margin:auto;padding:54px clamp(16px,5vw,44px) 40px}.eyebrow{margin:0 0 13px;color:#f2ba4a;font-size:13px;font-weight:700;letter-spacing:.24em;text-transform:uppercase}.intro h1{margin:0;font-family:"Cormorant Garamond",serif;font-size:clamp(46px,9vw,76px);line-height:.98}.intro>p:last-of-type{max-width:720px;margin:24px 0 0;color:#e5edf5;font-size:clamp(18px,3.5vw,24px);line-height:1.65}.divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:30px 0;color:#f4bc4b;font-size:30px}.divider:before,.divider:after{content:"";height:1px;flex:0 1 170px;background:linear-gradient(90deg,transparent,#d99b2b)}.divider:after{transform:scaleX(-1)}
+    .guidelines-card{width:100%;padding:14px 28px;border:1px solid rgba(222,169,74,.45);border-radius:24px;background:linear-gradient(145deg,var(--cream),var(--cream2));color:var(--ink);box-shadow:0 28px 70px rgba(0,0,0,.3)}
+    .rule{display:grid;grid-template-columns:78px minmax(0,1fr);gap:22px;align-items:start;padding:30px 0;border-bottom:1px solid rgba(144,99,29,.22)}.rule:last-child{border-bottom:0}.icon{width:64px;height:64px;display:grid;place-items:center;color:#bb7c13}.icon svg{width:58px;height:58px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.rule h2{margin:0 0 7px;font-family:"Cormorant Garamond",serif;font-size:clamp(29px,5vw,38px);line-height:1.05}.rule p{margin:0;font-size:clamp(16px,3.4vw,20px);line-height:1.55;overflow-wrap:anywhere}.closing{max-width:760px;margin:38px auto 0;text-align:center;color:#e6edf4;font-size:18px;line-height:1.65}.page-footer{padding:0 20px 40px;text-align:center;color:#dbe5ee}.page-footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:26px;margin-bottom:16px}.page-footer a{text-decoration:none}
+    @media(max-width:620px){.page-header{align-items:flex-start;flex-direction:column;padding:14px 18px}.page-header img{width:260px;max-width:84vw}.home-link{font-size:16px}main{padding-top:38px}.guidelines-card{padding:5px 20px;border-radius:20px}.rule{grid-template-columns:52px minmax(0,1fr);gap:15px;padding:25px 0}.icon,.icon svg{width:46px;height:46px}.rule h2{font-size:30px}.rule p{font-size:17px}.intro h1{overflow-wrap:anywhere}}
+    @media(max-width:370px){.rule{grid-template-columns:1fr}.icon{justify-self:start}.guidelines-card{padding-inline:17px}}
+  </style>
 </head>
-<body class="guidelines-page">
-  <header class="guidelines-header">
-    <a class="brand" href="index.html" aria-label="Sky's Bridge home">
-      <img src="skys-bridge-header-logo.jpg" alt="Sky's Bridge — Building Bridges Through Grief">
-    </a>
-    <a class="home-link" href="index.html">Return home</a>
+<body>
+  <header class="page-header">
+    <a href="index.html" aria-label="Sky's Bridge home"><img src="skys-bridge-header-logo.jpg" alt="Sky's Bridge — Building Bridges Through Grief"></a>
+    <a class="home-link" href="index.html">← Return home</a>
   </header>
-
-  <main class="guidelines-main">
-    <section class="guidelines-intro">
+  <main>
+    <section class="intro">
       <p class="eyebrow">A protected community</p>
       <h1>Community Guidelines</h1>
       <p>Together, we create a safe and compassionate space for everyone.</p>
-      <div class="star-divider" aria-hidden="true">✦</div>
+      <div class="divider" aria-hidden="true">✦</div>
     </section>
-
     <section class="guidelines-card" aria-label="Sky's Bridge community guidelines">
-      <article class="guideline-item">
-        <span class="guideline-icon" aria-hidden="true">♡</span>
-        <div><h2>Be kind and respectful</h2><p>Treat everyone with compassion, empathy and respect.</p></div>
-      </article>
-      <article class="guideline-item">
-        <span class="guideline-icon" aria-hidden="true">♢</span>
-        <div><h2>A safe space</h2><p>No bullying, harassment or hate speech will be tolerated.</p></div>
-      </article>
-      <article class="guideline-item">
-        <span class="guideline-icon" aria-hidden="true">▣</span>
-        <div><h2>Protect privacy</h2><p>Respect the privacy of others. Do not share personal information or private stories without permission.</p></div>
-      </article>
-      <article class="guideline-item">
-        <span class="guideline-icon" aria-hidden="true">◯</span>
-        <div><h2>Share mindfully</h2><p>Share your story only if and when you feel ready. Never pressure another person to share.</p></div>
-      </article>
-      <article class="guideline-item">
-        <span class="guideline-icon" aria-hidden="true">✦</span>
-        <div><h2>Honour every memory</h2><p>All memorials and stories are valued. We honour every child and every journey.</p></div>
-      </article>
-      <article class="guideline-item">
-        <span class="guideline-icon" aria-hidden="true">⚑</span>
-        <div><h2>Report concerns</h2><p>If you see harmful, unsafe or inappropriate behaviour, please let us know.</p></div>
-      </article>
+      <article class="rule"><span class="icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 55S8 41 8 22c0-9 6-15 14-15 5 0 8 3 10 7 2-4 5-7 10-7 8 0 14 6 14 15 0 19-24 33-24 33Z"/></svg></span><div><h2>Be kind and respectful</h2><p>Treat everyone with compassion, empathy and respect.</p></div></article>
+      <article class="rule"><span class="icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 5 52 13v16c0 13-8 23-20 30C20 52 12 42 12 29V13Z"/><path d="m32 19 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z"/></svg></span><div><h2>A safe space</h2><p>No bullying, harassment or hate speech will be tolerated.</p></div></article>
+      <article class="rule"><span class="icon" aria-hidden="true"><svg viewBox="0 0 64 64"><rect x="12" y="27" width="40" height="30" rx="4"/><path d="M20 27v-8a12 12 0 0 1 24 0v8M32 39v7"/></svg></span><div><h2>Protect privacy</h2><p>Respect the privacy of others. Do not share personal information or private stories without permission.</p></div></article>
+      <article class="rule"><span class="icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M8 30c0-12 10-21 24-21s24 9 24 21-10 21-24 21c-4 0-8-1-11-2L9 56l4-13c-3-4-5-8-5-13Z"/></svg></span><div><h2>Share mindfully</h2><p>Share your story only if and when you feel ready. Never pressure another person to share.</p></div></article>
+      <article class="rule"><span class="icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="m21 7 3 10 10 3-10 4-3 10-4-10-10-4 10-3ZM45 29l3 9 9 3-9 3-3 9-3-9-9-3 9-3Z"/></svg></span><div><h2>Honour every memory</h2><p>All memorials and stories are valued. We honour every child and every journey.</p></div></article>
+      <article class="rule"><span class="icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M15 58V8M15 10c12-6 21 6 34 0v27c-13 6-22-6-34 0"/></svg></span><div><h2>Report concerns</h2><p>If you see harmful, unsafe or inappropriate behaviour, please let us know.</p></div></article>
     </section>
-
-    <p class="guidelines-closing">Thank you for helping us build a community rooted in love, understanding and hope.</p>
-    <div class="star-divider" aria-hidden="true">✦</div>
+    <p class="closing">Thank you for helping us build a community rooted in love, understanding and hope.</p>
+    <div class="divider" aria-hidden="true">✦</div>
   </main>
-
-  <footer class="guidelines-footer">
-    <nav aria-label="Footer navigation"><a href="privacy.html">Privacy</a><a href="mailto:together@skysbridge.org">Contact us</a></nav>
-    <p>© <span id="year"></span> Sky's Bridge Foundation. All rights reserved.</p>
-  </footer>
+  <footer class="page-footer"><nav><a href="privacy.html">Privacy</a><a href="mailto:together@skysbridge.org">Contact us</a></nav><p>© <span id="year"></span> Sky's Bridge Foundation. All rights reserved.</p></footer>
   <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
 </body>
 </html>

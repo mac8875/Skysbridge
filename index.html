@@ -68,7 +68,25 @@
       <p>Families choose what to share and when. Public memorials require approval before they appear.</p>
     </div>
     <div class="star-field" id="starField">
-      <button class="star sky" id="openSkyStory" data-name="Sky" aria-label="Open Sky’s story" aria-haspopup="dialog"><span>Sky</span></button>
+      <button class="star sky" id="openSkyStory" data-name="Sky" aria-label="Open Sky’s story" aria-haspopup="dialog">
+        <svg class="sky-star-shape" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+          <defs>
+            <radialGradient id="skyStarGold" cx="50%" cy="46%" r="62%">
+              <stop offset="0%" stop-color="#fffbe9"/>
+              <stop offset="24%" stop-color="#ffe9a5"/>
+              <stop offset="58%" stop-color="#f7bf4d"/>
+              <stop offset="100%" stop-color="#c98617"/>
+            </radialGradient>
+            <filter id="skyStarGlow" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <polygon class="sky-star-rays" points="60,2 68,42 94,17 77,48 118,45 80,58 111,83 73,68 78,111 62,75 45,116 49,74 15,99 42,65 2,61 43,53 14,27 50,45" fill="url(#skyStarGold)" filter="url(#skyStarGlow)"/>
+          <circle cx="60" cy="59" r="12" fill="#fff9d8" opacity=".92"/>
+        </svg>
+        <span>Sky</span>
+      </button>
     </div>
     <div class="wall-actions">
       <button class="btn gold" id="openMemorial">Honor a child</button>

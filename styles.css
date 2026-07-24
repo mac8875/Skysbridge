@@ -116,3 +116,22 @@ h1,h2,h3,p,a,button,label{overflow-wrap:anywhere}
   .guideline-item{grid-template-columns:38px minmax(0,1fr);gap:10px}
   .guideline-icon{width:38px;font-size:28px}
 }
+
+/* v7: unmistakable SVG star for Sky */
+.star.sky{
+  width:86px!important;
+  height:86px!important;
+  border-radius:0!important;
+  background:transparent!important;
+  filter:none!important;
+  overflow:visible;
+  transform:none;
+  animation:none;
+}
+.star.sky::before,.star.sky::after{display:none!important;content:none!important}
+.sky-star-shape{display:block;width:86px;height:86px;overflow:visible;filter:drop-shadow(0 0 8px rgba(255,241,183,.95)) drop-shadow(0 0 24px rgba(232,170,67,.72));animation:skyStarBreath 3.2s ease-in-out infinite;transform-origin:center}
+.star.sky span{top:91px!important;font-size:30px!important;line-height:1;color:#ffd47b!important}
+.star.sky:hover .sky-star-shape,.star.sky:focus-visible .sky-star-shape{transform:scale(1.12);filter:drop-shadow(0 0 11px #fff7d2) drop-shadow(0 0 34px rgba(232,170,67,.95))}
+.star.sky:focus-visible{outline:2px solid #ffd47b;outline-offset:9px}
+@keyframes skyStarBreath{0%,100%{transform:scale(.96);opacity:.93}50%{transform:scale(1.06);opacity:1}}
+@media(max-width:650px){.star.sky{width:76px!important;height:76px!important;left:18%!important;top:23%!important}.sky-star-shape{width:76px;height:76px}.star.sky span{top:81px!important;font-size:27px!important}}

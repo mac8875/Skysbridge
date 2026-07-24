@@ -1,0 +1,7 @@
+Sky's Bridge v7 — upload the entire package to GitHub and overwrite existing files.
+The two critical files are:
+- index.html
+- styles.css
+- community-guidelines.html
+
+After committing to main, Netlify will deploy automatically. If the old round Sky remains, clear the browser cache or open the page in an incognito tab.
