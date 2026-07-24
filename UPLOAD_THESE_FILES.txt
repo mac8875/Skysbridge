@@ -1,13 +1,9 @@
-SKY’S BRIDGE — VERSION 8
+Upload all files to GitHub and overwrite the existing versions.
 
-Upload the complete contents of this folder to the root of your GitHub repository and overwrite existing files.
-
-Main changes:
-- Sky is now a true four-point star in the Wall of Stars.
-- Future memorial stars are smaller and less bright.
-- Header logo blends more softly into the navy header background.
-- Supabase and existing platform functions remain unchanged.
-
-Most important files changed:
+Most important changed files:
 - index.html
 - styles.css
+- community-guidelines.html
+- skys-bridge-wordmark.svg
+
+Netlify will deploy automatically after the commit.

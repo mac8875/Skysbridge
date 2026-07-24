@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 190" role="img" aria-labelledby="title desc">
+<title id="title">Sky's Bridge</title><desc id="desc">Sky's Bridge — Building Bridges Through Grief</desc>
+<defs>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd889"/><stop offset=".52" stop-color="#e6a83f"/><stop offset="1" stop-color="#fff4cf"/></linearGradient>
+  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M62 18 L68 75 L122 81 L68 87 L62 144 L56 87 L2 81 L56 75 Z" fill="url(#gold)" stroke="none" filter="url(#glow)"/>
+  <path d="M128 129 C205 147 264 147 338 132 C365 126 389 131 408 151 C427 131 451 126 478 132 C552 147 611 147 688 129" stroke-width="3"/>
+  <path d="M128 139 C205 157 264 157 338 142 C366 136 389 141 408 161 C427 141 450 136 478 142 C552 157 611 157 688 139" stroke-width="1.6" opacity=".75"/>
+  <path d="M145 170 H272 M544 170 H671" stroke-width="1.7" opacity=".85"/>
+</g>
+<text x="132" y="112" fill="url(#gold)" font-family="Georgia, 'Times New Roman', serif" font-size="84" letter-spacing="-2">Sky’s Bridge</text>
+<text x="291" y="178" fill="#e7b45a" font-family="Arial, Helvetica, sans-serif" font-size="14" letter-spacing="5.5">BUILDING BRIDGES THROUGH GRIEF</text>
+</svg>

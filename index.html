@@ -15,7 +15,7 @@
 <body>
 <header class="topbar">
   <a class="brand" href="#home">
-    <img src="skys-bridge-header-logo.jpg" alt="Sky's Bridge">
+    <img src="skys-bridge-wordmark.svg" alt="Sky's Bridge">
   </a>
   <button class="menu" aria-label="Open menu"><span></span><span></span><span></span></button>
   <nav>
@@ -71,19 +71,18 @@
       <button class="star sky" id="openSkyStory" data-name="Sky" aria-label="Open Sky’s story" aria-haspopup="dialog">
         <svg class="sky-star-shape" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
           <defs>
-            <radialGradient id="skyStarGold" cx="50%" cy="46%" r="62%">
-              <stop offset="0%" stop-color="#fffbe9"/>
-              <stop offset="24%" stop-color="#ffe9a5"/>
-              <stop offset="58%" stop-color="#f7bf4d"/>
-              <stop offset="100%" stop-color="#c98617"/>
-            </radialGradient>
+            <linearGradient id="skyStarGold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fff9d7"/>
+              <stop offset="48%" stop-color="#ffd16d"/>
+              <stop offset="100%" stop-color="#d99424"/>
+            </linearGradient>
             <filter id="skyStarGlow" x="-100%" y="-100%" width="300%" height="300%">
-              <feGaussianBlur stdDeviation="5" result="blur"/>
+              <feGaussianBlur stdDeviation="2.8" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
           </defs>
-          <polygon class="sky-star-rays" points="60,2 68,49 118,60 68,71 60,118 52,71 2,60 52,49" fill="url(#skyStarGold)" filter="url(#skyStarGlow)"/>
-          <polygon class="sky-star-core" points="60,35 66,54 85,60 66,66 60,85 54,66 35,60 54,54" fill="#fff9d8" opacity=".82"/>
+          <path class="sky-star-rays" d="M60 2 L63.4 53.5 L118 60 L63.4 66.5 L60 118 L56.6 66.5 L2 60 L56.6 53.5 Z" fill="url(#skyStarGold)" filter="url(#skyStarGlow)"/>
+          <path class="sky-star-center" d="M60 51 L63 57 L69 60 L63 63 L60 69 L57 63 L51 60 L57 57 Z" fill="#fff9df" opacity=".94"/>
         </svg>
         <span>Sky</span>
       </button>
@@ -101,7 +100,10 @@
       <p id="memberEmail"></p>
     </div>
     <div class="member-actions">
-      <button class="btn ghost" id="signOut">Sign out</button>
+      <button class="signout-btn" id="signOut" type="button" aria-label="Sign out">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H6.8A1.8 1.8 0 0 0 5 6.8v10.4A1.8 1.8 0 0 0 6.8 19H10M14 8l4 4-4 4M9 12h9"/></svg>
+        <span>Sign out</span>
+      </button>
     </div>
   </section>
 
@@ -119,7 +121,7 @@
 </main>
 
 <footer>
-  <img src="skys-bridge-header-logo.jpg" alt="Sky's Bridge">
+  <img src="skys-bridge-wordmark.svg" alt="Sky's Bridge">
   <div><a href="privacy.html">Privacy</a><a href="community-guidelines.html">Community guidelines</a></div>
   <p>© <span id="year"></span> Sky's Bridge</p>
 </footer>
