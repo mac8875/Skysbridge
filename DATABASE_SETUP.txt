@@ -1,0 +1,40 @@
+SKY'S BRIDGE — DATABASE ACTIVATION
+
+The database migration is located at:
+  supabase/migrations/20260724223000_complete_platform.sql
+
+It creates:
+- profiles
+- stars (including Sky as the first public star)
+- memorials
+- memories
+- support_groups
+- group_members
+- group_posts
+- Row Level Security policies and indexes
+
+HOW TO APPLY THROUGH THE SUPABASE GITHUB INTEGRATION
+1. Upload/commit the complete project to the main branch of mac8875/Skysbridge.
+2. Open Supabase > Project Settings > Integrations > GitHub.
+3. Confirm repository mac8875/Skysbridge is selected.
+4. Working directory must be a single dot: .
+5. Enable “Deploy to production”.
+6. Commit a change to main (uploading this migration is that change).
+7. Open the integration’s deployment/history area and verify the migration succeeded.
+
+IMPORTANT
+Merely storing the SQL file in GitHub does not create the tables unless the Supabase
+GitHub integration actually runs the migration. If the integration reports an error,
+open the migration log and use the exact message to diagnose it.
+
+TEST AFTER DEPLOYMENT
+- Sign in to the website.
+- Open Sky > Leave a Memory.
+- Submit a short test memory.
+- Success text should say the memory was submitted privately for review.
+
+FIRST ADMIN
+The migration intentionally does not guess which account should be administrator.
+After your first account exists, an administrator can be assigned later in Supabase
+by setting profiles.is_admin = true for that account. Do not expose a service-role key
+in the website.
