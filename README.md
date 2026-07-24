@@ -26,3 +26,7 @@ Read `COMMUNITY_SETUP.txt` for the current manual room-approval process.
 ## Security
 
 `config.js` contains only a publishable browser key. Never commit a secret or service-role key. Room membership and post access are protected by Supabase Row Level Security.
+
+
+## v12 administrator workflow
+This version adds a protected administrator review centre and optional transactional email notifications through Netlify Functions + Resend. Read `ADMIN_EMAIL_SETUP.md` before deployment.

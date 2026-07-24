@@ -4,7 +4,10 @@ const configured = Boolean(
   !cfg.supabaseUrl.startsWith('YOUR_') &&
   !cfg.supabaseAnonKey.startsWith('YOUR_')
 );
-const sb = configured ? supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey) : null;
+const supabaseLibrary = window.supabase;
+const sb = configured && supabaseLibrary?.createClient
+  ? supabaseLibrary.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey)
+  : null;
 
 const $ = (selector) => document.querySelector(selector);
 const nav = $('.topbar nav');
@@ -74,14 +77,14 @@ function openAuth(mode = 'signup') {
   $('#authSubmit').textContent = mode === 'login' ? 'Log in' : 'Create account';
   $('#authNameLabel').classList.toggle('hidden', mode === 'login');
   $('#authName').required = mode === 'signup';
-  setMessage('authMessage', configured ? '' : 'Supabase is not connected yet.', !configured);
+  setMessage('authMessage', sb ? '' : 'The secure community service is temporarily unavailable. Please refresh the page and try again.', !sb);
   openModal(authModal);
 }
 
 async function requireUser(message) {
   if (!sb) {
     openAuth('signup');
-    setMessage('authMessage', 'Supabase setup is not complete.', true);
+    setMessage('authMessage', 'The secure community service is temporarily unavailable. Please refresh the page and try again.', true);
     return null;
   }
   const { data: { user }, error } = await sb.auth.getUser();
@@ -116,7 +119,7 @@ $('#openMemory')?.addEventListener('click', async () => {
 $('#authForm')?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!sb) {
-    setMessage('authMessage', 'Supabase setup is not complete.', true);
+    setMessage('authMessage', 'The secure community service is temporarily unavailable. Please refresh the page and try again.', true);
     return;
   }
   const email = $('#authEmail').value.trim();
@@ -157,6 +160,24 @@ $('#signOut')?.addEventListener('click', async () => {
   await refreshSession();
 });
 
+async function callSecureFunction(name, payload) {
+  if (!sb || !activeUser) return { ok: false, skipped: true };
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session?.access_token) return { ok: false, skipped: true };
+    const response = await fetch(`/.netlify/functions/${name}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(() => ({}));
+    return { ok: response.ok, ...result };
+  } catch (error) {
+    console.warn(`Sky's Bridge function ${name} could not be reached`, error);
+    return { ok: false, error: error.message };
+  }
+}
+
 $('#memorialForm')?.addEventListener('submit', async (event) => {
   event.preventDefault();
   const user = await requireUser('Please log in before submitting a memorial.');
@@ -168,11 +189,13 @@ $('#memorialForm')?.addEventListener('submit', async (event) => {
     remembrance: $('#childStory').value.trim(),
     public_requested: $('#publicConsent').checked
   };
-  const { error } = await sb.from('memorials').insert(payload);
+  const { data: createdMemorial, error } = await sb.from('memorials').insert(payload).select('id').single();
   setMessage('memorialMessage', error ? friendlyError(error) : 'Your memorial was submitted privately for review.', Boolean(error));
   if (!error) {
     event.target.reset();
+    if (createdMemorial?.id) callSecureFunction('notify-request', { requestType: 'memorial', requestId: createdMemorial.id });
     await loadMyMemorials();
+    if (activeProfile?.is_admin) await loadAdminDashboard();
   }
 });
 
@@ -187,9 +210,13 @@ $('#memoryForm')?.addEventListener('submit', async (event) => {
     author_name: $('#memoryAuthor').value.trim(),
     message: $('#memoryText').value.trim()
   };
-  const { error } = await sb.from('memories').insert(payload);
+  const { data: createdMemory, error } = await sb.from('memories').insert(payload).select('id').single();
   setMessage('memoryMessage', error ? friendlyError(error) : 'Thank you. Your memory was submitted privately for review.', Boolean(error));
-  if (!error) event.target.reset();
+  if (!error) {
+    event.target.reset();
+    if (createdMemory?.id) callSecureFunction('notify-request', { requestType: 'memory', requestId: createdMemory.id });
+    if (activeProfile?.is_admin) await loadAdminDashboard();
+  }
 });
 
 async function loadApprovedMemorials() {
@@ -218,7 +245,7 @@ async function loadApprovedMemorials() {
 
 async function loadProfile() {
   if (!activeUser) return;
-  const { data, error } = await sb.from('profiles').select('display_name').eq('id', activeUser.id).maybeSingle();
+  const { data, error } = await sb.from('profiles').select('display_name,is_admin').eq('id', activeUser.id).maybeSingle();
   if (error) {
     setMessage('profileMessage', friendlyError(error), true);
     return;
@@ -325,19 +352,21 @@ async function requestRoomAccess(groupId, button) {
   if (!activeUser) return;
   button.disabled = true;
   button.textContent = 'Sending…';
-  const { error } = await sb.from('group_members').insert({
+  const { data: createdMembership, error } = await sb.from('group_members').insert({
     group_id: groupId,
     user_id: activeUser.id,
     role: 'member',
     status: 'pending'
-  });
+  }).select('group_id,user_id').single();
   if (error) {
     button.disabled = false;
     button.textContent = 'Request access';
     alert(friendlyError(error));
     return;
   }
+  if (createdMembership) callSecureFunction('notify-request', { requestType: 'membership', requestId: groupId });
   await loadRooms();
+  if (activeProfile?.is_admin) await loadAdminDashboard();
 }
 
 async function enterRoom(group) {
@@ -402,8 +431,57 @@ $('#postForm')?.addEventListener('submit', async (event) => {
   }
 });
 
+function requestCard(title, body, meta, type, id) {
+  return `<div class="admin-request" data-review-type="${escapeHtml(type)}" data-review-id="${escapeHtml(id)}">
+    <h4>${escapeHtml(title)}</h4>${body ? `<p>${escapeHtml(body)}</p>` : ''}
+    <div class="admin-meta">${meta.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div>
+    <div class="admin-actions"><button class="admin-approve" type="button" data-decision="approve">Approve</button><button class="admin-decline" type="button" data-decision="decline">Decline</button></div>
+  </div>`;
+}
+
+async function loadAdminDashboard() {
+  const panel = $('#adminDashboard');
+  if (!activeProfile?.is_admin) { panel?.classList.add('hidden'); return; }
+  panel?.classList.remove('hidden');
+  setMessage('adminMessage', 'Loading pending requests…');
+  const [membershipsRes, memorialsRes, memoriesRes, groupsRes, profilesRes] = await Promise.all([
+    sb.from('group_members').select('group_id,user_id,status,joined_at').eq('status','pending').order('joined_at'),
+    sb.from('memorials').select('id,user_id,child_name,remembrance,public_requested,created_at').eq('approved',false).is('rejection_reason',null).order('created_at'),
+    sb.from('memories').select('id,user_id,author_name,message,created_at').eq('approved',false).is('rejection_reason',null).order('created_at'),
+    sb.from('support_groups').select('id,name'),
+    sb.from('profiles').select('id,display_name')
+  ]);
+  const firstError=[membershipsRes,memorialsRes,memoriesRes,groupsRes,profilesRes].find(r=>r.error)?.error;
+  if(firstError){setMessage('adminMessage',friendlyError(firstError),true);return;}
+  const groups=new Map((groupsRes.data||[]).map(x=>[x.id,x.name]));
+  const profiles=new Map((profilesRes.data||[]).map(x=>[x.id,x.display_name||'Community member']));
+  const memberships=membershipsRes.data||[], memorials=memorialsRes.data||[], memories=memoriesRes.data||[];
+  $('#pendingMembershipCount').textContent=memberships.length; $('#pendingMemorialCount').textContent=memorials.length; $('#pendingMemoryCount').textContent=memories.length;
+  $('#adminMemberships').innerHTML=memberships.length?memberships.map(x=>requestCard(groups.get(x.group_id)||'Protected room','',[profiles.get(x.user_id)||'Community member',new Date(x.joined_at).toLocaleString()], 'membership', `${x.group_id}:${x.user_id}`)).join(''):'<p class="empty-state">No pending room requests.</p>';
+  $('#adminMemorials').innerHTML=memorials.length?memorials.map(x=>requestCard(x.child_name,x.remembrance,[profiles.get(x.user_id)||'Community member',x.public_requested?'Public wall requested':'Private memorial',new Date(x.created_at).toLocaleString()], 'memorial', x.id)).join(''):'<p class="empty-state">No pending memorials.</p>';
+  $('#adminMemories').innerHTML=memories.length?memories.map(x=>requestCard(`Memory from ${x.author_name}`,x.message,[profiles.get(x.user_id)||'Community member',new Date(x.created_at).toLocaleString()], 'memory', x.id)).join(''):'<p class="empty-state">No pending memories.</p>';
+  panel.querySelectorAll('.admin-actions button').forEach(btn=>btn.addEventListener('click',handleAdminDecision));
+  setMessage('adminMessage','');
+}
+
+async function handleAdminDecision(event){
+  const button=event.currentTarget, card=button.closest('.admin-request');
+  const type=card.dataset.reviewType, requestId=card.dataset.reviewId, decision=button.dataset.decision;
+  let reason='';
+  if(decision==='decline') reason=prompt('Optional private reason for declining:','')||'Not approved at this time.';
+  card.querySelectorAll('button').forEach(b=>b.disabled=true);
+  setMessage('adminMessage', `${decision==='approve'?'Approving':'Declining'} request…`);
+  const result=await callSecureFunction('review-request',{requestType:type,requestId,decision,reason});
+  if(!result.ok){card.querySelectorAll('button').forEach(b=>b.disabled=false);setMessage('adminMessage',result.error||'The review could not be completed.',true);return;}
+  setMessage('adminMessage',result.emailSent===false?'Decision saved. Email delivery is not configured yet.':'Decision saved and email sent.');
+  await Promise.all([loadAdminDashboard(),loadRooms(),loadMyMemorials(),loadApprovedMemorials()]);
+}
+
+$('#refreshAdmin')?.addEventListener('click',loadAdminDashboard);
+
 async function loadCommunity() {
   await Promise.all([loadProfile(), loadMyMemorials(), loadRooms()]);
+  await loadAdminDashboard();
 }
 
 $('#refreshCommunity')?.addEventListener('click', async () => {
@@ -419,6 +497,7 @@ async function refreshSession() {
   activeUser = session?.user || null;
   $('#memberPanel').classList.toggle('hidden', !session);
   $('#communityHub').classList.toggle('hidden', !session);
+  if (!session) $('#adminDashboard')?.classList.add('hidden');
   $('#memberEmail').textContent = session?.user?.email || '';
   document.querySelectorAll('[data-open-auth]').forEach((button) => button.classList.toggle('hidden', Boolean(session)));
   if (session) await loadCommunity();

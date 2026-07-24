@@ -1,12 +1,8 @@
-Sky's Bridge v11.2 — interaction repair
+Sky's Bridge v11.3
 
-Fixed a JavaScript startup error caused by a missing #year element.
-That error stopped the rest of script.js from running, which disabled:
-- the mobile navigation menu
-- the Sky memorial modal
-- login/signup buttons
-- Honor a child
-- member/community controls
-
-Footer remains:
-© 2026 Sky's Bridge by Marco Freund. All rights reserved.
+Fixed:
+- Join our community buttons now open the registration dialog even if the Supabase library fails to load.
+- Honor a child now opens the login flow instead of appearing unresponsive.
+- A Supabase loading problem can no longer stop the rest of the page JavaScript.
+- Sky star, mobile navigation, modal close buttons and community actions remain active.
+- Footer remains: © 2026 Sky's Bridge by Marco Freund. All rights reserved.
