@@ -1,0 +1,29 @@
+SKY'S BRIDGE V11 — COMMUNITY FUNCTIONS
+
+Included functions
+- Member profile / chosen community name
+- Private memorial status list
+- Protected support-room directory
+- Access requests with pending / approved status
+- Posts visible only to approved room members
+- Responsive community dashboard
+
+Deployment
+1. Upload every file in this folder to the root of your GitHub repository.
+2. Commit the changes.
+3. Netlify will deploy the website automatically.
+4. Supabase GitHub integration should apply:
+   supabase/migrations/20260725010000_community_functions.sql
+
+Approving room access
+Until the dedicated moderator dashboard is added:
+1. Open Supabase > Table Editor > group_members.
+2. Find the request.
+3. Change status from pending to approved.
+4. The member can then enter the room, read posts and share posts.
+
+Important privacy behaviour
+- People who are not logged in cannot list rooms.
+- Pending members cannot read room posts.
+- Only approved members can read or create posts in that room.
+- Memorials and memories still require review before becoming public.

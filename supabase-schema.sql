@@ -405,3 +405,15 @@ grant select, insert, update, delete on public.support_groups to authenticated;
 grant select, insert, update, delete on public.group_members to authenticated;
 grant select, insert, update, delete on public.group_posts to authenticated;
 grant select, insert, update, delete on public.stars to authenticated;
+
+-- ---------------------------------------------------------------------------
+-- v11 protected community additions
+-- ---------------------------------------------------------------------------
+alter table public.group_posts
+  add column if not exists author_name text not null default 'Community member'
+  check (char_length(author_name) between 1 and 80);
+
+create index if not exists group_posts_group_created_idx
+  on public.group_posts (group_id, created_at desc);
+create index if not exists group_members_user_status_idx
+  on public.group_members (user_id, status);

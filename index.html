@@ -96,13 +96,73 @@
     <div>
       <p class="eyebrow">Member area</p>
       <h2>Welcome to Sky's Bridge</h2>
-      <p id="memberEmail"></p>
+      <p id="memberGreeting">Your protected community space is ready.</p><p id="memberEmail"></p>
     </div>
     <div class="member-actions">
       <button class="signout-btn" id="signOut" type="button" aria-label="Exit member area">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H6.8A1.8 1.8 0 0 0 5 6.8v10.4A1.8 1.8 0 0 0 6.8 19H10M14 8l4 4-4 4M9 12h9"/></svg>
         <span>Exit</span>
       </button>
+    </div>
+  </section>
+
+
+  <section class="community-hub hidden" id="communityHub" aria-labelledby="communityHubTitle">
+    <div class="hub-heading">
+      <div>
+        <p class="eyebrow">Protected community</p>
+        <h2 id="communityHubTitle">Your space to connect</h2>
+        <p>Choose what feels right today. Your profile, room requests and posts are visible only according to the privacy rules of each space.</p>
+      </div>
+      <button class="btn ghost hub-refresh" id="refreshCommunity" type="button">Refresh</button>
+    </div>
+
+    <div class="hub-grid">
+      <article class="hub-card profile-card">
+        <div class="hub-card-icon">♡</div>
+        <div>
+          <p class="eyebrow">Your profile</p>
+          <h3>A name to share</h3>
+          <p>Use your first name, initials or another name that feels safe.</p>
+        </div>
+        <form id="profileForm" class="compact-form">
+          <label>Community name<input id="profileName" type="text" maxlength="80" placeholder="e.g. Marco or M." autocomplete="nickname"></label>
+          <button class="btn gold" type="submit">Save profile</button>
+        </form>
+        <p class="form-message" id="profileMessage"></p>
+      </article>
+
+      <article class="hub-card memorial-status-card">
+        <div class="hub-card-icon">✦</div>
+        <div>
+          <p class="eyebrow">Your memorials</p>
+          <h3>Submitted with care</h3>
+          <p>See whether your memorial is waiting for review or has been approved for the Wall of Stars.</p>
+        </div>
+        <div class="status-list" id="myMemorials"><p class="empty-state">No memorial submitted yet.</p></div>
+        <button class="btn gold" id="hubOpenMemorial" type="button">Honor a child</button>
+      </article>
+    </div>
+
+    <div class="rooms-section">
+      <div class="rooms-heading">
+        <div><p class="eyebrow">Protected rooms</p><h3>Find the room that understands</h3></div>
+        <p>Access requests are reviewed before private conversations become visible.</p>
+      </div>
+      <div class="room-grid" id="roomGrid"><p class="empty-state">Loading protected rooms…</p></div>
+    </div>
+
+    <div class="room-conversation hidden" id="roomConversation">
+      <div class="conversation-header">
+        <div><p class="eyebrow">Private room</p><h3 id="activeRoomName">Room</h3><p id="activeRoomDescription"></p></div>
+        <button class="btn ghost" id="closeRoom" type="button">Close room</button>
+      </div>
+      <form id="postForm" class="post-form">
+        <label>Share with this room<textarea id="postBody" rows="4" maxlength="5000" placeholder="Write only what feels right to share…" required></textarea></label>
+        <div class="post-form-footer"><span>Your post is visible only to approved room members.</span><button class="btn gold" type="submit">Share post</button></div>
+      </form>
+      <p class="form-message" id="postMessage"></p>
+      <div class="post-feed" id="postFeed"><p class="empty-state">No posts yet. This can be a quiet beginning.</p></div>
     </div>
   </section>
 
@@ -122,7 +182,7 @@
 <footer>
   <img src="skys-bridge-wordmark.svg" alt="Sky's Bridge">
   <div><a href="privacy.html">Privacy</a><a href="community-guidelines.html">Community guidelines</a></div>
-  <p>© <span id="year"></span> Sky's Bridge</p>
+  <p>© 2026 Sky's Bridge by Marco Freund. All rights reserved.</p>
 </footer>
 
 <div class="modal sky-story-modal hidden" id="skyStoryModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="skyStoryTitle">
@@ -175,6 +235,7 @@
     <h2 id="authTitle">Join our community</h2>
     <p id="authNote">Create your protected member account.</p>
     <form id="authForm">
+      <label id="authNameLabel">Community name<input id="authName" type="text" maxlength="80" autocomplete="nickname" placeholder="First name, initials or chosen name"></label>
       <label>Email<input id="authEmail" type="email" required autocomplete="email"></label>
       <label>Password<input id="authPassword" type="password" minlength="8" required autocomplete="current-password"></label>
       <button class="btn gold large" type="submit" id="authSubmit">Create account</button>
