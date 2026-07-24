@@ -1,41 +1,48 @@
-SKY'S BRIDGE — SUPABASE-CONNECTED VERSION
+SKY'S BRIDGE — GITHUB + SUPABASE PLATFORM FOUNDATION
 
-The website is already configured with:
-Project URL: https://urlnadzbsccvtvijgyrs.supabase.co
-Public key: configured in config.js
+This version is prepared for the existing GitHub repository:
+mac8875/Skysbridge
 
-ONE REQUIRED SUPABASE STEP
-1. Open your Supabase project.
-2. Open SQL Editor > New query.
-3. Copy the complete contents of supabase-schema.sql.
-4. Paste it into the SQL Editor and press Run.
+NO MANUAL SQL EDITOR IS REQUIRED FOR THE INITIAL MIGRATION
 
-AUTHENTICATION SETTINGS
-In Supabase open Authentication > URL Configuration and set:
-Site URL: https://skysbridge.org
+1. Extract this ZIP file.
+2. Upload ALL files and folders to the ROOT of the GitHub repository.
+3. Important: preserve the folder path:
+   supabase/migrations/20260724180000_initial_platform.sql
+4. Commit the files.
+5. Merge them into the production branch configured in Supabase.
+6. Supabase will apply the migration through the GitHub integration.
+7. Netlify will deploy the website from the same repository.
+
+SUPABASE GITHUB INTEGRATION
+- Repository: mac8875/Skysbridge
+- Working directory: .
+- Production deployment: enabled for the branch you use for the live website
+
+AUTHENTICATION URL SETTINGS
+Supabase > Authentication > URL Configuration
+Site URL:
+https://skysbridge.org
+
 Redirect URLs:
-- https://skysbridge.org
-- https://www.skysbridge.org
+https://skysbridge.org
+https://www.skysbridge.org
 
-In Authentication > Providers > Email, keep Email enabled.
-For testing you may temporarily disable Confirm email, but confirmation is recommended for the public website.
-
-WHAT WORKS AFTER RUNNING THE SQL
-- Email registration and login
+CURRENT FEATURES
+- Registration and login
 - Protected member panel
 - Private memorial submission
-- Approved public memorials loaded from Supabase
-- Leave a Memory for Sky, saved privately for review
-- Row Level Security policies protecting submissions
+- Approved entries shown on the Wall of Stars
+- Sky's clickable memorial story
+- Leave a Memory for Sky
+- Row Level Security
+- Netlify security headers
 
-APPROVING CONTENT
-In Supabase > Table Editor:
-- memorials: set approved=true only after review
-- memories: set approved=true only after review
-
-DEPLOYMENT
-Upload every file in this folder to the root of the GitHub repository connected to Netlify.
+CONTENT APPROVAL
+Until the admin dashboard is built, use Supabase Table Editor:
+- memorials: set approved = true after review
+- memories: set approved = true after review
 
 SECURITY
-The publishable key in config.js is intentionally public and protected by Row Level Security.
-Never add a secret key or service_role key to the website.
+The browser key in config.js is publishable and may appear in frontend code.
+Never put a secret key or service_role key into GitHub or the website.
