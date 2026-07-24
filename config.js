@@ -1,6 +1,6 @@
-// Replace these two values after creating your Supabase project.
-// These are public browser values, not your password.
+// Public Supabase browser configuration for Sky's Bridge.
+// The publishable key is safe to use in frontend code. Never add a secret/service-role key here.
 window.SKYBRIDGE_CONFIG = {
-  supabaseUrl: "YOUR_SUPABASE_PROJECT_URL",
-  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY"
+  supabaseUrl: "https://urlnadzbsccvtvijgyrs.supabase.co",
+  supabaseAnonKey: "sb_publishable_pExSYS2erdZw2EatmQ5x-g_X50v3oaR"
 };

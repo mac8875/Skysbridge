@@ -68,7 +68,7 @@
       <p>Families choose what to share and when. Public memorials require approval before they appear.</p>
     </div>
     <div class="star-field" id="starField">
-      <button class="star sky" data-name="Sky" aria-label="Sky"><span>Sky</span></button>
+      <button class="star sky" id="openSkyStory" data-name="Sky" aria-label="Open Sky’s story" aria-haspopup="dialog"><span>Sky</span></button>
     </div>
     <div class="wall-actions">
       <button class="btn gold" id="openMemorial">Honor a child</button>
@@ -105,6 +105,49 @@
   <div><a href="privacy.html">Privacy</a><a href="community-guidelines.html">Community guidelines</a></div>
   <p>© <span id="year"></span> Sky's Bridge</p>
 </footer>
+
+<div class="modal sky-story-modal hidden" id="skyStoryModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="skyStoryTitle">
+  <div class="modal-card sky-story-card">
+    <button class="close" data-close aria-label="Close Sky’s story">&times;</button>
+    <div class="memorial-star" aria-hidden="true">✦</div>
+    <p class="eyebrow">Wall of Stars</p>
+    <h2 id="skyStoryTitle">Sky</h2>
+    <p class="sky-dedication">Forever our son. Forever our light.</p>
+
+    <div class="sky-story-copy">
+      <p><strong>Sky lived only a short time, but he changed our lives forever.</strong></p>
+      <p>His life taught us that love is not measured in years, but in the depth of the bond we share.</p>
+      <p>After losing him, we discovered how lonely grief can become. Many parents carry their pain in silence, believing they are alone.</p>
+      <p><strong>Sky's Bridge Foundation</strong> was created in his memory—to build bridges between families who understand this journey, to ensure that every child is remembered, and that no parent has to grieve alone.</p>
+      <p><strong>Sky is the first star on our Wall of Stars.</strong></p>
+      <p class="sky-light">His light became the beginning of thousands of others.</p>
+    </div>
+
+    <div class="memorial-details" aria-label="Sky memorial details">
+      <div><span>Date of Birth</span><strong>Kept private</strong></div>
+      <div><span>Date of Passing</span><strong>Kept private</strong></div>
+      <div><span>Loved by</span><strong>Mum &amp; Dad</strong></div>
+    </div>
+
+    <p class="forever-line">Forever loved. Forever remembered.</p>
+    <button class="btn gold large sky-memory-btn" id="openMemory" type="button">Leave a Memory</button>
+  </div>
+</div>
+
+<div class="modal hidden" id="memoryModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="memoryTitle">
+  <div class="modal-card">
+    <button class="close" data-close aria-label="Close memory form">&times;</button>
+    <p class="eyebrow">For Sky</p>
+    <h2 id="memoryTitle">Leave a Memory</h2>
+    <p>Your memory will remain private until it has been reviewed and approved.</p>
+    <form id="memoryForm">
+      <label>Your name<input id="memoryAuthor" type="text" maxlength="80" required autocomplete="name"></label>
+      <label>Your memory<textarea id="memoryText" rows="6" maxlength="800" required></textarea></label>
+      <button class="btn gold large" type="submit">Submit memory</button>
+    </form>
+    <p class="form-message" id="memoryMessage"></p>
+  </div>
+</div>
 
 <div class="modal hidden" id="authModal" aria-hidden="true">
   <div class="modal-card">
