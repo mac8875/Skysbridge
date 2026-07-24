@@ -1,0 +1,12 @@
+Sky's Bridge v11.2 — interaction repair
+
+Fixed a JavaScript startup error caused by a missing #year element.
+That error stopped the rest of script.js from running, which disabled:
+- the mobile navigation menu
+- the Sky memorial modal
+- login/signup buttons
+- Honor a child
+- member/community controls
+
+Footer remains:
+© 2026 Sky's Bridge by Marco Freund. All rights reserved.

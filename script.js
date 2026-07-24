@@ -10,7 +10,8 @@ const $ = (selector) => document.querySelector(selector);
 const nav = $('.topbar nav');
 $('.menu')?.addEventListener('click', () => nav?.classList.toggle('open'));
 document.querySelectorAll('.topbar nav a').forEach((link) => link.addEventListener('click', () => nav?.classList.remove('open')));
-$('#year').textContent = new Date().getFullYear();
+const yearElement = $('#year');
+if (yearElement) yearElement.textContent = new Date().getFullYear();
 
 const authModal = $('#authModal');
 const memorialModal = $('#memorialModal');
