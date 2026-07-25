@@ -1,8 +1,6 @@
 {
-  "name": "skysbridge-community",
+  "name": "skysbridge-platform",
   "private": true,
-  "version": "15.0.0",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.52.0"
-  }
+  "version": "17.0.0",
+  "description": "Sky's Bridge community platform – Version 17"
 }

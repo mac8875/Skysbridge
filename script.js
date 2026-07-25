@@ -1,3 +1,4 @@
+const SKYBRIDGE_VERSION = '16.0.0';
 const cfg = window.SKYBRIDGE_CONFIG || {};
 const configured = Boolean(
   cfg.supabaseUrl && cfg.supabaseAnonKey &&
@@ -302,6 +303,7 @@ async function loadApprovedMemorials({ reset = true } = {}) {
     .select('id,child_name,remembrance,created_at')
     .eq('approved', true)
     .eq('public_requested', true)
+    .eq('archived', false)
     .order('created_at', { ascending: true })
     .range(from, to);
 
@@ -540,30 +542,93 @@ function requestCard(title, body, meta, type, id) {
   </div>`;
 }
 
+function adminStatus(item) {
+  if (item.archived) return 'Archived';
+  if (item.approved) return 'Approved';
+  if (item.rejection_reason) return 'Rejected';
+  return 'Pending';
+}
+
+function managementCard(item, type) {
+  const isMemorial = type === 'memorial';
+  const title = isMemorial ? item.child_name : `Memory from ${item.author_name}`;
+  const body = isMemorial ? item.remembrance : item.message;
+  const status = adminStatus(item);
+  const actions = [];
+  if (item.archived) actions.push(['restore','Restore']);
+  else actions.push(['archive','Archive']);
+  if (item.approved) actions.push(['reject','Reject approval']);
+  else actions.push(['approve','Approve']);
+  actions.push(['delete','Delete permanently']);
+  return `<div class="admin-request admin-managed-item" data-content-type="${type}" data-content-id="${escapeHtml(item.id)}">
+    <div class="admin-item-top"><h4>${escapeHtml(title)}</h4><span class="admin-state state-${status.toLowerCase()}">${status}</span></div>
+    ${body ? `<p>${escapeHtml(body)}</p>` : ''}
+    <div class="admin-meta"><span>${new Date(item.created_at).toLocaleString()}</span>${item.rejection_reason ? `<span>Reason: ${escapeHtml(item.rejection_reason)}</span>` : ''}</div>
+    <div class="admin-actions">${actions.map(([action,label])=>`<button type="button" class="admin-manage-action action-${action}" data-action="${action}">${label}</button>`).join('')}</div>
+  </div>`;
+}
+
 async function loadAdminDashboard() {
   const panel = $('#adminDashboard');
   if (!activeProfile?.is_admin) { panel?.classList.add('hidden'); return; }
   panel?.classList.remove('hidden');
-  setMessage('adminMessage', 'Loading pending requests…');
-  const [membershipsRes, memorialsRes, memoriesRes, groupsRes, profilesRes] = await Promise.all([
+  setMessage('adminMessage', 'Loading administration…');
+  const [membershipsRes, pendingMemorialsRes, pendingMemoriesRes, allMemorialsRes, allMemoriesRes, groupsRes, profilesRes] = await Promise.all([
     sb.from('group_members').select('group_id,user_id,status,joined_at').eq('status','pending').order('joined_at'),
-    sb.from('memorials').select('id,user_id,child_name,remembrance,public_requested,created_at').eq('approved',false).is('rejection_reason',null).order('created_at'),
-    sb.from('memories').select('id,user_id,author_name,message,created_at').eq('approved',false).is('rejection_reason',null).order('created_at'),
+    sb.from('memorials').select('id,user_id,child_name,remembrance,public_requested,created_at').eq('approved',false).is('rejection_reason',null).eq('archived',false).order('created_at'),
+    sb.from('memories').select('id,user_id,author_name,message,created_at').eq('approved',false).is('rejection_reason',null).eq('archived',false).order('created_at'),
+    sb.from('memorials').select('id,child_name,remembrance,approved,archived,rejection_reason,created_at').order('created_at',{ascending:false}).limit(250),
+    sb.from('memories').select('id,author_name,message,approved,archived,rejection_reason,created_at').order('created_at',{ascending:false}).limit(250),
     sb.from('support_groups').select('id,name'),
     sb.from('profiles').select('id,display_name')
   ]);
-  const firstError=[membershipsRes,memorialsRes,memoriesRes,groupsRes,profilesRes].find(r=>r.error)?.error;
+  const results=[membershipsRes,pendingMemorialsRes,pendingMemoriesRes,allMemorialsRes,allMemoriesRes,groupsRes,profilesRes];
+  const firstError=results.find(r=>r.error)?.error;
   if(firstError){setMessage('adminMessage',friendlyError(firstError),true);return;}
   const groups=new Map((groupsRes.data||[]).map(x=>[x.id,x.name]));
   const profiles=new Map((profilesRes.data||[]).map(x=>[x.id,x.display_name||'Community member']));
-  const memberships=membershipsRes.data||[], memorials=memorialsRes.data||[], memories=memoriesRes.data||[];
+  const memberships=membershipsRes.data||[], memorials=pendingMemorialsRes.data||[], memories=pendingMemoriesRes.data||[];
+  window.adminMemorialItems=allMemorialsRes.data||[]; window.adminMemoryItems=allMemoriesRes.data||[];
   $('#pendingMembershipCount').textContent=memberships.length; $('#pendingMemorialCount').textContent=memorials.length; $('#pendingMemoryCount').textContent=memories.length;
+  $('#managedMemorialCount').textContent=window.adminMemorialItems.length; $('#managedMemoryCount').textContent=window.adminMemoryItems.length;
   $('#adminMemberships').innerHTML=memberships.length?memberships.map(x=>requestCard(groups.get(x.group_id)||'Protected room','',[profiles.get(x.user_id)||'Community member',new Date(x.joined_at).toLocaleString()], 'membership', `${x.group_id}:${x.user_id}`)).join(''):'<p class="empty-state">No pending room requests.</p>';
   $('#adminMemorials').innerHTML=memorials.length?memorials.map(x=>requestCard(x.child_name,x.remembrance,[profiles.get(x.user_id)||'Community member',x.public_requested?'Public wall requested':'Private memorial',new Date(x.created_at).toLocaleString()], 'memorial', x.id)).join(''):'<p class="empty-state">No pending memorials.</p>';
   $('#adminMemories').innerHTML=memories.length?memories.map(x=>requestCard(`Memory from ${x.author_name}`,x.message,[profiles.get(x.user_id)||'Community member',new Date(x.created_at).toLocaleString()], 'memory', x.id)).join(''):'<p class="empty-state">No pending memories.</p>';
-  panel.querySelectorAll('.admin-actions button').forEach(btn=>btn.addEventListener('click',handleAdminDecision));
+  renderAdminManagement();
+  panel.querySelectorAll('.admin-actions button[data-decision]').forEach(btn=>btn.addEventListener('click',handleAdminDecision));
   setMessage('adminMessage','');
 }
+
+function renderAdminManagement(){
+  const mq=($('#adminMemorialSearch')?.value||'').trim().toLowerCase();
+  const rq=($('#adminMemorySearch')?.value||'').trim().toLowerCase();
+  const memorials=(window.adminMemorialItems||[]).filter(x=>!mq||`${x.child_name} ${x.remembrance}`.toLowerCase().includes(mq));
+  const memories=(window.adminMemoryItems||[]).filter(x=>!rq||`${x.author_name} ${x.message}`.toLowerCase().includes(rq));
+  $('#adminAllMemorials').innerHTML=memorials.length?memorials.map(x=>managementCard(x,'memorial')).join(''):'<p class="empty-state">No matching memorials.</p>';
+  $('#adminAllMemories').innerHTML=memories.length?memories.map(x=>managementCard(x,'memory')).join(''):'<p class="empty-state">No matching memories.</p>';
+  document.querySelectorAll('.admin-manage-action').forEach(btn=>btn.addEventListener('click',handleContentManagement));
+}
+
+async function handleContentManagement(event){
+  const button=event.currentTarget, card=button.closest('.admin-managed-item');
+  const contentType=card.dataset.contentType, contentId=card.dataset.contentId, action=button.dataset.action;
+  let reason=null;
+  if(action==='reject') reason=prompt('Private reason for rejecting this approval:','Removed from public view by an administrator.')||'Removed from public view by an administrator.';
+  if(action==='delete'){
+    const label=contentType==='memorial'?'memorial and its star':'memory';
+    if(!confirm(`Delete this ${label} permanently? This cannot be undone.`)) return;
+  }
+  if(action==='archive'&&!confirm('Archive this item? It will be hidden but can be restored later.')) return;
+  card.querySelectorAll('button').forEach(b=>b.disabled=true);
+  setMessage('adminMessage', `${action.charAt(0).toUpperCase()+action.slice(1)} in progress…`);
+  const {data,error}=await sb.rpc('admin_manage_content',{p_content_type:contentType,p_content_id:contentId,p_action:action,p_reason:reason});
+  if(error){card.querySelectorAll('button').forEach(b=>b.disabled=false);setMessage('adminMessage',`Action failed: ${friendlyError(error)}`,true);return;}
+  setMessage('adminMessage','Change saved successfully.');
+  await Promise.all([loadAdminDashboard(),loadMyMemorials(),loadApprovedMemorials({reset:true})]);
+}
+
+$('#adminMemorialSearch')?.addEventListener('input',renderAdminManagement);
+$('#adminMemorySearch')?.addEventListener('input',renderAdminManagement);
 
 async function handleAdminDecision(event){
   const button=event.currentTarget, card=button.closest('.admin-request');
@@ -572,7 +637,7 @@ async function handleAdminDecision(event){
   if(decision==='decline') reason=prompt('Optional private reason for declining:','')||'Not approved at this time.';
   card.querySelectorAll('button').forEach(b=>b.disabled=true);
   setMessage('adminMessage', `${decision==='approve'?'Approving':'Declining'} request…`);
-  // v15: use a protected Supabase RPC first. This works without a Netlify
+  // v17: use a protected Supabase RPC first. This works without a Netlify
   // service-role key and verifies the administrator inside the database.
   let result = { ok: false };
   const { data: rpcData, error: rpcError } = await sb.rpc('review_community_request', {
@@ -588,7 +653,7 @@ async function handleAdminDecision(event){
     // yet been run but the Netlify service-role function is configured.
     result = await callSecureFunction('review-request',{requestType:type,requestId,decision,reason});
   } else {
-    result = { ok: false, error: friendlyError(rpcError) };
+    result = { ok: false, error: `Review failed: ${friendlyError(rpcError)}` };
   }
   if(!result.ok){
     card.querySelectorAll('button').forEach(b=>b.disabled=false);

@@ -1,0 +1,9 @@
+UPLOAD THIS FOLDER'S CONTENTS TO THE GITHUB REPOSITORY ROOT.
+
+After Netlify reports “Published”:
+- Open https://skysbridge.org
+- Refresh the browser page
+- Log in with the confirmed administrator account
+- Test one pending request
+
+No new SQL step is required because the moderation SQL was already installed successfully.

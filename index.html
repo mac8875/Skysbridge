@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="styles.css?v=17">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -196,8 +196,10 @@
     </div>
     <div class="admin-summary" id="adminSummary">
       <div><strong id="pendingMembershipCount">0</strong><span>Room requests</span></div>
-      <div><strong id="pendingMemorialCount">0</strong><span>Memorials</span></div>
-      <div><strong id="pendingMemoryCount">0</strong><span>Memories</span></div>
+      <div><strong id="pendingMemorialCount">0</strong><span>Pending memorials</span></div>
+      <div><strong id="pendingMemoryCount">0</strong><span>Pending memories</span></div>
+      <div><strong id="managedMemorialCount">0</strong><span>All memorials</span></div>
+      <div><strong id="managedMemoryCount">0</strong><span>All memories</span></div>
     </div>
     <div class="admin-columns">
       <article class="admin-card">
@@ -211,6 +213,18 @@
       <article class="admin-card">
         <p class="eyebrow">Sky's memories</p><h3>Pending memories</h3>
         <div class="admin-list" id="adminMemories"><p class="empty-state">No pending memories.</p></div>
+      </article>
+    </div>
+    <div class="admin-management">
+      <article class="admin-card admin-manage-card">
+        <div class="admin-card-heading"><div><p class="eyebrow">Wall of Stars</p><h3>Manage memorials</h3></div><input class="admin-search" id="adminMemorialSearch" type="search" placeholder="Search child name" aria-label="Search memorials"></div>
+        <p class="admin-help">Archive hides a star without deleting it. Reject removes approval. Delete is permanent.</p>
+        <div class="admin-list" id="adminAllMemorials"><p class="empty-state">Loading memorials…</p></div>
+      </article>
+      <article class="admin-card admin-manage-card">
+        <div class="admin-card-heading"><div><p class="eyebrow">Sky's memories</p><h3>Manage memories</h3></div><input class="admin-search" id="adminMemorySearch" type="search" placeholder="Search name or text" aria-label="Search memories"></div>
+        <p class="admin-help">Approved memories can be rejected, archived, restored or permanently deleted.</p>
+        <div class="admin-list" id="adminAllMemories"><p class="empty-state">Loading memories…</p></div>
       </article>
     </div>
     <p class="form-message" id="adminMessage"></p>
@@ -328,6 +342,6 @@
 </div>
 
 <script src="config.js"></script>
-<script src="script.js?v=15"></script>
+<script src="script.js?v=17"></script>
 </body>
 </html>

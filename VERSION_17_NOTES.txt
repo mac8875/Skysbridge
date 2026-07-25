@@ -1,0 +1,11 @@
+SKY'S BRIDGE VERSION 17
+
+New administrator controls:
+- Archive and restore memorials/stars
+- Revoke an approval (Reject approval)
+- Re-approve rejected memorials and memories
+- Permanently delete memorials/stars or memories with confirmation
+- Search all memorials and memories
+- Clear status labels: Pending, Approved, Rejected, Archived
+
+IMPORTANT: Run V17_RUN_THIS_IN_SUPABASE.sql once in Supabase SQL Editor.

@@ -1,0 +1,28 @@
+SKY'S BRIDGE VERSION 16 — COMPLETE COMMUNITY REVIEW
+
+Included in this release
+- Clear Log in and Create account modes on desktop and mobile.
+- Existing confirmed members can log in without creating another account.
+- Administrator access is detected from public.profiles.is_admin.
+- Approve and Decline use the protected Supabase review_community_request function.
+- Approved or declined requests disappear from the pending list immediately.
+- The review dashboard refreshes counts, rooms, memorials and the Wall of Stars.
+- The footer places “All rights reserved.” on its own line.
+- The scalable Wall of Stars remains scrollable and suitable for many memorials.
+- Version 16 cache tags help browsers load the newest CSS and JavaScript after deployment.
+
+DATABASE STATUS
+The Version 15 moderation SQL has already been run successfully in Supabase.
+Do not run it again unless the database is recreated. The installer remains included as:
+V15_RUN_THIS_IN_SUPABASE.sql
+
+DEPLOYMENT
+1. Upload all files from this folder to the GitHub repository root.
+2. Wait for the Netlify deployment to complete.
+3. Open skysbridge.org and refresh the page.
+4. Sign out and sign in again if an older session is still cached.
+5. Open the admin review centre and test Approve and Decline.
+
+SECURITY
+Never place a Supabase service-role key in config.js, GitHub, or browser code.
+Only the public anonymous key belongs in config.js.

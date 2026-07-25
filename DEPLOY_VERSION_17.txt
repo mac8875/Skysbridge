@@ -1,0 +1,4 @@
+1. Upload the contents of this folder to the GitHub repository root.
+2. Let Netlify deploy the changes.
+3. In Supabase SQL Editor, run the complete contents of V17_RUN_THIS_IN_SUPABASE.sql once.
+4. Sign out and back in, then open the Administration section.

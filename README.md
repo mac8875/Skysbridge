@@ -1,3 +1,5 @@
+# Sky's Bridge — Version 17
+
 # Sky's Bridge v11 Community
 
 A protected memorial and community platform for families after the loss of a child.
@@ -39,3 +41,11 @@ This version adds a protected administrator review centre and optional transacti
 - Name search using Supabase filtering
 - Sky remains permanently featured as the first star
 - Approved public memorials open in a dedicated remembrance dialog
+
+
+## Version 17
+Login, administrator detection, scalable Wall of Stars, and protected Approve/Decline moderation are included. The one-time moderation SQL has already been installed in the existing Supabase project.
+
+
+## Version 17 admin management
+Run `V17_RUN_THIS_IN_SUPABASE.sql` once to enable archive, restore, revoke approval and permanent deletion.
