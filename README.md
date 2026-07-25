@@ -30,3 +30,12 @@ Read `COMMUNITY_SETUP.txt` for the current manual room-approval process.
 
 ## v12 administrator workflow
 This version adds a protected administrator review centre and optional transactional email notifications through Netlify Functions + Resend. Read `ADMIN_EMAIL_SETUP.md` before deployment.
+
+
+## Version 13 — Scalable Wall of Stars
+- Scrollable star field that stays a comfortable size on mobile and desktop
+- Paginated Supabase loading (24 memorials at a time)
+- Automatic loading near the bottom plus an accessible “Explore more stars” button
+- Name search using Supabase filtering
+- Sky remains permanently featured as the first star
+- Approved public memorials open in a dedicated remembrance dialog

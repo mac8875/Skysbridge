@@ -1,0 +1,15 @@
+SKY'S BRIDGE VERSION 14 — LOGIN FIX
+
+Changes:
+- Added clear Log in / Create account tabs inside the account window.
+- Added an "Already have an account? Log in" switch below the form.
+- Added Log in and Join buttons inside the mobile menu.
+- Closing/opening the account window now resets old confirmation messages.
+- Password autocomplete changes correctly between login and registration.
+- Added cache-busting version tags so Netlify browsers load the new CSS and JavaScript.
+
+After uploading to GitHub/Netlify:
+1. Wait for the Netlify deploy to finish.
+2. Open skysbridge.org and refresh the page.
+3. Tap the menu, then Log in, or open Join our community and select the Log in tab.
+4. Sign in with the existing confirmed account.

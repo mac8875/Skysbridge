@@ -20,6 +20,7 @@ const authModal = $('#authModal');
 const memorialModal = $('#memorialModal');
 const skyStoryModal = $('#skyStoryModal');
 const memoryModal = $('#memoryModal');
+const communityStarModal = $('#communityStarModal');
 let authMode = 'signup';
 let activeUser = null;
 let activeProfile = null;
@@ -68,17 +69,36 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') closeModals();
 });
 
-document.querySelectorAll('[data-open-auth]').forEach((button) => button.addEventListener('click', () => openAuth(button.dataset.openAuth)));
+document.querySelectorAll('[data-open-auth]').forEach((button) => button.addEventListener('click', () => {
+  nav?.classList.remove('open');
+  openAuth(button.dataset.openAuth);
+}));
+document.querySelectorAll('[data-auth-mode]').forEach((button) => button.addEventListener('click', () => openAuth(button.dataset.authMode)));
 
 function openAuth(mode = 'signup') {
-  authMode = mode;
-  $('#authTitle').textContent = mode === 'login' ? 'Welcome back' : 'Join our community';
-  $('#authNote').textContent = mode === 'login' ? 'Log in to your protected member area.' : 'Create your protected member account.';
-  $('#authSubmit').textContent = mode === 'login' ? 'Log in' : 'Create account';
-  $('#authNameLabel').classList.toggle('hidden', mode === 'login');
-  $('#authName').required = mode === 'signup';
+  authMode = mode === 'login' ? 'login' : 'signup';
+  const isLogin = authMode === 'login';
+  $('#authTitle').textContent = isLogin ? 'Welcome back' : 'Join our community';
+  $('#authNote').textContent = isLogin ? 'Log in to your protected member area.' : 'Create your protected member account.';
+  $('#authSubmit').textContent = isLogin ? 'Log in' : 'Create account';
+  $('#authNameLabel').classList.toggle('hidden', isLogin);
+  $('#authName').required = !isLogin;
+  $('#authPassword').setAttribute('autocomplete', isLogin ? 'current-password' : 'new-password');
+  document.querySelectorAll('.auth-tab').forEach((tab) => {
+    const selected = tab.dataset.authMode === authMode;
+    tab.classList.toggle('active', selected);
+    tab.setAttribute('aria-selected', String(selected));
+  });
+  const alternative = $('#authAlternative');
+  if (alternative) {
+    alternative.dataset.authMode = isLogin ? 'signup' : 'login';
+    alternative.innerHTML = isLogin
+      ? 'New to Sky\'s Bridge? <strong>Create an account</strong>'
+      : 'Already have an account? <strong>Log in</strong>';
+  }
   setMessage('authMessage', sb ? '' : 'The secure community service is temporarily unavailable. Please refresh the page and try again.', !sb);
   openModal(authModal);
+  setTimeout(() => (isLogin ? $('#authEmail') : $('#authName'))?.focus(), 50);
 }
 
 async function requireUser(message) {
@@ -219,29 +239,110 @@ $('#memoryForm')?.addEventListener('submit', async (event) => {
   }
 });
 
-async function loadApprovedMemorials() {
-  if (!sb) return;
-  const { data, error } = await sb.from('memorials')
-    .select('id,child_name,remembrance')
+const STAR_PAGE_SIZE = 24;
+let starPage = 0;
+let starSearchTerm = '';
+let starLoading = false;
+let starHasMore = false;
+let starRenderedCount = 0;
+let starSearchTimer = null;
+
+function openCommunityStar(item) {
+  $('#communityStarTitle').textContent = item.child_name || 'A cherished child';
+  $('#communityStarRemembrance').textContent = item.remembrance || 'Held forever in the hearts of those who love them.';
+  openModal(communityStarModal);
+}
+
+function createCommunityStar(item, index) {
+  const star = document.createElement('button');
+  star.type = 'button';
+  star.className = 'star community-star';
+  star.style.setProperty('--delay', `${(index % 12) * -0.23}s`);
+  star.setAttribute('aria-label', `Open memorial for ${item.child_name}`);
+  star.innerHTML = '<span class="community-star-shape" aria-hidden="true">✦</span><strong></strong>';
+  star.querySelector('strong').textContent = item.child_name;
+  star.addEventListener('click', () => openCommunityStar(item));
+  return star;
+}
+
+function updateStarWallStatus(message = '') {
+  const state = $('#starFieldState');
+  const more = $('#loadMoreStars');
+  if (state) {
+    state.textContent = message;
+    state.classList.toggle('hidden', !message);
+  }
+  more?.classList.toggle('hidden', !starHasMore || starLoading);
+  const count = $('#starCount');
+  if (count) {
+    if (starSearchTerm) count.textContent = `${starRenderedCount} matching ${starRenderedCount === 1 ? 'star' : 'stars'}`;
+    else count.textContent = starRenderedCount ? `Sky and ${starRenderedCount} more ${starRenderedCount === 1 ? 'light' : 'lights'}` : 'Sky is the first light';
+  }
+}
+
+async function loadApprovedMemorials({ reset = true } = {}) {
+  const grid = $('#starGrid');
+  if (!grid || starLoading) return;
+  if (!sb) {
+    updateStarWallStatus('More lights will appear here as memorials are approved.');
+    return;
+  }
+
+  starLoading = true;
+  if (reset) {
+    starPage = 0;
+    starRenderedCount = 0;
+    grid.innerHTML = '';
+  }
+  updateStarWallStatus('Loading stars…');
+
+  const from = starPage * STAR_PAGE_SIZE;
+  const to = from + STAR_PAGE_SIZE;
+  let query = sb.from('memorials')
+    .select('id,child_name,remembrance,created_at')
     .eq('approved', true)
     .eq('public_requested', true)
-    .order('created_at', { ascending: true });
-  if (error) return;
-  const field = $('#starField');
-  field?.querySelectorAll('.star.community-star').forEach((element) => element.remove());
-  (data || []).forEach((item, index) => {
-    const star = document.createElement('button');
-    star.type = 'button';
-    star.className = 'star community-star';
-    star.style.setProperty('--i', index + 1);
-    star.setAttribute('aria-label', `Memorial for ${item.child_name}`);
-    star.title = item.remembrance || item.child_name;
-    const label = document.createElement('span');
-    label.textContent = item.child_name;
-    star.appendChild(label);
-    field?.appendChild(star);
-  });
+    .order('created_at', { ascending: true })
+    .range(from, to);
+
+  if (starSearchTerm) query = query.ilike('child_name', `%${starSearchTerm}%`);
+  const { data, error } = await query;
+  starLoading = false;
+
+  if (error) {
+    updateStarWallStatus('The stars could not be loaded right now. Please try again.');
+    return;
+  }
+
+  const rows = data || [];
+  const visibleRows = rows.slice(0, STAR_PAGE_SIZE);
+  visibleRows.forEach((item, index) => grid.appendChild(createCommunityStar(item, starRenderedCount + index)));
+  starRenderedCount += visibleRows.length;
+  starHasMore = rows.length > STAR_PAGE_SIZE;
+  if (starHasMore) starPage += 1;
+
+  if (!starRenderedCount) {
+    updateStarWallStatus(starSearchTerm ? `No star found for “${starSearchTerm}”.` : 'More lights will appear here as memorials are approved.');
+  } else {
+    updateStarWallStatus('');
+  }
 }
+
+$('#loadMoreStars')?.addEventListener('click', () => loadApprovedMemorials({ reset: false }));
+$('#starSearch')?.addEventListener('input', (event) => {
+  clearTimeout(starSearchTimer);
+  starSearchTimer = setTimeout(() => {
+    starSearchTerm = event.target.value.trim();
+    loadApprovedMemorials({ reset: true });
+  }, 300);
+});
+
+$('#starField')?.addEventListener('scroll', (event) => {
+  const field = event.currentTarget;
+  if (starHasMore && !starLoading && field.scrollTop + field.clientHeight >= field.scrollHeight - 120) {
+    loadApprovedMemorials({ reset: false });
+  }
+});
 
 async function loadProfile() {
   if (!activeUser) return;

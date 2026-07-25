@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=14">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -24,6 +24,10 @@
     <a href="#stars">Wall of Stars</a>
     <a href="#resources">Resources</a>
     <a href="#contact">Contact</a>
+    <div class="mobile-auth-actions">
+      <button class="btn ghost" type="button" data-open-auth="login">Log in</button>
+      <button class="btn gold" type="button" data-open-auth="signup">Join our community</button>
+    </div>
   </nav>
   <div class="actions">
     <button class="btn ghost" data-open-auth="login">Log in</button>
@@ -67,24 +71,38 @@
       <h2>Every light carries a name.<br>Every name carries a story.</h2>
       <p>Families choose what to share and when. Public memorials require approval before they appear.</p>
     </div>
-    <div class="star-field" id="starField">
-      <button class="star sky" id="openSkyStory" data-name="Sky" aria-label="Open Sky’s story" aria-haspopup="dialog">
-        <svg class="sky-star-shape" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id="skyStarGold" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#fff9d7"/>
-              <stop offset="48%" stop-color="#ffd16d"/>
-              <stop offset="100%" stop-color="#d99424"/>
-            </linearGradient>
-            <filter id="skyStarGlow" x="-100%" y="-100%" width="300%" height="300%">
-              <feGaussianBlur stdDeviation="2.8" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <path class="sky-star-rays" d="M60 3 L61.9 56.9 L117 60 L61.9 63.1 L60 117 L58.1 63.1 L3 60 L58.1 56.9 Z" fill="url(#skyStarGold)" filter="url(#skyStarGlow)"/>
-        </svg>
-        <span>Sky</span>
-      </button>
+    <div class="star-tools" aria-label="Wall of Stars controls">
+      <label class="star-search">
+        <span class="sr-only">Search the Wall of Stars</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+        <input id="starSearch" type="search" maxlength="80" placeholder="Search a child's name" autocomplete="off">
+      </label>
+      <span class="star-count" id="starCount" aria-live="polite">Sky is the first light</span>
+    </div>
+    <div class="star-field" id="starField" tabindex="0" aria-label="Scrollable Wall of Stars">
+      <div class="sky-featured">
+        <button class="star sky" id="openSkyStory" data-name="Sky" aria-label="Open Sky’s story" aria-haspopup="dialog">
+          <svg class="sky-star-shape" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="skyStarGold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#fff9d7"/>
+                <stop offset="48%" stop-color="#ffd16d"/>
+                <stop offset="100%" stop-color="#d99424"/>
+              </linearGradient>
+              <filter id="skyStarGlow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="2.8" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path class="sky-star-rays" d="M60 3 L61.9 56.9 L117 60 L61.9 63.1 L60 117 L58.1 63.1 L3 60 L58.1 56.9 Z" fill="url(#skyStarGold)" filter="url(#skyStarGlow)"/>
+          </svg>
+          <span>Sky</span>
+        </button>
+        <p>Our first star</p>
+      </div>
+      <div class="star-grid" id="starGrid" aria-live="polite"></div>
+      <div class="star-field-state" id="starFieldState">More lights will appear here as memorials are approved.</div>
+      <button class="explore-stars hidden" id="loadMoreStars" type="button">Explore more stars</button>
     </div>
     <div class="wall-actions">
       <button class="btn gold" id="openMemorial">Honor a child</button>
@@ -214,7 +232,7 @@
 <footer>
   <img src="skys-bridge-wordmark.svg" alt="Sky's Bridge">
   <div><a href="privacy.html">Privacy</a><a href="community-guidelines.html">Community guidelines</a></div>
-  <p>© 2026 Sky's Bridge by Marco Freund. All rights reserved.</p>
+  <p>© 2026 Sky's Bridge by Marco Freund.<br>All rights reserved.</p>
 </footer>
 
 <div class="modal sky-story-modal hidden" id="skyStoryModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="skyStoryTitle">
@@ -266,13 +284,30 @@
     <p class="eyebrow">Sky's Bridge</p>
     <h2 id="authTitle">Join our community</h2>
     <p id="authNote">Create your protected member account.</p>
+    <div class="auth-tabs" role="tablist" aria-label="Account access">
+      <button class="auth-tab" id="authLoginTab" type="button" role="tab" data-auth-mode="login">Log in</button>
+      <button class="auth-tab active" id="authSignupTab" type="button" role="tab" data-auth-mode="signup">Create account</button>
+    </div>
     <form id="authForm">
       <label id="authNameLabel">Community name<input id="authName" type="text" maxlength="80" autocomplete="nickname" placeholder="First name, initials or chosen name"></label>
       <label>Email<input id="authEmail" type="email" required autocomplete="email"></label>
       <label>Password<input id="authPassword" type="password" minlength="8" required autocomplete="current-password"></label>
       <button class="btn gold large" type="submit" id="authSubmit">Create account</button>
     </form>
-    <p class="form-message" id="authMessage"></p>
+    <button class="auth-alternative" id="authAlternative" type="button" data-auth-mode="login">Already have an account? <strong>Log in</strong></button>
+    <p class="form-message" id="authMessage" aria-live="polite"></p>
+  </div>
+</div>
+
+
+<div class="modal hidden" id="communityStarModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="communityStarTitle">
+  <div class="modal-card community-star-card">
+    <button class="close" data-close aria-label="Close memorial">&times;</button>
+    <div class="memorial-star" aria-hidden="true">✦</div>
+    <p class="eyebrow">Wall of Stars</p>
+    <h2 id="communityStarTitle"></h2>
+    <p class="community-star-remembrance" id="communityStarRemembrance"></p>
+    <p class="forever-line">Forever loved. Forever remembered.</p>
   </div>
 </div>
 
@@ -293,6 +328,6 @@
 </div>
 
 <script src="config.js"></script>
-<script src="script.js"></script>
+<script src="script.js?v=14"></script>
 </body>
 </html>
