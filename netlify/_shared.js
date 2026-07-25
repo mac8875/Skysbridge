@@ -1,7 +1,11 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const json = (statusCode, body) => ({ statusCode, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-const serviceClient = () => createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { autoRefreshToken:false, persistSession:false } });
+const serviceClient = () => {
+  if(!process.env.SUPABASE_URL) throw new Error('Netlify environment variable SUPABASE_URL is missing.');
+  if(!process.env.SUPABASE_SERVICE_ROLE_KEY) throw new Error('Netlify environment variable SUPABASE_SERVICE_ROLE_KEY is missing. Run the v15 Supabase SQL migration or configure this variable.');
+  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { autoRefreshToken:false, persistSession:false } });
+};
 async function authenticatedUser(event, adminRequired=false){
   const token=(event.headers.authorization||event.headers.Authorization||'').replace(/^Bearer\s+/i,'');
   if(!token) throw new Error('Missing authentication token.');
