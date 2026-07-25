@@ -1,0 +1,12 @@
+Sky's Bridge Version 18
+
+- Optional email copies for messages posted in selected protected rooms.
+- Secure Netlify server function; no mail credentials are exposed in the browser.
+- Destination is configured with ROOM_MESSAGE_FORWARD_TO in Netlify.
+- Clear in-room disclosure when forwarding is enabled.
+- Duplicate-email protection through email_forwarded_at.
+
+Required:
+1. Run V18_RUN_THIS_IN_SUPABASE.sql once.
+2. In Netlify environment variables set ROOM_MESSAGE_FORWARD_TO to your Microsoft 365 mailbox.
+3. Ensure RESEND_API_KEY and MAIL_FROM are configured and the sending domain is verified.

@@ -1,4 +1,4 @@
-const SKYBRIDGE_VERSION = '16.0.0';
+const SKYBRIDGE_VERSION = '18.0.0';
 const cfg = window.SKYBRIDGE_CONFIG || {};
 const configured = Boolean(
   cfg.supabaseUrl && cfg.supabaseAnonKey &&
@@ -403,7 +403,7 @@ async function loadRooms() {
   grid.innerHTML = '<p class="empty-state">Loading protected rooms…</p>';
 
   const [groupsResult, membershipsResult] = await Promise.all([
-    sb.from('support_groups').select('id,slug,name,description').eq('is_active', true).order('created_at'),
+    sb.from('support_groups').select('id,slug,name,description,forward_messages_to_email,forwarding_notice').eq('is_active', true).order('created_at'),
     sb.from('group_members').select('group_id,status,role').eq('user_id', activeUser.id)
   ]);
 
@@ -435,6 +435,7 @@ async function loadRooms() {
           <span class="room-state">${approved ? 'Approved member' : pending ? 'Awaiting review' : blocked ? 'Access unavailable' : 'Protected'}</span>
           <button class="btn ${approved ? 'gold' : 'ghost'} room-action" type="button"
             data-room-id="${group.id}" data-room-name="${escapeHtml(group.name)}" data-room-description="${escapeHtml(group.description)}"
+            data-room-forward="${group.forward_messages_to_email ? 'true' : 'false'}" data-room-notice="${escapeHtml(group.forwarding_notice || '')}"
             data-room-status="${status}" ${pending || blocked ? 'disabled' : ''}>${buttonText}</button>
         </div>
       </article>`;
@@ -444,7 +445,9 @@ async function loadRooms() {
     const group = {
       id: button.dataset.roomId,
       name: button.dataset.roomName,
-      description: button.dataset.roomDescription
+      description: button.dataset.roomDescription,
+      forwardMessagesToEmail: button.dataset.roomForward === 'true',
+      forwardingNotice: button.dataset.roomNotice || ''
     };
     if (button.dataset.roomStatus === 'approved') await enterRoom(group);
     else await requestRoomAccess(group.id, button);
@@ -476,6 +479,11 @@ async function enterRoom(group) {
   activeRoom = group;
   $('#activeRoomName').textContent = group.name;
   $('#activeRoomDescription').textContent = group.description;
+  const forwardingNotice = $('#roomForwardingNotice');
+  if (forwardingNotice) {
+    forwardingNotice.classList.toggle('hidden', !group.forwardMessagesToEmail);
+    forwardingNotice.textContent = group.forwardingNotice || 'Messages in this room are also sent securely to the Sky's Bridge Microsoft 365 support mailbox for professional review and possible forwarding to the treating clinician.';
+  }
   $('#roomConversation').classList.remove('hidden');
   setMessage('postMessage', '');
   await loadPosts();
@@ -521,17 +529,27 @@ $('#postForm')?.addEventListener('submit', async (event) => {
   const body = $('#postBody').value.trim();
   if (!body) return;
   setMessage('postMessage', 'Sharing…');
-  const { error } = await sb.from('group_posts').insert({
+  const { data: createdPost, error } = await sb.from('group_posts').insert({
     group_id: activeRoom.id,
     user_id: activeUser.id,
     author_name: activeProfile?.display_name || activeUser.email?.split('@')[0] || 'Community member',
     body
-  });
-  setMessage('postMessage', error ? friendlyError(error) : 'Your post has been shared with this room.', Boolean(error));
-  if (!error) {
-    event.target.reset();
-    await loadPosts();
+  }).select('id').single();
+  if (error) {
+    setMessage('postMessage', friendlyError(error), true);
+    return;
   }
+
+  let message = 'Your post has been shared with this room.';
+  if (activeRoom.forwardMessagesToEmail && createdPost?.id) {
+    const notification = await callSecureFunction('notify-room-message', { postId: createdPost.id });
+    message = notification?.emailSent
+      ? 'Your post has been shared and sent to the secure Microsoft 365 support mailbox.'
+      : 'Your post has been shared. The email copy could not be sent; the room post remains available securely.';
+  }
+  setMessage('postMessage', message, false);
+  event.target.reset();
+  await loadPosts();
 });
 
 function requestCard(title, body, meta, type, id) {

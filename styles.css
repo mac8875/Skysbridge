@@ -397,3 +397,14 @@ footer img{height:76px;max-width:min(330px,100%)}
 .admin-manage-action{background:transparent;color:#f5e9d2;border:1px solid rgba(255,255,255,.22)!important}.action-approve,.action-restore{background:rgba(144,220,181,.14)!important;color:#b9f0d3!important;border-color:rgba(144,220,181,.32)!important}.action-reject,.action-archive{color:#ffd59b!important}.action-delete{color:#ffb1b1!important;border-color:rgba(255,120,120,.3)!important}
 @media(max-width:1100px){.admin-summary{grid-template-columns:repeat(3,1fr)}.admin-management{grid-template-columns:1fr}}
 @media(max-width:640px){.admin-summary{grid-template-columns:1fr}.admin-card-heading{align-items:stretch;flex-direction:column}.admin-search{width:100%}}
+
+
+.room-forwarding-notice {
+  margin: 1rem 0;
+  padding: .9rem 1rem;
+  border: 1px solid rgba(212, 175, 55, .35);
+  border-radius: 14px;
+  background: rgba(212, 175, 55, .08);
+  font-size: .92rem;
+  line-height: 1.55;
+}
