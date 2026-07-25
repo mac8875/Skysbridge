@@ -1,0 +1,19 @@
+SKY'S BRIDGE VERSION 15 — RELIABLE MODERATION
+
+What changed
+- Approve and Decline now use a secure Supabase database function.
+- The database itself verifies that the logged-in user is an administrator.
+- Moderation no longer depends on a Netlify SUPABASE_SERVICE_ROLE_KEY.
+- Approved/declined cards disappear immediately and the dashboard refreshes.
+- Error messages now show the actual database problem.
+- Existing Netlify moderation remains as a backward-compatible fallback.
+
+REQUIRED ONE-TIME STEP
+1. Open Supabase > SQL Editor > New query.
+2. Copy the full contents of V15_RUN_THIS_IN_SUPABASE.sql.
+3. Press Run.
+4. Redeploy this version on GitHub/Netlify.
+5. Sign out of Sky's Bridge, refresh, sign in again, and approve the request.
+
+Do not create tables manually. The SQL is safe to run once and uses
+"if not exists" for the added columns and indexes.

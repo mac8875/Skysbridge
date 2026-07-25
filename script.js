@@ -572,9 +572,31 @@ async function handleAdminDecision(event){
   if(decision==='decline') reason=prompt('Optional private reason for declining:','')||'Not approved at this time.';
   card.querySelectorAll('button').forEach(b=>b.disabled=true);
   setMessage('adminMessage', `${decision==='approve'?'Approving':'Declining'} request…`);
-  const result=await callSecureFunction('review-request',{requestType:type,requestId,decision,reason});
-  if(!result.ok){card.querySelectorAll('button').forEach(b=>b.disabled=false);setMessage('adminMessage',result.error||'The review could not be completed.',true);return;}
-  setMessage('adminMessage',result.emailSent===false?'Decision saved. Email delivery is not configured yet.':'Decision saved and email sent.');
+  // v15: use a protected Supabase RPC first. This works without a Netlify
+  // service-role key and verifies the administrator inside the database.
+  let result = { ok: false };
+  const { data: rpcData, error: rpcError } = await sb.rpc('review_community_request', {
+    p_request_type: type,
+    p_request_id: requestId,
+    p_decision: decision,
+    p_reason: reason || null
+  });
+  if (!rpcError) {
+    result = { ok: true, ...(rpcData || {}), emailSent: false };
+  } else if (/function .*review_community_request|schema cache/i.test(rpcError.message || '')) {
+    // Backward-compatible fallback for deployments where the v15 SQL has not
+    // yet been run but the Netlify service-role function is configured.
+    result = await callSecureFunction('review-request',{requestType:type,requestId,decision,reason});
+  } else {
+    result = { ok: false, error: friendlyError(rpcError) };
+  }
+  if(!result.ok){
+    card.querySelectorAll('button').forEach(b=>b.disabled=false);
+    setMessage('adminMessage',result.error||'The review could not be completed.',true);
+    return;
+  }
+  card.remove();
+  setMessage('adminMessage',result.emailSent?'Decision saved and email sent.':'Decision saved successfully.');
   await Promise.all([loadAdminDashboard(),loadRooms(),loadMyMemorials(),loadApprovedMemorials()]);
 }
 
