@@ -1,7 +1,0 @@
-VERSION 19 DEPLOYMENT
-
-1. Upload all files in this folder to the GitHub repository, replacing the old website files.
-2. Configure the Microsoft 365 Graph variables listed in MICROSOFT_365_GRAPH_SETUP.md.
-3. Trigger a new Netlify deploy after saving the variables.
-4. No new SQL is required when Version 18 SQL has already succeeded.
-5. Test with a short message in an email-forwarding private room.
