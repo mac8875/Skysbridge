@@ -1,0 +1,17 @@
+SKY'S BRIDGE – VERSION 20
+
+This release preserves all Version 19 features and fixes the Netlify deployment structure.
+
+IMPORTANT STRUCTURE
+netlify/
+  functions/
+    _shared.js
+    notify-request.js
+    notify-room-message.js
+    review-request.js
+
+The item named functions must be a folder, never a file.
+The included netlify.toml points to: netlify/functions
+
+No additional Supabase SQL is required if Version 18 SQL was already run successfully.
+After uploading, trigger a fresh Netlify deploy.

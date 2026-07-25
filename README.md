@@ -1,3 +1,11 @@
+# Sky's Bridge – Version 20
+
+Version 20 corrects the Netlify Functions folder layout while retaining the Microsoft 365 Graph integration and all previous community, moderation, memorial, and Wall of Stars features.
+
+# Sky's Bridge — Version 19
+
+This release adds server-side Microsoft 365 email delivery through Microsoft Graph for selected protected rooms. See `MICROSOFT_365_GRAPH_SETUP.md`.
+
 # Sky's Bridge — Version 17
 
 # Sky's Bridge v11 Community

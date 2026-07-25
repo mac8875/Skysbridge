@@ -482,7 +482,7 @@ async function enterRoom(group) {
   const forwardingNotice = $('#roomForwardingNotice');
   if (forwardingNotice) {
     forwardingNotice.classList.toggle('hidden', !group.forwardMessagesToEmail);
-    forwardingNotice.textContent = group.forwardingNotice || 'Messages in this room are also sent securely to the Sky's Bridge Microsoft 365 support mailbox for professional review and possible forwarding to the treating clinician.';
+    forwardingNotice.textContent = group.forwardingNotice || "Messages in this room are also sent securely to the Sky's Bridge Microsoft 365 support mailbox for professional review and possible forwarding to the treating clinician.";
   }
   $('#roomConversation').classList.remove('hidden');
   setMessage('postMessage', '');

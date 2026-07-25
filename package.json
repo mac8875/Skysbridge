@@ -1,8 +1,8 @@
 {
   "name": "skysbridge-platform",
   "private": true,
-  "version": "18.0.0",
-  "description": "Sky's Bridge community platform – Version 18",
+  "version": "20.0.0",
+  "description": "Sky's Bridge community platform – Version 20 with corrected Netlify Functions directory and Microsoft 365 Graph email delivery",
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4"
   }

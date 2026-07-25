@@ -1,0 +1,14 @@
+SKY'S BRIDGE — VERSION 19
+
+Microsoft 365 email delivery is now built into the Netlify server functions.
+
+WHAT CHANGED
+- Private-room message copies are sent through Microsoft Graph.
+- Microsoft 365 credentials remain server-side in Netlify.
+- Email is sent from the licensed Microsoft 365 mailbox configured as M365_SENDER_EMAIL.
+- A copy is saved in the sender mailbox's Sent Items.
+- The member's account address is used as Reply-To when available.
+- Existing admin/request notification functions also use the same Microsoft 365 sender.
+- Duplicate forwarding remains prevented by email_forwarded_at.
+
+No additional Supabase SQL is required if the Version 18 SQL was already run successfully.

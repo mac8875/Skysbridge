@@ -1,0 +1,8 @@
+VERSION 20 DEPLOY
+
+1. Extract this ZIP first.
+2. Upload the CONTENTS of the extracted folder to the ROOT of the GitHub repository.
+3. Confirm GitHub shows netlify/functions/ as a folder containing four .js files.
+4. Commit the changes.
+5. In Netlify, trigger a new production deploy.
+6. Do not upload the ZIP file itself into the repository.
