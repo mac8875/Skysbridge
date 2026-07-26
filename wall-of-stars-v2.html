@@ -1,59 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="theme-color" content="#03101f">
+        <title>Wall of Stars | Sky’s Bridge</title>
+          <meta name="description" content="A place where every child is remembered and every story continues to shine.">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+              <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+                  <link rel="stylesheet" href="wall-of-stars-v2.css">
+                  </head>
+                  <body>
+                    <header class="site-header">
+                        <a class="brand" href="index.html" aria-label="Sky’s Bridge home">
+                              <img src="skys-bridge-wordmark.svg" alt="Sky’s Bridge — Building Bridges Through Grief">
+                                  </a>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                      <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-navigation" aria-label="Open menu">
+                                            <span></span><span></span><span></span>
+                                                </button>
 
-<title>Sky's Bridge | Wall of Stars</title>
+                                                    <nav id="main-navigation" class="main-navigation" aria-label="Main navigation">
+                                                          <a href="index.html">Home</a>
+                                                                <a href="index.html#about">About</a>
+                                                                      <a href="index.html#community">Community</a>
+                                                                            <a class="active" href="wall-of-stars-v2.html">Wall of Stars</a>
+                                                                                  <a href="community-guidelines.html">Guidelines</a>
+                                                                                        <a class="nav-cta" href="index.html#join">Join our community</a>
+                                                                                            </nav>
+                                                                                              </header>
 
-<link rel="stylesheet" href="wall-of-stars-v2.css">
+                                                                                                <main>
+                                                                                                    <section class="hero" aria-labelledby="wall-title">
+                                                                                                          <div class="hero-stars" aria-hidden="true"></div>
+                                                                                                                <div class="hero-content">
+                                                                                                                        <img class="hero-logo" src="skys-bridge-wordmark.svg" alt="Sky’s Bridge — Building Bridges Through Grief">
+                                                                                                                                <p class="eyebrow">In loving memory</p>
+                                                                                                                                        <h1 id="wall-title">Wall of Stars</h1>
+                                                                                                                                                <div class="title-divider" aria-hidden="true"><span></span><b>✦</b><span></span></div>
+                                                                                                                                                        <p class="hero-copy">Honoring the children who live forever in our hearts.</p>
+                                                                                                                                                                <p class="hero-note">A star shines every day. On a birthday, its light grows brighter. On a passing anniversary, a candle is lit.</p>
+                                                                                                                                                                      </div>
+                                                                                                                                                                          </section>
 
-</head>
+                                                                                                                                                                              <section class="wall-section" aria-labelledby="memorials-title">
+                                                                                                                                                                                    <div class="wall-toolbar">
+                                                                                                                                                                                            <div>
+                                                                                                                                                                                                      <p class="eyebrow">Forever remembered</p>
+                                                                                                                                                                                                                <h2 id="memorials-title">Our stars</h2>
+                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                <p id="wall-count" class="wall-count" aria-live="polite"></p>
+                                                                                                                                                                                                                                      </div>
 
-<body>
+                                                                                                                                                                                                                                            <div class="filters" aria-label="Wall filters">
+                                                                                                                                                                                                                                                    <label>
+                                                                                                                                                                                                                                                              <span>Search</span>
+                                                                                                                                                                                                                                                                        <input id="star-search" type="search" placeholder="Search by name" autocomplete="off">
+                                                                                                                                                                                                                                                                                </label>
+                                                                                                                                                                                                                                                                                        <label>
+                                                                                                                                                                                                                                                                                                  <span>Sort</span>
+                                                                                                                                                                                                                                                                                                            <select id="star-sort">
+                                                                                                                                                                                                                                                                                                                        <option value="featured">Featured first</option>
+                                                                                                                                                                                                                                                                                                                                    <option value="az">Name A–Z</option>
+                                                                                                                                                                                                                                                                                                                                                <option value="za">Name Z–A</option>
+                                                                                                                                                                                                                                                                                                                                                          </select>
+                                                                                                                                                                                                                                                                                                                                                                  </label>
+                                                                                                                                                                                                                                                                                                                                                                        </div>
 
-<header class="hero">
+                                                                                                                                                                                                                                                                                                                                                                              <div id="wall-grid" class="wall-grid" aria-live="polite" aria-label="Memorial stars"></div>
+                                                                                                                                                                                                                                                                                                                                                                                    <p id="wall-empty" class="empty-state" hidden>No matching stars were found.</p>
+                                                                                                                                                                                                                                                                                                                                                                                        </section>
 
-<div class="hero-overlay"></div>
+                                                                                                                                                                                                                                                                                                                                                                                            <section class="closing-message">
+                                                                                                                                                                                                                                                                                                                                                                                                  <span aria-hidden="true">✦</span>
+                                                                                                                                                                                                                                                                                                                                                                                                        <p>Every star has a story.<br>Every story deserves to be remembered.</p>
+                                                                                                                                                                                                                                                                                                                                                                                                            </section>
+                                                                                                                                                                                                                                                                                                                                                                                                              </main>
 
-<div class="hero-content">
+                                                                                                                                                                                                                                                                                                                                                                                                                <footer class="site-footer">
+                                                                                                                                                                                                                                                                                                                                                                                                                    <img src="skys-bridge-wordmark.svg" alt="Sky’s Bridge">
+                                                                                                                                                                                                                                                                                                                                                                                                                        <p>© 2026 Sky’s Bridge</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                            <p>Sky Speech by Marco Freund</p>
+                                                                                                                                                                                                                                                                                                                                                                                                                              </footer>
 
-<img
-class="hero-logo"
-src="skys-bridge-logo.png"
-alt="Sky's Bridge">
+                                                                                                                                                                                                                                                                                                                                                                                                                                <dialog id="memorial-dialog" class="memorial-dialog">
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <button class="dialog-close" type="button" aria-label="Close">×</button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="dialog-symbol" aria-hidden="true">✦</div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                            <h2 id="dialog-name"></h2>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                <p id="dialog-message"></p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                  </dialog>
 
-<h1>
-Every child deserves to be remembered.
-</h1>
-
-<p>
-
-A place where every star continues to shine.
-
-</p>
-
-<a class="join-button">
-
-Honor a Child
-
-</a>
-
-</div>
-
-</header>
-
-<section class="wall">
-
-<div id="wall-grid">
-
-</div>
-
-</section>
-
-<script src="wall-of-stars-v2.js"></script>
-
-</body>
-
-</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    <script src="wall-of-stars-v2.js"></script>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    </body>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    
