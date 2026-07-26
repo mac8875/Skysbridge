@@ -1,0 +1,9 @@
+SKY'S BRIDGE VERSION 26 — VERIFIED VISUAL POLISH
+
+- Complete hero artwork is preserved on desktop and mobile.
+- “You are not alone.” is centred in the hero.
+- Header and footer wordmarks use contain sizing and cannot crop.
+- Memorial names sit close beneath their stars and candles.
+- Candle rebuilt with fine wax shading, visible wick, centred flame and subtle glow.
+- Flame anchoring no longer conflicts with its animation.
+- Cache-busting stylesheet version changed to v=26.
