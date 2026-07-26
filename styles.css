@@ -447,25 +447,74 @@ footer img{height:76px;max-width:min(330px,100%)}
   .post-form{width:100%;padding:14px;border-radius:16px}
   .post-form #postBody{width:100%;min-height:210px;padding:16px;font-size:16px;border-radius:13px}
 }
-/* Mobile modal scrolling */
-.modal-content,
-.modal-card,
+/* =========================================
+   FIX: Mobile pop-ups vollständig scrollbar
+========================================= */
+
 .modal {
-
-    max-height: 90vh;
-    overflow-y: auto;
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    overflow-y: auto !important;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
 
-    padding-bottom: 40px;
+    padding:
+        max(14px, env(safe-area-inset-top))
+        12px
+        calc(100px + env(safe-area-inset-bottom));
+
+    background: rgba(1, 7, 15, 0.78);
 }
 
-/* Larger text boxes on phones */
-@media (max-width:768px){
+.modal-card {
+    width: min(94vw, 480px);
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0 auto;
+}
 
-    textarea{
+/* Honor-a-child form */
+#memorialModal .modal-card {
+    padding-bottom: 50px;
+}
 
-        min-height:220px;
-        font-size:17px;
+#memorialModal textarea {
+    width: 100%;
+    min-height: 160px;
+    resize: vertical;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .modal {
+        padding-top: 12px;
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-bottom: calc(130px + env(safe-area-inset-bottom));
     }
 
+    .modal-card {
+        width: 94%;
+        margin: 0 auto;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    #memorialModal textarea {
+        min-height: 170px;
+        font-size: 17px;
+    }
+
+    #memorialModal button[type="submit"] {
+        width: 100%;
+        min-height: 58px;
+        margin-top: 12px;
+        margin-bottom: 30px;
+    }
 }
