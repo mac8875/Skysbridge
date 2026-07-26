@@ -1350,3 +1350,119 @@ footer img{height:76px;max-width:min(330px,100%)}
   .wall-v29 .star.community-star strong{font-size:39px!important;margin-top:16px!important}
   .wall-v29 .star.community-star>.memorial-candle{margin-top:25px!important;transform:none!important;margin-bottom:0!important}
 }
+
+/* =========================================================
+   v30 — exact Option 1 memorial candle correction
+   ========================================================= */
+.wall-v29 .star.community-star {
+  min-height: 340px !important;
+  justify-content: flex-start !important;
+  padding: 38px 24px 24px !important;
+}
+.wall-v29 .star.community-star strong {
+  margin-top: 92px !important;
+  color: #f8f4ec !important;
+  font-size: 42px !important;
+  font-weight: 500 !important;
+}
+.wall-v29 .community-star-visual {
+  top: 24px !important;
+  right: 25px !important;
+}
+.wall-v29 .memorial-divider { margin: 10px auto 4px !important; }
+.wall-v29 .memorial-age:empty,
+.wall-v29 .memorial-divider:has(+ .memorial-age:empty) { display: none !important; }
+
+/* The flame, wick and wax are deliberately separated so the flame can never sit inside the candle. */
+.wall-v29 .star.community-star > .memorial-candle {
+  position: relative !important;
+  width: 72px !important;
+  height: 146px !important;
+  margin: 20px auto 0 !important;
+  overflow: visible !important;
+  transform: none !important;
+}
+.wall-v29 .memorial-candle::before {
+  left: 50% !important;
+  bottom: 0 !important;
+  width: 52px !important;
+  height: 10px !important;
+  margin-left: -26px !important;
+  background: radial-gradient(ellipse, rgba(224,164,56,.27), rgba(224,164,56,.08) 45%, transparent 74%) !important;
+  filter: blur(2px) !important;
+}
+.wall-v29 .candle-glow {
+  left: 50% !important;
+  top: 0 !important;
+  width: 112px !important;
+  height: 112px !important;
+  margin-left: -56px !important;
+  background: radial-gradient(circle, rgba(255,213,116,.30), rgba(242,143,28,.08) 42%, transparent 72%) !important;
+  filter: blur(5px) !important;
+}
+.wall-v29 .candle-body {
+  left: 28px !important;
+  bottom: 8px !important;
+  width: 16px !important;
+  height: 72px !important;
+  border: 1px solid rgba(255,246,222,.78) !important;
+  border-radius: 3px 3px 5px 5px !important;
+  background: linear-gradient(90deg,#9f8868 0%,#e9d8b8 20%,#fff8e5 48%,#d8bf94 75%,#8c7353 100%) !important;
+  box-shadow: inset 2px 0 2px rgba(255,255,255,.72), inset -2px 0 3px rgba(73,49,23,.22), 0 8px 15px rgba(0,0,0,.40), 0 0 12px rgba(255,214,127,.12) !important;
+}
+.wall-v29 .candle-body::before {
+  left: -1px !important;
+  top: -3px !important;
+  width: 16px !important;
+  height: 5px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(ellipse at 50% 50%,#3e2b1c 0 8%,#f7e9ca 20% 58%,#9f8764 82%,#6c5538 100%) !important;
+}
+.wall-v29 .candle-body::after {
+  left: 2px !important;
+  top: 3px !important;
+  width: 2px !important;
+  height: 30px !important;
+  border-radius: 0 0 3px 3px !important;
+  background: linear-gradient(#fff8e4,#d8bd8b 80%,transparent) !important;
+  box-shadow: 8px 8px 0 -1px rgba(241,219,177,.52) !important;
+}
+.wall-v29 .candle-wick {
+  left: 35px !important;
+  bottom: 81px !important;
+  width: 2px !important;
+  height: 12px !important;
+  background: #1e130d !important;
+  border-radius: 2px !important;
+}
+.wall-v29 .candle-flame {
+  left: 50% !important;
+  bottom: 94px !important;
+  width: 14px !important;
+  height: 40px !important;
+  margin-left: -7px !important;
+  border-radius: 50% 50% 48% 52% / 78% 78% 22% 22% !important;
+  background: radial-gradient(ellipse at 50% 76%,#fff 0 12%,#fffbd5 23%,#ffd45d 47%,#ed7b17 69%,rgba(237,123,23,0) 76%) !important;
+  box-shadow: 0 0 5px rgba(255,255,255,.95), 0 0 14px rgba(255,210,99,.92), 0 0 30px rgba(232,116,18,.42) !important;
+}
+.wall-v29 .candle-flame::after {
+  bottom: 7px !important;
+  width: 3px !important;
+  height: 13px !important;
+  margin-left: -1.5px !important;
+}
+
+@media (max-width:650px) {
+  .wall-v29 .star.community-star,
+  .wall-v29 .sky-card {
+    min-height: 332px !important;
+    padding: 34px 20px 22px !important;
+  }
+  .wall-v29 .star.community-star strong {
+    margin-top: 82px !important;
+    font-size: 40px !important;
+  }
+  .wall-v29 .star.community-star > .memorial-candle {
+    margin-top: 16px !important;
+  }
+}

@@ -1,0 +1,5 @@
+Sky's Bridge v30 — Option 1 exact candle correction
+- No age shown unless both birth and passing dates are supplied.
+- Slim wax candle with clearly separated wick and flame.
+- One full-width memorial card per row on mobile.
+- Existing Supabase and Netlify functionality retained.
