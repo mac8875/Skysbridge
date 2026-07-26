@@ -9,8 +9,9 @@ exports.handler = async (event) => {
 
   try {
     const { client, user } = await authenticatedUser(event, false);
-    const { postId } = JSON.parse(event.body || '{}');
+    const { postId, shareWithProfessional } = JSON.parse(event.body || '{}');
     if (!postId) throw new Error('Missing post ID.');
+    if (shareWithProfessional !== true) return json(200, { ok: true, emailSent: false, skipped: true, reason: 'Consent not given' });
 
     const { data: post, error } = await client
       .from('group_posts')
@@ -37,12 +38,12 @@ exports.handler = async (event) => {
     const createdAt = new Date(post.created_at).toLocaleString('en-GB', { timeZone: 'UTC', dateStyle: 'medium', timeStyle: 'short' });
     const subject = `Sky's Bridge — New message in ${roomName}`;
     const html = `<div style="font-family:Arial,sans-serif;line-height:1.6;max-width:720px">
-      <h2>New message in “${escapeHtml(roomName)}”</h2>
+      <h2>Optional professional-support request from “${escapeHtml(roomName)}”</h2>
       <p><strong>Author:</strong> ${escapeHtml(authorName)}<br>
       <strong>Account:</strong> ${escapeHtml(user.email || 'Not available')}<br>
       <strong>Time:</strong> ${escapeHtml(createdAt)} UTC</p>
       <div style="white-space:pre-wrap;border-left:3px solid #b89535;padding:12px 16px;background:#f7f4ec">${escapeHtml(post.body)}</div>
-      <p style="font-size:12px;color:#666">Confidential: this message originated in a protected Sky's Bridge room. Handle it according to your privacy and clinical-support procedures. Do not forward without an appropriate lawful basis and the member's informed consent.</p>
+      <p style="font-size:12px;color:#666">Confidential: the member explicitly chose to share this protected-room message with a Sky's Bridge grief professional. Handle it according to your privacy and professional-support procedures. Do not forward it beyond the authorised support team without an appropriate lawful basis.</p>
     </div>`;
 
     const emailSent = await sendMail({ to: destination, subject, html, replyTo: user.email || undefined });
