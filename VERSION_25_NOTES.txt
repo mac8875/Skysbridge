@@ -1,0 +1,8 @@
+SKY'S BRIDGE VERSION 25
+
+Wall of Stars candle refinement:
+- Restored the flame and ensured it always renders above the candle body.
+- Removed the transform conflict that could move or hide the flame during animation.
+- Added a centered wick, wax texture, recessed candle top and soft reflected glow.
+- Replaced the basic flame with a brighter layered flame and gentle premium flicker.
+- Kept responsive sizing for mobile and the larger annual Sky tribute.
