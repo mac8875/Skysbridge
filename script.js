@@ -479,11 +479,10 @@ async function enterRoom(group) {
   activeRoom = group;
   $('#activeRoomName').textContent = group.name;
   $('#activeRoomDescription').textContent = group.description;
-  const forwardingNotice = $('#roomForwardingNotice');
-  if (forwardingNotice) {
-    forwardingNotice.classList.toggle('hidden', !group.forwardMessagesToEmail);
-    forwardingNotice.textContent = group.forwardingNotice || "Messages in this room are also sent securely to the Sky's Bridge Microsoft 365 support mailbox for professional review and possible forwarding to the treating clinician.";
-  }
+  const professionalSupport = $('#professionalSupport');
+  const professionalCheckbox = $('#sendToProfessional');
+  if (professionalSupport) professionalSupport.classList.toggle('hidden', !group.forwardMessagesToEmail);
+  if (professionalCheckbox) professionalCheckbox.checked = false;
   $('#roomConversation').classList.remove('hidden');
   setMessage('postMessage', '');
   await loadPosts();
@@ -540,12 +539,16 @@ $('#postForm')?.addEventListener('submit', async (event) => {
     return;
   }
 
+  const shareWithProfessional = Boolean($('#sendToProfessional')?.checked);
   let message = 'Your post has been shared with this room.';
-  if (activeRoom.forwardMessagesToEmail && createdPost?.id) {
-    const notification = await callSecureFunction('notify-room-message', { postId: createdPost.id });
+  if (shareWithProfessional && activeRoom.forwardMessagesToEmail && createdPost?.id) {
+    const notification = await callSecureFunction('notify-room-message', {
+      postId: createdPost.id,
+      shareWithProfessional: true
+    });
     message = notification?.emailSent
-      ? 'Your post has been shared and sent to the secure Microsoft 365 support mailbox.'
-      : 'Your post has been shared. The email copy could not be sent; the room post remains available securely.';
+      ? "Your post has been shared with this room and securely shared with a Sky's Bridge grief professional."
+      : 'Your post has been shared with this room. The optional professional-support copy could not be sent.';
   }
   setMessage('postMessage', message, false);
   event.target.reset();

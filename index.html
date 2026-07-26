@@ -175,10 +175,21 @@
         <div><p class="eyebrow">Private room</p><h3 id="activeRoomName">Room</h3><p id="activeRoomDescription"></p></div>
         <button class="btn ghost" id="closeRoom" type="button">Close room</button>
       </div>
-      <div class="room-forwarding-notice hidden" id="roomForwardingNotice" role="note"></div>
       <form id="postForm" class="post-form">
         <label>Share with this room<textarea id="postBody" rows="4" maxlength="5000" placeholder="Write only what feels right to share…" required></textarea></label>
-        <div class="post-form-footer"><span>Your post is visible only to approved room members. Rooms marked for professional review also send a secure email copy.</span><button class="btn gold" type="submit">Share post</button></div>
+
+        <div class="professional-support hidden" id="professionalSupport">
+          <p class="eyebrow">Additional support</p>
+          <h4>Your Privacy Matters</h4>
+          <p>Everything you share remains private within this protected room and is visible only to approved members.</p>
+          <label class="support-checkbox" for="sendToProfessional">
+            <input type="checkbox" id="sendToProfessional">
+            <span><strong>Share this message with a Sky's Bridge grief professional (optional)</strong></span>
+          </label>
+          <p class="support-note">Your message will remain private within this protected room unless you choose to share it. By selecting this option, you consent to securely sharing your message with a qualified grief professional who may review it and, if appropriate, offer additional support.</p>
+        </div>
+
+        <div class="post-form-footer"><span>Your post is visible only to approved members of this protected room.</span><button class="btn gold" type="submit">Share post</button></div>
       </form>
       <p class="form-message" id="postMessage"></p>
       <div class="post-feed" id="postFeed"><p class="empty-state">No posts yet. This can be a quiet beginning.</p></div>

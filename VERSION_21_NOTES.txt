@@ -1,0 +1,13 @@
+SKY'S BRIDGE PLATFORM — VERSION 21 COMPLETE
+
+Changes
+- Replaced automatic protected-room email forwarding with an explicit optional consent checkbox.
+- Added a gold custom checkbox matching the Sky's Bridge design.
+- Added the 'Your Privacy Matters' support panel.
+- Messages remain inside the protected room unless the member actively selects professional sharing.
+- The Netlify function now requires shareWithProfessional=true before sending any email.
+- Professional sharing is offered only in rooms configured for professional support.
+- Removed public-facing references to Microsoft 365.
+
+Deployment
+Upload the complete contents of this package to the GitHub repository used by Netlify. No additional database migration is required. Existing Netlify environment variables remain unchanged.
