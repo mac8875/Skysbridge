@@ -1275,3 +1275,78 @@ footer img{height:76px;max-width:min(330px,100%)}
 }
 
 @media(prefers-reduced-motion:reduce){.candle-flame,.candle-glow{animation:none!important}}
+
+/* =========================================================
+   v29 Option 1 — approved memorial card and candle treatment
+   ========================================================= */
+.wall-v29 .memorial-showcase{display:block!important;width:100%!important}
+.wall-v29 .star-grid{overflow:visible!important}
+.wall-v29 .star.community-star{
+  justify-content:center!important;
+  min-height:360px!important;
+  padding:48px 24px 30px!important;
+}
+.wall-v29 .community-star-visual{
+  position:absolute!important;
+  top:24px!important;
+  right:25px!important;
+  width:50px!important;
+  height:50px!important;
+  margin:0!important;
+}
+.wall-v29 .premium-star-svg{width:46px!important;height:46px!important}
+.wall-v29 .star.community-star strong{margin-top:18px!important;font-size:40px!important}
+.wall-v29 .memorial-divider{margin:15px auto 7px!important}
+.wall-v29 .memorial-age:empty,.wall-v29 .memorial-divider:has(+ .memorial-age:empty){display:none!important}
+
+/* Option 1 candle: slim wax column, visible wick, flame fully above the wax. */
+.wall-v29 .star.community-star>.memorial-candle{
+  width:64px!important;
+  height:130px!important;
+  margin:28px auto 0!important;
+  transform:none!important;
+}
+.wall-v29 .memorial-candle::before{
+  bottom:2px!important;width:54px!important;height:11px!important;margin-left:-27px!important;
+  background:radial-gradient(ellipse,rgba(224,164,56,.30),rgba(224,164,56,.10) 42%,transparent 72%)!important;
+}
+.wall-v29 .candle-glow{
+  top:-2px!important;width:104px!important;height:104px!important;margin-left:-52px!important;
+  background:radial-gradient(circle,rgba(255,211,111,.30),rgba(242,143,28,.09) 43%,transparent 72%)!important;
+}
+.wall-v29 .candle-body{
+  left:22px!important;bottom:8px!important;width:20px!important;height:69px!important;
+  border-radius:3px 3px 6px 6px!important;
+  background:linear-gradient(90deg,#aa926b 0%,#efe0bd 15%,#fff8df 42%,#e3c998 68%,#9c825d 100%)!important;
+  box-shadow:inset 2px 0 3px rgba(255,255,255,.75),inset -3px 0 4px rgba(80,55,28,.22),0 9px 16px rgba(0,0,0,.38),0 0 15px rgba(255,213,123,.14)!important;
+}
+.wall-v29 .candle-body::before{
+  left:-1px!important;top:-3px!important;width:20px!important;height:6px!important;
+  background:radial-gradient(ellipse at 50% 48%,#473321 0 9%,#f8eaca 20% 58%,#aa9069 80%,#725b3d 100%)!important;
+}
+.wall-v29 .candle-body::after{left:3px!important;top:2px!important;width:3px!important;height:32px!important;box-shadow:10px 7px 0 -1px rgba(244,225,185,.58)!important}
+.wall-v29 .candle-wick{
+  left:31px!important;bottom:76px!important;width:2px!important;height:10px!important;background:#24160e!important;
+}
+.wall-v29 .candle-flame{
+  bottom:84px!important;width:15px!important;height:38px!important;margin-left:-7.5px!important;
+  border-radius:52% 48% 50% 50%/78% 78% 22% 22%!important;
+  background:radial-gradient(ellipse at 50% 76%,#fff 0 13%,#fffbd2 23%,#ffd25a 46%,#ef831c 68%,rgba(239,131,28,0) 75%)!important;
+  box-shadow:0 0 5px rgba(255,255,255,.92),0 0 14px rgba(255,207,91,.88),0 0 30px rgba(232,119,22,.42)!important;
+}
+.wall-v29 .candle-flame::after{bottom:7px!important;width:4px!important;height:14px!important;margin-left:-2px!important}
+
+@media(max-width:650px){
+  .wall-v29{padding-left:18px!important;padding-right:18px!important}
+  .wall-v29 .memorial-showcase{width:100%!important}
+  .wall-v29 .star-grid{grid-template-columns:minmax(0,1fr)!important;width:100%!important;gap:18px!important}
+  .wall-v29 .star.community-star,.wall-v29 .sky-card{
+    width:100%!important;max-width:none!important;min-width:0!important;min-height:350px!important;
+    padding:44px 22px 25px!important;margin:0!important;
+  }
+  .wall-v29 .sky-card{margin-bottom:18px!important}
+  .wall-v29 .community-star-visual{top:22px!important;right:22px!important;width:46px!important;height:46px!important}
+  .wall-v29 .premium-star-svg{width:43px!important;height:43px!important}
+  .wall-v29 .star.community-star strong{font-size:39px!important;margin-top:16px!important}
+  .wall-v29 .star.community-star>.memorial-candle{margin-top:25px!important;transform:none!important;margin-bottom:0!important}
+}

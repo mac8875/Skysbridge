@@ -288,10 +288,10 @@ function openCommunityStar(item) {
 function formatLifeSpan(item) {
   const born = dateParts(item.birth_date);
   const passed = dateParts(item.passing_date);
-  if (!born || !passed) return 'Forever loved';
+  if (!born || !passed) return '';
   const birth = new Date(born.year, born.month - 1, born.day);
   const passing = new Date(passed.year, passed.month - 1, passed.day);
-  if (passing < birth) return 'Forever loved';
+  if (passing < birth) return '';
   const days = Math.max(0, Math.round((passing - birth) / 86400000));
   if (days < 14) return `${days || 1} ${days === 1 ? 'day' : 'days'}`;
   if (days < 60) { const weeks = Math.max(1, Math.round(days / 7)); return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`; }
@@ -319,15 +319,15 @@ function createCommunityStar(item, index) {
   if (state.birthday) dayLabels.push('birthday star');
   if (state.remembrance) dayLabels.push('remembrance day');
   star.setAttribute('aria-label', `Open memorial for ${item.child_name}${dayLabels.length ? `, ${dayLabels.join(' and ')}` : ''}`);
+  const lifeSpan = formatLifeSpan(item);
   star.innerHTML = `
     <span class="community-star-visual" aria-hidden="true">
       <svg class="premium-star-svg" viewBox="0 0 120 120" focusable="false"><path d="M60 4 64 54 116 60 64 66 60 116 56 66 4 60 56 54Z"/></svg>
     </span>
     <strong></strong>
-    <span class="memorial-divider" aria-hidden="true"><i></i><b>◆</b><i></i></span>
-    <span class="memorial-age"></span>`;
+    ${lifeSpan ? '<span class="memorial-divider" aria-hidden="true"><i></i><b>◆</b><i></i></span><span class="memorial-age"></span>' : ''}`;
   star.querySelector('strong').textContent = item.child_name;
-  star.querySelector('.memorial-age').textContent = formatLifeSpan(item);
+  if (lifeSpan) star.querySelector('.memorial-age').textContent = lifeSpan;
   star.appendChild(createCandle());
   star.addEventListener('click', () => openCommunityStar(item));
   return star;

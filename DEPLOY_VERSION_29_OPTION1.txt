@@ -1,0 +1,5 @@
+Sky's Bridge v29 — Option 1
+- Slim memorial candle with visible wick and flame above the wax
+- No lifespan shown unless both birth and passing dates are provided
+- One full-width memorial card per row on mobile
+- Existing Netlify and Supabase functions retained
