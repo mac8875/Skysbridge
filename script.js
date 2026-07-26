@@ -154,7 +154,7 @@ $('#authForm')?.addEventListener('submit', async (event) => {
         email,
         password,
         options: {
-          emailRedirectTo: location.origin,
+          emailRedirectTo: "https://skysbridge.org/",
           data: { display_name: displayName }
         }
       });

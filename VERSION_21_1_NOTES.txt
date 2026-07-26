@@ -1,0 +1,11 @@
+SKY'S BRIDGE VERSION 21.1 — AUTH REDIRECT FIX
+
+- Account confirmation emails now always return to https://skysbridge.org/
+- Removed dependence on the browser's current origin during signup.
+- Prevents confirmation links from redirecting mobile users to localhost:3000.
+- Existing login and protected-community behavior remains unchanged.
+
+IMPORTANT SUPABASE DASHBOARD CHECK
+Auth > URL Configuration:
+- Site URL: https://skysbridge.org
+- Redirect URLs: https://skysbridge.org/**
