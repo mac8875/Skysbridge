@@ -306,7 +306,7 @@ function createCommunityStar(item, index) {
   if (state.remembrance) dayLabels.push('remembrance candle');
   star.setAttribute('aria-label', `Open memorial for ${item.child_name}${dayLabels.length ? `, ${dayLabels.join(' and ')}` : ''}`);
   star.innerHTML = '<span class="community-star-visual"><span class="community-star-shape" aria-hidden="true">✦</span></span><strong></strong>';
-  if (state.remembrance) star.querySelector('.community-star-visual').appendChild(createCandle());
+  if (state.remembrance) star.appendChild(createCandle());
   star.querySelector('strong').textContent = item.child_name;
   star.addEventListener('click', () => openCommunityStar(item));
   return star;

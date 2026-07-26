@@ -1,0 +1,5 @@
+Version 27
+- Candle flame is positioned completely above the wax rim and wick.
+- Memorial cards upgraded for a premium mobile and desktop layout.
+- Names and candles aligned vertically with refined spacing.
+- Cache-busting updated to v27.
