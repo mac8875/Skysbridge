@@ -447,74 +447,87 @@ footer img{height:76px;max-width:min(330px,100%)}
   .post-form{width:100%;padding:14px;border-radius:16px}
   .post-form #postBody{width:100%;min-height:210px;padding:16px;font-size:16px;border-radius:13px}
 }
-/* =========================================
-   FIX: Mobile pop-ups vollständig scrollbar
-========================================= */
 
-.modal {
-    display: block !important;
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100dvh;
-    overflow-y: auto !important;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    touch-action: pan-y;
-
-    padding:
-        max(14px, env(safe-area-inset-top))
-        12px
-        calc(100px + env(safe-area-inset-bottom));
-
-    background: rgba(1, 7, 15, 0.78);
+/* Version 22.2 — refined memorial star spacing and clearer candle flame */
+.star.community-star{
+  height:104px!important;
 }
-
-.modal-card {
-    width: min(94vw, 480px);
-    max-height: none !important;
-    overflow: visible !important;
-    margin: 0 auto;
+.community-star-visual{
+  width:58px;
+  height:50px;
 }
-
-/* Honor-a-child form */
-#memorialModal .modal-card {
-    padding-bottom: 50px;
+.community-star-shape{
+  font-size:38px!important;
+  line-height:1;
+  color:#fff2bd;
+  font-weight:300;
+  text-shadow:
+    0 0 5px rgba(255,255,240,.98),
+    0 0 12px rgba(255,220,135,.92),
+    0 0 24px rgba(232,170,67,.56);
+  transform:scaleX(.78);
 }
-
-#memorialModal textarea {
-    width: 100%;
-    min-height: 160px;
-    resize: vertical;
+.star.community-star strong{
+  margin-top:2px!important;
 }
-
-/* Mobile */
-@media (max-width: 768px) {
-
-    .modal {
-        padding-top: 12px;
-        padding-left: 8px;
-        padding-right: 8px;
-        padding-bottom: calc(130px + env(safe-area-inset-bottom));
-    }
-
-    .modal-card {
-        width: 94%;
-        margin: 0 auto;
-        padding-left: 24px;
-        padding-right: 24px;
-    }
-
-    #memorialModal textarea {
-        min-height: 170px;
-        font-size: 17px;
-    }
-
-    #memorialModal button[type="submit"] {
-        width: 100%;
-        min-height: 58px;
-        margin-top: 12px;
-        margin-bottom: 30px;
-    }
+.memorial-candle{
+  right:-4px;
+  bottom:0;
+  width:18px;
+  height:38px;
+  filter:drop-shadow(0 0 6px rgba(255,191,74,.32));
+}
+.candle-body{
+  left:4px;
+  width:11px;
+  height:23px;
+  background:linear-gradient(90deg,#d8bc83,#fff5d2 48%,#c59e63);
+}
+.candle-wick{
+  left:8.5px;
+  bottom:22px;
+  height:6px;
+}
+.candle-flame{
+  left:4px;
+  bottom:27px;
+  width:11px;
+  height:17px;
+  border-radius:72% 36% 68% 34%;
+  background:radial-gradient(circle at 50% 68%,#fffef0 0 20%,#ffe37c 29%,#ffb12e 53%,#e56918 76%,transparent 78%);
+  box-shadow:
+    0 0 6px rgba(255,255,225,.95),
+    0 0 13px rgba(255,193,73,.94),
+    0 0 24px rgba(232,112,26,.52);
+  animation:candleFlickerClear 1.7s ease-in-out infinite;
+}
+@keyframes candleFlickerClear{
+  0%,100%{transform:rotate(3deg) scale(1);opacity:.98}
+  32%{transform:rotate(-4deg) scale(.94,1.08);opacity:1}
+  64%{transform:rotate(5deg) scale(1.06,.96);opacity:.96}
+}
+.star.community-star.is-birthday .community-star-shape{
+  color:#fff8d8;
+  text-shadow:
+    0 0 7px #fff,
+    0 0 16px #ffe08d,
+    0 0 32px rgba(232,170,67,.95);
+}
+.star.community-star.is-remembrance-day .community-star-shape{
+  color:#f4dfab;
+}
+.sky-annual-tribute .memorial-candle{
+  right:-12px;
+  bottom:5px;
+  transform:scale(1.08);
+}
+@media(max-width:650px){
+  .star.community-star{height:96px!important}
+  .community-star-visual{width:54px;height:46px}
+  .community-star-shape{font-size:35px!important}
+  .star.community-star strong{margin-top:1px!important}
+  .memorial-candle{right:-3px}
+}
+@media(prefers-reduced-motion:reduce){
+  .candle-flame{animation:none!important}
 }

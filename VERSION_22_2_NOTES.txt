@@ -1,0 +1,9 @@
+Sky's Bridge Version 22.2
+
+Changes:
+- Memorial stars are finer, brighter, and closer to the child's name.
+- Candle body is slightly smaller and more elegant.
+- Candle flame is larger, brighter, and easier to see on mobile.
+- Birthday and remembrance visual effects remain active.
+- Sky's special February 9 tribute remains active with bright star and candle.
+- Includes all previous Version 22.1 features and mobile Private Room improvements.
