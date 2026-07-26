@@ -110,6 +110,8 @@ create table if not exists public.memorials (
   user_id uuid not null references auth.users(id) on delete cascade,
   child_name text not null check (char_length(child_name) between 1 and 80),
   remembrance text not null default '' check (char_length(remembrance) <= 5000),
+  birth_date date,
+  passing_date date,
   public_requested boolean not null default false,
   approved boolean not null default false,
   rejection_reason text check (rejection_reason is null or char_length(rejection_reason) <= 500),

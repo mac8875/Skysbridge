@@ -332,6 +332,7 @@
     <div class="memorial-star" aria-hidden="true">✦</div>
     <p class="eyebrow">Wall of Stars</p>
     <h2 id="communityStarTitle"></h2>
+    <p class="community-star-dates" id="communityStarDates"></p>
     <p class="community-star-remembrance" id="communityStarRemembrance"></p>
     <p class="forever-line">Forever loved. Forever remembered.</p>
   </div>
@@ -345,6 +346,10 @@
     <p>Your submission is private until approved.</p>
     <form id="memorialForm">
       <label>Child's name<input id="childName" type="text" maxlength="80" required></label>
+      <div class="memorial-date-fields">
+        <label>Date of birth <span class="optional-label">(optional)</span><input id="childBirthDate" type="date"></label>
+        <label>Date of passing <span class="optional-label">(optional)</span><input id="childPassingDate" type="date"></label>
+      </div>
       <label>Short remembrance<textarea id="childStory" rows="5" maxlength="500"></textarea></label>
       <label class="check"><input id="publicConsent" type="checkbox"> I would like this memorial to be considered for the public Wall of Stars.</label>
       <button class="btn gold large" type="submit">Submit memorial</button>
@@ -354,6 +359,6 @@
 </div>
 
 <script src="config.js"></script>
-<script src="script.js?v=18"></script>
+<script src="script.js?v=22"></script>
 </body>
 </html>

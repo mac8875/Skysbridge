@@ -208,6 +208,8 @@ $('#memorialForm')?.addEventListener('submit', async (event) => {
     user_id: user.id,
     child_name: $('#childName').value.trim(),
     remembrance: $('#childStory').value.trim(),
+    birth_date: $('#childBirthDate').value || null,
+    passing_date: $('#childPassingDate').value || null,
     public_requested: $('#publicConsent').checked
   };
   const { data: createdMemorial, error } = await sb.from('memorials').insert(payload).select('id').single();
@@ -248,10 +250,47 @@ let starHasMore = false;
 let starRenderedCount = 0;
 let starSearchTimer = null;
 
+function dateParts(dateValue) {
+  if (!dateValue) return null;
+  const match = String(dateValue).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return match ? { year: Number(match[1]), month: Number(match[2]), day: Number(match[3]) } : null;
+}
+
+function isAnnualDateToday(dateValue, now = new Date()) {
+  const parts = dateParts(dateValue);
+  return Boolean(parts && parts.month === now.getMonth() + 1 && parts.day === now.getDate());
+}
+
+function formatMemorialDate(dateValue) {
+  const parts = dateParts(dateValue);
+  if (!parts) return '';
+  return new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'long', year: 'numeric' })
+    .format(new Date(parts.year, parts.month - 1, parts.day));
+}
+
+function memorialDayState(item, now = new Date()) {
+  return {
+    birthday: isAnnualDateToday(item.birth_date, now),
+    remembrance: isAnnualDateToday(item.passing_date, now)
+  };
+}
+
 function openCommunityStar(item) {
   $('#communityStarTitle').textContent = item.child_name || 'A cherished child';
+  const dates = [];
+  if (item.birth_date) dates.push(`Born: ${formatMemorialDate(item.birth_date)}`);
+  if (item.passing_date) dates.push(`Remembered: ${formatMemorialDate(item.passing_date)}`);
+  $('#communityStarDates').textContent = dates.join('  •  ');
   $('#communityStarRemembrance').textContent = item.remembrance || 'Held forever in the hearts of those who love them.';
   openModal(communityStarModal);
+}
+
+function createCandle() {
+  const candle = document.createElement('span');
+  candle.className = 'memorial-candle';
+  candle.setAttribute('aria-hidden', 'true');
+  candle.innerHTML = '<span class="candle-flame"></span><span class="candle-wick"></span><span class="candle-body"></span>';
+  return candle;
 }
 
 function createCommunityStar(item, index) {
@@ -259,11 +298,30 @@ function createCommunityStar(item, index) {
   star.type = 'button';
   star.className = 'star community-star';
   star.style.setProperty('--delay', `${(index % 12) * -0.23}s`);
-  star.setAttribute('aria-label', `Open memorial for ${item.child_name}`);
-  star.innerHTML = '<span class="community-star-shape" aria-hidden="true">✦</span><strong></strong>';
+  const state = memorialDayState(item);
+  if (state.birthday) star.classList.add('is-birthday');
+  if (state.remembrance) star.classList.add('is-remembrance-day');
+  const dayLabels = [];
+  if (state.birthday) dayLabels.push('birthday star');
+  if (state.remembrance) dayLabels.push('remembrance candle');
+  star.setAttribute('aria-label', `Open memorial for ${item.child_name}${dayLabels.length ? `, ${dayLabels.join(' and ')}` : ''}`);
+  star.innerHTML = '<span class="community-star-visual"><span class="community-star-shape" aria-hidden="true">✦</span></span><strong></strong>';
+  if (state.remembrance) star.querySelector('.community-star-visual').appendChild(createCandle());
   star.querySelector('strong').textContent = item.child_name;
   star.addEventListener('click', () => openCommunityStar(item));
   return star;
+}
+
+function applySkyAnnualTribute(now = new Date()) {
+  const skyStar = $('#openSkyStory');
+  if (!skyStar) return;
+  const isFebruaryNinth = now.getMonth() === 1 && now.getDate() === 9;
+  skyStar.classList.toggle('sky-annual-tribute', isFebruaryNinth);
+  skyStar.querySelector('.memorial-candle')?.remove();
+  if (isFebruaryNinth) {
+    skyStar.appendChild(createCandle());
+    skyStar.setAttribute('aria-label', 'Open Sky’s story. Sky’s annual day of light and remembrance.');
+  }
 }
 
 function updateStarWallStatus(message = '') {
@@ -300,7 +358,7 @@ async function loadApprovedMemorials({ reset = true } = {}) {
   const from = starPage * STAR_PAGE_SIZE;
   const to = from + STAR_PAGE_SIZE;
   let query = sb.from('memorials')
-    .select('id,child_name,remembrance,created_at')
+    .select('id,child_name,remembrance,birth_date,passing_date,created_at')
     .eq('approved', true)
     .eq('public_requested', true)
     .eq('archived', false)
@@ -329,6 +387,8 @@ async function loadApprovedMemorials({ reset = true } = {}) {
     updateStarWallStatus('');
   }
 }
+
+applySkyAnnualTribute();
 
 $('#loadMoreStars')?.addEventListener('click', () => loadApprovedMemorials({ reset: false }));
 $('#starSearch')?.addEventListener('input', (event) => {

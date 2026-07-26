@@ -1,0 +1,11 @@
+SKY'S BRIDGE — VERSION 22.1 COMPLETE
+
+- Adds optional Date of birth and Date of passing fields to memorial submissions.
+- Each birthday: the child's star shines brighter and sparkles gently.
+- Each date of passing: a small, quiet candle appears beside the child's star.
+- Every February 9: Sky's permanent first star shines especially brightly, sparkles, and displays a candle.
+- Makes the Private Room writing box wider and taller, especially on mobile phones.
+- Preserves the optional grief-professional sharing checkbox from Version 21.
+
+DATABASE STEP
+Run V22_RUN_THIS_IN_SUPABASE.sql once in the Supabase SQL Editor before testing the date fields.

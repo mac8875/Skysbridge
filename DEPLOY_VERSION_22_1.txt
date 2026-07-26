@@ -1,0 +1,7 @@
+VERSION 22.1 DEPLOYMENT
+
+1. Run V22_RUN_THIS_IN_SUPABASE.sql once in Supabase SQL Editor.
+2. Upload all files and folders in this package to the root of the GitHub repository, replacing the prior version.
+3. Wait for Netlify to deploy the new GitHub commit.
+4. Test a memorial with today's birthday and another with today's date of passing.
+5. The February 9 tribute for Sky activates automatically each year based on the visitor's local date.

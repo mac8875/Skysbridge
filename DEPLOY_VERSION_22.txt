@@ -1,0 +1,3 @@
+Sky's Bridge Version 22
+Run V22_RUN_THIS_IN_SUPABASE.sql before testing date fields.
+Then upload all files to GitHub and deploy on Netlify.

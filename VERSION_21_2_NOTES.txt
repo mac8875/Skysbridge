@@ -1,0 +1,16 @@
+SKY'S BRIDGE VERSION 21.2 COMPLETE
+
+Included:
+- Optional Date of birth and Date of passing fields for memorial submissions.
+- Birthday: the child's star shines brighter and sparkles each year.
+- Date of passing: a small animated remembrance candle appears beside the star each year.
+- Sky: every 9 February, Sky's star shines especially brightly, sparkles, and displays a candle.
+- Memorial modal displays birth and remembrance dates when provided.
+- Private Room message field is wider/taller on phones and easier to type in.
+- Existing login fix and optional professional-support consent remain included.
+
+IMPORTANT DATABASE STEP:
+Run V21_2_RUN_THIS_IN_SUPABASE.sql once in Supabase SQL Editor before testing the new date fields.
+
+DEPLOYMENT:
+Upload all files to GitHub, replacing the current version. Netlify should deploy automatically.

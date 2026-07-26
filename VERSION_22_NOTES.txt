@@ -1,0 +1,10 @@
+SKY'S BRIDGE VERSION 22
+
+- Adds optional date of birth and date of passing to memorial submissions.
+- Birthday: the child's star shines brighter and sparkles each year.
+- Date of passing: a quiet animated candle appears beside the star each year.
+- February 9: Sky's permanent first star both sparkles and displays a candle.
+- Memorial pop-up displays the entered dates.
+- Includes an accessibility reduced-motion fallback.
+
+REQUIRED: Run V22_RUN_THIS_IN_SUPABASE.sql once in Supabase SQL Editor.
