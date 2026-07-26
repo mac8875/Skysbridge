@@ -1,0 +1,7 @@
+Sky's Bridge v31 — SVG memorial candle
+
+- Replaced the layered CSS candle with one scalable SVG asset.
+- Flame, wick, wax body and glow now remain aligned at every screen size.
+- Added assets/memorial-candle.svg.
+- Added candle-preview.html for quick visual testing.
+- Existing Supabase and Netlify functions are unchanged.

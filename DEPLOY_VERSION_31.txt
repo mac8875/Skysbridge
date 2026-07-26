@@ -1,0 +1,3 @@
+Deploy version: 31
+Main change: single-source SVG memorial candle
+Upload the complete project to GitHub/Netlify. No Supabase migration is required.

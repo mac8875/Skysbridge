@@ -301,9 +301,9 @@ function formatLifeSpan(item) {
 
 function createCandle() {
   const candle = document.createElement('span');
-  candle.className = 'memorial-candle';
+  candle.className = 'memorial-candle memorial-candle-svg-wrap';
   candle.setAttribute('aria-hidden', 'true');
-  candle.innerHTML = '<span class="candle-glow"></span><span class="candle-flame"></span><span class="candle-wick"></span><span class="candle-body"></span>';
+  candle.innerHTML = '<img class="memorial-candle-svg" src="assets/memorial-candle.svg" alt="" width="120" height="240" loading="lazy" decoding="async">';
   return candle;
 }
 

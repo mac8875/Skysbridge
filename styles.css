@@ -1466,3 +1466,52 @@ footer img{height:76px;max-width:min(330px,100%)}
     margin-top: 16px !important;
   }
 }
+
+/* =========================================================
+   v31 — single-source SVG memorial candle
+   The complete candle is one scalable asset, so flame, wick
+   and wax can no longer drift apart at different breakpoints.
+   ========================================================= */
+.wall-v29 .star.community-star > .memorial-candle-svg-wrap,
+.wall-v29 .sky-card > .memorial-candle-svg-wrap {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  flex: 0 0 auto !important;
+  width: 66px !important;
+  height: 132px !important;
+  margin: 18px auto 0 !important;
+  overflow: visible !important;
+  transform: none !important;
+  filter: none !important;
+  isolation: auto !important;
+}
+.wall-v29 .memorial-candle-svg-wrap::before,
+.wall-v29 .memorial-candle-svg-wrap::after,
+.wall-v29 .memorial-candle-svg-wrap > .candle-glow,
+.wall-v29 .memorial-candle-svg-wrap > .candle-flame,
+.wall-v29 .memorial-candle-svg-wrap > .candle-wick,
+.wall-v29 .memorial-candle-svg-wrap > .candle-body {
+  display: none !important;
+  content: none !important;
+}
+.wall-v29 .memorial-candle-svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  overflow: visible !important;
+  filter: none !important;
+}
+@media (max-width:650px) {
+  .wall-v29 .star.community-star > .memorial-candle-svg-wrap,
+  .wall-v29 .sky-card > .memorial-candle-svg-wrap {
+    width: 64px !important;
+    height: 128px !important;
+    margin-top: 16px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wall-v29 .memorial-candle-svg { animation: none !important; }
+}
