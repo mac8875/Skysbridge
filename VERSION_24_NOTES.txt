@@ -1,0 +1,3 @@
+Version 24
+- Desktop logo fully visible
+- Candle flame centered above wick

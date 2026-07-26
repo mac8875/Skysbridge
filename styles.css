@@ -618,3 +618,20 @@ footer img{height:76px;max-width:min(330px,100%)}
     padding-right:20px;
   }
 }
+
+
+/* v24 Desktop logo fix */
+.hero-logo img,
+.hero img,
+.hero-image img{
+  width:min(90%,720px)!important;
+  max-width:720px!important;
+  height:auto!important;
+  object-fit:contain!important;
+}
+
+/* v24 Candle alignment */
+.candle-flame{
+  left:50%!important;
+  transform:translateX(-50%)!important;
+}
