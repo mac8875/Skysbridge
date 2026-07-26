@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 240" role="img" aria-labelledby="title desc">
+  <title id="title">Sky's Bridge memorial candle</title>
+  <desc id="desc">A slim ivory memorial candle with a visible wick, warm flame and soft golden glow.</desc>
+  <defs>
+    <radialGradient id="flameGlow" cx="50%" cy="42%" r="50%">
+      <stop offset="0" stop-color="#fff5c7" stop-opacity=".74"/>
+      <stop offset=".34" stop-color="#ffc34e" stop-opacity=".32"/>
+      <stop offset=".72" stop-color="#ed7a18" stop-opacity=".10"/>
+      <stop offset="1" stop-color="#ed7a18" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="baseGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#e8ad45" stop-opacity=".38"/>
+      <stop offset=".55" stop-color="#d8962b" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#d8962b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wax" x1="0" x2="1">
+      <stop offset="0" stop-color="#8f7759"/>
+      <stop offset=".16" stop-color="#d9c49c"/>
+      <stop offset=".42" stop-color="#fff7dd"/>
+      <stop offset=".62" stop-color="#f4e6c5"/>
+      <stop offset=".82" stop-color="#c8ac7d"/>
+      <stop offset="1" stop-color="#7b654c"/>
+    </linearGradient>
+    <radialGradient id="rim" cx="50%" cy="46%" rx="50%" ry="50%">
+      <stop offset="0" stop-color="#3f2a19"/>
+      <stop offset=".17" stop-color="#6b4a27"/>
+      <stop offset=".3" stop-color="#f9ecc9"/>
+      <stop offset=".72" stop-color="#d3b783"/>
+      <stop offset="1" stop-color="#846a49"/>
+    </radialGradient>
+    <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffef2"/>
+      <stop offset=".28" stop-color="#fff8c3"/>
+      <stop offset=".56" stop-color="#ffd05b"/>
+      <stop offset=".82" stop-color="#f08a20"/>
+      <stop offset="1" stop-color="#c95212"/>
+    </linearGradient>
+    <linearGradient id="innerFlame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".96"/>
+      <stop offset=".7" stop-color="#fff9d7" stop-opacity=".92"/>
+      <stop offset="1" stop-color="#ffd45e" stop-opacity=".18"/>
+    </linearGradient>
+    <filter id="softBlur" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+    <filter id="smallBlur" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+    <filter id="candleShadow" x="-100%" y="-30%" width="300%" height="180%">
+      <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#000814" flood-opacity=".58"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="60" cy="79" rx="42" ry="48" fill="url(#flameGlow)" filter="url(#softBlur)" opacity=".55">
+    <animate attributeName="opacity" values=".72;.96;.78;.92;.72" dur="3.2s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="60" cy="221" rx="34" ry="8" fill="url(#baseGlow)" filter="url(#smallBlur)"/>
+
+  <g>
+    <rect x="49" y="116" width="22" height="100" rx="4" fill="url(#wax)" stroke="#fff2cf" stroke-opacity=".78" stroke-width="1" style="filter:drop-shadow(0 7px 5px rgba(0,8,20,.58))"/>
+    <ellipse cx="60" cy="116" rx="11" ry="4.4" fill="url(#rim)" stroke="#fff4d2" stroke-opacity=".58" stroke-width=".8"/>
+    <path d="M53.5 119 C54 132 53 145 54 157 C54.8 165 57 166 57.4 155 L58.1 122 Z" fill="#f6e3ba" opacity=".74"/>
+    <path d="M67.3 121 C66.8 138 67.8 150 66.3 169 C65.8 176 63.6 177 63.5 165 L63.1 121 Z" fill="#baa071" opacity=".34"/>
+    <path d="M60 116 L60 102" stroke="#23170f" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+
+  <g transform-origin="60px 101px">
+    <path d="M60 101 C48 91 49 72 60 48 C72 72 72 91 60 101 Z" fill="url(#flame)">
+      <animateTransform attributeName="transform" type="rotate" values="0 60 101;-2.2 60 101;1.5 60 101;-1 60 101;0 60 101" dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="d" values="M60 101 C48 91 49 72 60 48 C72 72 72 91 60 101 Z;M60 101 C50 91 48 74 61 45 C70 72 73 90 60 101 Z;M60 101 C47 90 51 70 59 49 C73 72 70 92 60 101 Z;M60 101 C48 91 49 72 60 48 C72 72 72 91 60 101 Z" dur="2.4s" repeatCount="indefinite"/>
+    </path>
+    <path d="M60 96 C55 89 56 79 60 68 C65 79 65 89 60 96 Z" fill="url(#innerFlame)" opacity=".95"/>
+  </g>
+</svg>
