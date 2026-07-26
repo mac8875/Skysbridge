@@ -447,3 +447,25 @@ footer img{height:76px;max-width:min(330px,100%)}
   .post-form{width:100%;padding:14px;border-radius:16px}
   .post-form #postBody{width:100%;min-height:210px;padding:16px;font-size:16px;border-radius:13px}
 }
+/* Mobile modal scrolling */
+.modal-content,
+.modal-card,
+.modal {
+
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    padding-bottom: 40px;
+}
+
+/* Larger text boxes on phones */
+@media (max-width:768px){
+
+    textarea{
+
+        min-height:220px;
+        font-size:17px;
+    }
+
+}
