@@ -1,0 +1,8 @@
+Sky's Bridge Version 23.1
+
+Mobile Honor a Child form fix:
+- The modal is limited to the visible mobile viewport.
+- The form content scrolls smoothly inside the modal.
+- The Submit memorial button stays visible at the bottom while scrolling.
+- Safe-area spacing is included for mobile browser/navigation bars.
+- The remembrance field remains comfortably sized.

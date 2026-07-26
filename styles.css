@@ -531,3 +531,90 @@ footer img{height:76px;max-width:min(330px,100%)}
 @media(prefers-reduced-motion:reduce){
   .candle-flame{animation:none!important}
 }
+
+/* Version 23.1 — mobile Honor a Child modal: scrollable form + sticky submit */
+#memorialModal{
+  padding:
+    max(12px, env(safe-area-inset-top))
+    12px
+    max(12px, env(safe-area-inset-bottom));
+  overflow:hidden;
+}
+
+#memorialModal .modal-card{
+  display:flex;
+  flex-direction:column;
+  width:min(94vw,520px);
+  max-height:calc(100dvh - 24px);
+  overflow:hidden;
+  padding:34px 28px 0;
+}
+
+#memorialModal .modal-card > .eyebrow,
+#memorialModal .modal-card > h2,
+#memorialModal .modal-card > p:not(.form-message){
+  flex:0 0 auto;
+}
+
+#memorialModal #memorialForm{
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding:4px 4px calc(96px + env(safe-area-inset-bottom));
+  margin:0 -4px;
+  scroll-padding-bottom:110px;
+}
+
+#memorialModal #memorialForm .btn[type="submit"]{
+  position:sticky;
+  z-index:8;
+  bottom:calc(10px + env(safe-area-inset-bottom));
+  width:100%;
+  min-height:58px;
+  margin-top:8px;
+  box-shadow:
+    0 -18px 24px rgba(6,24,45,.94),
+    0 10px 25px rgba(232,170,67,.30);
+}
+
+#memorialModal .form-message{
+  flex:0 0 auto;
+  margin:0 -28px;
+  padding:8px 28px calc(12px + env(safe-area-inset-bottom));
+  background:#06182d;
+}
+
+@media(max-width:650px){
+  #memorialModal{
+    place-items:stretch center;
+    padding:8px 8px max(8px, env(safe-area-inset-bottom));
+  }
+
+  #memorialModal .modal-card{
+    width:100%;
+    max-height:calc(100dvh - 16px);
+    padding:28px 20px 0;
+    border-radius:20px;
+  }
+
+  #memorialModal .modal-card h2{
+    font-size:clamp(42px,13vw,58px);
+    padding-right:42px;
+  }
+
+  #memorialModal #memorialForm{
+    padding-bottom:calc(104px + env(safe-area-inset-bottom));
+  }
+
+  #memorialModal #childStory{
+    min-height:150px;
+  }
+
+  #memorialModal .form-message{
+    margin:0 -20px;
+    padding-left:20px;
+    padding-right:20px;
+  }
+}
