@@ -285,11 +285,25 @@ function openCommunityStar(item) {
   openModal(communityStarModal);
 }
 
+function formatLifeSpan(item) {
+  const born = dateParts(item.birth_date);
+  const passed = dateParts(item.passing_date);
+  if (!born || !passed) return 'Forever loved';
+  const birth = new Date(born.year, born.month - 1, born.day);
+  const passing = new Date(passed.year, passed.month - 1, passed.day);
+  if (passing < birth) return 'Forever loved';
+  const days = Math.max(0, Math.round((passing - birth) / 86400000));
+  if (days < 14) return `${days || 1} ${days === 1 ? 'day' : 'days'}`;
+  if (days < 60) { const weeks = Math.max(1, Math.round(days / 7)); return `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`; }
+  if (days < 730) { const months = Math.max(1, Math.round(days / 30.4375)); return `${months} ${months === 1 ? 'month' : 'months'}`; }
+  const years = Math.max(1, Math.floor(days / 365.2425)); return `${years} ${years === 1 ? 'year' : 'years'}`;
+}
+
 function createCandle() {
   const candle = document.createElement('span');
   candle.className = 'memorial-candle';
   candle.setAttribute('aria-hidden', 'true');
-  candle.innerHTML = '<span class="candle-flame"></span><span class="candle-wick"></span><span class="candle-body"></span>';
+  candle.innerHTML = '<span class="candle-glow"></span><span class="candle-flame"></span><span class="candle-wick"></span><span class="candle-body"></span>';
   return candle;
 }
 
@@ -303,11 +317,18 @@ function createCommunityStar(item, index) {
   if (state.remembrance) star.classList.add('is-remembrance-day');
   const dayLabels = [];
   if (state.birthday) dayLabels.push('birthday star');
-  if (state.remembrance) dayLabels.push('remembrance candle');
+  if (state.remembrance) dayLabels.push('remembrance day');
   star.setAttribute('aria-label', `Open memorial for ${item.child_name}${dayLabels.length ? `, ${dayLabels.join(' and ')}` : ''}`);
-  star.innerHTML = '<span class="community-star-visual"><span class="community-star-shape" aria-hidden="true">✦</span></span><strong></strong>';
-  if (state.remembrance) star.appendChild(createCandle());
+  star.innerHTML = `
+    <span class="community-star-visual" aria-hidden="true">
+      <svg class="premium-star-svg" viewBox="0 0 120 120" focusable="false"><path d="M60 4 64 54 116 60 64 66 60 116 56 66 4 60 56 54Z"/></svg>
+    </span>
+    <strong></strong>
+    <span class="memorial-divider" aria-hidden="true"><i></i><b>◆</b><i></i></span>
+    <span class="memorial-age"></span>`;
   star.querySelector('strong').textContent = item.child_name;
+  star.querySelector('.memorial-age').textContent = formatLifeSpan(item);
+  star.appendChild(createCandle());
   star.addEventListener('click', () => openCommunityStar(item));
   return star;
 }
@@ -317,11 +338,9 @@ function applySkyAnnualTribute(now = new Date()) {
   if (!skyStar) return;
   const isFebruaryNinth = now.getMonth() === 1 && now.getDate() === 9;
   skyStar.classList.toggle('sky-annual-tribute', isFebruaryNinth);
-  skyStar.querySelector('.memorial-candle')?.remove();
-  if (isFebruaryNinth) {
-    skyStar.appendChild(createCandle());
-    skyStar.setAttribute('aria-label', 'Open Sky’s story. Sky’s annual day of light and remembrance.');
-  }
+  skyStar.setAttribute('aria-label', isFebruaryNinth
+    ? 'Open Sky’s story. Sky’s annual day of light and remembrance.'
+    : 'Open Sky’s story.');
 }
 
 function updateStarWallStatus(message = '') {
@@ -362,7 +381,7 @@ async function loadApprovedMemorials({ reset = true } = {}) {
     .eq('approved', true)
     .eq('public_requested', true)
     .eq('archived', false)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: ($('#starSort')?.value || 'newest') === 'oldest' })
     .range(from, to);
 
   if (starSearchTerm) query = query.ilike('child_name', `%${starSearchTerm}%`);
@@ -391,6 +410,9 @@ async function loadApprovedMemorials({ reset = true } = {}) {
 applySkyAnnualTribute();
 
 $('#loadMoreStars')?.addEventListener('click', () => loadApprovedMemorials({ reset: false }));
+
+$('#starSort')?.addEventListener('change', () => loadApprovedMemorials({ reset: true }));
+
 $('#starSearch')?.addEventListener('input', (event) => {
   clearTimeout(starSearchTimer);
   starSearchTimer = setTimeout(() => {

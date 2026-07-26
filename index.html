@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=27">
+  <link rel="stylesheet" href="styles.css?v=29">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -65,47 +65,52 @@
     <div class="about-image"></div>
   </section>
 
-  <section class="wall" id="stars">
-    <div class="section-heading">
-      <p class="eyebrow">Wall of Stars</p>
-      <h2>Every light carries a name.<br>Every name carries a story.</h2>
-      <p>Families choose what to share and when. Public memorials require approval before they appear.</p>
+  <section class="wall wall-v29" id="stars">
+    <div class="wall-title-block">
+      <p class="eyebrow">A place of everlasting light</p>
+      <h2>Wall of Stars</h2>
+      <div class="wall-title-rule" aria-hidden="true"><span></span><b>✦</b><span></span></div>
+      <p>Each star represents a precious child whose light<br class="desktop-only"> continues to shine in our hearts forever.<br>Click on a star to read their story.</p>
     </div>
-    <div class="star-tools" aria-label="Wall of Stars controls">
+
+    <div class="star-tools premium-tools" aria-label="Wall of Stars controls">
       <label class="star-search">
         <span class="sr-only">Search the Wall of Stars</span>
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
-        <input id="starSearch" type="search" maxlength="80" placeholder="Search a child's name" autocomplete="off">
+        <input id="starSearch" type="search" maxlength="80" placeholder="Search by name" autocomplete="off">
       </label>
+      <button class="filter-icon" type="button" aria-label="Show memorial filters" title="Memorial filters">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M9 4v6M15 14v6"/></svg>
+      </button>
+      <div class="filter-row" aria-label="Memorial filters">
+        <label><span class="sr-only">Country</span><select aria-label="Country"><option>All Countries</option></select></label>
+        <label><span class="sr-only">Age</span><select aria-label="Age"><option>All Ages</option></select></label>
+        <label><span class="sr-only">Order</span><select id="starSort" aria-label="Order"><option value="oldest">Oldest First</option><option value="newest" selected>Newest First</option></select></label>
+      </div>
       <span class="star-count" id="starCount" aria-live="polite">Sky is the first light</span>
     </div>
-    <div class="star-field" id="starField" tabindex="0" aria-label="Scrollable Wall of Stars">
-      <div class="sky-featured">
-        <button class="star sky" id="openSkyStory" data-name="Sky" aria-label="Open Sky’s story" aria-haspopup="dialog">
-          <svg class="sky-star-shape" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-            <defs>
-              <linearGradient id="skyStarGold" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#fff9d7"/>
-                <stop offset="48%" stop-color="#ffd16d"/>
-                <stop offset="100%" stop-color="#d99424"/>
-              </linearGradient>
-              <filter id="skyStarGlow" x="-100%" y="-100%" width="300%" height="300%">
-                <feGaussianBlur stdDeviation="2.8" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-            </defs>
-            <path class="sky-star-rays" d="M60 3 L61.9 56.9 L117 60 L61.9 63.1 L60 117 L58.1 63.1 L3 60 L58.1 56.9 Z" fill="url(#skyStarGold)" filter="url(#skyStarGlow)"/>
-          </svg>
-          <span>Sky</span>
+
+    <div class="star-field premium-star-field v29-star-field" id="starField" tabindex="0" aria-label="Scrollable Wall of Stars">
+      <div class="memorial-showcase">
+        <button class="star community-star sky-card" id="openSkyStory" data-name="Sky" aria-label="Open Sky’s story" aria-haspopup="dialog">
+          <span class="community-star-visual" aria-hidden="true">
+            <svg class="premium-star-svg" viewBox="0 0 120 120" focusable="false">
+              <defs><linearGradient id="skyCardGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8d7"/><stop offset=".48" stop-color="#ffd16d"/><stop offset="1" stop-color="#d89422"/></linearGradient></defs>
+              <path d="M60 4 64 54 116 60 64 66 60 116 56 66 4 60 56 54Z" fill="url(#skyCardGold)"/>
+            </svg>
+          </span>
+          <strong>Sky</strong>
+          <span class="memorial-divider" aria-hidden="true"><i></i><b>◆</b><i></i></span>
+          <span class="memorial-age">13 weeks</span>
+          <span class="memorial-candle" aria-hidden="true"><span class="candle-glow"></span><span class="candle-flame"></span><span class="candle-wick"></span><span class="candle-body"></span></span>
         </button>
-        <p>Our first star</p>
+        <div class="star-grid" id="starGrid" aria-live="polite"></div>
       </div>
-      <div class="star-grid" id="starGrid" aria-live="polite"></div>
       <div class="star-field-state" id="starFieldState">More lights will appear here as memorials are approved.</div>
       <button class="explore-stars hidden" id="loadMoreStars" type="button">Explore more stars</button>
     </div>
-    <div class="wall-actions">
-      <button class="btn gold" id="openMemorial">Honor a child</button>
+    <div class="wall-actions premium-wall-actions">
+      <button class="btn gold honor-child-btn" id="openMemorial"><span aria-hidden="true">♡</span> Honor a child</button>
       <p>Your privacy and control always come first.</p>
     </div>
   </section>
@@ -359,6 +364,6 @@
 </div>
 
 <script src="config.js"></script>
-<script src="script.js?v=22"></script>
+<script src="script.js?v=29"></script>
 </body>
 </html>

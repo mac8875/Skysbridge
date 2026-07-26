@@ -1,0 +1,16 @@
+SKY'S BRIDGE — VERSION 29
+
+This version begins the full premium rebuild rather than adding another small patch.
+
+Completed in v29:
+- Hero rebuilt and centered on mobile and desktop.
+- Full wordmark kept visible in the header.
+- Wall of Stars converted from a fixed floating field to a responsive memorial-card grid.
+- One-column mobile layout, two-column tablet layout, three-column desktop layout.
+- Memorial cards rebuilt with restrained navy, ivory and gold styling.
+- Candle redrawn: thin wax body, visible wick and flame clearly above the candle.
+- Search/filter area visually simplified.
+- Existing Supabase, authentication, memorial and administration functions retained.
+
+Deploy:
+Upload all files to the existing GitHub repository. Netlify will redeploy automatically.

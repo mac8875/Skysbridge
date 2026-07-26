@@ -1,0 +1,6 @@
+Sky's Bridge v28 — premium Wall of Stars rebuild
+- New polished memorial-card grid
+- Fine wax candles with flame fully above the wick
+- Responsive two-column phone layout
+- Sky card and approved memorials share one consistent design
+- Search and sort controls retained
