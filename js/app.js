@@ -15,6 +15,7 @@
 
   const modal = document.querySelector("#modal");
   const modalContent = document.querySelector("#modalContent");
+  const modalCard = modal?.querySelector(".modal-card");
   const menuButton = document.querySelector(".menu-button");
   const nav = document.querySelector(".main-nav");
   const authButtons = Array.from(document.querySelectorAll("[data-open-auth]"));
@@ -75,17 +76,31 @@
     if (event.target === modal) closeModal();
   });
 
-  function openModal(html) {
+  function openModal(html, cardClass = "") {
     if (!modal || !modalContent) return;
+
     modalContent.innerHTML = html;
+
+    if (modalCard) {
+      modalCard.className = `modal-card ${cardClass}`.trim();
+      modalCard.scrollTop = 0;
+    }
+
     setHidden(modal, false);
     document.body.style.overflow = "hidden";
   }
 
   function closeModal() {
     if (!modal || !modalContent) return;
+
     setHidden(modal, true);
     modalContent.innerHTML = "";
+
+    if (modalCard) {
+      modalCard.className = "modal-card";
+      modalCard.scrollTop = 0;
+    }
+
     document.body.style.overflow = "";
   }
 
@@ -122,6 +137,35 @@
 
   function normalizeEmail(value) {
     return String(value || "").trim().toLowerCase();
+  }
+
+  function renderStoryParagraphs(value) {
+    const story = String(value || "Forever loved. Forever remembered.").trim();
+    const explicitParagraphs = story
+      .split(/\n\s*\n/)
+      .map(paragraph => paragraph.trim())
+      .filter(Boolean);
+
+    let paragraphs = explicitParagraphs;
+
+    if (explicitParagraphs.length === 1) {
+      const sentences = story
+        .match(/[^.!?]+[.!?]+(?:["'’”])?|[^.!?]+$/g)
+        ?.map(sentence => sentence.trim())
+        .filter(Boolean) || [story];
+
+      if (sentences.length > 2) {
+        paragraphs = [];
+
+        for (let index = 0; index < sentences.length; index += 2) {
+          paragraphs.push(sentences.slice(index, index + 2).join(" "));
+        }
+      }
+    }
+
+    return paragraphs
+      .map(paragraph => `<p>${escapeHtml(paragraph)}</p>`)
+      .join("");
   }
 
   function ensureProfessionalSupportStyles() {
@@ -580,7 +624,7 @@
     let star = {
       name: "Sky",
       story:
-        "Sky lived only a short time, but his life changed everything. His light became the beginning of Skysbridge—a place where children are named, remembered and forever part of their families' stories."
+        "Sky lived only a short time, but he changed our lives forever. His life taught us that love is not measured in years, but in the depth of the bond we share.\n\nAfter losing him, we discovered how lonely grief can become. Many parents carry their pain in silence, believing they are alone.\n\nSkysbridge was created in Sky’s memory—to build bridges between families who understand this journey, to ensure that every child is remembered, and that no parent has to grieve alone.\n\nSky is the first star on our Wall of Stars. His light became the beginning of thousands of others."
     };
 
     if (db) {
@@ -594,21 +638,58 @@
       if (data) star = data;
     }
 
+    const personalSkyOpening =
+      "The moment I first learned of Sky was the greatest happiness of my life. Having to let him go became my deepest pain.";
+
+    if (
+      slug === "sky" &&
+      !String(star.story || "").includes(personalSkyOpening)
+    ) {
+      star.story = `${personalSkyOpening}\n\n${star.story || ""}`.trim();
+    }
+
+    const starName = escapeHtml(star.name || "A child remembered");
+    const storyHtml = renderStoryParagraphs(star.story);
+
     openModal(`
-      <p class="eyebrow">A light remembered</p>
-      <h2 id="modalTitle">${escapeHtml(star.name)}</h2>
-      <p>${escapeHtml(star.story || "Forever loved. Forever remembered.")}</p>
-      <form class="form-grid" id="memoryForm">
-        <label>Your name
-          <input name="author_name" maxlength="80" required>
-        </label>
-        <label>Leave a memory
-          <textarea name="message" maxlength="800" required></textarea>
-        </label>
-        <button class="button button-gold">Submit memory privately</button>
-        <div class="notice" id="memoryStatus">Memories are reviewed before they become visible.</div>
-      </form>
-    `);
+      <article class="star-remembrance">
+        <header class="star-remembrance-header">
+          <p class="eyebrow">A light remembered</p>
+          <span class="star-remembrance-symbol" aria-hidden="true">✦</span>
+          <h2 id="modalTitle">${starName}</h2>
+          <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
+        </header>
+
+        <div class="star-story-copy">
+          ${storyHtml}
+        </div>
+
+        <div class="star-story-divider" aria-hidden="true">
+          <span>✦</span>
+        </div>
+
+        <section class="memory-section" aria-labelledby="memoryHeading">
+          <p class="eyebrow">Words of remembrance</p>
+          <h3 id="memoryHeading">Leave a memory for ${starName}</h3>
+          <p class="memory-intro">
+            Your words will remain private until they have been carefully reviewed.
+          </p>
+
+          <form class="form-grid memory-form" id="memoryForm">
+            <label>Your name
+              <input name="author_name" maxlength="80" autocomplete="name" required>
+            </label>
+            <label>Leave a memory
+              <textarea name="message" maxlength="800" required></textarea>
+            </label>
+            <button class="button button-gold" type="submit">Submit memory privately</button>
+            <div class="notice memory-notice" id="memoryStatus">
+              Memories are reviewed before they become visible.
+            </div>
+          </form>
+        </section>
+      </article>
+    `, "star-modal-card");
 
     const form = document.querySelector("#memoryForm");
     const status = document.querySelector("#memoryStatus");
