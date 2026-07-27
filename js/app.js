@@ -484,15 +484,9 @@
     const postList = document.querySelector("#postList");
     postList.innerHTML = `<p class="notice">Loading room posts…</p>`;
 
-    const { data, error } = await db
+    const { data: posts, error } = await db
       .from("group_posts")
-      .select(`
-        id,
-        body,
-        created_at,
-        user_id,
-        profiles:user_id(display_name)
-      `)
+      .select("id,body,created_at,user_id")
       .eq("group_id", activeRoomId)
       .eq("is_hidden", false)
       .order("created_at", { ascending: false });
@@ -502,15 +496,31 @@
       return;
     }
 
-    if (!data?.length) {
+    if (!posts?.length) {
       postList.innerHTML = `<p class="notice">This room is quiet for now. You can be the first to share.</p>`;
       return;
     }
 
-    postList.innerHTML = data.map(post => `
+    const userIds = [...new Set(posts.map(post => post.user_id).filter(Boolean))];
+    let profileMap = {};
+
+    if (userIds.length) {
+      const { data: profiles, error: profileError } = await db
+        .from("profiles")
+        .select("id,display_name")
+        .in("id", userIds);
+
+      if (!profileError) {
+        profileMap = Object.fromEntries(
+          (profiles || []).map(profile => [profile.id, profile.display_name])
+        );
+      }
+    }
+
+    postList.innerHTML = posts.map(post => `
       <article class="post-card">
         <div class="post-meta">
-          <strong>${escapeHtml(post.profiles?.display_name || "Community member")}</strong>
+          <strong>${escapeHtml(profileMap[post.user_id] || "Community member")}</strong>
           <span>${escapeHtml(formatDate(post.created_at))}</span>
         </div>
         <p>${escapeHtml(post.body)}</p>
@@ -530,16 +540,9 @@
     const target = document.querySelector("#pendingMembers");
     target.innerHTML = `<p class="muted">Loading…</p>`;
 
-    const { data, error } = await db
+    const { data: requests, error } = await db
       .from("group_members")
-      .select(`
-        group_id,
-        user_id,
-        status,
-        joined_at,
-        support_groups:group_id(name),
-        profiles:user_id(display_name)
-      `)
+      .select("group_id,user_id,status,joined_at")
       .eq("status", "pending")
       .order("joined_at", { ascending: true });
 
@@ -548,15 +551,40 @@
       return;
     }
 
-    if (!data?.length) {
+    if (!requests?.length) {
       target.innerHTML = `<p class="muted">No pending room requests.</p>`;
       return;
     }
 
-    target.innerHTML = data.map(item => `
+    const groupIds = [...new Set(requests.map(item => item.group_id).filter(Boolean))];
+    const userIds = [...new Set(requests.map(item => item.user_id).filter(Boolean))];
+
+    const [groupsResult, profilesResult] = await Promise.all([
+      groupIds.length
+        ? db.from("support_groups").select("id,name").in("id", groupIds)
+        : Promise.resolve({ data: [], error: null }),
+      userIds.length
+        ? db.from("profiles").select("id,display_name").in("id", userIds)
+        : Promise.resolve({ data: [], error: null })
+    ]);
+
+    if (groupsResult.error || profilesResult.error) {
+      const message = groupsResult.error?.message || profilesResult.error?.message;
+      target.innerHTML = `<p class="notice error">${escapeHtml(message)}</p>`;
+      return;
+    }
+
+    const groupMap = Object.fromEntries(
+      (groupsResult.data || []).map(group => [group.id, group.name])
+    );
+    const profileMap = Object.fromEntries(
+      (profilesResult.data || []).map(profile => [profile.id, profile.display_name])
+    );
+
+    target.innerHTML = requests.map(item => `
       <div class="review-item">
-        <strong>${escapeHtml(item.profiles?.display_name || item.user_id)}</strong>
-        <p>${escapeHtml(item.support_groups?.name || "Room")}</p>
+        <strong>${escapeHtml(profileMap[item.user_id] || item.user_id)}</strong>
+        <p>${escapeHtml(groupMap[item.group_id] || "Room")}</p>
         <div class="review-actions">
           <button class="button button-gold approve-member"
             data-group-id="${item.group_id}"
