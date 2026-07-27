@@ -17,31 +17,81 @@
   const modalContent = document.querySelector("#modalContent");
   const menuButton = document.querySelector(".menu-button");
   const nav = document.querySelector(".main-nav");
+  const authButtons = Array.from(document.querySelectorAll("[data-open-auth]"));
 
-  menuButton.addEventListener("click", () => {
-    nav.classList.toggle("open");
-    menuButton.setAttribute("aria-expanded", nav.classList.contains("open"));
+  function setHidden(element, hidden) {
+    if (!element) return;
+
+    element.hidden = hidden;
+
+    if (hidden) {
+      element.style.setProperty("display", "none", "important");
+    } else {
+      element.style.removeProperty("display");
+    }
+  }
+
+  function rememberAuthButtonLabels() {
+    authButtons.forEach(button => {
+      if (!button.dataset.guestLabel) {
+        button.dataset.guestLabel = button.textContent.trim();
+      }
+    });
+  }
+
+  function updateAuthButtons(isSignedIn) {
+    rememberAuthButtonLabels();
+
+    authButtons.forEach(button => {
+      button.textContent = isSignedIn
+        ? "Open member area"
+        : button.dataset.guestLabel;
+    });
+  }
+
+  function openMemberArea() {
+    nav?.classList.remove("open");
+    menuButton?.setAttribute("aria-expanded", "false");
+
+    const memberPanel = document.querySelector("#memberPanel");
+    const target =
+      memberPanel && !memberPanel.hidden
+        ? memberPanel
+        : document.querySelector("#community");
+
+    target?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  menuButton?.addEventListener("click", () => {
+    nav?.classList.toggle("open");
+    menuButton.setAttribute("aria-expanded", nav?.classList.contains("open"));
   });
 
-  document.querySelector(".modal-close").addEventListener("click", closeModal);
-  modal.addEventListener("click", event => {
+  document.querySelector(".modal-close")?.addEventListener("click", closeModal);
+  modal?.addEventListener("click", event => {
     if (event.target === modal) closeModal();
   });
 
   function openModal(html) {
+    if (!modal || !modalContent) return;
     modalContent.innerHTML = html;
-    modal.hidden = false;
+    setHidden(modal, false);
     document.body.style.overflow = "hidden";
   }
 
   function closeModal() {
-    modal.hidden = true;
+    if (!modal || !modalContent) return;
+    setHidden(modal, true);
     modalContent.innerHTML = "";
     document.body.style.overflow = "";
   }
 
   function setStatus(element, message, type = "") {
-    element.hidden = false;
+    if (!element) return;
+    setHidden(element, false);
     element.className = `notice ${type}`.trim();
     element.textContent = message;
   }
@@ -69,7 +119,6 @@
       timeStyle: "short"
     }).format(new Date(value));
   }
-
 
   function normalizeEmail(value) {
     return String(value || "").trim().toLowerCase();
@@ -383,8 +432,15 @@
     }
   }
 
-  document.querySelectorAll("[data-open-auth]").forEach(button => {
-    button.addEventListener("click", showAuth);
+  authButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      if (currentUser) {
+        openMemberArea();
+        return;
+      }
+
+      showAuth();
+    });
   });
 
   function showAuth() {
@@ -452,7 +508,7 @@
       setTimeout(async () => {
         closeModal();
         await refreshSession();
-        document.querySelector("#community").scrollIntoView({ behavior: "smooth" });
+        openMemberArea();
       }, 700);
     };
   }
@@ -609,25 +665,43 @@
   async function refreshSession() {
     if (!db) return;
 
-    const { data: { session } } = await db.auth.getSession();
+    const { data: { session }, error: sessionError } = await db.auth.getSession();
+
+    if (sessionError) {
+      console.error("Session error:", sessionError);
+    }
+
     const guest = document.querySelector("#guestCommunity");
     const memberPanel = document.querySelector("#memberPanel");
     const roomArea = document.querySelector("#roomArea");
+    const roomView = document.querySelector("#roomView");
     const adminPanel = document.querySelector("#adminPanel");
+    const adminBadge = document.querySelector("#adminBadge");
+    const memberGreeting = document.querySelector("#memberGreeting");
+    const memberEmail = document.querySelector("#memberEmail");
 
     if (!session) {
       currentUser = null;
       currentProfile = null;
       activeRoomId = null;
-      guest.hidden = false;
-      memberPanel.hidden = true;
-      roomArea.hidden = true;
-      adminPanel.hidden = true;
-      document.querySelector("#roomView").hidden = true;
+
+      updateAuthButtons(false);
+
+      setHidden(guest, false);
+      setHidden(memberPanel, true);
+      setHidden(roomArea, true);
+      setHidden(roomView, true);
+      setHidden(adminPanel, true);
+      setHidden(adminBadge, true);
+
+      if (memberGreeting) memberGreeting.textContent = "Welcome to Skysbridge";
+      if (memberEmail) memberEmail.textContent = "";
+
       return;
     }
 
     currentUser = session.user;
+    updateAuthButtons(true);
 
     try {
       currentProfile = await ensureProfile(currentUser);
@@ -641,18 +715,26 @@
 
     await connectApprovedProfessionalInvitations();
 
-    guest.hidden = true;
-    memberPanel.hidden = false;
-    roomArea.hidden = false;
+    setHidden(guest, true);
+    setHidden(memberPanel, false);
+    setHidden(roomArea, false);
+    setHidden(roomView, true);
 
-    document.querySelector("#memberGreeting").textContent =
-      `Welcome, ${currentProfile.display_name || "Member"}`;
-    document.querySelector("#memberEmail").textContent = currentUser.email || "";
-    document.querySelector("#adminBadge").hidden = !currentProfile.is_admin;
+    if (memberGreeting) {
+      memberGreeting.textContent =
+        `Welcome, ${currentProfile.display_name || "Member"}`;
+    }
+
+    if (memberEmail) {
+      memberEmail.textContent = currentUser.email || "";
+    }
+
+    setHidden(adminBadge, !currentProfile.is_admin);
 
     await loadRooms();
 
-    adminPanel.hidden = !currentProfile.is_admin;
+    setHidden(adminPanel, !currentProfile.is_admin);
+
     if (currentProfile.is_admin) {
       ensureProfessionalAdminSection();
       await loadAdminDashboard();
@@ -661,6 +743,8 @@
 
   async function loadRooms() {
     const roomList = document.querySelector("#roomList");
+    if (!roomList) return;
+
     roomList.innerHTML = `<p class="notice">Loading protected rooms…</p>`;
 
     const { data: rooms, error: roomError } = await db
@@ -761,7 +845,6 @@
       });
     });
 
-
     roomList.querySelectorAll(".request-professional").forEach(button => {
       button.addEventListener("click", () => {
         showProfessionalSupport(button.dataset.roomId, button.dataset.roomName);
@@ -771,26 +854,26 @@
 
   async function openRoom(roomId, roomName) {
     activeRoomId = roomId;
-    document.querySelector("#roomArea").hidden = true;
-    document.querySelector("#roomView").hidden = false;
+    setHidden(document.querySelector("#roomArea"), true);
+    setHidden(document.querySelector("#roomView"), false);
     document.querySelector("#activeRoomName").textContent = roomName;
     await loadPosts();
-    document.querySelector("#roomView").scrollIntoView({ behavior: "smooth" });
+    document.querySelector("#roomView")?.scrollIntoView({ behavior: "smooth" });
   }
 
-  document.querySelector("#closeRoom").addEventListener("click", () => {
+  document.querySelector("#closeRoom")?.addEventListener("click", () => {
     activeRoomId = null;
-    document.querySelector("#roomView").hidden = true;
-    document.querySelector("#roomArea").hidden = false;
+    setHidden(document.querySelector("#roomView"), true);
+    setHidden(document.querySelector("#roomArea"), false);
   });
 
-  document.querySelector("#postForm").addEventListener("submit", async event => {
+  document.querySelector("#postForm")?.addEventListener("submit", async event => {
     event.preventDefault();
 
     const bodyInput = document.querySelector("#postBody");
     const status = document.querySelector("#postStatus");
 
-    if (!activeRoomId || !bodyInput.value.trim()) return;
+    if (!activeRoomId || !bodyInput?.value.trim()) return;
 
     setStatus(status, "Publishing…");
 
@@ -812,6 +895,8 @@
 
   async function loadPosts() {
     const postList = document.querySelector("#postList");
+    if (!postList) return;
+
     postList.innerHTML = `<p class="notice">Loading room posts…</p>`;
 
     const { data: posts, error } = await db
@@ -869,6 +954,8 @@
 
   async function loadPendingMembers() {
     const target = document.querySelector("#pendingMembers");
+    if (!target) return;
+
     target.innerHTML = `<p class="muted">Loading…</p>`;
 
     const { data: requests, error } = await db
@@ -930,6 +1017,7 @@
     target.querySelectorAll(".approve-member").forEach(button => {
       button.onclick = () => reviewMembership(button, "approved");
     });
+
     target.querySelectorAll(".decline-member").forEach(button => {
       button.onclick = () => reviewMembership(button, "blocked");
     });
@@ -937,6 +1025,7 @@
 
   async function reviewMembership(button, nextStatus) {
     button.disabled = true;
+
     const { error } = await db
       .from("group_members")
       .update({ status: nextStatus })
@@ -954,6 +1043,8 @@
 
   async function loadPendingMemorials() {
     const target = document.querySelector("#pendingMemorials");
+    if (!target) return;
+
     target.innerHTML = `<p class="muted">Loading…</p>`;
 
     const { data, error } = await db
@@ -987,6 +1078,7 @@
     target.querySelectorAll(".review-memorial").forEach(button => {
       button.onclick = async () => {
         button.disabled = true;
+
         const { error: updateError } = await db
           .from("memorials")
           .update({ status: button.dataset.status })
@@ -996,6 +1088,7 @@
           button.textContent = updateError.message;
           return;
         }
+
         await loadPendingMemorials();
       };
     });
@@ -1003,6 +1096,8 @@
 
   async function loadPendingMemories() {
     const target = document.querySelector("#pendingMemories");
+    if (!target) return;
+
     target.innerHTML = `<p class="muted">Loading…</p>`;
 
     const { data, error } = await db
@@ -1035,6 +1130,7 @@
     target.querySelectorAll(".review-memory").forEach(button => {
       button.onclick = async () => {
         button.disabled = true;
+
         const { error: updateError } = await db
           .from("memories")
           .update({ status: button.dataset.status })
@@ -1044,21 +1140,38 @@
           button.textContent = updateError.message;
           return;
         }
+
         await loadPendingMemories();
       };
     });
   }
 
-  document.querySelector("#refreshAdmin").addEventListener("click", loadAdminDashboard);
+  document.querySelector("#refreshAdmin")?.addEventListener("click", loadAdminDashboard);
 
-  document.querySelector("#signOut").addEventListener("click", async () => {
+  document.querySelector("#signOut")?.addEventListener("click", async () => {
     if (!db) return;
-    await db.auth.signOut();
+
+    const { error } = await db.auth.signOut();
+
+    if (error) {
+      console.error("Sign-out error:", error);
+      return;
+    }
+
     await refreshSession();
+    document.querySelector("#community")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   });
 
   if (db) {
-    db.auth.onAuthStateChange(() => refreshSession());
+    db.auth.onAuthStateChange(() => {
+      window.setTimeout(refreshSession, 0);
+    });
+
     refreshSession();
+  } else {
+    updateAuthButtons(false);
   }
 })();
