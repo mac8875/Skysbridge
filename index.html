@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=26">
 </head>
 <body>
   <header class="site-header">
@@ -113,37 +113,101 @@
       <div class="section-heading">
         <p class="eyebrow">Protected community</p>
         <h2>Different rooms for different moments.</h2>
-        <p>Room content is visible only to approved members. People can observe quietly before posting.</p>
+        <p>Room content is visible only to approved members. You may observe quietly before posting.</p>
       </div>
 
-      <div class="room-grid">
-        <article class="room-card">
-          <span>🔒 Approval required</span>
-          <h3>Newly Bereaved</h3>
-          <p>A gentle room for the first days and months.</p>
-        </article>
-        <article class="room-card">
-          <span>🔒 Approval required</span>
-          <h3>Fathers' Space</h3>
-          <p>A protected room for fathers to speak without judgment.</p>
-        </article>
-        <article class="room-card">
-          <span>🔒 Approval required</span>
-          <h3>Remembering Together</h3>
-          <p>Share anniversaries, memories and rituals of remembrance.</p>
-        </article>
+      <div id="guestCommunity">
+        <div class="room-grid">
+          <article class="room-card">
+            <span>🔒 Approval required</span>
+            <h3>Newly Bereaved</h3>
+            <p>A gentle room for the first days and months.</p>
+          </article>
+          <article class="room-card">
+            <span>🔒 Approval required</span>
+            <h3>Fathers' Space</h3>
+            <p>A protected room for fathers to speak without judgment.</p>
+          </article>
+          <article class="room-card">
+            <span>🔒 Approval required</span>
+            <h3>Remembering Together</h3>
+            <p>Share anniversaries, memories and rituals of remembrance.</p>
+          </article>
+        </div>
+        <div class="center community-login">
+          <button class="button button-gold" data-open-auth>Sign in to request access</button>
+        </div>
       </div>
 
       <div class="member-panel" id="memberPanel" hidden>
         <div>
           <p class="eyebrow">Member area</p>
-          <h2>Welcome to Skysbridge</h2>
+          <h2 id="memberGreeting">Welcome to Skysbridge</h2>
           <p id="memberEmail"></p>
+          <p class="admin-badge" id="adminBadge" hidden>Administrator</p>
         </div>
         <button class="button button-outline" id="signOut">Sign out</button>
       </div>
 
-      <div id="communityDashboard" hidden></div>
+      <section id="roomArea" hidden>
+        <div class="subheading">
+          <div>
+            <p class="eyebrow">Your community</p>
+            <h2>Protected rooms</h2>
+          </div>
+          <p>Request access to a room. An administrator reviews every request.</p>
+        </div>
+        <div class="room-grid" id="roomList"></div>
+      </section>
+
+      <section class="room-view" id="roomView" hidden>
+        <div class="room-view-header">
+          <button class="button button-outline" id="closeRoom">← Back to rooms</button>
+          <div>
+            <p class="eyebrow">Protected room</p>
+            <h2 id="activeRoomName"></h2>
+          </div>
+        </div>
+
+        <form class="post-form" id="postForm">
+          <label for="postBody">Share something with this room</label>
+          <textarea id="postBody" maxlength="5000" required placeholder="Write only what feels right to share..."></textarea>
+          <div class="post-form-footer">
+            <small>Visible only to approved members of this room.</small>
+            <button class="button button-gold" type="submit">Publish in room</button>
+          </div>
+          <div class="notice" id="postStatus" hidden></div>
+        </form>
+
+        <div class="post-list" id="postList"></div>
+      </section>
+
+      <section class="admin-panel" id="adminPanel" hidden>
+        <div class="admin-heading">
+          <div>
+            <p class="eyebrow">Administration</p>
+            <h2>Review and moderation</h2>
+          </div>
+          <button class="button button-outline" id="refreshAdmin">Refresh</button>
+        </div>
+
+        <div class="admin-grid">
+          <article class="admin-card">
+            <h3>Room access requests</h3>
+            <div id="pendingMembers"><p class="muted">Loading…</p></div>
+          </article>
+
+          <article class="admin-card">
+            <h3>Memorial submissions</h3>
+            <div id="pendingMemorials"><p class="muted">Loading…</p></div>
+          </article>
+
+          <article class="admin-card">
+            <h3>Memories awaiting review</h3>
+            <div id="pendingMemories"><p class="muted">Loading…</p></div>
+          </article>
+        </div>
+      </section>
     </section>
 
     <section class="section contact-section">
@@ -171,7 +235,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/config.js?v=26"></script>
+  <script src="js/app.js?v=26"></script>
 </body>
 </html>
