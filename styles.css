@@ -1556,3 +1556,19 @@ footer img{height:76px;max-width:min(330px,100%)}
   align-items: center;
   flex-wrap: wrap;
 }
+/* Hauptüberschrift exakt zentrieren */
+main h1,
+.hero h1,
+.hero-content h1,
+.hero-copy h1,
+.hero-inner h1 {
+  display: block !important;
+  width: min(100%, 900px) !important;
+  max-width: 900px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+  transform: none !important;
+  left: auto !important;
+  right: auto !important;
+}
