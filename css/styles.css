@@ -1,4 +1,6 @@
-:root{
+[hidden] {
+  display: none !important;
+}:root{
   --night:#020812;--night-2:#051827;--panel:#08243a;--panel-deep:#031421;
   --gold:#e8b556;--gold-soft:#f4d792;--ivory:#f8f3e9;--muted:#b7c1cb;
   --line:rgba(232,181,86,.34);--cream:#f2eadb;--ink:#0a2135;--max:1240px;
