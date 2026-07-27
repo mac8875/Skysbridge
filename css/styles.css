@@ -67,3 +67,11 @@ footer nav{display:flex;justify-content:center;gap:22px;margin:22px 0}footer nav
 @media(max-width:1000px){.admin-grid{grid-template-columns:1fr}.hero-grid,.story-layout{grid-template-columns:1fr}.hero-copy{text-align:center}.hero h1{margin-inline:auto}.hero-copy>p:last-of-type{margin-inline:auto}.actions{justify-content:center}}
 @media(max-width:900px){.menu-button{display:block}.main-nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;padding:20px;background:#04111e;border-bottom:1px solid var(--line)}.main-nav.open{display:flex}.trust-strip{grid-template-columns:1fr 1fr}.room-grid{grid-template-columns:1fr}.subheading,.admin-heading{align-items:flex-start;flex-direction:column}}
 @media(max-width:600px){.brand strong{font-size:24px}.brand small{font-size:8px}.hero{padding-top:75px}.hero h1{font-size:45px}.trust-strip{grid-template-columns:1fr}.section{padding-top:76px;padding-bottom:76px}.star-sky{min-height:320px;padding:35px}.star-shape{font-size:62px}.modal-card{padding:28px 20px}.member-panel,.post-form-footer,.room-view-header{align-items:flex-start;flex-direction:column}.room-view-header h2{font-size:38px}}
+#guestCommunity[hidden],
+.member-panel[hidden],
+.admin-badge[hidden],
+#roomArea[hidden],
+#roomView[hidden],
+#adminPanel[hidden] {
+  display: none !important;
+}
