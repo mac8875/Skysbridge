@@ -1,6 +1,7 @@
 [hidden] {
   display: none !important;
-}:root{
+}
+:root{
   --night:#020812;--night-2:#051827;--panel:#08243a;--panel-deep:#031421;
   --gold:#e8b556;--gold-soft:#f4d792;--ivory:#f8f3e9;--muted:#b7c1cb;
   --line:rgba(232,181,86,.34);--cream:#f2eadb;--ink:#0a2135;--max:1240px;
@@ -56,7 +57,7 @@ a{color:inherit}button,input,textarea{font:inherit}
 .admin-panel{margin-top:75px;padding-top:65px;border-top:1px solid rgba(232,181,86,.22)}.admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.admin-card{min-width:0}
 .review-item{padding:15px 0;border-top:1px solid rgba(232,181,86,.14)}.review-item:first-child{border-top:0}.review-item strong{display:block;margin-bottom:6px}.review-item p{margin:6px 0;color:var(--muted);line-height:1.55;overflow-wrap:anywhere}
 .review-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.review-actions .button{padding:9px 14px;font-size:12px}
-.muted{color:var(--muted)}.contact-section{text-align:center;background:#020812}.contact-section h2 a{color:var(--gold-soft);text-decoration:none;overflow-wrap:anywhere}.contact-section>p:last-child{color:var(--muted)}
+.muted{color:var(--muted)}.contact-section{text-align:center;background:#020812;overflow:hidden}.contact-section h2{margin-left:auto;margin-right:auto;max-width:100%;font-size:clamp(21px,5.7vw,58px);line-height:1.1}.contact-section h2 a{display:inline-block;max-width:100%;color:var(--gold-soft);text-decoration:none;white-space:nowrap;overflow-wrap:normal;word-break:normal;letter-spacing:-.025em}.contact-section>p:last-child{color:var(--muted)}
 footer{padding:48px 24px;text-align:center;color:var(--muted);border-top:1px solid rgba(232,181,86,.16)}.footer-brand{display:flex;justify-content:center;align-items:center;gap:10px;color:var(--gold-soft);font:600 30px "Cormorant Garamond",serif}.footer-brand span{color:var(--gold)}
 footer nav{display:flex;justify-content:center;gap:22px;margin:22px 0}footer nav a{text-decoration:none}
 .modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.75)}.modal[hidden]{display:none}
@@ -64,9 +65,140 @@ footer nav{display:flex;justify-content:center;gap:22px;margin:22px 0}footer nav
 .modal-close{position:absolute;right:14px;top:9px;border:0;background:none;color:var(--ivory);font-size:31px;cursor:pointer}
 .form-grid{display:grid;gap:14px}.form-grid label{color:#d5dde5;font-size:13px}.form-grid input,.form-grid textarea{width:100%;margin-top:6px;padding:13px;color:white;border-radius:12px;border:1px solid rgba(232,181,86,.24);background:#03101c}.form-grid textarea{min-height:125px;resize:vertical}
 .tabs{display:flex;gap:8px;margin-bottom:20px}.tabs .button{flex:1}.notice{padding:12px;border-radius:12px;color:var(--gold-soft);background:rgba(232,181,86,.1);line-height:1.5;font-size:13px}.notice[hidden]{display:none}.error{color:var(--danger)}.success{color:var(--success)}
+
+/* Refined Wall of Stars remembrance modal */
+.star-modal-card{
+  width:min(760px,100%);
+  padding:clamp(34px,5vw,58px);
+  border-color:rgba(232,181,86,.38);
+  background:
+    radial-gradient(circle at 50% -8%,rgba(232,181,86,.12),transparent 31%),
+    linear-gradient(180deg,#092039 0%,#061725 58%,#04121e 100%);
+  box-shadow:0 34px 110px rgba(0,0,0,.68),inset 0 1px rgba(255,255,255,.025);
+  scrollbar-gutter:stable;
+}
+.star-modal-card .modal-close{
+  right:18px;
+  top:14px;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:var(--ivory);
+  background:rgba(2,8,18,.28);
+  line-height:1;
+}
+.star-modal-card .modal-close:hover{background:rgba(232,181,86,.12);color:var(--gold-soft)}
+.star-remembrance{width:min(620px,100%);margin:0 auto}
+.star-remembrance-header{text-align:center;padding:8px 34px 4px}
+.star-remembrance-header .eyebrow{margin-bottom:11px}
+.star-remembrance-symbol{
+  display:block;
+  width:max-content;
+  margin:0 auto 6px;
+  color:var(--gold-soft);
+  font-size:32px;
+  filter:drop-shadow(0 0 16px rgba(244,215,146,.62));
+}
+.star-remembrance-header h2{
+  margin:0;
+  color:var(--ivory);
+  font:600 clamp(52px,8vw,74px)/.94 "Cormorant Garamond",serif;
+  letter-spacing:-.02em;
+}
+.star-remembrance-subtitle{
+  margin:15px auto 0;
+  color:var(--gold-soft);
+  font:italic 500 clamp(18px,3vw,22px)/1.35 "Cormorant Garamond",serif;
+}
+.star-story-copy{
+  width:min(570px,100%);
+  margin:34px auto 0;
+  color:#dce4eb;
+  font-size:16.5px;
+  line-height:1.82;
+}
+.star-story-copy p{margin:0 0 19px}
+.star-story-copy p:last-child{margin-bottom:0}
+.star-story-divider{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin:36px 0 32px;
+  color:var(--gold);
+  opacity:.72;
+}
+.star-story-divider::before,.star-story-divider::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(232,181,86,.46));
+}
+.star-story-divider::after{background:linear-gradient(90deg,rgba(232,181,86,.46),transparent)}
+.star-story-divider span{font-size:16px;filter:drop-shadow(0 0 8px rgba(232,181,86,.55))}
+.memory-section{
+  padding:30px;
+  border:1px solid rgba(232,181,86,.2);
+  border-radius:22px;
+  background:rgba(2,15,26,.42);
+}
+.memory-section>.eyebrow{text-align:center;margin-bottom:8px}
+.memory-section h3{
+  margin:0;
+  color:var(--ivory);
+  text-align:center;
+  font:600 clamp(30px,5vw,40px)/1.08 "Cormorant Garamond",serif;
+}
+.memory-intro{
+  max-width:470px;
+  margin:12px auto 25px;
+  color:var(--muted);
+  text-align:center;
+  font-size:14px;
+  line-height:1.65;
+}
+.memory-form{gap:18px}
+.memory-form label{font-size:14px;font-weight:500}
+.memory-form input,.memory-form textarea{
+  margin-top:8px;
+  padding:15px 16px;
+  border-radius:15px;
+  border-color:rgba(232,181,86,.27);
+  background:rgba(1,12,21,.74);
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.memory-form input:focus,.memory-form textarea:focus{
+  outline:none;
+  border-color:rgba(244,215,146,.7);
+  box-shadow:0 0 0 3px rgba(232,181,86,.09);
+}
+.memory-form textarea{min-height:155px}
+.memory-form .button{width:100%;margin-top:2px;padding:15px 22px;font-size:16px}
+.memory-notice{text-align:center;background:transparent;padding:2px 8px;color:var(--muted)}
+.memory-notice.success,.memory-notice.error{padding:12px;background:rgba(232,181,86,.08)}
+
 @media(max-width:1000px){.admin-grid{grid-template-columns:1fr}.hero-grid,.story-layout{grid-template-columns:1fr}.hero-copy{text-align:center}.hero h1{margin-inline:auto}.hero-copy>p:last-of-type{margin-inline:auto}.actions{justify-content:center}}
 @media(max-width:900px){.menu-button{display:block}.main-nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;padding:20px;background:#04111e;border-bottom:1px solid var(--line)}.main-nav.open{display:flex}.trust-strip{grid-template-columns:1fr 1fr}.room-grid{grid-template-columns:1fr}.subheading,.admin-heading{align-items:flex-start;flex-direction:column}}
-@media(max-width:600px){.brand strong{font-size:24px}.brand small{font-size:8px}.hero{padding-top:75px}.hero h1{font-size:45px}.trust-strip{grid-template-columns:1fr}.section{padding-top:76px;padding-bottom:76px}.star-sky{min-height:320px;padding:35px}.star-shape{font-size:62px}.modal-card{padding:28px 20px}.member-panel,.post-form-footer,.room-view-header{align-items:flex-start;flex-direction:column}.room-view-header h2{font-size:38px}}
+@media(max-width:600px){
+  .brand strong{font-size:24px}.brand small{font-size:8px}.hero{padding-top:75px}.hero h1{font-size:45px}.trust-strip{grid-template-columns:1fr}.section{padding-top:76px;padding-bottom:76px}.star-sky{min-height:320px;padding:35px}.star-shape{font-size:62px}.modal-card{padding:28px 20px}.member-panel,.post-form-footer,.room-view-header{align-items:flex-start;flex-direction:column}.room-view-header h2{font-size:38px}
+  .star-modal-card{max-height:92vh;padding:30px 19px 24px;border-radius:24px}
+  .star-modal-card .modal-close{right:10px;top:10px;width:38px;height:38px;font-size:28px}
+  .star-remembrance-header{padding:9px 28px 0}
+  .star-remembrance-header h2{font-size:54px}
+  .star-remembrance-subtitle{font-size:19px}
+  .star-story-copy{margin-top:29px;font-size:15.5px;line-height:1.78}
+  .star-story-copy p{margin-bottom:17px}
+  .star-story-divider{margin:30px 0 27px}
+  .memory-section{padding:25px 18px 20px;border-radius:19px}
+  .memory-section h3{font-size:34px}
+  .memory-intro{margin-bottom:22px}
+  .memory-form textarea{min-height:140px}
+}
+@media(max-width:600px){
+  .contact-section{padding-left:12px;padding-right:12px}
+  .contact-section h2{font-size:clamp(19px,5.35vw,30px)}
+}
 #guestCommunity[hidden],
 .member-panel[hidden],
 .admin-badge[hidden],
