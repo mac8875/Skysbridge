@@ -1,59 +1,35 @@
-# Sky's Bridge – Version 20
+# Skysbridge V25 Upgrade
 
-Version 20 corrects the Netlify Functions folder layout while retaining the Microsoft 365 Graph integration and all previous community, moderation, memorial, and Wall of Stars features.
+This is the first stable step toward V32.
 
-# Sky's Bridge — Version 19
+## Included
+- Premium homepage using the selected Skysbridge logo
+- Sky as the first featured star
+- Marco's story, including the respectful wording about the couple's paths separating
+- Responsive mobile design
+- Supabase login and registration
+- Private memorial submissions
+- Moderated memory submissions
+- Privacy and community-guidelines pages
+- Row Level Security migration
+- Netlify security headers
 
-This release adds server-side Microsoft 365 email delivery through Microsoft Graph for selected protected rooms. See `MICROSOFT_365_GRAPH_SETUP.md`.
+## Upload to the existing GitHub repository
 
-# Sky's Bridge — Version 17
+1. Download and unzip this package.
+2. Upload the contents into the root of the existing Skysbridge repository.
+3. Replace files when GitHub asks.
+4. Do not upload the ZIP itself into the repository.
+5. Commit with:
+   `Upgrade Skysbridge to V25 foundation`
+6. Netlify should redeploy automatically.
 
-# Sky's Bridge v11 Community
+## Supabase
 
-A protected memorial and community platform for families after the loss of a child.
+1. Open `js/config.js`.
+2. Replace `PASTE_YOUR_SUPABASE_ANON_KEY_HERE` with the public anon key from Supabase.
+3. Run:
+   `supabase/migrations/20260727093000_skysbridge_v25.sql`
+   in the Supabase SQL Editor.
 
-## Functional community features
-
-- Supabase email registration and login
-- Chosen community display name
-- Personal memorial-submission status
-- Protected support-room directory
-- Membership access requests
-- Approved-member-only room conversations
-- Private posts protected by Row Level Security
-- Public Wall of Stars after moderation
-- Responsive mobile and desktop design
-
-## Deploy through GitHub
-
-1. Upload the complete contents of this folder to the root of `mac8875/Skysbridge`.
-2. Commit the files to the production branch connected to Netlify and Supabase.
-3. Netlify publishes the site from the repository root.
-4. Supabase applies `supabase/migrations/20260725010000_community_functions.sql`.
-
-Read `COMMUNITY_SETUP.txt` for the current manual room-approval process.
-
-## Security
-
-`config.js` contains only a publishable browser key. Never commit a secret or service-role key. Room membership and post access are protected by Supabase Row Level Security.
-
-
-## v12 administrator workflow
-This version adds a protected administrator review centre and optional transactional email notifications through Netlify Functions + Resend. Read `ADMIN_EMAIL_SETUP.md` before deployment.
-
-
-## Version 13 — Scalable Wall of Stars
-- Scrollable star field that stays a comfortable size on mobile and desktop
-- Paginated Supabase loading (24 memorials at a time)
-- Automatic loading near the bottom plus an accessible “Explore more stars” button
-- Name search using Supabase filtering
-- Sky remains permanently featured as the first star
-- Approved public memorials open in a dedicated remembrance dialog
-
-
-## Version 17
-Login, administrator detection, scalable Wall of Stars, and protected Approve/Decline moderation are included. The one-time moderation SQL has already been installed in the existing Supabase project.
-
-
-## Version 17 admin management
-Run `V17_RUN_THIS_IN_SUPABASE.sql` once to enable archive, restore, revoke approval and permanent deletion.
+Never place the service-role key in the website.
