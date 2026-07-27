@@ -70,6 +70,319 @@
     }).format(new Date(value));
   }
 
+
+  function normalizeEmail(value) {
+    return String(value || "").trim().toLowerCase();
+  }
+
+  function ensureProfessionalSupportStyles() {
+    if (document.querySelector("#professionalSupportStyles")) return;
+
+    const style = document.createElement("style");
+    style.id = "professionalSupportStyles";
+    style.textContent = `
+      .room-actions,
+      .review-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+      }
+
+      .support-consent {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: start;
+        gap: .65rem;
+      }
+
+      .support-consent input {
+        margin-top: .25rem;
+      }
+
+      .professional-request-meta {
+        display: grid;
+        gap: .2rem;
+        margin: .75rem 0;
+      }
+
+      .professional-request-meta span {
+        overflow-wrap: anywhere;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  ensureProfessionalSupportStyles();
+
+  async function invokeProfessionalSupport(body) {
+    if (!db) return { data: null, error: new Error("Supabase is not configured.") };
+    return db.functions.invoke("professional-support", { body });
+  }
+
+  function showProfessionalSupport(roomId, roomName) {
+    openModal(`
+      <p class="eyebrow">Optional professional support</p>
+      <h2 id="modalTitle">Request a therapist</h2>
+      <p>
+        This request is private. Skysbridge will only share the information you approve
+        and will never add a professional to a protected room without review.
+      </p>
+      <form class="form-grid" id="professionalSupportForm">
+        <label>Protected room
+          <input value="${escapeHtml(roomName)}" disabled>
+        </label>
+        <label>How can we help?
+          <select name="request_type" required>
+            <option value="find_professional">Please help me find a suitable therapist</option>
+            <option value="invite_therapist">I would like to invite my own therapist</option>
+          </select>
+        </label>
+        <label>Therapist's name (optional)
+          <input name="therapist_name" maxlength="120" autocomplete="name">
+        </label>
+        <label>Therapist's email (required for an invitation)
+          <input type="email" name="therapist_email" maxlength="254" autocomplete="email">
+        </label>
+        <label>Anything you would like us to know (optional)
+          <textarea name="message" maxlength="5000"></textarea>
+        </label>
+        <label class="support-consent">
+          <input type="checkbox" name="share_contact_consent" required>
+          <span>
+            I consent to Skysbridge reviewing this request and using my account email
+            to contact me about professional support.
+          </span>
+        </label>
+        <label class="support-consent">
+          <input type="checkbox" name="email_forward_requested">
+          <span>
+            Also forward this request to the protected Skysbridge Microsoft 365 mailbox.
+          </span>
+        </label>
+        <button class="button button-gold" type="submit">Send private request</button>
+        <div class="notice" id="professionalSupportStatus">
+          Your room posts are not included in this request.
+        </div>
+      </form>
+    `);
+
+    const form = document.querySelector("#professionalSupportForm");
+    const status = document.querySelector("#professionalSupportStatus");
+
+    form.onsubmit = async event => {
+      event.preventDefault();
+      if (!requireDatabase(status)) return;
+
+      const { data: { user } } = await db.auth.getUser();
+      if (!user) {
+        setStatus(status, "Please sign in before requesting professional support.", "error");
+        return;
+      }
+
+      const values = new FormData(form);
+      const requestType = values.get("request_type");
+      const therapistEmail = normalizeEmail(values.get("therapist_email"));
+
+      if (requestType === "invite_therapist" && !therapistEmail) {
+        setStatus(status, "Please enter your therapist's email address.", "error");
+        return;
+      }
+
+      setStatus(status, "Sending your private request…");
+
+      const { data: request, error } = await db
+        .from("professional_support_requests")
+        .insert({
+          requester_id: user.id,
+          group_id: roomId,
+          requester_email: normalizeEmail(user.email),
+          request_type: requestType,
+          therapist_name: values.get("therapist_name")?.trim() || null,
+          therapist_email: therapistEmail || null,
+          message: values.get("message")?.trim() || null,
+          share_contact_consent: values.get("share_contact_consent") === "on",
+          email_forward_requested: values.get("email_forward_requested") === "on"
+        })
+        .select("id")
+        .single();
+
+      if (error) {
+        setStatus(status, error.message, "error");
+        return;
+      }
+
+      let emailWarning = "";
+      if (values.get("email_forward_requested") === "on") {
+        const { data: emailResult, error: emailError } = await invokeProfessionalSupport({
+          action: "new_request",
+          request_id: request.id
+        });
+
+        if (emailError || emailResult?.warning) {
+          emailWarning = " The request is saved, but the Microsoft 365 notification could not be confirmed.";
+        }
+      }
+
+      form.reset();
+      setStatus(
+        status,
+        `Your request was submitted privately for review.${emailWarning}`,
+        emailWarning ? "" : "success"
+      );
+
+      if (currentProfile?.is_admin) await loadPendingProfessionalRequests();
+    };
+  }
+
+  function ensureProfessionalAdminSection() {
+    const adminPanel = document.querySelector("#adminPanel");
+    if (!adminPanel || document.querySelector("#pendingProfessionalRequests")) return;
+
+    const section = document.createElement("section");
+    section.className = "dashboard-card";
+    section.innerHTML = `
+      <p class="eyebrow">Private review</p>
+      <h3>Professional support requests</h3>
+      <div id="pendingProfessionalRequests">
+        <p class="muted">Loading…</p>
+      </div>
+    `;
+    adminPanel.appendChild(section);
+  }
+
+  async function loadPendingProfessionalRequests() {
+    ensureProfessionalAdminSection();
+    const target = document.querySelector("#pendingProfessionalRequests");
+    if (!target) return;
+
+    target.innerHTML = `<p class="muted">Loading…</p>`;
+
+    const { data: requests, error } = await db
+      .from("professional_support_requests")
+      .select(`
+        id,
+        requester_id,
+        requester_email,
+        group_id,
+        request_type,
+        therapist_name,
+        therapist_email,
+        message,
+        email_forward_requested,
+        email_forwarded_at,
+        created_at
+      `)
+      .eq("status", "pending")
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      target.innerHTML = `<p class="notice error">${escapeHtml(error.message)}</p>`;
+      return;
+    }
+
+    if (!requests?.length) {
+      target.innerHTML = `<p class="muted">No professional support requests awaiting review.</p>`;
+      return;
+    }
+
+    const groupIds = [...new Set(requests.map(item => item.group_id).filter(Boolean))];
+    const userIds = [...new Set(requests.map(item => item.requester_id).filter(Boolean))];
+
+    const [groupsResult, profilesResult] = await Promise.all([
+      groupIds.length
+        ? db.from("support_groups").select("id,name").in("id", groupIds)
+        : Promise.resolve({ data: [], error: null }),
+      userIds.length
+        ? db.from("profiles").select("id,display_name").in("id", userIds)
+        : Promise.resolve({ data: [], error: null })
+    ]);
+
+    if (groupsResult.error || profilesResult.error) {
+      const message = groupsResult.error?.message || profilesResult.error?.message;
+      target.innerHTML = `<p class="notice error">${escapeHtml(message)}</p>`;
+      return;
+    }
+
+    const groupMap = Object.fromEntries(
+      (groupsResult.data || []).map(group => [group.id, group.name])
+    );
+    const profileMap = Object.fromEntries(
+      (profilesResult.data || []).map(profile => [profile.id, profile.display_name])
+    );
+
+    target.innerHTML = requests.map(item => {
+      const requestLabel = item.request_type === "invite_therapist"
+        ? "Invite an existing therapist"
+        : "Help finding a therapist";
+
+      return `
+        <div class="review-item">
+          <strong>${escapeHtml(profileMap[item.requester_id] || "Community member")}</strong>
+          <div class="professional-request-meta">
+            <span><b>Room:</b> ${escapeHtml(groupMap[item.group_id] || "Protected room")}</span>
+            <span><b>Request:</b> ${escapeHtml(requestLabel)}</span>
+            <span><b>Member email:</b> ${escapeHtml(item.requester_email)}</span>
+            ${item.therapist_name ? `<span><b>Therapist:</b> ${escapeHtml(item.therapist_name)}</span>` : ""}
+            ${item.therapist_email ? `<span><b>Therapist email:</b> ${escapeHtml(item.therapist_email)}</span>` : ""}
+            <span><b>Microsoft 365:</b> ${item.email_forward_requested
+              ? (item.email_forwarded_at ? "Forwarded" : "Requested")
+              : "Not requested"}</span>
+            <span><b>Submitted:</b> ${escapeHtml(formatDate(item.created_at))}</span>
+          </div>
+          ${item.message ? `<p>${escapeHtml(item.message)}</p>` : ""}
+          <div class="review-actions">
+            <button class="button button-gold review-professional-request"
+              data-id="${item.id}" data-decision="approved">Approve</button>
+            <button class="button button-danger review-professional-request"
+              data-id="${item.id}" data-decision="declined">Decline</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    target.querySelectorAll(".review-professional-request").forEach(button => {
+      button.onclick = () => reviewProfessionalRequest(button);
+    });
+  }
+
+  async function reviewProfessionalRequest(button) {
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "Saving…";
+
+    const { data, error } = await invokeProfessionalSupport({
+      action: "review_request",
+      request_id: button.dataset.id,
+      decision: button.dataset.decision
+    });
+
+    if (error) {
+      button.disabled = false;
+      button.textContent = error.message || originalText;
+      return;
+    }
+
+    if (data?.warning) console.warn(data.warning);
+    await loadPendingProfessionalRequests();
+  }
+
+  async function connectApprovedProfessionalInvitations() {
+    if (!currentUser?.email) return;
+
+    const { data, error } = await invokeProfessionalSupport({
+      action: "connect_professional"
+    });
+
+    if (error) {
+      console.warn("Professional invitation check failed:", error.message || error);
+      return;
+    }
+
+    if (data?.connected_count) {
+      console.info(`Connected to ${data.connected_count} protected room(s) as a professional.`);
+    }
+  }
+
   document.querySelectorAll("[data-open-auth]").forEach(button => {
     button.addEventListener("click", showAuth);
   });
@@ -326,6 +639,8 @@
       };
     }
 
+    await connectApprovedProfessionalInvitations();
+
     guest.hidden = true;
     memberPanel.hidden = false;
     roomArea.hidden = false;
@@ -339,6 +654,7 @@
 
     adminPanel.hidden = !currentProfile.is_admin;
     if (currentProfile.is_admin) {
+      ensureProfessionalAdminSection();
       await loadAdminDashboard();
     }
   }
@@ -388,11 +704,18 @@
       } else if (membership?.status === "approved") {
         status = membership.role === "moderator" ? "Moderator" : "Approved member";
         action = `
-          <button class="button button-gold open-room"
-            data-room-id="${room.id}"
-            data-room-name="${escapeHtml(room.name)}">
-            Enter room
-          </button>
+          <div class="room-actions">
+            <button class="button button-gold open-room"
+              data-room-id="${room.id}"
+              data-room-name="${escapeHtml(room.name)}">
+              Enter room
+            </button>
+            <button class="button button-outline request-professional"
+              data-room-id="${room.id}"
+              data-room-name="${escapeHtml(room.name)}">
+              Request a therapist
+            </button>
+          </div>
         `;
       } else if (membership?.status === "blocked") {
         status = "Access unavailable";
@@ -435,6 +758,13 @@
     roomList.querySelectorAll(".open-room").forEach(button => {
       button.addEventListener("click", () => {
         openRoom(button.dataset.roomId, button.dataset.roomName);
+      });
+    });
+
+
+    roomList.querySelectorAll(".request-professional").forEach(button => {
+      button.addEventListener("click", () => {
+        showProfessionalSupport(button.dataset.roomId, button.dataset.roomName);
       });
     });
   }
@@ -532,7 +862,8 @@
     await Promise.all([
       loadPendingMembers(),
       loadPendingMemorials(),
-      loadPendingMemories()
+      loadPendingMemories(),
+      loadPendingProfessionalRequests()
     ]);
   }
 
