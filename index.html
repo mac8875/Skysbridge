@@ -9,16 +9,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=27-2">
+  <link rel="stylesheet" href="css/styles.css?v=32">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="#home" aria-label="Skysbridge home">
-      <span class="brand-mark">✦</span>
-      <span>
-        <strong>Skysbridge</strong>
-        <small>BUILDING BRIDGES THROUGH GRIEF</small>
-      </span>
+      <img src="skys-bridge-wordmark.svg" alt="Skysbridge — Building Bridges Through Grief">
     </a>
 
     <button class="menu-button" aria-label="Open navigation" aria-expanded="false">☰</button>
@@ -72,13 +68,32 @@
         <p>Memorials appear publicly only when a family requests publication and a moderator approves them.</p>
       </div>
 
-      <div class="star-sky" id="starWall">
-        <button class="memorial-star featured" data-star="sky" aria-label="Open Sky's story">
-          <span class="star-shape">✦</span>
+      <div class="wall-controls" aria-label="Wall of Stars controls">
+        <label>
+          <span>Search by name</span>
+          <input id="memorialSearch" type="search" maxlength="80" placeholder="Search the Wall of Stars" autocomplete="off">
+        </label>
+        <label>
+          <span>Sort memorials</span>
+          <select id="memorialSort">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="az">Name A–Z</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="memorial-grid" id="memorialGrid">
+        <button class="memorial-card sky-card" data-star="sky" aria-label="Open Sky's story">
+          <span class="memorial-symbol sky-symbol" aria-hidden="true">✦</span>
+          <span class="memorial-kicker">Our first star</span>
           <strong>Sky</strong>
-          <small>OUR FIRST STAR</small>
+          <span class="memorial-message">His life was short. His light remains.</span>
+          <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
+          <small>Forever our son. Forever our light.</small>
         </button>
       </div>
+      <p class="wall-status" id="wallStatus" aria-live="polite">Sky is the first light.</p>
 
       <div class="center">
         <button class="button button-gold" data-open-memorial>Honor a child</button>
@@ -225,7 +240,7 @@
   </main>
 
   <footer>
-    <div class="footer-brand"><span>✦</span><strong>Skysbridge</strong></div>
+    <div class="footer-brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge — Building Bridges Through Grief"></div>
     <nav>
       <a href="privacy.html">Privacy</a>
       <a href="community-guidelines.html">Community Guidelines</a>
@@ -243,6 +258,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js?v=26-1"></script>
-  <script src="js/app.js?v=27-2"></script>
+  <script src="js/app.js?v=32"></script>
 </body>
 </html>

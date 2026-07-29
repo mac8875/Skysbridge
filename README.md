@@ -1,35 +1,31 @@
-# Skysbridge V25 Upgrade
+# Skysbridge Version 32
 
-This is the first stable step toward V32.
+This package repairs the active frontend and restores the remembrance features to the live homepage.
 
 ## Included
-- Premium homepage using the selected Skysbridge logo
-- Sky as the first featured star
-- Marco's story, including the respectful wording about the couple's paths separating
-- Responsive mobile design
-- Supabase login and registration
-- Private memorial submissions
-- Moderated memory submissions
-- Privacy and community-guidelines pages
-- Row Level Security migration
-- Netlify security headers
 
-## Upload to the existing GitHub repository
+- Full Skysbridge wordmark in the header and footer
+- Brighter premium navy palette
+- Responsive Wall of Stars memorial cards
+- Approved public memorials loaded from Supabase
+- SVG remembrance candles
+- Optional birth and passing dates
+- Birthday and passing-anniversary highlighting
+- Search and sorting
+- Existing authentication, protected rooms, administration and professional-support functions
 
-1. Download and unzip this package.
-2. Upload the contents into the root of the existing Skysbridge repository.
-3. Replace files when GitHub asks.
-4. Do not upload the ZIP itself into the repository.
-5. Commit with:
-   `Upgrade Skysbridge to V25 foundation`
-6. Netlify should redeploy automatically.
+## Upload to GitHub
+
+Upload the complete contents of this folder into the root of the existing Skysbridge repository and replace matching files.
+
+Suggested commit message:
+
+`Restore memorial candles and brighten Skysbridge V32`
+
+Netlify should redeploy automatically.
 
 ## Supabase
 
-1. Open `js/config.js`.
-2. Replace `PASTE_YOUR_SUPABASE_ANON_KEY_HERE` with the public anon key from Supabase.
-3. Run:
-   `supabase/migrations/20260727093000_skysbridge_v25.sql`
-   in the Supabase SQL Editor.
+No new migration is required when `supabase/migrations/20260726093000_memorial_dates_and_annual_tributes.sql` has already been executed. If the date fields have not yet been added, run that migration once in the Supabase SQL Editor. The page also includes a safe fallback so memorial submission and display continue without the optional dates.
 
-Never place the service-role key in the website.
+Never place a Supabase service-role key in frontend files.

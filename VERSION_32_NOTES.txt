@@ -1,0 +1,12 @@
+Skysbridge Version 32 — repaired active frontend
+
+- Unified the files actually loaded by index.html.
+- Restored the full Skysbridge wordmark in the header and footer, including the wing-like gold flourish beneath the name.
+- Brightened the navy palette while keeping the calm premium character.
+- Rebuilt the Wall of Stars as responsive memorial cards.
+- Restored approved public memorials from Supabase.
+- Added the Version 31 SVG candle to memorial cards and remembrance dialogs.
+- Restored optional birth and passing dates, birthday highlighting and annual remembrance highlighting.
+- Added search and sorting to the Wall of Stars.
+- Corrected administrator memorial and memory review to use the live approved/rejection_reason schema.
+- No new Supabase migration is required if the memorial date migration was already run.

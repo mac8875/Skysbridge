@@ -1,0 +1,9 @@
+SKYSBRIDGE VERSION 32
+
+Upload the complete contents of this folder to the root of the existing GitHub repository and replace matching files.
+
+Suggested commit message:
+Restore memorial candles and brighten Skysbridge V32
+
+Netlify should deploy automatically.
+No SQL needs to be run if 20260726093000_memorial_dates_and_annual_tributes.sql was already executed.

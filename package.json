@@ -1,8 +1,8 @@
 {
   "name": "skysbridge-platform",
   "private": true,
-  "version": "30.0.0",
-  "description": "Sky's Bridge community platform \u2014 Version 30 Option 1 candle correction",
+  "version": "32.0.0",
+  "description": "Skysbridge community platform \u2014 Version 32 restored memorial wall",
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4"
   }
