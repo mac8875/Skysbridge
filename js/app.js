@@ -764,15 +764,37 @@
     return "";
   }
 
+  function memorialDayState(item) {
+    // A remembrance anniversary takes priority if both dates fall on the same day.
+    if (sameMonthAndDay(item.passing_date)) return "anniversary";
+    if (sameMonthAndDay(item.birth_date)) return "birthday";
+    return "standard";
+  }
+
+  function memorialSymbolMarkup(state, detailed = false) {
+    if (state === "anniversary") {
+      return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "A lit memorial candle" : ""}">`;
+    }
+
+    return `<span class="memorial-star-image" aria-hidden="true">✦</span>`;
+  }
+
   function openApprovedMemorial(item) {
-    const birthday = sameMonthAndDay(item.birth_date);
-    const anniversary = sameMonthAndDay(item.passing_date);
-    const dayLabel = anniversary ? "Today we remember" : birthday ? "Today we celebrate" : "A light remembered";
+    const state = memorialDayState(item);
+    const dayLabel =
+      state === "anniversary"
+        ? "Today we remember"
+        : state === "birthday"
+          ? "Today we celebrate"
+          : "A light remembered";
     const dateLine = memorialDateLine(item);
+
     openModal(`
-      <article class="memorial-detail-card">
+      <article class="memorial-detail-card is-${state}">
         <p class="eyebrow">${dayLabel}</p>
-        <img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="A lit memorial candle">
+        <div class="memorial-detail-symbol">
+          ${memorialSymbolMarkup(state, true)}
+        </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
@@ -801,18 +823,24 @@
     });
 
     rows.forEach(item => {
-      const birthday = sameMonthAndDay(item.birth_date);
-      const anniversary = sameMonthAndDay(item.passing_date);
+      const state = memorialDayState(item);
       const card = document.createElement("button");
       card.type = "button";
-      card.className = `memorial-card${birthday ? " is-birthday" : ""}${anniversary ? " is-anniversary" : ""}`;
+      card.className = `memorial-card is-${state}`;
       card.dataset.publicMemorial = item.id;
       card.setAttribute("aria-label", `Open memorial for ${item.child_name || "a child remembered"}`);
+
       const dateLine = memorialDateLine(item);
-      const dayLabel = anniversary ? "Today we remember" : birthday ? "Today we celebrate" : "Forever remembered";
+      const dayLabel =
+        state === "anniversary"
+          ? "Today we remember"
+          : state === "birthday"
+            ? "Today we celebrate"
+            : "Forever remembered";
+
       card.innerHTML = `
-        <span class="memorial-symbol" aria-hidden="true">
-          <img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="">
+        <span class="memorial-symbol">
+          ${memorialSymbolMarkup(state)}
         </span>
         <span class="memorial-kicker">A light remembered</span>
         <strong>${escapeHtml(item.child_name || "Forever loved")}</strong>
@@ -820,6 +848,7 @@
         <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
         <small>${dateLine ? `<span class="memorial-dates">${escapeHtml(dateLine)}</span>` : "Forever loved. Forever remembered."}${item.country ? `<span class="memorial-dates">${escapeHtml(item.country)}</span>` : ""}</small>
       `;
+
       card.addEventListener("click", () => openApprovedMemorial(item));
       grid.appendChild(card);
     });
