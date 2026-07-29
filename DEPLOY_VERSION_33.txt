@@ -1,0 +1,20 @@
+Skysbridge Version 33
+
+Fixes the active Wall of Stars on the homepage:
+- Normal days: only a calm star
+- Birthdays: a brighter, twinkling star
+- Passing anniversaries: only a candle
+- The candle has enough vertical space and cannot cover the text
+- The same symbol logic is used in the memorial detail modal
+
+Replace these active files in GitHub:
+  js/app.js
+  css/styles.css
+
+Suggested commit message:
+Fix anniversary symbols and candle spacing V33
+
+Why the previous ZIP did not change the live page:
+The homepage does not use wall-of-stars-v2.js or wall-of-stars-v2.css. It uses js/app.js and css/styles.css.
+
+After Netlify finishes deploying, reload skysbridge.org. If Chrome still shows the old candle, close the tab and open the site again or test once in an Incognito tab.
