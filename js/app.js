@@ -1,3 +1,4 @@
+// SKYBRIDGE V34 — anniversary symbol logic: star normally, sparkle on birthdays, candle only on remembrance days
 (() => {
   const cfg = window.SKYSBRIDGE_CONFIG || {};
   const configured =
