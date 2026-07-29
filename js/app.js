@@ -572,6 +572,14 @@
         <label>Your remembrance
           <textarea name="remembrance" maxlength="5000" required></textarea>
         </label>
+        <div class="date-grid">
+          <label>Date of birth (optional)
+            <input type="date" name="birth_date">
+          </label>
+          <label>Date of passing (optional)
+            <input type="date" name="passing_date">
+          </label>
+        </div>
         <label>Country (optional)
           <input name="country" maxlength="80">
         </label>
@@ -598,13 +606,23 @@
       }
 
       const values = new FormData(form);
-      const { error } = await db.from("memorials").insert({
+      const payload = {
         user_id: user.id,
         child_name: values.get("child_name"),
         remembrance: values.get("remembrance"),
         country: values.get("country") || null,
+        birth_date: values.get("birth_date") || null,
+        passing_date: values.get("passing_date") || null,
         public_requested: values.get("public_requested") === "on"
-      });
+      };
+
+      let { error } = await db.from("memorials").insert(payload);
+
+      if (error && /birth_date|passing_date/i.test(error.message || "")) {
+        delete payload.birth_date;
+        delete payload.passing_date;
+        ({ error } = await db.from("memorials").insert(payload));
+      }
 
       if (error) {
         setStatus(status, error.message, "error");
@@ -721,6 +739,133 @@
       setStatus(status, "Your memory was submitted privately for review.", "success");
     };
   }
+
+
+  let approvedMemorials = [];
+
+  function sameMonthAndDay(value, today = new Date()) {
+    if (!value) return false;
+    const parts = String(value).slice(0, 10).split("-").map(Number);
+    return parts.length === 3 && parts[1] === today.getMonth() + 1 && parts[2] === today.getDate();
+  }
+
+  function formatPlainDate(value) {
+    if (!value) return "";
+    const date = new Date(`${String(value).slice(0, 10)}T12:00:00`);
+    return new Intl.DateTimeFormat("en", { day: "numeric", month: "long", year: "numeric" }).format(date);
+  }
+
+  function memorialDateLine(item) {
+    const birth = formatPlainDate(item.birth_date);
+    const passing = formatPlainDate(item.passing_date);
+    if (birth && passing) return `${birth} — ${passing}`;
+    if (birth) return `Born ${birth}`;
+    if (passing) return `Remembered since ${passing}`;
+    return "";
+  }
+
+  function openApprovedMemorial(item) {
+    const birthday = sameMonthAndDay(item.birth_date);
+    const anniversary = sameMonthAndDay(item.passing_date);
+    const dayLabel = anniversary ? "Today we remember" : birthday ? "Today we celebrate" : "A light remembered";
+    const dateLine = memorialDateLine(item);
+    openModal(`
+      <article class="memorial-detail-card">
+        <p class="eyebrow">${dayLabel}</p>
+        <img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="A lit memorial candle">
+        <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
+        ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
+        ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
+        <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
+        <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
+      </article>
+    `, "star-modal-card");
+  }
+
+  function renderApprovedMemorials() {
+    const grid = document.querySelector("#memorialGrid");
+    const status = document.querySelector("#wallStatus");
+    if (!grid || !status) return;
+
+    grid.querySelectorAll("[data-public-memorial]").forEach(card => card.remove());
+
+    const search = String(document.querySelector("#memorialSearch")?.value || "").trim().toLowerCase();
+    const sort = document.querySelector("#memorialSort")?.value || "newest";
+    let rows = approvedMemorials.filter(item => !search || String(item.child_name || "").toLowerCase().includes(search));
+
+    rows = [...rows].sort((a, b) => {
+      if (sort === "az") return String(a.child_name || "").localeCompare(String(b.child_name || ""));
+      const aTime = new Date(a.created_at || 0).getTime();
+      const bTime = new Date(b.created_at || 0).getTime();
+      return sort === "oldest" ? aTime - bTime : bTime - aTime;
+    });
+
+    rows.forEach(item => {
+      const birthday = sameMonthAndDay(item.birth_date);
+      const anniversary = sameMonthAndDay(item.passing_date);
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = `memorial-card${birthday ? " is-birthday" : ""}${anniversary ? " is-anniversary" : ""}`;
+      card.dataset.publicMemorial = item.id;
+      card.setAttribute("aria-label", `Open memorial for ${item.child_name || "a child remembered"}`);
+      const dateLine = memorialDateLine(item);
+      const dayLabel = anniversary ? "Today we remember" : birthday ? "Today we celebrate" : "Forever remembered";
+      card.innerHTML = `
+        <span class="memorial-symbol" aria-hidden="true">
+          <img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="">
+        </span>
+        <span class="memorial-kicker">A light remembered</span>
+        <strong>${escapeHtml(item.child_name || "Forever loved")}</strong>
+        <span class="memorial-day">${dayLabel}</span>
+        <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
+        <small>${dateLine ? `<span class="memorial-dates">${escapeHtml(dateLine)}</span>` : "Forever loved. Forever remembered."}${item.country ? `<span class="memorial-dates">${escapeHtml(item.country)}</span>` : ""}</small>
+      `;
+      card.addEventListener("click", () => openApprovedMemorial(item));
+      grid.appendChild(card);
+    });
+
+    if (search && !rows.length) status.textContent = `No memorial found for “${document.querySelector("#memorialSearch").value.trim()}”.`;
+    else if (approvedMemorials.length) status.textContent = `Sky and ${approvedMemorials.length} more ${approvedMemorials.length === 1 ? "light" : "lights"}.`;
+    else status.textContent = "Sky is the first light. More memorials will appear after family consent and moderator approval.";
+  }
+
+  async function loadApprovedMemorials() {
+    const status = document.querySelector("#wallStatus");
+    if (!status) return;
+    if (!db) {
+      renderApprovedMemorials();
+      return;
+    }
+
+    status.textContent = "Loading memorials…";
+    let result = await db
+      .from("memorials")
+      .select("id,child_name,remembrance,country,birth_date,passing_date,created_at")
+      .eq("approved", true)
+      .eq("public_requested", true)
+      .order("created_at", { ascending: false });
+
+    if (result.error && /birth_date|passing_date/i.test(result.error.message || "")) {
+      result = await db
+        .from("memorials")
+        .select("id,child_name,remembrance,country,created_at")
+        .eq("approved", true)
+        .eq("public_requested", true)
+        .order("created_at", { ascending: false });
+    }
+
+    if (result.error) {
+      approvedMemorials = [];
+      status.textContent = "The public memorials could not be loaded right now. Sky remains visible as the first light.";
+      return;
+    }
+
+    approvedMemorials = result.data || [];
+    renderApprovedMemorials();
+  }
+
+  document.querySelector("#memorialSearch")?.addEventListener("input", renderApprovedMemorials);
+  document.querySelector("#memorialSort")?.addEventListener("change", renderApprovedMemorials);
 
   async function ensureProfile(user) {
     const { data, error } = await db
@@ -1131,7 +1276,8 @@
     const { data, error } = await db
       .from("memorials")
       .select("id,child_name,remembrance,country,public_requested,created_at")
-      .eq("status", "pending")
+      .eq("approved", false)
+      .is("rejection_reason", null)
       .order("created_at", { ascending: true });
 
     if (error) {
@@ -1150,8 +1296,8 @@
         <p>${escapeHtml(item.remembrance)}</p>
         <p>${item.public_requested ? "Public wall requested" : "Private remembrance"}</p>
         <div class="review-actions">
-          <button class="button button-gold review-memorial" data-id="${item.id}" data-status="approved">Approve</button>
-          <button class="button button-danger review-memorial" data-id="${item.id}" data-status="declined">Decline</button>
+          <button class="button button-gold review-memorial" data-id="${item.id}" data-decision="approve">Approve</button>
+          <button class="button button-danger review-memorial" data-id="${item.id}" data-decision="decline">Decline</button>
         </div>
       </div>
     `).join("");
@@ -1160,9 +1306,13 @@
       button.onclick = async () => {
         button.disabled = true;
 
+        const approved = button.dataset.decision === "approve";
         const { error: updateError } = await db
           .from("memorials")
-          .update({ status: button.dataset.status })
+          .update({
+            approved,
+            rejection_reason: approved ? null : "Not approved at this time."
+          })
           .eq("id", button.dataset.id);
 
         if (updateError) {
@@ -1171,6 +1321,7 @@
         }
 
         await loadPendingMemorials();
+        await loadApprovedMemorials();
       };
     });
   }
@@ -1184,7 +1335,8 @@
     const { data, error } = await db
       .from("memories")
       .select("id,star_slug,author_name,message,created_at")
-      .eq("status", "pending")
+      .eq("approved", false)
+      .is("rejection_reason", null)
       .order("created_at", { ascending: true });
 
     if (error) {
@@ -1202,8 +1354,8 @@
         <strong>${escapeHtml(item.author_name)} · ${escapeHtml(item.star_slug)}</strong>
         <p>${escapeHtml(item.message)}</p>
         <div class="review-actions">
-          <button class="button button-gold review-memory" data-id="${item.id}" data-status="approved">Approve</button>
-          <button class="button button-danger review-memory" data-id="${item.id}" data-status="declined">Decline</button>
+          <button class="button button-gold review-memory" data-id="${item.id}" data-decision="approve">Approve</button>
+          <button class="button button-danger review-memory" data-id="${item.id}" data-decision="decline">Decline</button>
         </div>
       </div>
     `).join("");
@@ -1212,9 +1364,13 @@
       button.onclick = async () => {
         button.disabled = true;
 
+        const approved = button.dataset.decision === "approve";
         const { error: updateError } = await db
           .from("memories")
-          .update({ status: button.dataset.status })
+          .update({
+            approved,
+            rejection_reason: approved ? null : "Not approved at this time."
+          })
           .eq("id", button.dataset.id);
 
         if (updateError) {
@@ -1245,6 +1401,8 @@
       block: "start"
     });
   });
+
+  loadApprovedMemorials();
 
   if (db) {
     db.auth.onAuthStateChange(() => {
