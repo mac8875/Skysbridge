@@ -35,7 +35,7 @@ a{color:inherit}button,input,textarea{font:inherit}
 .stars-section{background:radial-gradient(circle at 50% 28%,rgba(64,124,166,.32),transparent 48%),linear-gradient(180deg,#08243a,#04131f)}
 .star-sky{min-height:410px;display:flex;align-items:center;justify-content:center;padding:52px;margin-bottom:30px;overflow:hidden;border-radius:32px;border:1px solid rgba(232,181,86,.18);background:radial-gradient(circle at 35% 30%,rgba(39,88,128,.2),transparent 32%),linear-gradient(rgba(2,8,18,.18),rgba(2,8,18,.75));box-shadow:inset 0 0 95px rgba(0,0,0,.38)}
 .memorial-star{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;background:none;color:var(--ivory);cursor:pointer}
-.star-shape{color:var(--gold-soft);font-size:76px;filter:drop-shadow(0 0 20px rgba(244,215,146,.82));animation:breathe 3.8s ease-in-out infinite}
+.star-shape{display:block;width:112px;height:132px;font-size:0;color:transparent;background:url("../assets/memorial-star.svg") center/contain no-repeat;filter:drop-shadow(0 0 17px rgba(244,215,146,.66)) drop-shadow(0 0 38px rgba(232,181,86,.30));animation:breathe 3.8s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.06);opacity:1}}
 .memorial-star strong{color:var(--gold-soft);font:600 31px "Cormorant Garamond",serif}.memorial-star small{color:var(--muted);letter-spacing:.18em;font-size:9px}
 
@@ -54,12 +54,12 @@ a{color:inherit}button,input,textarea{font:inherit}
 .memorial-message{max-width:270px;margin:14px auto 0;color:#d6e0e8;line-height:1.6}
 .memorial-card small{margin-top:auto;color:var(--muted);line-height:1.55}
 .memorial-symbol{display:grid;place-items:center;width:100%;height:132px;margin-bottom:14px;color:var(--gold-soft);overflow:visible}
-.sky-symbol{font-size:88px;filter:drop-shadow(0 0 13px #fff8d5) drop-shadow(0 0 32px rgba(232,181,86,.9));animation:breathe 3.8s ease-in-out infinite}
-.memorial-star-image{display:grid;place-items:center;width:110px;height:120px;font-size:92px;line-height:1;color:var(--gold-soft);filter:drop-shadow(0 0 9px rgba(232,181,86,.38));transform-origin:center}
+.sky-symbol{display:block;width:126px;height:144px;font-size:0;color:transparent;background:url("../assets/memorial-star.svg") center/contain no-repeat;filter:drop-shadow(0 0 14px #fff8d5) drop-shadow(0 0 34px rgba(232,181,86,.72));animation:breathe 3.8s ease-in-out infinite}
+.memorial-star-image{display:block;width:110px;height:122px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(232,181,86,.32)) drop-shadow(0 0 18px rgba(232,181,86,.12));transform-origin:center}
 .memorial-candle-image{display:block;width:68px;height:150px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(255,192,76,.3))}
 .memorial-card.is-anniversary{border-color:rgba(244,215,146,.47)}
 .memorial-card.is-anniversary .memorial-symbol{height:164px;margin-bottom:18px}
-.memorial-card.is-birthday .memorial-star-image{color:#fff0b4;animation:birthdayStarTwinkle 2.35s ease-in-out infinite;filter:drop-shadow(0 0 13px #fff7d5) drop-shadow(0 0 32px rgba(232,181,86,.92))}
+.memorial-card.is-birthday .memorial-star-image{animation:birthdayStarTwinkle 2.35s ease-in-out infinite;filter:brightness(1.16) saturate(1.08) drop-shadow(0 0 12px #fff7d5) drop-shadow(0 0 34px rgba(232,181,86,.90))}
 .memorial-card.is-birthday .memorial-symbol::before,.memorial-card.is-birthday .memorial-symbol::after{content:"✦";position:absolute;color:#fff4c6;font-size:17px;opacity:0;pointer-events:none;animation:birthdaySparkle 2.35s ease-in-out infinite}
 .memorial-card.is-birthday .memorial-symbol::before{transform:translate(48px,-42px);animation-delay:.15s}
 .memorial-card.is-birthday .memorial-symbol::after{transform:translate(-50px,35px);animation-delay:1.15s}
@@ -74,8 +74,8 @@ a{color:inherit}button,input,textarea{font:inherit}
 .memorial-detail-symbol{display:grid;place-items:center;min-height:150px;margin:0 auto 12px}
 .memorial-detail-card.is-anniversary .memorial-detail-symbol{min-height:176px}
 .memorial-detail-card .memorial-candle-image{width:78px;height:170px;margin:0 auto}
-.memorial-detail-card .memorial-star-image{width:125px;height:140px;font-size:105px}
-.memorial-detail-card.is-birthday .memorial-star-image{color:#fff0b4;animation:birthdayStarTwinkle 2.35s ease-in-out infinite;filter:drop-shadow(0 0 13px #fff7d5) drop-shadow(0 0 35px rgba(232,181,86,.94))}
+.memorial-detail-card .memorial-star-image{width:132px;height:148px;object-fit:contain}
+.memorial-detail-card.is-birthday .memorial-star-image{animation:birthdayStarTwinkle 2.35s ease-in-out infinite;filter:brightness(1.18) saturate(1.08) drop-shadow(0 0 13px #fff7d5) drop-shadow(0 0 37px rgba(232,181,86,.92))}
 .memorial-detail-card h2{margin:.1em 0;color:var(--gold-soft);font:600 clamp(48px,8vw,72px)/1 "Cormorant Garamond",serif}.memorial-detail-meta{color:var(--gold);font-size:13px}.memorial-detail-story{margin:28px 0 0;color:#dce4eb;text-align:left;font-size:16px;line-height:1.8}.memorial-detail-story p{margin:0 0 17px}
 .story-section{color:var(--ink);background:var(--cream)}
 .story-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}.story-text{color:#263c4d;line-height:1.85;font-size:17px}
@@ -133,13 +133,14 @@ footer nav{display:flex;justify-content:center;gap:22px;margin:22px 0}footer nav
 .star-remembrance-header{text-align:center;padding:8px 34px 4px}
 .star-remembrance-header .eyebrow{margin-bottom:11px}
 .star-remembrance-symbol{
-  display:block;
-  width:max-content;
-  margin:0 auto 6px;
-  color:var(--gold-soft);
-  font-size:32px;
-  filter:drop-shadow(0 0 16px rgba(244,215,146,.62));
+  display:grid;
+  place-items:center;
+  width:84px;
+  height:96px;
+  margin:0 auto 8px;
+  filter:drop-shadow(0 0 14px rgba(244,215,146,.52));
 }
+.star-remembrance-symbol img{display:block;width:100%;height:100%;object-fit:contain}
 .star-remembrance-header h2{
   margin:0;
   color:var(--ivory);
@@ -220,7 +221,7 @@ footer nav{display:flex;justify-content:center;gap:22px;margin:22px 0}footer nav
 @media(max-width:1000px){.admin-grid{grid-template-columns:1fr}.hero-grid,.story-layout{grid-template-columns:1fr}.hero-copy{text-align:center}.hero h1{margin-inline:auto}.hero-copy>p:last-of-type{margin-inline:auto}.actions{justify-content:center}}
 @media(max-width:900px){.menu-button{display:block}.main-nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;padding:20px;background:#04111e;border-bottom:1px solid var(--line)}.main-nav.open{display:flex}.trust-strip{grid-template-columns:1fr 1fr}.room-grid{grid-template-columns:1fr}.subheading,.admin-heading{align-items:flex-start;flex-direction:column}}
 @media(max-width:600px){
-  .brand{min-width:0}.brand img{width:min(270px,72vw);height:60px}.hero{padding-top:75px}.hero h1{font-size:45px}.trust-strip{grid-template-columns:1fr}.section{padding-top:76px;padding-bottom:76px}.star-sky{min-height:320px;padding:35px}.star-shape{font-size:62px}.modal-card{padding:28px 20px}.member-panel,.post-form-footer,.room-view-header{align-items:flex-start;flex-direction:column}.room-view-header h2{font-size:38px}
+  .brand{min-width:0}.brand img{width:min(270px,72vw);height:60px}.hero{padding-top:75px}.hero h1{font-size:45px}.trust-strip{grid-template-columns:1fr}.section{padding-top:76px;padding-bottom:76px}.star-sky{min-height:320px;padding:35px}.star-shape{width:96px;height:114px}.modal-card{padding:28px 20px}.member-panel,.post-form-footer,.room-view-header{align-items:flex-start;flex-direction:column}.room-view-header h2{font-size:38px}
   .star-modal-card{max-height:92vh;padding:30px 19px 24px;border-radius:24px}
   .star-modal-card .modal-close{right:10px;top:10px;width:38px;height:38px;font-size:28px}
   .star-remembrance-header{padding:9px 28px 0}
