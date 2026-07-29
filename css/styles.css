@@ -52,17 +52,30 @@ a{color:inherit}button,input,textarea{font:inherit}
 .memorial-kicker{color:var(--gold);font-size:10px;text-transform:uppercase;letter-spacing:.18em}
 .memorial-message{max-width:270px;margin:14px auto 0;color:#d6e0e8;line-height:1.6}
 .memorial-card small{margin-top:auto;color:var(--muted);line-height:1.55}
-.memorial-symbol{display:grid;place-items:center;height:132px;margin-bottom:4px;color:var(--gold-soft)}
+.memorial-symbol{display:grid;place-items:center;width:100%;height:132px;margin-bottom:14px;color:var(--gold-soft);overflow:visible}
 .sky-symbol{font-size:88px;filter:drop-shadow(0 0 13px #fff8d5) drop-shadow(0 0 32px rgba(232,181,86,.9));animation:breathe 3.8s ease-in-out infinite}
-.memorial-candle-image{display:block;width:82px;height:150px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(255,192,76,.3))}
+.memorial-star-image{display:grid;place-items:center;width:110px;height:120px;font-size:92px;line-height:1;color:var(--gold-soft);filter:drop-shadow(0 0 9px rgba(232,181,86,.38));transform-origin:center}
+.memorial-candle-image{display:block;width:68px;height:150px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(255,192,76,.3))}
+.memorial-card.is-anniversary{border-color:rgba(244,215,146,.47)}
+.memorial-card.is-anniversary .memorial-symbol{height:164px;margin-bottom:18px}
+.memorial-card.is-birthday .memorial-star-image{color:#fff0b4;animation:birthdayStarTwinkle 2.35s ease-in-out infinite;filter:drop-shadow(0 0 13px #fff7d5) drop-shadow(0 0 32px rgba(232,181,86,.92))}
+.memorial-card.is-birthday .memorial-symbol::before,.memorial-card.is-birthday .memorial-symbol::after{content:"✦";position:absolute;color:#fff4c6;font-size:17px;opacity:0;pointer-events:none;animation:birthdaySparkle 2.35s ease-in-out infinite}
+.memorial-card.is-birthday .memorial-symbol::before{transform:translate(48px,-42px);animation-delay:.15s}
+.memorial-card.is-birthday .memorial-symbol::after{transform:translate(-50px,35px);animation-delay:1.15s}
 .memorial-rule{width:100%;display:flex;align-items:center;gap:11px;margin:22px 0 18px;color:var(--gold);opacity:.66}.memorial-rule i{height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(232,181,86,.52))}.memorial-rule i:last-child{background:linear-gradient(90deg,rgba(232,181,86,.52),transparent)}.memorial-rule b{font-weight:400;font-size:11px}
 .memorial-day{display:inline-flex;margin:10px 0 -2px;padding:6px 10px;border-radius:999px;color:#1b2025;background:linear-gradient(135deg,var(--gold-soft),var(--gold));font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
 .memorial-dates{display:block;margin-top:8px;color:#d4c49f;font-size:12px;line-height:1.55}
 .wall-status{min-height:24px;margin:0 auto 28px;color:var(--muted);text-align:center}
-.memorial-card.is-birthday .memorial-symbol{animation:birthdayGlow 2s ease-in-out infinite}.memorial-card.is-anniversary{border-color:rgba(244,215,146,.47)}
-@keyframes birthdayGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(244,215,146,.28))}50%{filter:drop-shadow(0 0 28px rgba(244,215,146,.85))}}
+@keyframes birthdayStarTwinkle{0%,100%{transform:scale(1) rotate(0deg);opacity:.9}50%{transform:scale(1.12) rotate(1deg);opacity:1}}
+@keyframes birthdaySparkle{0%,100%{opacity:0}42%{opacity:1}68%{opacity:0}}
 .date-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.memorial-detail-card{width:min(600px,100%);margin:0 auto;text-align:center}.memorial-detail-card .memorial-candle-image{width:92px;height:170px;margin:0 auto}.memorial-detail-card h2{margin:.1em 0;color:var(--gold-soft);font:600 clamp(48px,8vw,72px)/1 "Cormorant Garamond",serif}.memorial-detail-meta{color:var(--gold);font-size:13px}.memorial-detail-story{margin:28px 0 0;color:#dce4eb;text-align:left;font-size:16px;line-height:1.8}.memorial-detail-story p{margin:0 0 17px}
+.memorial-detail-card{width:min(600px,100%);margin:0 auto;text-align:center}
+.memorial-detail-symbol{display:grid;place-items:center;min-height:150px;margin:0 auto 12px}
+.memorial-detail-card.is-anniversary .memorial-detail-symbol{min-height:176px}
+.memorial-detail-card .memorial-candle-image{width:78px;height:170px;margin:0 auto}
+.memorial-detail-card .memorial-star-image{width:125px;height:140px;font-size:105px}
+.memorial-detail-card.is-birthday .memorial-star-image{color:#fff0b4;animation:birthdayStarTwinkle 2.35s ease-in-out infinite;filter:drop-shadow(0 0 13px #fff7d5) drop-shadow(0 0 35px rgba(232,181,86,.94))}
+.memorial-detail-card h2{margin:.1em 0;color:var(--gold-soft);font:600 clamp(48px,8vw,72px)/1 "Cormorant Garamond",serif}.memorial-detail-meta{color:var(--gold);font-size:13px}.memorial-detail-story{margin:28px 0 0;color:#dce4eb;text-align:left;font-size:16px;line-height:1.8}.memorial-detail-story p{margin:0 0 17px}
 .story-section{color:var(--ink);background:var(--cream)}
 .story-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}.story-text{color:#263c4d;line-height:1.85;font-size:17px}
 .text-link{padding:0;border:0;background:none;color:#996411;font-weight:600;cursor:pointer}
@@ -235,4 +248,6 @@ footer nav{display:flex;justify-content:center;gap:22px;margin:22px 0}footer nav
 
 @media(max-width:1000px){.memorial-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.brand img{width:min(290px,38vw)}}
 @media(max-width:700px){.wall-controls{grid-template-columns:1fr}.memorial-grid{grid-template-columns:1fr}.memorial-card{min-height:390px}.date-grid{grid-template-columns:1fr}}
-@media(max-width:600px){.brand img{width:min(250px,70vw);height:56px}.site-header{padding-block:10px}.memorial-grid{gap:18px}.memorial-card{padding:30px 22px 25px}.memorial-symbol{height:122px}.footer-brand img{height:75px}}
+@media(max-width:600px){.brand img{width:min(250px,70vw);height:56px}.site-header{padding-block:10px}.memorial-grid{gap:18px}.memorial-card{padding:30px 22px 25px}.memorial-symbol{height:132px}.memorial-card.is-anniversary .memorial-symbol{height:164px;margin-bottom:20px}.footer-brand img{height:75px}}
+
+@media(prefers-reduced-motion:reduce){.memorial-star-image{animation:none!important}}
