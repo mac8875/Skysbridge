@@ -1,0 +1,29 @@
+SKYSBRIDGE V35 — WALL OF STARS FIRST
+
+PURPOSE
+- Makes the Wall of Stars the primary identity and first action.
+- Changes the main call to action from community access to visiting or creating a memorial.
+- Keeps the protected community as an optional secondary feature.
+- Removes the therapist-request and therapist-invitation pathway from the website interface.
+- Adds professional-help.html with links to established independent organisations.
+
+FILES TO REPLACE / ADD
+- index.html
+- css/styles.css
+- js/app.js
+- professional-help.html (new)
+
+DEPLOYMENT
+1. Upload these files to the matching locations in the GitHub repository root.
+2. Keep all existing assets, js/config.js, privacy.html, community-guidelines.html, Supabase files and Netlify functions.
+3. Commit the changes and allow Netlify to publish.
+4. Refresh skysbridge.org and test:
+   - Visit the Wall of Stars
+   - Search and sort memorials
+   - Open Sky's story
+   - Submit an Honor a child form
+   - Sign in and enter an approved community room
+   - Open Professional Help
+
+DATABASE
+No new SQL is required. Existing professional-support database tables or server functions may remain dormant for now; V35 no longer exposes or calls them from the website interface. They can be removed later in a separate database cleanup after confirming that no historic records are needed.

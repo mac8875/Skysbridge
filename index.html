@@ -3,29 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#03101b">
-  <title>Skysbridge — Building Bridges Through Grief</title>
-  <meta name="description" content="A protected place where children are remembered and grieving families can find understanding.">
+  <meta name="theme-color" content="#04121f">
+  <title>Skysbridge — Every Child Deserves a Place Among the Stars</title>
+  <meta name="description" content="Skysbridge is a dignified digital place of remembrance where children can be named, honoured and remembered on the Wall of Stars.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=32">
+  <link rel="stylesheet" href="css/styles.css?v=35">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="#home" aria-label="Skysbridge home">
-      <img src="skys-bridge-wordmark.svg" alt="Skysbridge — Building Bridges Through Grief">
+      <img src="skys-bridge-wordmark.svg" alt="Skysbridge">
     </a>
-
     <button class="menu-button" aria-label="Open navigation" aria-expanded="false">☰</button>
-
     <nav class="main-nav" aria-label="Primary">
-      <a href="#home">Home</a>
       <a href="#stars">Wall of Stars</a>
-      <a href="#story">Our Story</a>
+      <a href="#story">Sky's Story</a>
       <a href="#community">Community</a>
-      <a href="community-guidelines.html">Guidelines</a>
-      <button class="button button-gold" data-open-auth>Join safely</button>
+      <a href="professional-help.html">Professional Help</a>
+      <button class="button button-gold" data-open-memorial>Honor a child</button>
     </nav>
   </header>
 
@@ -33,21 +30,20 @@
     <section class="hero" id="home">
       <div class="stars" aria-hidden="true"></div>
       <div class="hero-glow" aria-hidden="true"></div>
-
       <div class="hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow">Remember a child. Find understanding. Walk together.</p>
-          <h1>Every child deserves to be remembered.<br>Every family deserves to be heard.</h1>
-          <p>
-            Skysbridge is a gentle, protected community for parents and families after the loss of a child.
-            Share only when you are ready. Your story remains yours.
+          <p class="eyebrow">A place for every child among the stars</p>
+          <h1>Every child deserves to be remembered.</h1>
+          <p class="hero-intro">
+            Skysbridge is a digital place of remembrance for children who left too soon.
+            Families can create a star, preserve a story and decide what remains private or becomes part of the public Wall of Stars.
           </p>
           <div class="actions">
-            <button class="button button-gold" data-open-auth>Enter the community</button>
-            <a class="button button-outline" href="#stars">Visit the Wall of Stars</a>
+            <a class="button button-gold" href="#stars">Visit the Wall of Stars</a>
+            <button class="button button-outline" data-open-memorial>Honor a child</button>
           </div>
+          <p class="hero-note">Names, memories and stories held with dignity.</p>
         </div>
-
         <figure class="logo-panel">
           <img src="assets/skysbridge-logo.png" alt="Skysbridge logo showing a golden bridge, stars and water">
         </figure>
@@ -55,26 +51,26 @@
     </section>
 
     <section class="trust-strip" aria-label="Skysbridge values">
-      <span>Private by default</span>
+      <span>Family-controlled visibility</span>
       <span>Human review</span>
       <span>No advertising around grief</span>
-      <span>Parent-controlled visibility</span>
+      <span>Remembered with dignity</span>
     </section>
 
     <section class="section stars-section" id="stars">
-      <div class="section-heading">
-        <p class="eyebrow">Wall of Stars</p>
-        <h2>Every light carries a story.</h2>
-        <p>Memorials appear publicly only when a family requests publication and a moderator approves them.</p>
+      <div class="wall-first-intro">
+        <p class="eyebrow">The heart of Skysbridge</p>
+        <h2>The Wall of Stars</h2>
+        <p>
+          Each light carries a name and a story. Public memorials appear only when a family requests publication and a moderator approves them.
+        </p>
       </div>
 
-      <div class="wall-controls" aria-label="Wall of Stars controls">
-        <label>
-          <span>Search by name</span>
-          <input id="memorialSearch" type="search" maxlength="80" placeholder="Search the Wall of Stars" autocomplete="off">
+      <div class="wall-controls">
+        <label>Find a star
+          <input id="memorialSearch" type="search" placeholder="Search by name" autocomplete="off">
         </label>
-        <label>
-          <span>Sort memorials</span>
+        <label>Order
           <select id="memorialSort">
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
@@ -83,181 +79,132 @@
         </label>
       </div>
 
+      <p class="wall-status" id="wallStatus" aria-live="polite">Loading memorials…</p>
+
       <div class="memorial-grid" id="memorialGrid">
-        <button class="memorial-card sky-card" data-star="sky" aria-label="Open Sky's story">
-          <span class="memorial-symbol sky-symbol" aria-hidden="true">✦</span>
-          <span class="memorial-kicker">Our first star</span>
+        <button class="memorial-card is-standard" data-star="sky" type="button" aria-label="Open Sky's story">
+          <span class="memorial-symbol"><span class="sky-symbol">✦</span></span>
+          <span class="memorial-kicker">The first light</span>
           <strong>Sky</strong>
-          <span class="memorial-message">His life was short. His light remains.</span>
+          <span class="memorial-day">Forever remembered</span>
           <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
-          <small>Forever our son. Forever our light.</small>
+          <small>His life was short. His light remains.</small>
         </button>
       </div>
-      <p class="wall-status" id="wallStatus" aria-live="polite">Sky is the first light.</p>
 
-      <div class="center">
+      <div class="wall-primary-actions">
         <button class="button button-gold" data-open-memorial>Honor a child</button>
+        <a class="button button-outline" href="#story">Why Sky is the first star</a>
       </div>
     </section>
 
     <section class="section story-section" id="story">
       <div class="story-layout">
         <div>
-          <p class="eyebrow">Our story</p>
+          <p class="eyebrow">Where Skysbridge began</p>
           <h2>Sky lived only a short time, but his light continues.</h2>
         </div>
-
         <div class="story-text">
           <p>
-            Skysbridge began with Sky—with the love he brought into my life and with the belief
-            that no child should ever be reduced to a statistic, and no parent should ever feel
-            unseen in grief.
+            Skysbridge began with Sky—with the love he brought into my life and with the belief that no child should ever be reduced to a statistic.
           </p>
-
           <p>
-            Sky was our deeply longed-for child. He was conceived in love, carried in hope,
-            and loved from the very first moment. Although grief shaped us in different ways
-            and our lives eventually took separate paths, the love we share for Sky has never changed.
+            Sky was our deeply longed-for child. He was conceived in love, carried in hope and loved from the very first moment. His story deserves a place that remains visible.
           </p>
-
           <p>
-            For me, Skysbridge grew from that enduring love and from the hope that other families
-            might find understanding sooner than we did—so they feel less alone, better supported,
-            and free to remember their child in their own way.
+            The Wall of Stars grew from that enduring love: a dignified place where other families can preserve a child's name, memory and story in the way that feels right to them.
           </p>
-
           <button class="text-link" data-star="sky">Read Sky's story →</button>
         </div>
       </div>
     </section>
 
+    <section class="section support-paths" id="support">
+      <div class="section-heading">
+        <p class="eyebrow">Beyond remembrance</p>
+        <h2>Connection is available, but remembrance comes first.</h2>
+        <p>Skysbridge keeps these paths separate and clearly defined.</p>
+      </div>
+      <div class="support-grid">
+        <article class="support-card">
+          <p class="eyebrow">Optional community</p>
+          <h3>A quiet, protected place to connect</h3>
+          <p>Approved members may enter private rooms, listen quietly and share only when they feel ready. The community is supplementary to the Wall of Stars.</p>
+          <a class="button button-outline" href="#community">Explore the community</a>
+        </article>
+        <article class="support-card">
+          <p class="eyebrow">Established help</p>
+          <h3>Professional support outside Skysbridge</h3>
+          <p>Skysbridge does not provide therapy or match members with therapists. We link to established bereavement organisations and professional support resources.</p>
+          <a class="button button-gold" href="professional-help.html">Find established support</a>
+        </article>
+      </div>
+    </section>
+
     <section class="section community-section" id="community">
       <div class="section-heading">
-        <p class="eyebrow">Protected community</p>
-        <h2>Different rooms for different moments.</h2>
-        <p>Room content is visible only to approved members. You may observe quietly before posting.</p>
+        <p class="eyebrow">Optional protected community</p>
+        <h2>A place to listen, remember and connect.</h2>
+        <p>Room content is visible only to approved members. You may observe quietly before posting. Skysbridge is not a therapy provider.</p>
       </div>
 
       <div id="guestCommunity">
         <div class="room-grid">
-          <article class="room-card">
-            <span>🔒 Approval required</span>
-            <h3>Newly Bereaved</h3>
-            <p>A gentle room for the first days and months.</p>
-          </article>
-          <article class="room-card">
-            <span>🔒 Approval required</span>
-            <h3>Fathers' Space</h3>
-            <p>A protected room for fathers to speak without judgment.</p>
-          </article>
-          <article class="room-card">
-            <span>🔒 Approval required</span>
-            <h3>Remembering Together</h3>
-            <p>Share anniversaries, memories and rituals of remembrance.</p>
-          </article>
+          <article class="room-card"><span>🔒 Approval required</span><h3>Newly Bereaved</h3><p>A gentle room for the first days and months.</p></article>
+          <article class="room-card"><span>🔒 Approval required</span><h3>Fathers' Space</h3><p>A protected room for fathers to speak without judgment.</p></article>
+          <article class="room-card"><span>🔒 Approval required</span><h3>Remembering Together</h3><p>Share anniversaries, memories and rituals of remembrance.</p></article>
         </div>
-        <div class="center community-login">
-          <button class="button button-gold" data-open-auth>Sign in to request access</button>
-        </div>
+        <div class="center community-login"><button class="button button-gold" data-open-auth>Sign in to request access</button></div>
       </div>
 
       <div class="member-panel" id="memberPanel" hidden>
-        <div>
-          <p class="eyebrow">Member area</p>
-          <h2 id="memberGreeting">Welcome to Skysbridge</h2>
-          <p id="memberEmail"></p>
-          <p class="admin-badge" id="adminBadge" hidden>Administrator</p>
-        </div>
+        <div><p class="eyebrow">Member area</p><h2 id="memberGreeting">Welcome to Skysbridge</h2><p id="memberEmail"></p><p class="admin-badge" id="adminBadge" hidden>Administrator</p></div>
         <button class="button button-outline" id="signOut">Sign out</button>
       </div>
 
       <section id="roomArea" hidden>
-        <div class="subheading">
-          <div>
-            <p class="eyebrow">Your community</p>
-            <h2>Protected rooms</h2>
-          </div>
-          <p>Request access to a room. An administrator reviews every request.</p>
-        </div>
+        <div class="subheading"><div><p class="eyebrow">Your community</p><h2>Protected rooms</h2></div><p>Request access to a room. An administrator reviews every request.</p></div>
         <div class="room-grid" id="roomList"></div>
       </section>
 
       <section class="room-view" id="roomView" hidden>
-        <div class="room-view-header">
-          <button class="button button-outline" id="closeRoom">← Back to rooms</button>
-          <div>
-            <p class="eyebrow">Protected room</p>
-            <h2 id="activeRoomName"></h2>
-          </div>
-        </div>
-
+        <div class="room-view-header"><button class="button button-outline" id="closeRoom">← Back to rooms</button><div><p class="eyebrow">Protected room</p><h2 id="activeRoomName"></h2></div></div>
         <form class="post-form" id="postForm">
           <label for="postBody">Share something with this room</label>
           <textarea id="postBody" maxlength="5000" required placeholder="Write only what feels right to share..."></textarea>
-          <div class="post-form-footer">
-            <small>Visible only to approved members of this room.</small>
-            <button class="button button-gold" type="submit">Publish in room</button>
-          </div>
+          <div class="post-form-footer"><small>Visible only to approved members of this room.</small><button class="button button-gold" type="submit">Publish in room</button></div>
           <div class="notice" id="postStatus" hidden></div>
         </form>
-
         <div class="post-list" id="postList"></div>
       </section>
 
       <section class="admin-panel" id="adminPanel" hidden>
-        <div class="admin-heading">
-          <div>
-            <p class="eyebrow">Administration</p>
-            <h2>Review and moderation</h2>
-          </div>
-          <button class="button button-outline" id="refreshAdmin">Refresh</button>
-        </div>
-
+        <div class="admin-heading"><div><p class="eyebrow">Administration</p><h2>Review and moderation</h2></div><button class="button button-outline" id="refreshAdmin">Refresh</button></div>
         <div class="admin-grid">
-          <article class="admin-card">
-            <h3>Room access requests</h3>
-            <div id="pendingMembers"><p class="muted">Loading…</p></div>
-          </article>
-
-          <article class="admin-card">
-            <h3>Memorial submissions</h3>
-            <div id="pendingMemorials"><p class="muted">Loading…</p></div>
-          </article>
-
-          <article class="admin-card">
-            <h3>Memories awaiting review</h3>
-            <div id="pendingMemories"><p class="muted">Loading…</p></div>
-          </article>
+          <article class="admin-card"><h3>Room access requests</h3><div id="pendingMembers"><p class="muted">Loading…</p></div></article>
+          <article class="admin-card"><h3>Memorial submissions</h3><div id="pendingMemorials"><p class="muted">Loading…</p></div></article>
+          <article class="admin-card"><h3>Memories awaiting review</h3><div id="pendingMemories"><p class="muted">Loading…</p></div></article>
         </div>
       </section>
     </section>
 
     <section class="section contact-section">
-      <p class="eyebrow">A gentle place to begin</p>
+      <p class="eyebrow">Contact Skysbridge</p>
       <h2><a href="mailto:together@skysbridge.org">together@skysbridge.org</a></h2>
-      <p>Questions, ideas or a wish to help build the community are always welcome.</p>
+      <p>Questions about a memorial, privacy or the Wall of Stars are always welcome.</p>
     </section>
   </main>
 
   <footer>
-    <div class="footer-brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge — Building Bridges Through Grief"></div>
-    <nav>
-      <a href="privacy.html">Privacy</a>
-      <a href="community-guidelines.html">Community Guidelines</a>
-      <a href="mailto:together@skysbridge.org">Contact</a>
-    </nav>
-    <p>Sky&rsquo;s Bridge by Marco Freund &nbsp;|&nbsp; © 2026 Skysbridge. All rights reserved.</p>
+    <div class="footer-brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge"></div>
+    <nav><a href="#stars">Wall of Stars</a><a href="professional-help.html">Professional Help</a><a href="privacy.html">Privacy</a><a href="community-guidelines.html">Guidelines</a><a href="mailto:together@skysbridge.org">Contact</a></nav>
+    <p>Sky Speech by Marco Freund &nbsp;|&nbsp; © 2026 Skysbridge. All rights reserved.</p>
   </footer>
 
-  <div class="modal" id="modal" hidden>
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="modal-close" aria-label="Close">×</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
+  <div class="modal" id="modal" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" aria-label="Close">×</button><div id="modalContent"></div></div></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js?v=26-1"></script>
-  <script src="js/app.js?v=32"></script>
+  <script src="js/app.js?v=35"></script>
 </body>
 </html>
