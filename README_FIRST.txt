@@ -1,7 +1,7 @@
-SKYSBRIDGE V37 — COMPLETE WEBSITE
+SKYSBRIDGE V39 — ENGLISH / DEUTSCH
 
-Upload the CONTENTS of this folder to the root of the Skysbridge GitHub repository, replacing the existing files.
+Upload the complete contents of this folder to the root of the GitHub repository and replace existing files.
 
-The administrator star deletion from V36 is preserved. If RUN_ONCE_IN_SUPABASE.sql has not already been run, execute it once in the Supabase SQL Editor.
+Deutsch: Den vollständigen Inhalt dieses Ordners in das Hauptverzeichnis des GitHub-Repositories hochladen und vorhandene Dateien ersetzen.
 
-After Netlify deploys, refresh the site. The CSS uses ?v=37 to bypass the previous cached layout.
+No new Supabase migration is required for this language update.

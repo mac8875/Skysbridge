@@ -1,0 +1,21 @@
+SKYSBRIDGE VERSION 38
+
+Expanded the Professional Help directory with verified official resources.
+
+United Arab Emirates added:
+- Raymee Grief Services at The LightHouse Arabia
+- Small and Mighty Babies
+- German Neuroscience Center grief and loss support group
+- American Wellness Center grief management services
+
+Germany added:
+- VEID e.V.
+- Initiative REGENBOGEN
+- Frag OSKAR / Bundesverband Kinderhospiz
+- Trauerland
+- GEPS Deutschland e.V.
+- Unsere Sternenkinder Hessen e.V.
+
+The page is now grouped into UAE, Germany and International sections.
+External-link disclaimer expanded to cover availability, costs, languages and eligibility.
+CSS cache version updated to v38.

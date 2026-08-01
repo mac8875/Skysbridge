@@ -1,0 +1,8 @@
+SKYSBRIDGE VERSION 39
+
+- Vollständige deutsche Sprachfassung ergänzt.
+- Englisch/Deutsch-Umschalter auf allen Seiten hinzugefügt.
+- Deutsche Übersetzungen für Startseite, Formulare, Sternenwand, Mitgliederbereich und Administration.
+- Deutsche Fassungen von Professional Help, Privacy und Community Guidelines.
+- Sprachwechsel auf der Startseite behält den aktuellen Abschnitt (#stars, #story, #community) bei.
+- Admin-Löschfunktion und Supabase-Struktur aus V38 unverändert erhalten.
