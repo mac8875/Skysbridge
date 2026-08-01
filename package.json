@@ -1,8 +1,8 @@
 {
   "name": "skysbridge-platform",
   "private": true,
-  "version": "36.0.0",
-  "description": "Skysbridge platform — Version 36 with administrator management of published memorial stars",
+  "version": "41.0.0",
+  "description": "Skysbridge platform — Version 41 with complete and natural German localization",
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4"
   }

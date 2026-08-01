@@ -1,0 +1,10 @@
+SKYSBRIDGE V41 — vollständige deutsche Korrektur
+
+- Deutscher Sky-Text vollständig neu und natürlich formuliert.
+- Alter gemischtsprachiger JavaScript-Cache wird durch den neuen Dateinamen app-de-v41.js sicher umgangen.
+- HTML-Seiten erhalten No-Cache-Header für zuverlässige Aktualisierungen.
+- "Eine Erinnerung für ... hinterlassen" ersetzt durch "Eine Erinnerung an ... teilen".
+- Formulartexte für persönliche Worte und Gedenksterne sprachlich überarbeitet.
+- Doppelte Absatz-Auszeichnung im deutschen Story-Renderer behoben.
+- Interne englische Ablehnungsbegründungen ins Deutsche übertragen.
+- Keine neue Supabase-Migration erforderlich.

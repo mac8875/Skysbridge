@@ -1,9 +1,10 @@
-# Skysbridge V40 installieren
+# Skysbridge V41 installieren
 
-1. Entpacke das ZIP.
-2. Lade den vollständigen Inhalt in das Hauptverzeichnis deines GitHub-Repositories hoch.
-3. Ersetze die vorhandenen Dateien.
-4. Warte den Netlify-Deploy ab und öffne anschließend die deutsche Seite neu.
-5. Falls noch alter Text erscheint, lade die Seite einmal vollständig neu oder leere den Browser-Cache.
+1. Den gesamten Inhalt dieses ZIP-Archivs in das Hauptverzeichnis des GitHub-Repositories hochladen.
+2. Vorhandene Dateien vollständig ersetzen.
+3. Den Netlify-Deploy abwarten.
+4. Danach `https://skysbridge.org/index-de.html` neu öffnen.
 
-Für V40 muss keine neue Supabase-SQL-Datei ausgeführt werden.
+Die deutsche Seite lädt jetzt die neue Datei `js/app-de-v41.js`. Dadurch kann eine alte, gemischtsprachige Browser-Version nicht mehr verwendet werden.
+
+Für V41 muss keine neue SQL-Datei in Supabase ausgeführt werden.
