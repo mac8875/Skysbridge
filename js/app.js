@@ -1,4 +1,4 @@
-// SKYBRIDGE V35 — Wall of Stars first; external established support links
+// SKYBRIDGE V36 — administrators can manage and delete published memorial stars
 (() => {
   const cfg = window.SKYSBRIDGE_CONFIG || {};
   const configured =
@@ -878,11 +878,153 @@
     `).join("");
   }
 
+  function ensurePublishedMemorialAdminSection() {
+    const grid = document.querySelector("#adminPanel .admin-grid");
+    if (!grid || document.querySelector("#publishedMemorials")) return;
+
+    const card = document.createElement("article");
+    card.className = "admin-card";
+    card.dataset.adminPublishedMemorials = "true";
+    card.innerHTML = `
+      <h3>Published stars</h3>
+      <p class="muted">Manage memorials that are currently visible on the Wall of Stars. Sky is permanently protected.</p>
+      <div id="publishedMemorials"><p class="muted">Loading…</p></div>
+    `;
+    grid.appendChild(card);
+  }
+
+  async function loadPublishedMemorials() {
+    ensurePublishedMemorialAdminSection();
+
+    const target = document.querySelector("#publishedMemorials");
+    if (!target) return;
+
+    if (!currentProfile?.is_admin) {
+      target.innerHTML = `<p class="notice error">Administrator access is required.</p>`;
+      return;
+    }
+
+    target.innerHTML = `<p class="muted">Loading…</p>`;
+
+    let result = await db
+      .from("memorials")
+      .select("id,child_name,country,created_at")
+      .eq("approved", true)
+      .eq("public_requested", true)
+      .order("created_at", { ascending: false });
+
+    if (result.error && /country/i.test(result.error.message || "")) {
+      result = await db
+        .from("memorials")
+        .select("id,child_name,created_at")
+        .eq("approved", true)
+        .eq("public_requested", true)
+        .order("created_at", { ascending: false });
+    }
+
+    if (result.error) {
+      target.innerHTML = `<p class="notice error">${escapeHtml(result.error.message)}</p>`;
+      return;
+    }
+
+    const memorials = result.data || [];
+
+    if (!memorials.length) {
+      target.innerHTML = `<p class="muted">No published memorial stars. Sky remains permanently visible.</p>`;
+      return;
+    }
+
+    target.innerHTML = memorials.map(item => `
+      <div class="review-item">
+        <strong>${escapeHtml(item.child_name)}</strong>
+        ${item.country ? `<p>${escapeHtml(item.country)}</p>` : ""}
+        <p>${escapeHtml(formatDate(item.created_at))}</p>
+        <div class="review-actions">
+          <button
+            class="button button-danger delete-published-memorial"
+            type="button"
+            data-id="${escapeHtml(item.id)}"
+            data-name="${escapeHtml(item.child_name)}">
+            Delete star
+          </button>
+        </div>
+      </div>
+    `).join("");
+
+    target.querySelectorAll(".delete-published-memorial").forEach(button => {
+      button.onclick = async () => {
+        const memorialId = button.dataset.id;
+        const childName = button.dataset.name || "this child";
+
+        if (!memorialId) return;
+
+        const confirmed = window.confirm(
+          `Permanently delete the star for ${childName}? This cannot be undone.`
+        );
+
+        if (!confirmed) return;
+
+        const originalLabel = button.textContent;
+        button.disabled = true;
+        button.textContent = "Deleting…";
+
+        let deleted = false;
+        let deleteError = null;
+
+        const rpcResult = await db.rpc("admin_delete_published_memorial", {
+          p_memorial_id: memorialId
+        });
+
+        if (!rpcResult.error) {
+          deleted = rpcResult.data === true;
+        } else if (/function|schema cache|admin_delete_published_memorial/i.test(rpcResult.error.message || "")) {
+          // Compatibility fallback for installations where the V36 SQL has not run yet.
+          const fallbackResult = await db
+            .from("memorials")
+            .delete()
+            .eq("id", memorialId)
+            .eq("approved", true)
+            .eq("public_requested", true)
+            .select("id");
+
+          deleteError = fallbackResult.error;
+          deleted = Boolean(fallbackResult.data?.length);
+        } else {
+          deleteError = rpcResult.error;
+        }
+
+        if (deleteError) {
+          button.disabled = false;
+          button.textContent = originalLabel;
+          window.alert(`The star could not be deleted: ${deleteError.message}`);
+          return;
+        }
+
+        if (!deleted) {
+          button.disabled = false;
+          button.textContent = originalLabel;
+          window.alert(
+            "Nothing was deleted. Run RUN_ONCE_IN_SUPABASE.sql and confirm that your profile has is_admin = true."
+          );
+          return;
+        }
+
+        await Promise.all([
+          loadPublishedMemorials(),
+          loadApprovedMemorials()
+        ]);
+      };
+    });
+  }
+
   async function loadAdminDashboard() {
+    ensurePublishedMemorialAdminSection();
+
     await Promise.all([
       loadPendingMembers(),
       loadPendingMemorials(),
-      loadPendingMemories()
+      loadPendingMemories(),
+      loadPublishedMemorials()
     ]);
   }
 
