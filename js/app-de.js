@@ -1,4 +1,4 @@
-// SKYBRIDGE V39 DE — deutsche Benutzeroberfläche mit Admin-Sternverwaltung
+// SKYBRIDGE V40 DE — deutsche Benutzeroberfläche mit Admin-Sternverwaltung
 (() => {
   const cfg = window.SKYSBRIDGE_CONFIG || {};
   const configured =
@@ -345,10 +345,12 @@
   });
 
   async function showStar(slug) {
+    const germanSkyStory =
+      "Der Moment, in dem ich zum ersten Mal von Sky erfuhr, war das größte Glück meines Lebens. Ihn gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.\n\nSky war nur für kurze Zeit bei uns, doch er hat unser Leben für immer verändert. Sein Leben hat uns gelehrt, dass Liebe nicht in Jahren gemessen wird, sondern an der Tiefe der Verbundenheit, die wir miteinander teilen.\n\nNach seinem Verlust haben wir erfahren, wie einsam Trauer sein kann. Viele Eltern tragen ihren Schmerz still in sich und glauben, damit allein zu sein.\n\nSkysbridge entstand in Erinnerung an Sky – als würdevoller Ort, an dem Kinder, die viel zu früh gegangen sind, beim Namen genannt, geehrt und in Erinnerung bewahrt werden können.\n\nSky ist der erste Stern auf unserer Sternenwand. Sein Licht wurde zum Anfang eines Ortes, an dem die Geschichte jedes Kindes weiterleuchten darf.";
+
     let star = {
       name: "Sky",
-      story:
-        "Sky lebte nur kurze Zeit, doch er hat unser Leben für immer verändert. Sein Leben lehrte uns, dass Liebe nicht in Jahren gemessen wird, sondern in der Tiefe der Verbindung, die wir teilen.\n\nNachdem wir ihn verloren hatten, erkannten wir, wie einsam Trauer werden kann. Viele Eltern tragen ihren Schmerz still und glauben, sie seien allein.\n\nSkysbridge wurde in Erinnerung an Sky geschaffen, damit Kinder, die viel zu früh gegangen sind, mit Namen genannt, geehrt und in Würde erinnert werden können.\n\nSky ist der erste Stern auf unserer Sternenwand. Sein Licht wurde zum Anfang eines Ortes, an dem die Geschichte jedes Kindes weiterleuchten darf."
+      story: germanSkyStory
     };
 
     if (db) {
@@ -359,17 +361,11 @@
         .eq("is_public", true)
         .maybeSingle();
 
-      if (data) star = data;
-    }
-
-    const personalSkyOpening =
-      "Der Moment, in dem ich zum ersten Mal von Sky erfuhr, war das größte Glück meines Lebens. Ihn gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.";
-
-    if (
-      slug === "sky" &&
-      !String(star.story || "").includes(personalSkyOpening)
-    ) {
-      star.story = `${personalSkyOpening}\n\n${star.story || ""}`.trim();
+      if (data) {
+        star = slug === "sky"
+          ? { name: data.name || "Sky", story: germanSkyStory }
+          : data;
+      }
     }
 
     const starName = escapeHtml(star.name || "Ein Kind, an das erinnert wird");
