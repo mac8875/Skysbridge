@@ -1,8 +1,8 @@
 {
   "name": "skysbridge-platform",
   "private": true,
-  "version": "32.0.0",
-  "description": "Skysbridge community platform \u2014 Version 32 restored memorial wall",
+  "version": "36.0.0",
+  "description": "Skysbridge platform — Version 36 with administrator management of published memorial stars",
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4"
   }

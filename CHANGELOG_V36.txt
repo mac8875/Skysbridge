@@ -1,0 +1,7 @@
+Skysbridge V36
+- Added a permanent Published stars section to the administrator dashboard.
+- Added safe deletion of approved public memorials.
+- Added server-side admin_delete_published_memorial Supabase function.
+- Added RLS administrator delete policy as a compatibility route.
+- Protected Sky's static first star from deletion.
+- Bumped frontend cache version to 36.
