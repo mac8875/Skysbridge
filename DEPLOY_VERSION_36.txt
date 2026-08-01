@@ -1,0 +1,4 @@
+V36 footer/mobile fix
+- Corrects footer credit to "Skys Bridge by Marco Freund"
+- Makes footer navigation wrap properly on mobile
+- Prevents footer copyright line overflow on small screens
