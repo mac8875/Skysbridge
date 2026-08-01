@@ -1,7 +1,4 @@
-SKYSBRIDGE V39 — ENGLISH / DEUTSCH
+SKYSBRIDGE V40
 
-Upload the complete contents of this folder to the root of the GitHub repository and replace existing files.
-
-Deutsch: Den vollständigen Inhalt dieses Ordners in das Hauptverzeichnis des GitHub-Repositories hochladen und vorhandene Dateien ersetzen.
-
-No new Supabase migration is required for this language update.
+Vollständige Website mit korrigierter und vollständiger deutscher Übersetzung von Skys Geschichte.
+Bitte den gesamten Inhalt in GitHub hochladen und vorhandene Dateien ersetzen.

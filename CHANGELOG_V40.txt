@@ -1,0 +1,8 @@
+SKYSBRIDGE V40 — German translation correction
+
+- Replaced the incomplete mixed-language Sky remembrance with a complete, polished German text.
+- German Sky text is now protected from being overwritten by the English database record.
+- Translated the remaining English paragraph in Sky's Story.
+- Corrected German navigation links to open the German pages.
+- Translated remaining English support-category labels on the German Professional Help page.
+- Updated cache versions to v40.

@@ -9,28 +9,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=39">
+  <link rel="stylesheet" href="css/styles.css?v=40">
 </head>
 <body>
   <header class="site-header">
-
-
-
-<a aria-label="Skysbridge Startseite" class="brand" href="#home">
-<img alt="Skysbridge" src="skys-bridge-wordmark.svg"/>
-</a><nav aria-label="Hauptnavigation" class="main-nav">
-<a href="#stars">Sternenwand</a>
-<a href="#story">Skys Geschichte</a>
-<a href="#community">Gemeinschaft</a>
-<a href="professional-help-de.html">Professionelle Hilfe</a>
-<button class="button button-gold" data-open-memorial="">Ein Kind ehren</button>
-</nav><div class="header-tools">
-<div aria-label="Language / Sprache" class="language-switch" role="group">
-<a aria-label="English" class="" data-language-link="en" href="index.html">EN</a>
-<a aria-current="page" aria-label="Deutsch" class="is-active" data-language-link="de" href="index-de.html">DE</a>
-</div>
-<button aria-expanded="false" aria-label="Navigation öffnen" class="menu-button">☰</button>
-</div></header>
+    <a class="brand" href="#home" aria-label="Skysbridge Startseite">
+      <img src="skys-bridge-wordmark.svg" alt="Skysbridge">
+    </a>
+    <div class="header-tools">
+      <div class="language-switch" role="group" aria-label="Language / Sprache">
+      <a href="index.html" data-language-link="en" class="" >EN</a>
+      <a href="index-de.html" data-language-link="de" class="is-active" aria-current="page">DE</a>
+    </div>
+      <button class="menu-button" aria-label="Navigation öffnen" aria-expanded="false">☰</button>
+    </div>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <a href="#stars">Sternenwand</a>
+      <a href="#story">Skys Geschichte</a>
+      <a href="#community">Gemeinschaft</a>
+      <a href="professional-help-de.html">Professionelle Hilfe</a>
+      <button class="button button-gold" data-open-memorial>Ein Kind ehren</button>
+    </nav>
+  </header>
   <main>
     <section class="hero" id="home">
       <div class="stars" aria-hidden="true"></div>
@@ -110,7 +110,7 @@
             Sky war unser zutiefst ersehntes Kind. Er wurde in Liebe empfangen, in Hoffnung getragen und vom allerersten Moment an geliebt. Seine Geschichte verdient einen Ort, der sichtbar bleibt.
           </p>
           <p>
-            Aus dieser bleibenden Liebe entstand die Sternenwand: ein würdevoller Ort, an dem andere Familien den Namen, die Erinnerung und die Geschichte ihres Kindes auf die Weise bewahren können, die sich für sie richtig anfühlt.
+            Die Sternenwand entstand aus dieser bleibenden Liebe: als würdevoller Ort, an dem andere Familien den Namen, die Erinnerung und die Geschichte ihres Kindes auf die Weise bewahren können, die sich für sie richtig anfühlt.
           </p>
           <button class="text-link" data-star="sky">Skys Geschichte lesen →</button>
         </div>
@@ -143,7 +143,7 @@
         <h2>Ein Ort zum Zuhören, Erinnern und Verbinden.</h2>
         <p>Inhalte der Räume sind nur für freigeschaltete Mitglieder sichtbar. Du kannst zunächst still mitlesen, bevor du etwas veröffentlichst. Skysbridge ist kein Therapieanbieter.</p>
       </div>
-      <div id="guestCommunity">
+      <div id="guestGemeinschaft">
         <div class="room-grid">
           <article class="room-card"><span>🔒 Freigabe erforderlich</span><h3>Neu Trauernde</h3><p>Ein behutsamer Raum für die ersten Tage und Monate.</p></article>
           <article class="room-card"><span>🔒 Freigabe erforderlich</span><h3>Raum für Väter</h3><p>Ein geschützter Raum, in dem Väter ohne Bewertung sprechen können.</p></article>
@@ -198,7 +198,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js?v=26-1"></script>
-  <script src="js/language-switch.js?v=39"></script>
-  <script src="js/app-de.js?v=39"></script>
+  <script src="js/language-switch.js?v=40"></script>
+  <script src="js/app-de.js?v=40"></script>
 </body>
 </html>
