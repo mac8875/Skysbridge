@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 200" role="img" aria-labelledby="title desc">
+  <title id="title">Sky’s Bridge memorial star</title>
+  <desc id="desc">An elegant four-point gold star with a softly faceted centre.</desc>
+  <defs>
+    <linearGradient id="outerGold" x1="0.18" y1="0.08" x2="0.82" y2="0.94">
+      <stop offset="0" stop-color="#fff8d8"/>
+      <stop offset="0.34" stop-color="#f8d889"/>
+      <stop offset="0.68" stop-color="#e4aa43"/>
+      <stop offset="1" stop-color="#b86f17"/>
+    </linearGradient>
+    <radialGradient id="centreLight" cx="50%" cy="46%" r="58%">
+      <stop offset="0" stop-color="#fffdf1"/>
+      <stop offset="0.36" stop-color="#fff2b4"/>
+      <stop offset="1" stop-color="#e6a83b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="-45%" y="-45%" width="190%" height="190%">
+      <feGaussianBlur stdDeviation="3.4" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.94  0 0.78 0 0 0.50  0 0 0.22 0 0.10  0 0 0 0.48 0" result="goldBlur"/>
+      <feMerge>
+        <feMergeNode in="goldBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#softGlow)">
+    <path d="M90 3 C93 51 101 87 177 100 C101 113 93 149 90 197 C87 149 79 113 3 100 C79 87 87 51 90 3 Z" fill="url(#outerGold)"/>
+
+    <!-- Quiet faceting gives the star the same polished character as the logo. -->
+    <path d="M90 3 L90 100 L69 78 Z" fill="#fff8d6" fill-opacity="0.70"/>
+    <path d="M177 100 L90 100 L111 78 Z" fill="#f8d47e" fill-opacity="0.58"/>
+    <path d="M90 197 L90 100 L111 122 Z" fill="#a95f13" fill-opacity="0.36"/>
+    <path d="M3 100 L90 100 L69 122 Z" fill="#d7942c" fill-opacity="0.54"/>
+
+    <circle cx="90" cy="100" r="21" fill="url(#centreLight)"/>
+    <path d="M90 80 L110 100 L90 120 L70 100 Z" fill="#ffeaa0" fill-opacity="0.32"/>
+    <circle cx="90" cy="100" r="4.4" fill="#fffdf2"/>
+  </g>
+</svg>
