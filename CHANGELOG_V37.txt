@@ -1,0 +1,8 @@
+SKYSBRIDGE V37
+
+- Desktop hero changed from a two-column layout to one centered column.
+- Header content now aligns to the same 1240 px centered site width.
+- Headline, introduction, buttons, note and main bridge image share one center axis.
+- Reduced excessive vertical space below the hero image.
+- Added CSS cache-busting with styles.css?v=37.
+- Preserved the V36 administrator deletion function and Supabase migration.

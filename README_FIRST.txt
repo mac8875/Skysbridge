@@ -1,9 +1,7 @@
-SKYSBRIDGE V36 — ADMIN STAR DELETE
+SKYSBRIDGE V37 — COMPLETE WEBSITE
 
-1. Gesamten Inhalt dieses Ordners ins GitHub-Hauptverzeichnis hochladen.
-2. Vorhandene Dateien ersetzen und committen.
-3. RUN_ONCE_IN_SUPABASE.sql einmal vollständig im Supabase SQL Editor ausführen.
-4. Netlify-Deploy abwarten und Website neu laden.
-5. Als Administrator unter "Published stars" testen.
+Upload the CONTENTS of this folder to the root of the Skysbridge GitHub repository, replacing the existing files.
 
-Ausführliche Erklärung: INSTALLATION_DE.md
+The administrator star deletion from V36 is preserved. If RUN_ONCE_IN_SUPABASE.sql has not already been run, execute it once in the Supabase SQL Editor.
+
+After Netlify deploys, refresh the site. The CSS uses ?v=37 to bypass the previous cached layout.
