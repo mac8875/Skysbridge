@@ -269,7 +269,7 @@ footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;marg
 .support-card .eyebrow{color:#9a6615}
 .support-card h3{margin:.15em 0 .45em;font:600 clamp(32px,4vw,46px)/1.05 "Cormorant Garamond",serif;color:#0a2135}
 .support-card p{margin:0 0 24px;color:#314657;line-height:1.75}
-.support-card .button{margin-top:auto}
+.support-card .button{margin-top:auto;align-self:center;text-align:center;white-space:normal}
 .support-card .button-outline{color:#0a2135;border-color:rgba(10,33,53,.25);background:rgba(255,255,255,.4)}
 .community-section{background:linear-gradient(180deg,#09263a,#061b2b)}
 .community-section>.section-heading{max-width:680px}
@@ -310,3 +310,8 @@ footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;marg
 @media(max-width:1120px) and (min-width:901px){.main-nav{gap:15px}.main-nav a{font-size:13px}.brand img{width:min(275px,27vw)}}
 @media(max-width:900px){.site-header{gap:12px}.main-nav{margin-left:0}.header-tools{margin-left:auto}.language-switch a{min-width:36px;height:32px;padding:0 8px}.main-nav{z-index:30}}
 @media(max-width:600px){.brand img{width:min(205px,52vw)!important}.header-tools{gap:6px}.language-switch a{min-width:32px;height:30px;padding:0 7px;font-size:11px}.menu-button{padding:4px}}
+
+
+/* V42 — centered support buttons */
+.support-card .button{align-self:center;text-align:center;white-space:normal}
+@media(max-width:600px){.support-card .button{width:auto;max-width:100%;padding-left:28px;padding-right:28px}}
