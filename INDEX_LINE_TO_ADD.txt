@@ -1,0 +1,3 @@
+Add this line directly after the existing js/app.js script near the bottom of index.html:
+
+<script src="js/admin-star-delete.js?v=35-1"></script>
