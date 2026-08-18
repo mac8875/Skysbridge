@@ -10,12 +10,41 @@
     });
   });
 })();
+
 (() => {
   const cfg = window.SKYSBRIDGE_CONFIG || {};
   const db = window.supabase?.createClient &&
     cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY
       ? window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY)
       : null;
+
+  let adminCache;
+
+  async function currentUserIsAdmin() {
+    if (!db) return false;
+    if (adminCache !== undefined) return adminCache;
+
+    const { data: { user }, error: userError } = await db.auth.getUser();
+    if (userError || !user) {
+      adminCache = false;
+      return false;
+    }
+
+    const { data, error } = await db
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    adminCache = !error && data?.is_admin === true;
+    return adminCache;
+  }
+
+  if (db) {
+    db.auth.onAuthStateChange(() => {
+      adminCache = undefined;
+    });
+  }
 
   async function showApprovedMemories(slug) {
     if (!db || !slug) return;
@@ -35,13 +64,15 @@
 
     const { data, error } = await db
       .from('memories')
-      .select('author_name,message,created_at')
+      .select('id,author_name,message,created_at')
       .eq('star_slug', slug)
       .eq('approved', true)
       .eq('archived', false)
       .order('created_at', { ascending: false });
 
     if (error || !data?.length) return;
+
+    const canDelete = await currentUserIsAdmin();
 
     const list = document.createElement('div');
     list.id = 'approvedMemories';
@@ -62,6 +93,59 @@
         'margin:10px 0 0;color:#f4d792;font-size:13px;font-weight:600';
 
       card.append(message, author);
+
+      if (canDelete) {
+        const actions = document.createElement('div');
+        actions.style.cssText = 'margin-top:14px;display:flex;justify-content:flex-end';
+
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.className = 'button button-danger';
+        deleteButton.textContent = 'Delete memory';
+        deleteButton.style.padding = '8px 14px';
+        deleteButton.style.fontSize = '12px';
+
+        deleteButton.addEventListener('click', async event => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const confirmed = window.confirm(
+            `Permanently delete this memory from ${item.author_name || 'this author'}? This cannot be undone.`
+          );
+          if (!confirmed) return;
+
+          const originalText = deleteButton.textContent;
+          deleteButton.disabled = true;
+          deleteButton.textContent = 'Deleting…';
+
+          const { data: deletedRows, error: deleteError } = await db
+            .from('memories')
+            .delete()
+            .eq('id', item.id)
+            .select('id');
+
+          if (deleteError) {
+            deleteButton.disabled = false;
+            deleteButton.textContent = originalText;
+            window.alert(`The memory could not be deleted: ${deleteError.message}`);
+            return;
+          }
+
+          if (!deletedRows?.length) {
+            deleteButton.disabled = false;
+            deleteButton.textContent = originalText;
+            window.alert('Nothing was deleted. Please confirm that you are signed in as an administrator.');
+            return;
+          }
+
+          card.remove();
+          if (!list.children.length) list.remove();
+        });
+
+        actions.appendChild(deleteButton);
+        card.appendChild(actions);
+      }
+
       list.appendChild(card);
     });
 
