@@ -1,0 +1,20 @@
+/* SKYBRIDGE V43 — optional moderated photos for Wall of Stars memories */
+.memory-photo-field{display:grid;gap:8px}
+.memory-photo-input{width:100%;padding:10px!important;cursor:pointer}
+.memory-photo-input::file-selector-button{margin-right:12px;padding:9px 13px;border:1px solid rgba(232,181,86,.32);border-radius:999px;color:#151b22;background:linear-gradient(135deg,#f4d792,#e8b556);font:600 12px Inter,Arial,sans-serif;cursor:pointer}
+.memory-photo-help{display:block;color:#b7c1cb;font-size:12px;font-weight:400;line-height:1.55}
+.memory-photo-preview{margin-top:4px;padding:10px;border:1px solid rgba(232,181,86,.18);border-radius:18px;background:rgba(1,12,21,.55);text-align:center}
+.memory-photo-preview[hidden]{display:none!important}
+.memory-photo-preview img{display:block;max-width:100%;max-height:330px;margin:auto;border-radius:13px;object-fit:contain}
+.approved-memories{margin:4px 0 30px}
+.approved-memories-heading{margin:0 0 14px;color:#f4d792;text-align:center;font:600 25px/1.15 "Cormorant Garamond",serif}
+.approved-memory-card{padding:18px 20px;margin:12px 0;border:1px solid rgba(232,181,86,.25);border-radius:18px;background:rgba(4,20,34,.42);overflow:hidden}
+.approved-memory-photo{margin:-2px -4px 16px;padding:0;text-align:center}
+.approved-memory-photo img{display:block;width:100%;max-height:440px;margin:auto;border-radius:14px;background:rgba(1,10,18,.6);object-fit:contain}
+.approved-memory-message{margin:0;color:#e2e8ed;line-height:1.7;white-space:pre-wrap}
+.approved-memory-author{margin:10px 0 0;color:#f4d792;font-size:13px;font-weight:600}
+.approved-memory-actions{display:flex;justify-content:flex-end;margin-top:14px}
+.approved-memory-actions .button{padding:8px 14px;font-size:12px}
+.review-memory-photo{margin:14px 0 6px;padding:8px;border:1px solid rgba(232,181,86,.22);border-radius:15px;background:rgba(1,12,21,.5)}
+.review-memory-photo img{display:block;width:100%;max-height:300px;margin:auto;border-radius:10px;object-fit:contain}
+@media(max-width:600px){.approved-memory-card{padding:15px}.approved-memory-photo{margin:0 0 14px}.approved-memory-photo img{max-height:360px}.memory-photo-preview img{max-height:280px}}
