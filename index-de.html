@@ -10,6 +10,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css?v=41">
+
+  <style>
+    .sky-native-modal{
+      position:fixed;inset:0;z-index:90;display:none;place-items:center;
+      padding:20px;background:rgba(0,0,0,.78)
+    }
+    .sky-native-modal:target{display:grid}
+    .sky-native-modal .modal-card{width:min(620px,100%);max-height:90vh}
+    .sky-native-close{
+      position:absolute;right:14px;top:9px;border:0;background:none;
+      color:var(--ivory);font-size:31px;line-height:1;text-decoration:none;cursor:pointer
+    }
+    a.memorial-card{text-decoration:none}
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -82,14 +96,14 @@
       </div>
       <p class="wall-status" id="wallStatus" aria-live="polite">Gedenksterne werden geladen…</p>
       <div class="memorial-grid" id="memorialGrid">
-        <button class="memorial-card is-standard" data-star="sky" type="button" aria-label="Skys Geschichte öffnen">
+        <a class="memorial-card is-standard" href="#sky-de-modal" data-star="sky" role="button" aria-label="Skys Geschichte öffnen" onclick="event.stopImmediatePropagation()">
           <span class="memorial-symbol"><span class="sky-symbol">✦</span></span>
           <span class="memorial-kicker">Das erste Licht</span>
           <strong>Sky</strong>
           <span class="memorial-day">Für immer unvergessen</span>
           <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
           <small>Sein Leben war kurz. Sein Licht bleibt.</small>
-        </button>
+        </a>
       </div>
       <div class="wall-primary-actions">
         <button class="button button-gold" data-open-memorial>Ein Kind ehren</button>
@@ -194,12 +208,56 @@
     <nav><a href="#stars">Sternenwand</a><a href="professional-help-de.html">Professionelle Hilfe</a><a href="privacy-de.html">Datenschutz</a><a href="community-guidelines-de.html">Richtlinien</a><a href="mailto:together@skysbridge.org">Kontakt</a></nav>
     <p>Skys Bridge by Marco Freund &nbsp;|&nbsp; © 2026 Skysbridge. Alle Rechte vorbehalten.</p>
   </footer>
+
+  <div id="sky-de-modal" class="sky-native-modal" aria-labelledby="skyDeModalTitle">
+    <article class="modal-card star-modal-card">
+      <a class="sky-native-close" href="#stars" aria-label="Schließen">×</a>
+      <article class="star-remembrance">
+        <header class="star-remembrance-header">
+          <p class="eyebrow">Ein Licht, das bleibt</p>
+          <span class="star-remembrance-symbol" aria-hidden="true"><img src="assets/memorial-star.svg" alt=""></span>
+          <h2 id="skyDeModalTitle">Sky</h2>
+          <p class="star-remembrance-subtitle">Sein Leben war kurz. Sein Licht bleibt.</p>
+        </header>
+
+        <div class="star-story-copy">
+          <p>Als ich von Sky erfuhr, war das der glücklichste Moment meines Lebens. Ihn wieder gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.</p>
+          <p>Sky war nur kurze Zeit bei uns, und doch hat er unser Leben für immer verändert. Durch ihn haben wir verstanden, dass Liebe nicht in Jahren gemessen wird, sondern in der Tiefe der Verbindung, die bleibt.</p>
+          <p>Nach seinem Tod haben wir erlebt, wie still und einsam Trauer werden kann. Viele Eltern tragen ihren Schmerz allein, weil sie glauben, niemand könne wirklich verstehen, was sie verloren haben.</p>
+          <p>Aus der Liebe zu Sky entstand Skysbridge: ein würdevoller Ort, an dem Kinder, die viel zu früh gehen mussten, einen Namen, einen Stern und einen sichtbaren Platz in unserer Erinnerung behalten.</p>
+          <p>Sky ist der erste Stern auf unserer Sternenwand. Sein Licht steht am Anfang eines Ortes, an dem die Geschichten vieler Kinder weiterleuchten dürfen.</p>
+        </div>
+
+        <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
+
+        <section class="memory-section" aria-labelledby="memoryHeading">
+          <p class="eyebrow">Persönliche Worte</p>
+          <h3 id="memoryHeading">Eine Erinnerung an Sky teilen</h3>
+          <p class="memory-intro">
+            Du kannst hier ein paar persönliche Worte hinterlassen. Sie bleiben zunächst privat und werden vor einer möglichen Veröffentlichung sorgfältig geprüft.
+          </p>
+          <form class="form-grid memory-form" id="memoryForm">
+            <label>Dein Name
+              <input name="author_name" maxlength="80" autocomplete="name" required>
+            </label>
+            <label>Deine persönlichen Worte
+              <textarea name="message" maxlength="800" required></textarea>
+            </label>
+            <button class="button button-gold" type="submit">Zur Prüfung senden</button>
+            <div class="notice memory-notice" id="memoryStatus">
+              Deine Nachricht wird erst nach einer sorgfältigen Prüfung sichtbar.
+            </div>
+          </form>
+        </section>
+      </article>
+    </article>
+  </div>
+
   <div class="modal" id="modal" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" aria-label="Schließen">×</button><div id="modalContent"></div></div></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js?v=26-1"></script>
-  <script src="js/language-switch.js?v=46"></script>
-  <script src="js/app-de-v41.js?v=46"></script>
-  <script src="js/de-sky-v46.js?v=46"></script>
+  <script src="js/language-switch.js?v=47"></script>
+  <script src="js/app-de-v41.js?v=47"></script>
 </body>
 </html>
