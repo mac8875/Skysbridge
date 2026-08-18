@@ -136,6 +136,14 @@
     return data?.signedUrl || null;
   }
 
+  function formatMemoryDate(value) {
+    if (!value) return '';
+    return new Intl.DateTimeFormat(
+      isGerman ? 'de-DE' : 'en-GB',
+      { day: 'numeric', month: 'long', year: 'numeric' }
+    ).format(new Date(value));
+  }
+
   function buildPhotoField(form) {
     if (form.querySelector('[data-memory-photo-field]')) {
       return form.querySelector('input[name="memory_photo"]');
@@ -358,7 +366,10 @@
 
       const author = document.createElement('p');
       author.className = 'approved-memory-author';
-      author.textContent = item.author_name || '';
+      const memoryDate = formatMemoryDate(item.created_at);
+      author.textContent = [item.author_name || '', memoryDate]
+        .filter(Boolean)
+        .join(' · ');
 
       card.append(message, author);
 
