@@ -1,0 +1,21 @@
+Skysbridge – How It Works integration
+
+Add these files to the repository root:
+- how-it-works.html
+- how-it-works-de.html
+
+Then add the following navigation links:
+
+index.html
+Inside <nav class="main-nav" ...> add:
+<a href="how-it-works.html">How It Works</a>
+
+In the footer <nav> add:
+<a href="how-it-works.html">How It Works</a>
+
+index-de.html
+Inside <nav class="main-nav" ...> add:
+<a href="how-it-works-de.html">So funktioniert es</a>
+
+In the footer <nav> add:
+<a href="how-it-works-de.html">So funktioniert es</a>
