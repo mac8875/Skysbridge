@@ -315,3 +315,6 @@ footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;marg
 /* V42 — centered support buttons */
 .support-card .button{align-self:center;text-align:center;white-space:normal}
 @media(max-width:600px){.support-card .button{width:auto;max-width:100%;padding-left:28px;padding-right:28px}}
+
+/* V43 — readable privacy page copy */
+.privacy-section .story-text{color:#d6dee6}
