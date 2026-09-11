@@ -9,7 +9,7 @@ exports.handler = async (event) => {
       title='New protected-room request'; detail=`${user.email} requested access to ${data.support_groups?.name||'a protected room'}.`;
     }else if(requestType==='memorial'){
       const {data,error}=await client.from('memorials').select('user_id,child_name,public_requested').eq('id',requestId).single(); if(error||data.user_id!==user.id) throw new Error('Memorial request not found.');
-      title='New memorial awaiting review'; detail=`${user.email} submitted a memorial for ${data.child_name}${data.public_requested?' and requested publication on the Wall of Stars':''}.`;
+      title='New memorial awaiting review'; detail=`${user.email} submitted a memorial for ${data.child_name}${data.public_requested?' and requested publication in A Sky Full of Stars':''}.`;
     }else if(requestType==='memory'){
       const {data,error}=await client.from('memories').select('user_id,author_name,message').eq('id',requestId).single(); if(error||data.user_id!==user.id) throw new Error('Memory request not found.');
       title='New memory awaiting review'; detail=`${user.email} submitted a memory as ${data.author_name}.`;
