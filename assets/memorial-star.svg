@@ -24,10 +24,10 @@
   </defs>
 
   <g filter="url(#softGlow)">
-    <!-- Exact four-way symmetry keeps every point visually centred. -->
-    <path d="M100 4 C103 52 148 97 196 100 C148 103 103 148 100 196 C97 148 52 103 4 100 C52 97 97 52 100 4 Z" fill="url(#outerGold)"/>
-    <circle cx="100" cy="100" r="24" fill="url(#centreLight)"/>
-    <path d="M100 78 L122 100 L100 122 L78 100 Z" fill="#ffeaa0" fill-opacity="0.28"/>
+    <!-- An eight-point celestial sparkle: four long rays and four fine rays. -->
+    <path d="M100 4 L108.4 79.7 L133.9 66.1 L120.3 91.6 L196 100 L120.3 108.4 L133.9 133.9 L108.4 120.3 L100 196 L91.6 120.3 L66.1 133.9 L79.7 108.4 L4 100 L79.7 91.6 L66.1 66.1 L91.6 79.7 Z" fill="url(#outerGold)"/>
+    <circle cx="100" cy="100" r="28" fill="url(#centreLight)"/>
+    <path d="M100 73 L127 100 L100 127 L73 100 Z" fill="#fff0ae" fill-opacity="0.34"/>
     <circle cx="100" cy="100" r="4.4" fill="#fffdf2"/>
   </g>
 </svg>
