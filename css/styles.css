@@ -403,8 +403,8 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
 .logo-star-glow{
   position:absolute;
   z-index:3;
-  left:calc(50% - (var(--logo-art-width) * .241));
-  top:calc(50% - (var(--logo-art-width) * .286));
+  left:calc(25.91% - 4.5px);
+  top:calc(14.40% - 4.5px);
   width:9px;
   height:9px;
   border-radius:50%;
@@ -429,11 +429,7 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   .logo-panel::after{
     background:linear-gradient(180deg,rgba(6,26,43,.18) 0%,transparent 8%,transparent 94%,rgba(3,16,28,.22) 100%);
   }
-  .logo-star-glow{
-    left:calc(50% - (var(--logo-art-width) * .292));
-    top:calc(50% - (var(--logo-art-width) * .307));
-    transform-origin:center;
-  }
+  .logo-star-glow{transform-origin:center}
 }
 
 /* Calm, centered hero composition on the child-loss information pages. */
