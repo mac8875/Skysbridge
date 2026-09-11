@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#020713">
+  <title>Skysbridge – Sternenhimmel Kapazitätsvorschau</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--gold:#e8b556;--gold-soft:#f5d995;--ivory:#f8f3e9;--muted:#aebdca}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:#01050d;color:var(--ivory);font-family:Inter,Arial,sans-serif;overflow:hidden}
+    .app{position:relative;height:100%;isolation:isolate}
+    canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+    canvas.dragging{cursor:grabbing}
+    .topbar{position:absolute;z-index:3;left:clamp(12px,3vw,34px);right:clamp(12px,3vw,34px);top:clamp(12px,2vw,24px);display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid rgba(245,217,149,.18);border-radius:19px;background:rgba(3,12,24,.7);box-shadow:0 15px 48px rgba(0,0,0,.3);backdrop-filter:blur(18px)}
+    .brand{display:flex;align-items:center;gap:11px;min-width:max-content}.brand img{width:156px;height:40px;object-fit:contain;object-position:left}.demo-badge{padding:5px 8px;border:1px solid rgba(245,217,149,.25);border-radius:999px;color:var(--gold-soft);font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+    .controls{display:flex;align-items:center;gap:8px;margin-left:auto}
+    button,input{font:inherit}
+    button{min-height:40px;padding:0 14px;border:1px solid rgba(245,217,149,.23);border-radius:999px;color:#dfe7ee;background:rgba(9,28,48,.72);cursor:pointer}
+    button:hover,button:focus-visible{border-color:rgba(245,217,149,.65);color:#fff;outline:none}
+    button.active{color:#151b22;background:linear-gradient(135deg,var(--gold-soft),var(--gold));border-color:transparent}
+    .icon-button{width:40px;padding:0;font-size:20px}
+    .search{width:min(220px,22vw);height:40px;padding:0 15px;border:1px solid rgba(245,217,149,.2);border-radius:999px;color:#fff;background:rgba(2,10,20,.7);outline:none}.search:focus{border-color:rgba(245,217,149,.62)}
+    .hint{position:absolute;z-index:2;left:50%;bottom:24px;transform:translateX(-50%);padding:9px 14px;border-radius:999px;color:#b9c8d5;background:rgba(2,9,18,.62);backdrop-filter:blur(12px);font-size:12px;pointer-events:none;white-space:nowrap}
+    .counter{position:absolute;z-index:2;left:24px;bottom:24px;color:#9fb1bf;font-size:12px}.counter strong{color:var(--gold-soft);font-weight:600}
+    .panel{position:absolute;z-index:4;right:24px;top:98px;width:min(340px,calc(100vw - 32px));padding:27px;border:1px solid rgba(245,217,149,.28);border-radius:23px;background:linear-gradient(160deg,rgba(10,34,57,.94),rgba(2,11,22,.97));box-shadow:0 28px 90px rgba(0,0,0,.52);backdrop-filter:blur(18px)}
+    .panel[hidden]{display:none}.panel .close{position:absolute;right:12px;top:12px;width:34px;min-height:34px;padding:0;border:0;background:transparent;font-size:22px}.panel .eyebrow{margin:0 0 7px;color:var(--gold);font-size:10px;letter-spacing:.18em;text-transform:uppercase}.panel h2{margin:0;color:var(--gold-soft);font:600 42px/1 "Cormorant Garamond",serif}.panel p{color:#c1ced9;line-height:1.65}.panel small{color:#8196a8}
+    @media(max-width:800px){.topbar{align-items:flex-start;flex-wrap:wrap}.brand img{width:135px}.controls{width:100%;margin:0;overflow-x:auto;padding-bottom:2px}.search{min-width:150px;flex:1}.hint{bottom:18px;max-width:90vw;overflow:hidden;text-overflow:ellipsis}.counter{display:none}.panel{right:16px;top:145px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <canvas id="sky" aria-label="Interaktiver Demo-Sternenhimmel mit eintausend Gedenksternen"></canvas>
+  <header class="topbar">
+    <div class="brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge"><span class="demo-badge">Vorschau</span></div>
+    <div class="controls" aria-label="Sternenhimmel steuern">
+      <button class="count-button active" data-count="1000">1.000 Sterne</button>
+      <button class="count-button" data-count="2000">2.000 Sterne</button>
+      <input class="search" id="search" type="search" placeholder="Sky oder Nr. 742" aria-label="Demo-Stern suchen">
+      <button class="icon-button" id="zoomOut" aria-label="Herauszoomen">−</button>
+      <button class="icon-button" id="zoomIn" aria-label="Hineinzoomen">+</button>
+      <button id="reset">Alle zeigen</button>
+    </div>
+  </header>
+  <div class="counter"><strong id="visibleCount">1.000</strong> Demo-Sterne · keine echten Einträge</div>
+  <div class="hint">Ziehen zum Bewegen · Mausrad oder Tasten zum Zoomen · Stern anklicken</div>
+  <aside class="panel" id="panel" hidden>
+    <button class="close" id="closePanel" aria-label="Schließen">×</button>
+    <p class="eyebrow">Kapazitätsvorschau</p>
+    <h2 id="starName">Sky</h2>
+    <p id="starCopy">Dies ist ein Demo-Stern. Auf der echten Sternenwand würde sich hier erst nach dem Anklicken die Erinnerungskarte öffnen.</p>
+    <small id="starMeta"></small>
+  </aside>
+</div>
+<script>
+(() => {
+  const canvas = document.querySelector("#sky");
+  const ctx = canvas.getContext("2d");
+  const panel = document.querySelector("#panel");
+  const nameEl = document.querySelector("#starName");
+  const metaEl = document.querySelector("#starMeta");
+  const world = { width: 9000, height: 5600 };
+  const view = { x: world.width / 2, y: world.height / 2, zoom: .16 };
+  let count = 1000, stars = [], dragging = false, moved = false, start = null, raf = 0;
+  const pointers = new Map();
+
+  function seededRandom(seed) {
+    let value = seed >>> 0;
+    return () => {
+      value = (value * 1664525 + 1013904223) >>> 0;
+      return value / 4294967296;
+    };
+  }
+
+  function makeStars(total) {
+    const random = seededRandom(8875 + total);
+    const cols = total === 1000 ? 40 : 50;
+    const rows = Math.ceil(total / cols);
+    const cellW = world.width / cols;
+    const cellH = world.height / rows;
+    const result = [];
+    for (let i = 0; i < total; i++) {
+      const col = i % cols, row = Math.floor(i / cols);
+      const x = (col + .18 + random() * .64) * cellW;
+      const y = (row + .18 + random() * .64) * cellH;
+      result.push({
+        id:i + 1,x,y,
+        size:2.4 + random() * 4.6,
+        alpha:.46 + random() * .5,
+        phase:random() * Math.PI * 2,
+        speed:.00035 + random() * .00055,
+        style:i % 5,
+        warmth:random() > .76 ? "warm" : random() > .52 ? "cool" : "white"
+      });
+    }
+    const sky = result[0];
+    Object.assign(sky,{id:0,x:world.width/2,y:world.height/2,size:13,alpha:1,style:5,name:"Sky"});
+    return result;
+  }
+
+  function resize() {
+    const ratio = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = Math.round(innerWidth * ratio);
+    canvas.height = Math.round(innerHeight * ratio);
+    canvas.style.width = innerWidth + "px";
+    canvas.style.height = innerHeight + "px";
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+    requestDraw();
+  }
+
+  function screen(star) {
+    return {x:(star.x-view.x)*view.zoom+innerWidth/2,y:(star.y-view.y)*view.zoom+innerHeight/2};
+  }
+
+  function drawBackground() {
+    const bg = ctx.createRadialGradient(innerWidth*.48,innerHeight*.45,20,innerWidth*.48,innerHeight*.45,Math.max(innerWidth,innerHeight)*.8);
+    bg.addColorStop(0,"#0a2340"); bg.addColorStop(.42,"#041326"); bg.addColorStop(1,"#01050d");
+    ctx.fillStyle=bg;ctx.fillRect(0,0,innerWidth,innerHeight);
+    ctx.save();ctx.translate(innerWidth*.5,innerHeight*.52);ctx.rotate(-.33);
+    for(let i=0;i<7;i++){ctx.beginPath();ctx.strokeStyle=`rgba(130,169,198,${.018+i*.008})`;ctx.lineWidth=70+i*24;ctx.shadowBlur=40;ctx.shadowColor="rgba(158,190,214,.08)";ctx.moveTo(-innerWidth,-20+i*3);ctx.lineTo(innerWidth,20-i*3);ctx.stroke()}
+    ctx.restore();
+  }
+
+  function drawStarShape(x,y,r,style,color,alpha) {
+    ctx.save();ctx.translate(x,y);ctx.globalAlpha=alpha;ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=Math.max(4,r*2.4);
+    ctx.beginPath();
+    if(style===3){ctx.arc(0,0,r*.62,0,Math.PI*2)}
+    else {
+      const points=style===1?5:style===0?8:4;
+      for(let i=0;i<points*2;i++){const a=-Math.PI/2+i*Math.PI/points;const rr=i%2===0?r:(style===2?r*.17:r*.38);const px=Math.cos(a)*rr,py=Math.sin(a)*rr;i?ctx.lineTo(px,py):ctx.moveTo(px,py)}
+      ctx.closePath();
+    }
+    ctx.fill();
+    if(style===4){ctx.globalAlpha*=.3;ctx.beginPath();ctx.arc(0,0,r*1.5,0,Math.PI*2);ctx.strokeStyle=color;ctx.lineWidth=1;ctx.stroke()}
+    ctx.restore();
+  }
+
+  function drawLeo() {
+    const pts=[[-420,0],[-610,-250],[-570,-460],[-310,-560],[-100,-390],[-420,0],[0,80],[310,-40],[520,100],[0,80]];
+    ctx.save();ctx.translate(innerWidth/2,innerHeight/2);ctx.scale(view.zoom,view.zoom);
+    ctx.strokeStyle="rgba(210,227,240,.17)";ctx.lineWidth=1/view.zoom;ctx.beginPath();
+    pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();ctx.restore();
+  }
+
+  function draw(time=0) {
+    raf=0;drawBackground();drawLeo();
+    for(const star of stars){
+      const p=screen(star);if(p.x<-30||p.y<-30||p.x>innerWidth+30||p.y>innerHeight+30)continue;
+      const twinkle=.78+.22*Math.sin(time*star.speed+star.phase);
+      const color=star.warmth==="warm"?"#f4dfaa":star.warmth==="cool"?"#d9ebff":"#fff";
+      const radius=Math.max(.7,star.size*Math.sqrt(view.zoom*2.4));
+      drawStarShape(p.x,p.y,radius,star.style,color,star.alpha*twinkle);
+      if((view.zoom>.48&&radius>2.3)||star.id===0){
+        ctx.fillStyle=star.id===0?"#f4d792":"rgba(222,232,240,.72)";
+        ctx.font=star.id===0?"600 22px Cormorant Garamond":"11px Inter";
+        ctx.textAlign="center";ctx.fillText(star.id===0?"Sky":String(star.id).padStart(4,"0"),p.x,p.y+radius+18);
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
+  function fitAll(){view.x=world.width/2;view.y=world.height/2;view.zoom=Math.min(innerWidth/world.width,innerHeight/world.height)*.88;requestDraw()}
+  function zoomAt(factor,cx=innerWidth/2,cy=innerHeight/2){
+    const beforeX=(cx-innerWidth/2)/view.zoom+view.x,beforeY=(cy-innerHeight/2)/view.zoom+view.y;
+    view.zoom=Math.max(.06,Math.min(1.5,view.zoom*factor));
+    view.x=beforeX-(cx-innerWidth/2)/view.zoom;view.y=beforeY-(cy-innerHeight/2)/view.zoom;requestDraw();
+  }
+  function centerOn(star){view.x=star.x;view.y=star.y;view.zoom=Math.max(view.zoom,.62);requestDraw()}
+  function hitTest(x,y){let best=null,distance=22;for(const star of stars){const p=screen(star);const d=Math.hypot(p.x-x,p.y-y);if(d<distance){distance=d;best=star}}return best}
+  function openStar(star){nameEl.textContent=star.id===0?"Sky":`Demo-Stern ${String(star.id).padStart(4,"0")}`;metaEl.textContent=star.id===0?"Fester Mittelpunkt im Sternbild Löwe":"Demonstration eines anklickbaren Gedenksterns";panel.hidden=false}
+
+  canvas.addEventListener("wheel",e=>{e.preventDefault();zoomAt(e.deltaY<0?1.13:.885,e.clientX,e.clientY)},{passive:false});
+  canvas.addEventListener("pointerdown",e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});dragging=true;moved=false;start={x:e.clientX,y:e.clientY,vx:view.x,vy:view.y};canvas.classList.add("dragging")});
+  canvas.addEventListener("pointermove",e=>{if(!dragging||!start)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.hypot(dx,dy)>4)moved=true;view.x=start.vx-dx/view.zoom;view.y=start.vy-dy/view.zoom;requestDraw()});
+  canvas.addEventListener("pointerup",e=>{pointers.delete(e.pointerId);if(!moved){const star=hitTest(e.clientX,e.clientY);if(star)openStar(star)}dragging=false;start=null;canvas.classList.remove("dragging")});
+  canvas.addEventListener("pointercancel",()=>{dragging=false;start=null;canvas.classList.remove("dragging")});
+  document.querySelectorAll(".count-button").forEach(button=>button.addEventListener("click",()=>{count=Number(button.dataset.count);stars=makeStars(count);document.querySelectorAll(".count-button").forEach(b=>b.classList.toggle("active",b===button));document.querySelector("#visibleCount").textContent=count.toLocaleString("de-DE");canvas.setAttribute("aria-label",`Interaktiver Demo-Sternenhimmel mit ${count.toLocaleString("de-DE")} Gedenksternen`);fitAll()}));
+  document.querySelector("#zoomIn").onclick=()=>zoomAt(1.25);document.querySelector("#zoomOut").onclick=()=>zoomAt(.8);document.querySelector("#reset").onclick=fitAll;document.querySelector("#closePanel").onclick=()=>panel.hidden=true;
+  document.querySelector("#search").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const raw=e.currentTarget.value.trim().toLowerCase();const id=raw==="sky"?0:Number(raw.replace(/\D/g,""));const star=stars.find(s=>s.id===id);if(star){centerOn(star);openStar(star)}});
+  stars=makeStars(count);addEventListener("resize",resize);resize();fitAll();
+})();
+</script>
+</body>
+</html>
