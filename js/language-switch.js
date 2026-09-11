@@ -1,4 +1,76 @@
 (() => {
+  const header = document.querySelector('.site-header');
+  const path = window.location.pathname.split('/').pop() || 'index.html';
+  const isHome = path === 'index.html' || path === 'index-de.html';
+
+  if (header && !isHome) {
+    const isGerman = String(document.documentElement.lang || '').toLowerCase().startsWith('de');
+    const home = isGerman ? 'index-de.html' : 'index.html';
+    const items = isGerman ? [
+      ['Sternenwand', `${home}#stars`],
+      ['Skys Geschichte', `${home}#story`],
+      ['So funktioniert es', 'how-it-works-de.html'],
+      ['Sternenkind & Kindsverlust', 'sternenkind-kindsverlust.html'],
+      ['Gemeinschaft', `${home}#community`],
+      ['Professionelle Hilfe', 'professional-help-de.html']
+    ] : [
+      ['Wall of Stars', `${home}#stars`],
+      ["Sky's Story", `${home}#story`],
+      ['How It Works', 'how-it-works.html'],
+      ['Child Loss Memorial', 'child-loss-memorial.html'],
+      ['Community', `${home}#community`],
+      ['Professional Help', 'professional-help.html']
+    ];
+
+    let tools = header.querySelector('.header-tools');
+    if (!tools) {
+      tools = document.createElement('div');
+      tools.className = 'header-tools';
+      header.appendChild(tools);
+    }
+
+    let menuButton = tools.querySelector('.menu-button');
+    if (!menuButton) {
+      menuButton = document.createElement('button');
+      menuButton.className = 'menu-button';
+      menuButton.type = 'button';
+      menuButton.setAttribute('aria-label', isGerman ? 'Navigation öffnen' : 'Open navigation');
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.textContent = '☰';
+      tools.appendChild(menuButton);
+    }
+
+    const existingNav = header.querySelector('.main-nav');
+    const nav = existingNav || document.createElement('nav');
+    nav.className = 'main-nav';
+    nav.setAttribute('aria-label', isGerman ? 'Hauptnavigation' : 'Primary');
+    nav.replaceChildren();
+
+    items.forEach(([label, href]) => {
+      const link = document.createElement('a');
+      link.href = href;
+      link.textContent = label;
+      if (!href.includes('#') && href === path) {
+        link.classList.add('is-current');
+        link.setAttribute('aria-current', 'page');
+      }
+      nav.appendChild(link);
+    });
+
+    const honor = document.createElement('a');
+    honor.href = `${home}#stars`;
+    honor.className = 'button button-gold';
+    honor.textContent = isGerman ? 'Ein Kind ehren' : 'Honor a child';
+    nav.appendChild(honor);
+    if (!existingNav) header.appendChild(nav);
+
+    menuButton.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.textContent = open ? '×' : '☰';
+    });
+  }
+
   document.querySelectorAll('[data-language-link]').forEach(link => {
     link.addEventListener('click', event => {
       const target = new URL(link.getAttribute('href'), window.location.href);
