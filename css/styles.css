@@ -344,7 +344,7 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
 
 .stars-section::before,.community-section::before,.contact-section::before{content:"";position:absolute;z-index:-1;width:min(680px,58vw);aspect-ratio:1;right:-9%;top:9%;background:#f8f3e9;opacity:.026;pointer-events:none;-webkit-mask:url("../assets/memorial-star.svg") center/contain no-repeat;mask:url("../assets/memorial-star.svg") center/contain no-repeat}
 .community-section::before{left:-12%;right:auto;top:18%;opacity:.022}
-.contact-section::before{width:min(440px,48vw);right:4%;top:-34%;opacity:.024}
+.contact-section::before{width:min(310px,30vw);right:6%;top:50%;transform:translateY(-50%);opacity:.024}
 
 .support-card,.help-card,.room-card,.dashboard-card,.admin-card,.post-form,.post-card{border-color:rgba(244,215,146,.18);box-shadow:0 22px 55px rgba(0,0,0,.09),inset 0 1px rgba(255,255,255,.055)}
 .support-card,.help-card{background:rgba(255,255,255,.58);box-shadow:0 22px 60px rgba(20,34,45,.085),inset 0 1px rgba(255,255,255,.78)}
@@ -526,7 +526,7 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
 footer{position:relative;border-top-color:rgba(244,215,146,.24);box-shadow:inset 0 1px rgba(255,255,255,.025)}
 footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font-size:16px;opacity:.75;text-shadow:0 0 18px rgba(244,215,146,.5)}
 
-@media(max-width:700px){.story-section::before,.support-paths::before,.help-page::before,.privacy-section::before{opacity:.028;-webkit-mask-size:145vw auto;mask-size:145vw auto}.stars-section::before,.community-section::before,.contact-section::before{width:95vw;opacity:.018}.support-card,.help-card{box-shadow:0 14px 36px rgba(20,34,45,.07),inset 0 1px rgba(255,255,255,.7)}}
+@media(max-width:700px){.story-section::before,.support-paths::before,.help-page::before,.privacy-section::before{opacity:.028;-webkit-mask-size:145vw auto;mask-size:145vw auto}.stars-section::before,.community-section::before{width:95vw;opacity:.018}.contact-section::before{width:min(240px,54vw);right:-4%;top:50%;opacity:.016}.support-card,.help-card{box-shadow:0 14px 36px rgba(20,34,45,.07),inset 0 1px rgba(255,255,255,.7)}}
 
 
 /* V60 — celestial Wall of Stars: memorial cards appear only after selecting a light */
