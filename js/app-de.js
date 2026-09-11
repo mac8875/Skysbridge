@@ -291,7 +291,7 @@
         </label>
         <label>
           <input type="checkbox" name="public_requested">
-          Einen Platz auf der öffentlichen Sternenwand beantragen
+          Einen Platz auf der öffentlichen Sternenhimmel beantragen
         </label>
         <button class="button button-gold">Privat zur Prüfung einreichen</button>
         <div class="notice" id="memorialStatus">Du behältst die Kontrolle über die Veröffentlichung.</div>
@@ -346,7 +346,7 @@
 
   async function showStar(slug) {
     const germanSkyStory =
-      "Der Moment, in dem ich zum ersten Mal von Sky erfuhr, war das größte Glück meines Lebens. Ihn gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.\n\nSky war nur für kurze Zeit bei uns, doch er hat unser Leben für immer verändert. Sein Leben hat uns gelehrt, dass Liebe nicht in Jahren gemessen wird, sondern an der Tiefe der Verbundenheit, die wir miteinander teilen.\n\nNach seinem Verlust haben wir erfahren, wie einsam Trauer sein kann. Viele Eltern tragen ihren Schmerz still in sich und glauben, damit allein zu sein.\n\nSkysbridge entstand in Erinnerung an Sky – als würdevoller Ort, an dem Kinder, die viel zu früh gegangen sind, beim Namen genannt, geehrt und in Erinnerung bewahrt werden können.\n\nSky ist der erste Stern auf unserer Sternenwand. Sein Licht wurde zum Anfang eines Ortes, an dem die Geschichte jedes Kindes weiterleuchten darf.";
+      "Der Moment, in dem ich zum ersten Mal von Sky erfuhr, war das größte Glück meines Lebens. Ihn gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.\n\nSky war nur für kurze Zeit bei uns, doch er hat unser Leben für immer verändert. Sein Leben hat uns gelehrt, dass Liebe nicht in Jahren gemessen wird, sondern an der Tiefe der Verbundenheit, die wir miteinander teilen.\n\nNach seinem Verlust haben wir erfahren, wie einsam Trauer sein kann. Viele Eltern tragen ihren Schmerz still in sich und glauben, damit allein zu sein.\n\nSkysbridge entstand in Erinnerung an Sky – als würdevoller Ort, an dem Kinder, die viel zu früh gegangen sind, beim Namen genannt, geehrt und in Erinnerung bewahrt werden können.\n\nSky ist der erste Stern in Ein Himmel voller Sterne. Sein Licht wurde zum Anfang eines Ortes, an dem die Geschichte jedes Kindes weiterleuchten darf.";
 
     let star = {
       name: "Sky",
@@ -895,7 +895,7 @@
     card.dataset.adminPublishedMemorials = "true";
     card.innerHTML = `
       <h3>Veröffentlichte Sterne</h3>
-      <p class="muted">Verwalte Gedenksterne, die derzeit auf der Sternenwand sichtbar sind. Sky ist dauerhaft geschützt.</p>
+      <p class="muted">Verwalte Gedenksterne, die derzeit in Ein Himmel voller Sterne sichtbar sind. Sky ist dauerhaft geschützt.</p>
       <div id="publishedMemorials"><p class="muted">Wird geladen …</p></div>
     `;
     grid.appendChild(card);
@@ -1152,7 +1152,7 @@
       <div class="review-item">
         <strong>${escapeHtml(item.child_name)}</strong>
         <p>${escapeHtml(item.remembrance)}</p>
-        <p>${item.public_requested ? "Öffentliche Sternenwand beantragt" : "Private Erinnerung"}</p>
+        <p>${item.public_requested ? "Öffentliche Ein Himmel voller Sterne beantragt" : "Private Erinnerung"}</p>
         <div class="review-actions">
           <button class="button button-gold review-memorial" data-id="${item.id}" data-decision="approve">Freigeben</button>
           <button class="button button-danger review-memorial" data-id="${item.id}" data-decision="decline">Ablehnen</button>
