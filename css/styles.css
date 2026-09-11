@@ -499,3 +499,153 @@ footer{position:relative;border-top-color:rgba(244,215,146,.24);box-shadow:inset
 footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font-size:16px;opacity:.75;text-shadow:0 0 18px rgba(244,215,146,.5)}
 
 @media(max-width:700px){.story-section::before,.support-paths::before,.help-page::before,.privacy-section::before{opacity:.028;-webkit-mask-size:145vw auto;mask-size:145vw auto}.stars-section::before,.community-section::before,.contact-section::before{width:95vw;opacity:.018}.support-card,.help-card{box-shadow:0 14px 36px rgba(20,34,45,.07),inset 0 1px rgba(255,255,255,.7)}}
+
+
+/* V60 — celestial Wall of Stars: memorial cards appear only after selecting a light */
+.celestial-wall{
+  position:relative;
+  display:block;
+  width:min(1120px,100%);
+  max-width:1120px;
+  min-height:clamp(560px,64vw,720px);
+  margin:0 auto 30px;
+  overflow:hidden;
+  isolation:isolate;
+  border:1px solid rgba(244,215,146,.2);
+  border-radius:34px;
+  background:
+    radial-gradient(circle at 48% 51%,rgba(232,181,86,.10),transparent 14%),
+    radial-gradient(circle at 74% 28%,rgba(58,117,166,.22),transparent 25%),
+    radial-gradient(circle at 25% 76%,rgba(26,74,113,.28),transparent 30%),
+    linear-gradient(180deg,#061a30 0%,#03101f 62%,#020a13 100%);
+  box-shadow:inset 0 0 120px rgba(0,0,0,.48),0 28px 80px rgba(0,0,0,.22);
+}
+.celestial-wall::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  opacity:.76;
+  background-image:
+    radial-gradient(circle,#fff8dc 0 1px,transparent 1.7px),
+    radial-gradient(circle,#b8d9f2 0 1px,transparent 1.8px),
+    radial-gradient(circle,#f4d792 0 1.15px,transparent 2px);
+  background-size:89px 83px,137px 129px,211px 193px;
+  background-position:13px 19px,41px 67px,93px 31px;
+  animation:celestialDrift 34s linear infinite alternate;
+}
+.celestial-wall::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 50% 112%,rgba(58,118,162,.16),transparent 52%);
+}
+.leo-map{
+  position:absolute;
+  inset:11% 13% 12%;
+  z-index:0;
+  width:74%;
+  height:72%;
+  overflow:visible;
+  opacity:.7;
+  pointer-events:none;
+  filter:drop-shadow(0 0 7px rgba(244,215,146,.22));
+}
+.leo-map polyline{fill:none;stroke:rgba(244,215,146,.32);stroke-width:.42;stroke-dasharray:1.2 1.8;vector-effect:non-scaling-stroke}
+.leo-map circle{fill:#f8efd3;filter:drop-shadow(0 0 3px rgba(244,215,146,.8))}
+.constellation-label{
+  position:absolute;
+  left:48%;
+  top:22%;
+  z-index:1;
+  transform:translateX(-50%);
+  color:rgba(244,215,146,.68);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  pointer-events:none;
+}
+.celestial-wall .memorial-card{
+  position:absolute;
+  z-index:2;
+  left:var(--star-x,48%);
+  top:var(--star-y,51%);
+  width:132px;
+  min-height:0;
+  height:132px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  box-shadow:none;
+  transform:translate(-50%,-50%);
+  animation:starFloat 6s ease-in-out infinite;
+}
+.celestial-wall .memorial-card:hover,
+.celestial-wall .memorial-card:focus-visible{
+  z-index:4;
+  border:0;
+  box-shadow:none;
+  transform:translate(-50%,-50%) scale(1.12);
+  outline:none;
+}
+.celestial-wall .memorial-card:focus-visible::after{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border:1px solid rgba(244,215,146,.72);
+  border-radius:50%;
+  box-shadow:0 0 24px rgba(232,181,86,.32);
+}
+.celestial-wall [data-star="sky"]{--star-x:48%;--star-y:51%;width:166px;height:166px}
+.celestial-wall .memorial-symbol{height:78px;margin:0;overflow:visible}
+.celestial-wall [data-star="sky"] .memorial-symbol{height:94px}
+.celestial-wall .sky-symbol,
+.celestial-wall .memorial-star-image{
+  width:76px;
+  height:86px;
+  filter:drop-shadow(0 0 9px #fff4bd) drop-shadow(0 0 26px rgba(232,181,86,.78));
+  animation:celestialPulse 3.8s ease-in-out infinite;
+}
+.celestial-wall [data-star="sky"] .sky-symbol{width:94px;height:106px}
+.celestial-wall .memorial-card strong{
+  position:absolute;
+  left:50%;
+  top:calc(50% + 38px);
+  transform:translateX(-50%);
+  margin:0;
+  color:#f7dda0;
+  font:600 22px/1 "Cormorant Garamond",serif;
+  text-shadow:0 2px 10px #020812,0 0 15px rgba(232,181,86,.38);
+  white-space:nowrap;
+}
+.celestial-wall [data-star="sky"] strong{top:calc(50% + 48px);font-size:27px}
+.celestial-wall .memorial-kicker,
+.celestial-wall .memorial-day,
+.celestial-wall .memorial-rule,
+.celestial-wall .memorial-card small{display:none}
+@keyframes celestialPulse{0%,100%{transform:scale(.94);opacity:.82}50%{transform:scale(1.08);opacity:1}}
+@keyframes starFloat{0%,100%{margin-top:0}50%{margin-top:-5px}}
+@keyframes celestialDrift{from{transform:translate3d(-4px,-3px,0)}to{transform:translate3d(5px,4px,0)}}
+@media(max-width:700px){
+  .celestial-wall{min-height:580px;border-radius:25px}
+  .leo-map{inset:10% 1% 18%;width:98%;height:68%}
+  .constellation-label{top:20%}
+  .celestial-wall [data-star="sky"]{--star-x:46%;--star-y:49%}
+  .celestial-wall .memorial-card{width:112px;height:112px}
+  .celestial-wall [data-star="sky"]{width:142px;height:142px}
+  .celestial-wall .sky-symbol,.celestial-wall .memorial-star-image{width:64px;height:74px}
+  .celestial-wall [data-star="sky"] .sky-symbol{width:82px;height:92px}
+  .celestial-wall .memorial-card strong{top:calc(50% + 33px);font-size:20px}
+  .celestial-wall [data-star="sky"] strong{top:calc(50% + 42px);font-size:25px}
+}
+@media(prefers-reduced-motion:reduce){
+  .celestial-wall::before,.celestial-wall .memorial-card,.celestial-wall .sky-symbol,.celestial-wall .memorial-star-image{animation:none!important}
+}
