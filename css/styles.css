@@ -489,40 +489,42 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   }
 }
 
-/* A restrained light follows the star trail across the bridge artwork. */
+/* Animate only the bright star already present in the bridge artwork. */
 .bridge-star-flight{
   position:absolute;
   z-index:3;
-  left:calc(50% - min(540px,46vw) + min(178px,15vw));
-  top:13%;
-  width:min(390px,34vw);
-  height:min(150px,13vw);
+  left:32.8%;
+  top:16%;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:radial-gradient(circle,#fffdf0 0 8%,rgba(255,239,166,.72) 18%,rgba(232,181,86,.18) 46%,transparent 72%);
+  box-shadow:0 0 10px rgba(255,248,211,.65),0 0 25px rgba(232,181,86,.44);
   pointer-events:none;
+  opacity:0;
+  animation:bridgeStarTwinkle 5.8s ease-in-out infinite;
 }
 .bridge-star-flight::before{
-  content:"✦";
+  content:"";
   position:absolute;
-  left:0;
-  top:0;
-  color:#fff6c9;
-  font-size:clamp(13px,1.45vw,21px);
-  line-height:1;
-  opacity:0;
-  text-shadow:0 0 5px #fff,0 0 12px #f7c85f,0 0 24px rgba(232,181,86,.9);
-  animation:bridgeStarFlight 7.5s ease-in-out infinite;
+  inset:-13px;
+  background:
+    linear-gradient(90deg,transparent 47%,rgba(255,248,215,.72) 50%,transparent 53%),
+    linear-gradient(0deg,transparent 47%,rgba(255,248,215,.82) 50%,transparent 53%);
+  filter:blur(.35px);
 }
-@keyframes bridgeStarFlight{
-  0%,12%{left:0;top:0;opacity:0;transform:scale(.7)}
-  18%{opacity:1}
-  42%{left:34%;top:17%;opacity:.95;transform:scale(1)}
-  68%{left:70%;top:57%;opacity:.9;transform:scale(.88)}
-  82%{left:100%;top:100%;opacity:0;transform:scale(.55)}
-  100%{left:100%;top:100%;opacity:0;transform:scale(.55)}
+@keyframes bridgeStarTwinkle{
+  0%,58%,100%{opacity:0;transform:scale(.72)}
+  66%{opacity:.48;transform:scale(.9)}
+  73%{opacity:1;transform:scale(1.22)}
+  80%{opacity:.32;transform:scale(.82)}
+  86%{opacity:.78;transform:scale(1.06)}
+  93%{opacity:0;transform:scale(.72)}
 }
 @media(max-width:700px){
-  .bridge-star-flight{left:18vw;top:16%;width:52vw;height:20vw}
+  .bridge-star-flight{left:23%;top:18%;width:15px;height:15px}
 }
-@media(prefers-reduced-motion:reduce){.bridge-star-flight::before{animation:none;opacity:.75}}
+@media(prefers-reduced-motion:reduce){.bridge-star-flight{animation:none;opacity:0}}
 .button-outline{border-color:rgba(244,215,146,.32);box-shadow:inset 0 1px rgba(255,255,255,.035)}
 .button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 15px 36px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.3)}
 .seo-callout,.how-note{box-shadow:0 24px 65px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.045)}
