@@ -36,7 +36,7 @@ a{color:inherit}button,input,textarea{font:inherit}
 .stars-section{background:radial-gradient(circle at 50% 28%,rgba(64,124,166,.32),transparent 48%),linear-gradient(180deg,#08243a,#04131f)}
 .star-sky{min-height:410px;display:flex;align-items:center;justify-content:center;padding:52px;margin-bottom:30px;overflow:hidden;border-radius:32px;border:1px solid rgba(232,181,86,.18);background:radial-gradient(circle at 35% 30%,rgba(39,88,128,.2),transparent 32%),linear-gradient(rgba(2,8,18,.18),rgba(2,8,18,.75));box-shadow:inset 0 0 95px rgba(0,0,0,.38)}
 .memorial-star{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;background:none;color:var(--ivory);cursor:pointer}
-.star-shape{display:block;width:112px;height:132px;font-size:0;color:transparent;background:url("../assets/memorial-star.svg?v=54") center/contain no-repeat;filter:drop-shadow(0 0 17px rgba(244,215,146,.66)) drop-shadow(0 0 38px rgba(232,181,86,.30));animation:breathe 3.8s ease-in-out infinite}
+.star-shape{display:block;width:112px;height:132px;font-size:0;color:transparent;background:url("../assets/memorial-star.svg?v=55") center/contain no-repeat;filter:drop-shadow(0 0 17px rgba(244,215,146,.66)) drop-shadow(0 0 38px rgba(232,181,86,.30));animation:breathe 3.8s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.06);opacity:1}}
 .memorial-star strong{color:var(--gold-soft);font:600 31px "Cormorant Garamond",serif}.memorial-star small{color:var(--muted);letter-spacing:.18em;font-size:9px}
 
@@ -55,7 +55,7 @@ a{color:inherit}button,input,textarea{font:inherit}
 .memorial-message{max-width:270px;margin:14px auto 0;color:#d6e0e8;line-height:1.6}
 .memorial-card small{margin-top:auto;color:var(--muted);line-height:1.55}
 .memorial-symbol{display:grid;place-items:center;width:100%;height:132px;margin-bottom:14px;color:var(--gold-soft);overflow:visible}
-.sky-symbol{display:block;width:126px;height:144px;font-size:0;color:transparent;background:url("../assets/memorial-star.svg?v=54") center/contain no-repeat;filter:drop-shadow(0 0 14px #fff8d5) drop-shadow(0 0 34px rgba(232,181,86,.72));animation:breathe 3.8s ease-in-out infinite}
+.sky-symbol{display:block;width:126px;height:144px;font-size:0;color:transparent;background:url("../assets/memorial-star.svg?v=55") center/contain no-repeat;filter:drop-shadow(0 0 14px #fff8d5) drop-shadow(0 0 34px rgba(232,181,86,.72));animation:breathe 3.8s ease-in-out infinite}
 .memorial-star-image{display:block;width:110px;height:122px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(232,181,86,.32)) drop-shadow(0 0 18px rgba(232,181,86,.12));transform-origin:center}
 .memorial-candle-image{display:block;width:68px;height:150px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(255,192,76,.3))}
 .memorial-card.is-anniversary{border-color:rgba(244,215,146,.47)}
@@ -429,8 +429,14 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   height:122px;
   background-size:contain;
   filter:drop-shadow(0 0 8px rgba(232,181,86,.32)) drop-shadow(0 0 18px rgba(232,181,86,.12));
-  animation:none;
+  animation:memorialTwinkle 3.8s ease-in-out infinite;
 }
+.memorial-star-image{animation:memorialTwinkle 3.8s ease-in-out infinite}
+@keyframes memorialTwinkle{
+  0%,100%{transform:scale(.98);opacity:.9}
+  50%{transform:scale(1.035);opacity:1}
+}
+@media(prefers-reduced-motion:reduce){.memorial-star-image,.sky-symbol{animation:none!important}}
 
 /* Quiet star separators make the desktop navigation easier to scan. */
 @media(min-width:901px){
