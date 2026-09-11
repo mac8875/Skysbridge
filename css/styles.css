@@ -901,9 +901,9 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 }
 .sky-story-article{width:min(790px,100%);margin:0 auto;text-align:center}
 .sky-story-emblem{display:block;width:104px;height:118px;margin:0 auto 18px;background:url("../assets/memorial-star.svg?v=55") center/contain no-repeat;filter:drop-shadow(0 0 12px #fff5c8) drop-shadow(0 0 34px rgba(232,181,86,.62));animation:featuredStarGlow 6.4s ease-in-out infinite}
-.sky-story-article h1{margin:.05em 0;color:var(--gold-soft);font:600 clamp(52px,8vw,84px)/1.02 "Playfair Display",Georgia,serif;letter-spacing:-.025em}
-.sky-story-subtitle{margin:20px auto 42px;color:#e4e8ec;font:italic 500 clamp(19px,2.6vw,24px)/1.55 "Playfair Display",Georgia,serif}
-.sky-story-copy{text-align:left;color:#e3e9ee;font-size:17px;line-height:1.9}
+.sky-story-article h1{margin:.05em 0;color:var(--gold-soft);font:600 clamp(58px,9vw,94px)/.92 "Cormorant Garamond",serif}
+.sky-story-subtitle{margin:18px auto 42px;color:#d9e1e8;font:italic 500 clamp(20px,3vw,25px)/1.4 "Cormorant Garamond",serif}
+.sky-story-copy{text-align:left;color:#e3e9ee;font:400 17px/1.9 "Lora",Georgia,serif;letter-spacing:.002em}
 .sky-story-copy p{margin:0 0 22px}
 .sky-story-divider{width:90px;height:1px;margin:38px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .sky-story-return{margin-top:18px}
