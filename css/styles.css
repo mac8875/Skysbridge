@@ -420,12 +420,12 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
 
 @media(max-width:700px){
   .logo-panel{
-    --logo-art-width:118vw;
-    min-height:clamp(410px,112vw,610px);
+    --logo-art-width:100vw;
+    min-height:0;
     margin-top:0;
-    margin-bottom:-58px;
+    margin-bottom:-40px;
   }
-  .logo-panel img{width:var(--logo-art-width);max-width:none}
+  .logo-panel img{width:var(--logo-art-width);max-width:100%;height:auto}
   .logo-panel::after{
     background:linear-gradient(180deg,rgba(6,26,43,.18) 0%,transparent 8%,transparent 94%,rgba(3,16,28,.22) 100%);
   }
