@@ -494,7 +494,7 @@
   }
 
   function memorialSymbolMarkup(state, detailed = false) {
-    if (state === "anniversary") {
+    if (state === "anniversary" && detailed) {
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Eine brennende Gedenkkerze" : ""}">`;
     }
 
@@ -544,13 +544,23 @@
       return sort === "oldest" ? aTime - bTime : bTime - aTime;
     });
 
-    rows.forEach(item => {
+    rows.forEach((item, index) => {
       const state = memorialDayState(item);
       const card = document.createElement("button");
       card.type = "button";
       card.className = `memorial-card is-${state}`;
       card.dataset.publicMemorial = item.id;
       card.setAttribute("aria-label", `Gedenkstern für ${item.child_name || "ein Kind"} öffnen`);
+
+      const starPositions = [
+        ["72%","34%"],["76%","62%"],["25%","66%"],["19%","35%"],
+        ["87%","43%"],["61%","76%"],["35%","79%"],["31%","24%"],
+        ["90%","72%"],["12%","56%"],["66%","19%"],["44%","88%"]
+      ];
+      const [starX, starY] = starPositions[index % starPositions.length];
+      card.style.setProperty("--star-x", starX);
+      card.style.setProperty("--star-y", starY);
+      card.style.animationDelay = `${(index % 7) * -.65}s`;
 
       const dateLine = memorialDateLine(item);
       const dayLabel =
