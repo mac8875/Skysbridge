@@ -403,8 +403,8 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
 .logo-star-glow{
   position:absolute;
   z-index:3;
-  left:calc(25.91% - 4.5px);
-  top:calc(14.40% - 4.5px);
+  left:calc(50% - (var(--logo-art-width) * .241) - 4.5px);
+  top:calc(50% - (var(--logo-art-width) * .286) - 4.5px);
   width:9px;
   height:9px;
   border-radius:50%;
