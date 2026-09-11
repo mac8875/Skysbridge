@@ -327,3 +327,35 @@ footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;marg
 .stars-section,.community-section,.contact-section,.how-note,.seo-callout{position:relative;isolation:isolate;overflow:hidden}
 .stars-section::after,.community-section::after,.contact-section::after,.how-note::after,.seo-callout::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;opacity:.42;background-image:radial-gradient(circle at 8% 18%,rgba(248,243,233,.78) 0 1px,transparent 1.7px),radial-gradient(circle at 29% 72%,rgba(244,215,146,.62) 0 1px,transparent 1.8px),radial-gradient(circle at 53% 31%,rgba(248,243,233,.72) 0 1px,transparent 1.6px),radial-gradient(circle at 76% 64%,rgba(244,215,146,.55) 0 1.1px,transparent 1.9px),radial-gradient(circle at 92% 22%,rgba(248,243,233,.7) 0 1px,transparent 1.7px);background-size:173px 157px,229px 211px,197px 181px,263px 239px,211px 193px;background-position:0 0,31px 47px,83px 19px,17px 91px,121px 53px}
 .stars-section>*,.community-section>*,.contact-section>*,.how-note>*,.seo-callout>*{position:relative;z-index:1}
+
+/* V49 — refined, memorial-quality visual finish */
+body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10%,rgba(42,91,128,.18),transparent 34%),linear-gradient(180deg,#071b2d 0%,#04121f 58%,#020a12 100%)}
+.site-header{box-shadow:0 12px 38px rgba(0,0,0,.18),inset 0 -1px rgba(255,255,255,.025)}
+.hero{border-bottom:1px solid rgba(244,215,146,.12);box-shadow:inset 0 -42px 80px rgba(0,0,0,.12)}
+.hero h1{text-wrap:balance;text-shadow:0 2px 24px rgba(0,0,0,.22)}
+.hero-copy .hero-intro,.hero-copy>p:last-of-type{text-wrap:pretty}
+.section{border-top:1px solid rgba(255,255,255,.025)}
+.section-heading h2,.story-layout h2{text-wrap:balance}
+
+.story-section::before{inset:3% -6%;opacity:.052;-webkit-mask-size:min(1220px,94vw) auto;mask-size:min(1220px,94vw) auto}
+.support-paths,.help-page,.privacy-section{position:relative;isolation:isolate;overflow:hidden}
+.support-paths::before,.help-page::before,.privacy-section::before{content:"";position:absolute;z-index:-1;inset:0;background:#0a2135;opacity:.032;pointer-events:none;-webkit-mask:url("../skys-bridge-wordmark.svg") center 18%/min(1180px,92vw) auto no-repeat;mask:url("../skys-bridge-wordmark.svg") center 18%/min(1180px,92vw) auto no-repeat}
+.support-paths>*,.help-page>*,.privacy-section>*{position:relative;z-index:1}
+
+.stars-section::before,.community-section::before,.contact-section::before{content:"";position:absolute;z-index:-1;width:min(680px,58vw);aspect-ratio:1;right:-9%;top:9%;background:#f8f3e9;opacity:.026;pointer-events:none;-webkit-mask:url("../assets/memorial-star.svg") center/contain no-repeat;mask:url("../assets/memorial-star.svg") center/contain no-repeat}
+.community-section::before{left:-12%;right:auto;top:18%;opacity:.022}
+.contact-section::before{width:min(440px,48vw);right:4%;top:-34%;opacity:.024}
+
+.support-card,.help-card,.room-card,.dashboard-card,.admin-card,.post-form,.post-card{border-color:rgba(244,215,146,.18);box-shadow:0 22px 55px rgba(0,0,0,.09),inset 0 1px rgba(255,255,255,.055)}
+.support-card,.help-card{background:rgba(255,255,255,.58);box-shadow:0 22px 60px rgba(20,34,45,.085),inset 0 1px rgba(255,255,255,.78)}
+.memorial-card{box-shadow:0 26px 70px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.045)}
+.button{letter-spacing:.01em;box-shadow:inset 0 1px rgba(255,255,255,.2);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.button-gold{background:linear-gradient(135deg,#f6dc9d 0%,#e8b556 52%,#c98724 100%);box-shadow:0 12px 32px rgba(183,121,28,.2),inset 0 1px rgba(255,255,255,.5)}
+.button-outline{border-color:rgba(244,215,146,.32);box-shadow:inset 0 1px rgba(255,255,255,.035)}
+.button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 15px 36px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.3)}
+.seo-callout,.how-note{box-shadow:0 24px 65px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.045)}
+.contact-section{box-shadow:inset 0 28px 70px rgba(0,0,0,.1)}
+footer{position:relative;border-top-color:rgba(244,215,146,.24);box-shadow:inset 0 1px rgba(255,255,255,.025)}
+footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font-size:16px;opacity:.75;text-shadow:0 0 18px rgba(244,215,146,.5)}
+
+@media(max-width:700px){.story-section::before,.support-paths::before,.help-page::before,.privacy-section::before{opacity:.028;-webkit-mask-size:145vw auto;mask-size:145vw auto}.stars-section::before,.community-section::before,.contact-section::before{width:95vw;opacity:.018}.support-card,.help-card{box-shadow:0 14px 36px rgba(20,34,45,.07),inset 0 1px rgba(255,255,255,.7)}}
