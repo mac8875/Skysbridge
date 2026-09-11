@@ -10,9 +10,9 @@
 }
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ivory);background:linear-gradient(180deg,#071b2d 0%,var(--night) 58%,#020a12 100%);font-family:Inter,Arial,sans-serif}
 a{color:inherit}button,input,textarea{font:inherit}
-.site-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:17px max(24px,calc((100vw - var(--max))/2));border-bottom:1px solid rgba(232,181,86,.14);background:rgba(5,22,36,.91);backdrop-filter:blur(16px)}
-.brand{display:flex;align-items:center;text-decoration:none;min-width:250px}.brand img{display:block;width:min(310px,30vw);height:70px;object-fit:contain;object-position:left center;filter:drop-shadow(0 0 15px rgba(232,181,86,.14))}
-.main-nav{display:flex;align-items:center;gap:23px;margin-left:auto}.main-nav a{text-decoration:none;font-size:14px;color:#d6dee6}.main-nav a:hover{color:var(--gold-soft)}
+.site-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px max(20px,calc((100vw - 1400px)/2));border-bottom:1px solid rgba(232,181,86,.14);background:rgba(5,22,36,.91);backdrop-filter:blur(16px)}
+.brand{display:flex;align-items:center;text-decoration:none;min-width:205px}.brand img{display:block;width:min(245px,24vw);height:64px;object-fit:contain;object-position:left center;filter:drop-shadow(0 0 15px rgba(232,181,86,.14))}
+.main-nav{display:flex;align-items:center;justify-content:flex-end;gap:clamp(12px,1.35vw,21px);margin-left:auto}.main-nav a{text-decoration:none;font-size:13px;font-weight:500;line-height:1.2;color:#eef2f5;white-space:nowrap}.main-nav a:hover{color:var(--ivory)}
 .menu-button{display:none;border:0;background:none;color:var(--gold);font-size:27px}
 .button{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:13px 21px;border:0;cursor:pointer;text-decoration:none;font-weight:600;transition:.2s ease}
 .button:hover:not(:disabled){transform:translateY(-1px)}.button:disabled{cursor:not-allowed;opacity:.65}
