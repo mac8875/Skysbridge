@@ -11,7 +11,7 @@
     'Sky war nur kurze Zeit bei uns, und doch hat er unser Leben für immer verändert. Durch ihn haben wir verstanden, dass Liebe nicht in Jahren gemessen wird, sondern in der Tiefe der Verbindung, die bleibt.',
     'Nach seinem Tod haben wir erlebt, wie still und einsam Trauer werden kann. Viele Eltern tragen ihren Schmerz allein, weil sie glauben, niemand könne wirklich verstehen, was sie verloren haben.',
     'Aus der Liebe zu Sky entstand Skysbridge: ein würdevoller Ort, an dem Kinder, die viel zu früh gehen mussten, einen Namen, einen Stern und einen sichtbaren Platz in unserer Erinnerung behalten.',
-    'Sky ist der erste Stern in Ein Himmel voller Sterne. Sein Licht steht am Anfang eines Ortes, an dem die Geschichten vieler Kinder weiterleuchten dürfen.'
+    'Sky ist das erste Licht im Himmel voller Sterne. Mit seinem Stern begann dieser Ort – und neben ihm darf jedes Kind sein eigenes Licht haben.'
   ];
 
   function escapeHtml(value) {
