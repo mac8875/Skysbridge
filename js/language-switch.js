@@ -8,14 +8,14 @@
     const home = isGerman ? 'index-de.html' : 'index.html';
     const items = isGerman ? [
       ['Sternenwand', `${home}#stars`],
-      ['Skys Geschichte', `${home}#story`],
+      ['Skys Geschichte', 'skys-story-de.html'],
       ['So funktioniert es', 'how-it-works-de.html'],
       ['Sternenkind & Kindsverlust', 'sternenkind-kindsverlust.html'],
       ['Gemeinschaft', `${home}#community`],
       ['Professionelle Hilfe', 'professional-help-de.html']
     ] : [
       ['Wall of Stars', `${home}#stars`],
-      ["Sky's Story", `${home}#story`],
+      ["Sky's Story", 'skys-story.html'],
       ['How It Works', 'how-it-works.html'],
       ['Child Loss Memorial', 'child-loss-memorial.html'],
       ['Community', `${home}#community`],
@@ -69,6 +69,48 @@
       menuButton.setAttribute('aria-expanded', String(open));
       menuButton.textContent = open ? '×' : '☰';
     });
+  }
+
+  const navigation = header?.querySelector('.main-nav');
+  const navigationLinks = Array.from(navigation?.querySelectorAll('a:not(.button)') || []);
+
+  function setCurrentNavigation(hash = window.location.hash) {
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+
+    navigationLinks.forEach(link => {
+      const target = new URL(link.getAttribute('href'), window.location.href);
+      const targetPath = target.pathname.split('/').pop() || 'index.html';
+      const samePage = targetPath === currentPath;
+      const isSection = samePage && target.hash && target.hash === hash;
+      const isStandalonePage = samePage && !target.hash;
+      const current = isSection || isStandalonePage;
+
+      link.classList.toggle('is-current', current);
+      if (current) link.setAttribute('aria-current', target.hash ? 'location' : 'page');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  setCurrentNavigation();
+
+  if (isHome && navigationLinks.length) {
+    const sections = ['stars', 'community']
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setCurrentNavigation(`#${visible.target.id}`);
+    }, { rootMargin: '-18% 0px -58% 0px', threshold: [0.08, 0.3, 0.6] });
+
+    sections.forEach(section => observer.observe(section));
+    window.addEventListener('hashchange', () => setCurrentNavigation());
+    navigationLinks.forEach(link => link.addEventListener('click', () => {
+      const target = new URL(link.href);
+      if (target.hash) setCurrentNavigation(target.hash);
+    }));
   }
 
   document.querySelectorAll('[data-language-link]').forEach(link => {

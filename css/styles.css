@@ -462,6 +462,13 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   .main-nav>a.is-current{color:var(--gold-soft)}
 }
 
+.main-nav>a.is-current,
+.main-nav>a[aria-current="page"],
+.main-nav>a[aria-current="location"]{
+  color:var(--gold-soft);
+  text-shadow:0 0 14px rgba(244,215,146,.24);
+}
+
 /* Full bridge artwork as a softly feathered watermark on light sections. */
 .story-section::before,
 .support-paths::before,
