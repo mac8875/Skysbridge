@@ -77,7 +77,10 @@ a{color:inherit}button,input,textarea{font:inherit}
 .memorial-detail-card .memorial-star-image{width:132px;height:148px;object-fit:contain}
 .memorial-detail-card.is-birthday .memorial-star-image{animation:birthdayStarTwinkle 2.35s ease-in-out infinite;filter:brightness(1.18) saturate(1.08) drop-shadow(0 0 13px #fff7d5) drop-shadow(0 0 37px rgba(232,181,86,.92))}
 .memorial-detail-card h2{margin:.1em 0;color:var(--gold-soft);font:600 clamp(48px,8vw,72px)/1 "Cormorant Garamond",serif}.memorial-detail-meta{color:var(--gold);font-size:13px}.memorial-detail-story{margin:28px 0 0;color:#dce4eb;text-align:left;font-size:16px;line-height:1.8}.memorial-detail-story p{margin:0 0 17px}
-.story-section{color:var(--ink);background:var(--cream)}
+.story-section{position:relative;isolation:isolate;color:var(--ink);background:var(--cream);overflow:hidden}
+.story-section::before{content:"";position:absolute;z-index:-1;inset:6% -8%;background:#0a2135;opacity:.035;pointer-events:none;-webkit-mask:url("../skys-bridge-wordmark.svg") center 24%/min(1180px,92vw) auto no-repeat;mask:url("../skys-bridge-wordmark.svg") center 24%/min(1180px,92vw) auto no-repeat}
+.story-section>*{position:relative;z-index:1}
+.hero .text-link{color:var(--ivory);text-decoration-color:rgba(248,243,233,.58);text-underline-offset:.18em}
 .story-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}.story-text{color:#263c4d;line-height:1.85;font-size:17px}
 .text-link{padding:0;border:0;background:none;color:#996411;font-weight:600;cursor:pointer}
 .community-section{background:linear-gradient(180deg,#08253b,#0a2d46)}
