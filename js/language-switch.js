@@ -7,7 +7,7 @@
     const isGerman = String(document.documentElement.lang || '').toLowerCase().startsWith('de');
     const home = isGerman ? 'index-de.html' : 'index.html';
     const items = isGerman ? [
-      ['Sternenwand', `${home}#stars`],
+      ['Ein Himmel voller Sterne', `${home}#stars`],
       ['Skys Geschichte', 'skys-story-de.html'],
       ['So funktioniert es', 'how-it-works-de.html'],
       ['Sternenkind & Kindsverlust', 'sternenkind-kindsverlust.html'],
