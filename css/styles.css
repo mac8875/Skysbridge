@@ -355,6 +355,7 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
 /* Let the bridge artwork become part of the sky instead of a framed image. */
 .hero-grid{max-width:none}
 .logo-panel{
+  --logo-art-width:min(1080px,92vw);
   width:100vw;
   min-height:clamp(500px,58vw,790px);
   margin:-34px calc(50% - 50vw) -74px;
@@ -370,13 +371,13 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   z-index:-2;
   inset:-45px;
   background:
-    linear-gradient(180deg,rgba(6,26,43,.42),rgba(6,26,43,.1) 45%,rgba(3,16,28,.7)),
+    linear-gradient(180deg,rgba(6,26,43,.12),rgba(6,26,43,.03) 48%,rgba(3,16,28,.22)),
     url("../assets/skysbridge-logo.png") center/cover no-repeat;
   filter:blur(30px) saturate(.85);
   transform:scale(1.08);
-  opacity:.72;
-  -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.22) 8%,#000 27%,#000 88%,transparent 100%);
-  mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.22) 8%,#000 27%,#000 88%,transparent 100%);
+  opacity:.58;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.72) 0%,#000 12%,#000 92%,rgba(0,0,0,.78) 100%);
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.72) 0%,#000 12%,#000 92%,rgba(0,0,0,.78) 100%);
 }
 .logo-panel::after{
   content:"";
@@ -385,30 +386,50 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   inset:0;
   pointer-events:none;
   background:
-    linear-gradient(180deg,rgba(6,26,43,0) 0%,rgba(6,26,43,.3) 8%,transparent 30%,transparent 78%,#03101c 100%),
-    linear-gradient(90deg,#061a2b 0%,transparent 14%,transparent 86%,#061a2b 100%);
+    linear-gradient(180deg,rgba(6,26,43,.08) 0%,transparent 12%,transparent 91%,rgba(3,16,28,.22) 100%),
+    linear-gradient(90deg,rgba(6,26,43,.62) 0%,transparent 10%,transparent 90%,rgba(6,26,43,.62) 100%);
 }
 .logo-panel img{
-  width:min(1080px,92vw);
+  width:var(--logo-art-width);
   max-width:none;
   margin:0;
   border-radius:0;
   box-shadow:none;
-  -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.18) 7%,#000 24%,#000 90%,transparent 100%);
-  mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.18) 7%,#000 24%,#000 90%,transparent 100%);
-  filter:saturate(.94) contrast(1.02) drop-shadow(0 24px 52px rgba(0,0,0,.25));
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9) 0%,#000 7%,#000 96%,rgba(0,0,0,.9) 100%);
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.9) 0%,#000 7%,#000 96%,rgba(0,0,0,.9) 100%);
+  filter:saturate(1.03) brightness(1.07) contrast(1.03) drop-shadow(0 24px 52px rgba(0,0,0,.2));
 }
+
+.logo-star-glow{
+  position:absolute;
+  z-index:3;
+  left:calc(50% - (var(--logo-art-width) * .241));
+  top:calc(50% - (var(--logo-art-width) * .235));
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  pointer-events:none;
+  background:#fff9dc;
+  box-shadow:0 0 9px 3px #fff6c8,0 0 25px 10px rgba(255,215,120,.78),0 0 58px 19px rgba(232,181,86,.38);
+  animation:logoStarTwinkle 2.8s ease-in-out infinite;
+}
+.logo-star-glow::before,.logo-star-glow::after{content:"";position:absolute;left:50%;top:50%;background:linear-gradient(90deg,transparent,#fff9df,transparent);transform:translate(-50%,-50%)}
+.logo-star-glow::before{width:78px;height:1px}
+.logo-star-glow::after{width:1px;height:78px;background:linear-gradient(180deg,transparent,#fff9df,transparent)}
+@keyframes logoStarTwinkle{0%,100%{opacity:.72;transform:scale(.72)}46%{opacity:1;transform:scale(1.18)}67%{opacity:.84;transform:scale(.92)}}
 
 @media(max-width:700px){
   .logo-panel{
+    --logo-art-width:118vw;
     min-height:clamp(410px,112vw,610px);
     margin-top:0;
     margin-bottom:-58px;
   }
-  .logo-panel img{width:118vw;max-width:none}
+  .logo-panel img{width:var(--logo-art-width);max-width:none}
   .logo-panel::after{
-    background:linear-gradient(180deg,#061a2b 0%,transparent 12%,transparent 84%,#03101c 100%);
+    background:linear-gradient(180deg,rgba(6,26,43,.18) 0%,transparent 8%,transparent 94%,rgba(3,16,28,.22) 100%);
   }
+  .logo-star-glow{transform-origin:center}
 }
 
 /* Calm, centered hero composition on the child-loss information pages. */
@@ -880,11 +901,11 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 }
 .sky-story-article{width:min(790px,100%);margin:0 auto;text-align:center}
 .sky-story-emblem{display:block;width:104px;height:118px;margin:0 auto 18px;background:url("../assets/memorial-star.svg?v=55") center/contain no-repeat;filter:drop-shadow(0 0 12px #fff5c8) drop-shadow(0 0 34px rgba(232,181,86,.62));animation:featuredStarGlow 6.4s ease-in-out infinite}
-.sky-story-article h1{margin:.05em 0;color:var(--gold-soft);font:600 clamp(58px,9vw,94px)/.92 "Cormorant Garamond",serif}
-.sky-story-subtitle{margin:18px auto 42px;color:#d9e1e8;font:italic 500 clamp(20px,3vw,25px)/1.4 "Cormorant Garamond",serif}
+.sky-story-article h1{margin:.05em 0;color:var(--gold-soft);font:600 clamp(52px,8vw,84px)/1.02 "Playfair Display",Georgia,serif;letter-spacing:-.025em}
+.sky-story-subtitle{margin:20px auto 42px;color:#e4e8ec;font:italic 500 clamp(19px,2.6vw,24px)/1.55 "Playfair Display",Georgia,serif}
 .sky-story-copy{text-align:left;color:#e3e9ee;font-size:17px;line-height:1.9}
 .sky-story-copy p{margin:0 0 22px}
 .sky-story-divider{width:90px;height:1px;margin:38px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .sky-story-return{margin-top:18px}
 @media(max-width:600px){.sky-story-page{padding-top:62px}.sky-story-copy{font-size:16px;line-height:1.82}.sky-story-emblem{width:88px;height:100px}}
-@media(prefers-reduced-motion:reduce){.sky-story-emblem{animation:none}}
+@media(prefers-reduced-motion:reduce){.sky-story-emblem,.logo-star-glow{animation:none}}
