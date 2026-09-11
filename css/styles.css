@@ -430,8 +430,8 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
     background:linear-gradient(180deg,rgba(6,26,43,.18) 0%,transparent 8%,transparent 94%,rgba(3,16,28,.22) 100%);
   }
   .logo-star-glow{
-    left:calc(50% - (var(--logo-art-width) * .241));
-    top:calc(50% - (var(--logo-art-width) * .296));
+    left:calc(50% - (var(--logo-art-width) * .264));
+    top:calc(50% - (var(--logo-art-width) * .303));
     transform-origin:center;
   }
 }
