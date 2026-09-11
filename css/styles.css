@@ -633,8 +633,12 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   box-shadow:0 0 24px rgba(232,181,86,.32);
 }
 .celestial-wall [data-star="sky"]{--star-x:48%;--star-y:51%;width:166px;height:166px}
+.celestial-wall .memorial-card.is-viewer-center{--star-x:48%;--star-y:51%;width:166px;height:166px;z-index:3}
+.celestial-wall [data-star="sky"].is-secondary-light{width:132px;height:132px}
 .celestial-wall .memorial-symbol{height:78px;margin:0;overflow:visible}
 .celestial-wall [data-star="sky"] .memorial-symbol{height:94px}
+.celestial-wall .memorial-card.is-viewer-center .memorial-symbol{height:94px}
+.celestial-wall [data-star="sky"].is-secondary-light .memorial-symbol{height:78px}
 .celestial-wall .sky-symbol,
 .celestial-wall .memorial-star-image{
   width:76px;
@@ -643,6 +647,8 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   animation:celestialPulse 3.8s ease-in-out infinite;
 }
 .celestial-wall [data-star="sky"] .sky-symbol{width:94px;height:106px}
+.celestial-wall .memorial-card.is-viewer-center .memorial-star-shape{width:76px;height:86px}
+.celestial-wall [data-star="sky"].is-secondary-light .sky-symbol{width:76px;height:86px}
 .celestial-wall .memorial-card strong{
   position:absolute;
   left:50%;
@@ -655,6 +661,8 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   white-space:nowrap;
 }
 .celestial-wall [data-star="sky"] strong{top:calc(50% + 48px);font-size:27px}
+.celestial-wall .memorial-card.is-viewer-center strong{top:calc(50% + 42px);font-size:25px}
+.celestial-wall [data-star="sky"].is-secondary-light strong{top:calc(50% + 38px);font-size:22px}
 .celestial-wall .memorial-kicker,
 .celestial-wall .memorial-day,
 .celestial-wall .memorial-rule,
@@ -667,12 +675,18 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   .leo-map{inset:10% 1% 18%;width:98%;height:68%}
   .constellation-label{top:20%}
   .celestial-wall [data-star="sky"]{--star-x:46%;--star-y:49%}
+  .celestial-wall .memorial-card.is-viewer-center{--star-x:46%;--star-y:49%;width:142px;height:142px}
+  .celestial-wall [data-star="sky"].is-secondary-light{width:112px;height:112px}
   .celestial-wall .memorial-card{width:112px;height:112px}
   .celestial-wall [data-star="sky"]{width:142px;height:142px}
   .celestial-wall .sky-symbol,.celestial-wall .memorial-star-image{width:64px;height:74px}
   .celestial-wall [data-star="sky"] .sky-symbol{width:82px;height:92px}
+  .celestial-wall .memorial-card.is-viewer-center .memorial-star-shape{width:70px;height:80px}
+  .celestial-wall [data-star="sky"].is-secondary-light .sky-symbol{width:64px;height:74px}
   .celestial-wall .memorial-card strong{top:calc(50% + 33px);font-size:20px}
   .celestial-wall [data-star="sky"] strong{top:calc(50% + 42px);font-size:25px}
+  .celestial-wall .memorial-card.is-viewer-center strong{top:calc(50% + 38px);font-size:24px}
+  .celestial-wall [data-star="sky"].is-secondary-light strong{top:calc(50% + 33px);font-size:20px}
 }
 @media(prefers-reduced-motion:reduce){
   .celestial-wall::before,.celestial-wall .memorial-card,.celestial-wall .sky-symbol,.celestial-wall .memorial-star-image{animation:none!important}

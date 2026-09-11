@@ -523,6 +523,7 @@
   buildCelestialSky();
 
   let approvedMemorials = [];
+  let viewerMemorialIds = new Set();
 
   function sameMonthAndDay(value, today = new Date()) {
     if (!value) return false;
@@ -594,6 +595,11 @@
 
     grid.querySelectorAll("[data-public-memorial]").forEach(card => card.remove());
 
+    const skyCard = grid.querySelector('[data-star="sky"]');
+    skyCard?.classList.remove("is-secondary-light");
+    skyCard?.style.removeProperty("--star-x");
+    skyCard?.style.removeProperty("--star-y");
+
     const search = String(document.querySelector("#memorialSearch")?.value || "").trim().toLowerCase();
     const sort = document.querySelector("#memorialSort")?.value || "newest";
     let rows = approvedMemorials.filter(item => !search || String(item.child_name || "").toLowerCase().includes(search));
@@ -605,22 +611,22 @@
       return sort === "oldest" ? aTime - bTime : bTime - aTime;
     });
 
+    const viewerCenter = rows.find(item => viewerMemorialIds.has(item.id));
+    if (viewerCenter && skyCard) {
+      skyCard.classList.add("is-secondary-light");
+      skyCard.style.setProperty("--star-x", "72%");
+      skyCard.style.setProperty("--star-y", "34%");
+    }
+
     rows.forEach((item, index) => {
       const state = memorialDayState(item);
       const card = document.createElement("button");
       card.type = "button";
       card.className = `memorial-card is-${state}`;
       card.dataset.publicMemorial = item.id;
+      if (item.id === viewerCenter?.id) card.classList.add("is-viewer-center");
       card.setAttribute("aria-label", `Gedenkstern für ${item.child_name || "ein Kind"} öffnen`);
 
-      const starPositions = [
-        ["72%","34%"],["76%","62%"],["25%","66%"],["19%","35%"],
-        ["87%","43%"],["61%","76%"],["35%","79%"],["31%","24%"],
-        ["90%","72%"],["12%","56%"],["66%","19%"],["44%","88%"]
-      ];
-      const [starX, starY] = starPositions[index % starPositions.length];
-      card.style.setProperty("--star-x", starX);
-      card.style.setProperty("--star-y", starY);
       card.style.animationDelay = `${(index % 7) * -.65}s`;
 
       const dateLine = memorialDateLine(item);
@@ -642,11 +648,23 @@
         <small>${dateLine ? `<span class="memorial-dates">${escapeHtml(dateLine)}</span>` : "Für immer geliebt. Für immer unvergessen."}${item.country ? `<span class="memorial-dates">${escapeHtml(item.country)}</span>` : ""}</small>
       `;
 
+      const starPositions = [
+        ["72%","34%"],["76%","62%"],["25%","66%"],["19%","35%"],
+        ["87%","43%"],["61%","76%"],["35%","79%"],["31%","24%"],
+        ["90%","72%"],["12%","56%"],["66%","19%"],["44%","88%"]
+      ];
+      if (item.id !== viewerCenter?.id) {
+        const [starX, starY] = starPositions[(index + (viewerCenter ? 1 : 0)) % starPositions.length];
+        card.style.setProperty("--star-x", starX);
+        card.style.setProperty("--star-y", starY);
+      }
+
       card.addEventListener("click", () => openApprovedMemorial(item));
       grid.appendChild(card);
     });
 
     if (search && !rows.length) status.textContent = `Kein Gedenkstern für „${document.querySelector("#memorialSearch").value.trim()}“ gefunden.`;
+    else if (viewerCenter) status.textContent = `${viewerCenter.child_name || "Der Stern deines Kindes"} steht im Zentrum deiner Sternenwand.`;
     else if (approvedMemorials.length) status.textContent = `Sky und ${approvedMemorials.length} ${approvedMemorials.length === 1 ? "weiteres Licht" : "weitere Lichter"}.`;
     else status.textContent = "Sky ist das erste Licht. Weitere Gedenksterne erscheinen nach Zustimmung der Familie und Freigabe durch die Moderation.";
   }
@@ -660,6 +678,21 @@
     }
 
     status.textContent = "Gedenksterne werden geladen …";
+    viewerMemorialIds = new Set();
+
+    const { data: { user } } = await db.auth.getUser();
+    if (user) {
+      const ownResult = await db
+        .from("memorials")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("approved", true)
+        .eq("public_requested", true);
+
+      if (!ownResult.error) {
+        viewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
+      }
+    }
     let result = await db
       .from("memorials")
       .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,created_at")
@@ -1379,7 +1412,10 @@
 
   if (db) {
     db.auth.onAuthStateChange(() => {
-      window.setTimeout(refreshSession, 0);
+      window.setTimeout(async () => {
+        await refreshSession();
+        await loadApprovedMemorials();
+      }, 0);
     });
 
     refreshSession();
