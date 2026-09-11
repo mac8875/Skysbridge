@@ -14,7 +14,7 @@
       ['Gemeinschaft', `${home}#community`],
       ['Professionelle Hilfe', 'professional-help-de.html']
     ] : [
-      ['Wall of Stars', `${home}#stars`],
+      ['A Sky Full of Stars', `${home}#stars`],
       ["Sky's Story", 'skys-story.html'],
       ['How It Works', 'how-it-works.html'],
       ['Child Loss Memorial', 'child-loss-memorial.html'],
