@@ -193,7 +193,7 @@
     });
   });
 
-  function showAuth(forMemorial = false) {
+  function showAuth(forMemorial = false, initialMode = "login") {
     openModal(`
       <h2 id="modalTitle">${forMemorial ? "Anmelden, um ein Kind zu ehren" : "Skysbridge beitreten"}</h2>
       ${forMemorial ? "<p>Zum Schutz jeder Geschichte melde dich bitte an oder erstelle ein Konto, bevor du einen Gedenkstern anlegst.</p>" : ""}
@@ -213,7 +213,7 @@
       </form>
     `);
 
-    let mode = "login";
+    let mode = initialMode === "signup" ? "signup" : "login";
     const form = document.querySelector("#authForm");
     const status = document.querySelector("#authStatus");
 
@@ -229,6 +229,8 @@
       document.querySelector("#signupTab").className =
         `button ${mode === "signup" ? "button-gold" : "button-outline"}`;
     }
+
+    setMode(mode);
 
     form.onsubmit = async event => {
       event.preventDefault();
@@ -1348,6 +1350,30 @@
       block: "start"
     });
   });
+
+  async function openRequestedEntryPoint() {
+    const params = new URLSearchParams(window.location.search);
+    const authMode = params.get("auth");
+    const memorialRequested = params.get("memorial") === "1";
+    if (!memorialRequested && !["login", "signup"].includes(authMode)) return;
+
+    let user = currentUser;
+    if (!user && db) {
+      const result = await db.auth.getUser();
+      user = result.data?.user || null;
+      if (user) currentUser = user;
+    }
+
+    if (memorialRequested) {
+      user ? showMemorial() : showAuth(true, authMode === "signup" ? "signup" : "login");
+    } else if (user) {
+      openMemberArea();
+    } else {
+      showAuth(false, authMode);
+    }
+  }
+
+  openRequestedEntryPoint();
 
   loadApprovedMemorials();
 
