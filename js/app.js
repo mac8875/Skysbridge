@@ -383,7 +383,7 @@
       <article class="star-remembrance">
         <header class="star-remembrance-header">
           <p class="eyebrow">A light remembered</p>
-          <span class="star-remembrance-symbol" aria-hidden="true"><img src="assets/memorial-star.svg?v=54" alt=""></span>
+          <span class="star-remembrance-symbol" aria-hidden="true"><img src="assets/memorial-star.svg?v=55" alt=""></span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
         </header>
@@ -486,7 +486,7 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "A lit memorial candle" : ""}">`;
     }
 
-    return `<img class="memorial-star-image" src="assets/memorial-star.svg?v=54" alt="" aria-hidden="true">`;
+    return `<img class="memorial-star-image" src="assets/memorial-star.svg?v=55" alt="" aria-hidden="true">`;
   }
 
   function openApprovedMemorial(item) {
