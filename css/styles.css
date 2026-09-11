@@ -828,3 +828,56 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 }
 .how-steps .inline-action-link:hover{color:#fff0bd!important;text-decoration-color:#fff0bd}
 @media(max-width:800px){.how-steps .room-card{min-height:0;padding:29px}}
+
+
+/* V66 — no grey cards and dedicated Sky story */
+.guidelines-page .guideline-card{
+  border-color:rgba(232,181,86,.3);
+  border-top-color:rgba(244,215,146,.72);
+  color:var(--ivory);
+  background:
+    radial-gradient(circle at 88% 8%,rgba(59,112,151,.17),transparent 34%),
+    linear-gradient(155deg,#0b304b 0%,#061b2d 72%,#041522 100%);
+  box-shadow:0 22px 58px rgba(5,20,33,.2),inset 0 1px rgba(255,255,255,.045);
+}
+.guidelines-page .guideline-card h3{color:var(--gold-soft)}
+.guidelines-page .guideline-card p{color:#eef1f2}
+.guidelines-page .guideline-card a{color:var(--gold-soft);text-decoration-color:rgba(244,215,146,.72)}
+.how-note .button-outline{color:var(--gold-soft);border-color:rgba(244,215,146,.55);background:#061b2d}
+.how-note .button-outline:hover{color:#fff0bd;border-color:#f4d792;background:#092a43}
+
+.sky-story-page{
+  position:relative;
+  isolation:isolate;
+  min-height:calc(100vh - 93px);
+  overflow:hidden;
+  padding:clamp(72px,9vw,118px) 24px;
+  color:var(--ivory);
+  background:
+    radial-gradient(circle at 50% 18%,rgba(56,111,154,.3),transparent 32%),
+    radial-gradient(circle at 18% 74%,rgba(25,67,103,.22),transparent 29%),
+    linear-gradient(180deg,#08243b 0%,#041522 58%,#020a12 100%);
+}
+.sky-story-page::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  opacity:.5;
+  background-image:
+    radial-gradient(circle,#fff 0 1px,transparent 1.6px),
+    radial-gradient(circle,#f4d792 0 1px,transparent 1.8px),
+    radial-gradient(circle,#d8ebfb 0 .8px,transparent 1.5px);
+  background-size:137px 131px,211px 193px,89px 97px;
+  background-position:17px 31px,78px 54px,41px 12px;
+}
+.sky-story-article{width:min(790px,100%);margin:0 auto;text-align:center}
+.sky-story-emblem{display:block;width:104px;height:118px;margin:0 auto 18px;background:url("../assets/memorial-star.svg?v=55") center/contain no-repeat;filter:drop-shadow(0 0 12px #fff5c8) drop-shadow(0 0 34px rgba(232,181,86,.62));animation:featuredStarGlow 6.4s ease-in-out infinite}
+.sky-story-article h1{margin:.05em 0;color:var(--gold-soft);font:600 clamp(58px,9vw,94px)/.92 "Cormorant Garamond",serif}
+.sky-story-subtitle{margin:18px auto 42px;color:#d9e1e8;font:italic 500 clamp(20px,3vw,25px)/1.4 "Cormorant Garamond",serif}
+.sky-story-copy{text-align:left;color:#e3e9ee;font-size:17px;line-height:1.9}
+.sky-story-copy p{margin:0 0 22px}
+.sky-story-divider{width:90px;height:1px;margin:38px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.sky-story-return{margin-top:18px}
+@media(max-width:600px){.sky-story-page{padding-top:62px}.sky-story-copy{font-size:16px;line-height:1.82}.sky-story-emblem{width:88px;height:100px}}
+@media(prefers-reduced-motion:reduce){.sky-story-emblem{animation:none}}
