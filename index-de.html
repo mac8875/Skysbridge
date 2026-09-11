@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=59">
+  <link rel="stylesheet" href="css/styles.css?v=60">
 
   <style>
     .sky-native-modal{
@@ -99,7 +99,15 @@
         </label>
       </div>
       <p class="wall-status" id="wallStatus" aria-live="polite">Gedenksterne werden geladen…</p>
-      <div class="memorial-grid" id="memorialGrid">
+      <div class="memorial-grid celestial-wall" id="memorialGrid">
+        <svg class="leo-map" viewBox="0 0 100 100" aria-hidden="true">
+          <polyline points="48,51 40,42 42,31 52,25 60,34 48,51 65,55 79,48 89,56 65,55"></polyline>
+          <circle cx="40" cy="42" r=".8"></circle><circle cx="42" cy="31" r=".65"></circle>
+          <circle cx="52" cy="25" r=".72"></circle><circle cx="60" cy="34" r=".65"></circle>
+          <circle cx="65" cy="55" r=".72"></circle><circle cx="79" cy="48" r=".68"></circle>
+          <circle cx="89" cy="56" r=".62"></circle>
+        </svg>
+        <span class="constellation-label" aria-hidden="true">♌ Löwe</span>
         <a class="memorial-card is-standard" href="#sky-de-modal" data-star="sky" role="button" aria-label="Skys Geschichte öffnen" onclick="event.stopImmediatePropagation()">
           <span class="memorial-symbol"><span class="sky-symbol">✦</span></span>
           <span class="memorial-kicker">Das erste Licht</span>
@@ -262,6 +270,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js?v=26-1"></script>
   <script src="js/language-switch.js?v=51"></script>
-  <script src="js/app-de-v41.js?v=55"></script>
+  <script src="js/app-de-v41.js?v=60"></script>
 </body>
 </html>
