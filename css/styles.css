@@ -782,3 +782,49 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .inline-action-link:hover{color:#633f07!important}
 .inline-action-link:focus-visible{outline:2px solid #c88f2d;outline-offset:3px;border-radius:3px}
 @media(max-width:800px){.guideline-card{min-height:0;padding:28px}.guideline-card h3{font-size:28px}}
+
+
+/* V65 — unified How It Works cards: gold, navy and warm white only */
+.how-steps{align-items:stretch}
+.how-steps .room-card{
+  min-height:310px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  padding:34px;
+  border:1px solid rgba(232,181,86,.3);
+  border-top:3px solid rgba(244,215,146,.72);
+  border-radius:24px;
+  color:var(--ivory);
+  background:
+    radial-gradient(circle at 88% 8%,rgba(59,112,151,.17),transparent 34%),
+    linear-gradient(155deg,#0b304b 0%,#061b2d 72%,#041522 100%);
+  box-shadow:0 22px 58px rgba(5,20,33,.2),inset 0 1px rgba(255,255,255,.045);
+}
+.how-steps .room-card h3{
+  margin:.2em 0 .55em;
+  color:var(--gold-soft);
+  font-size:clamp(28px,3vw,34px);
+  line-height:1.08;
+  text-wrap:balance;
+}
+.how-steps .room-card p{
+  margin:0;
+  color:#eef1f2;
+  font-size:16px;
+  line-height:1.72;
+}
+.how-steps .how-step-number{
+  flex:0 0 auto;
+  border-color:rgba(244,215,146,.62);
+  color:#17202a;
+  background:linear-gradient(135deg,#f7dfa4,#e8b556);
+  box-shadow:0 8px 22px rgba(200,137,39,.18);
+}
+.how-steps .inline-action-link{
+  color:var(--gold-soft)!important;
+  font-weight:700;
+  text-decoration-color:rgba(244,215,146,.72);
+}
+.how-steps .inline-action-link:hover{color:#fff0bd!important;text-decoration-color:#fff0bd}
+@media(max-width:800px){.how-steps .room-card{min-height:0;padding:29px}}
