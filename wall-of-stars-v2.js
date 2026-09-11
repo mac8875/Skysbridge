@@ -14,7 +14,7 @@
   const skyMemorial = {
     id: 'sky',
     child_name: 'Sky',
-    remembrance: 'Sky is the first star on our Wall of Stars and the light behind Sky’s Bridge.',
+    remembrance: 'Sky is the first star in A Sky Full of Stars and the light behind Sky’s Bridge.',
     birth_date: null,
     passing_date: null,
     created_at: '2019-01-01T00:00:00Z',
