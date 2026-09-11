@@ -321,3 +321,8 @@ footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;marg
 
 /* V43 — readable privacy page copy */
 .privacy-section .story-text{color:#d6dee6}
+
+/* V45 — subtle star field across the dark blue content areas */
+.stars-section,.community-section,.contact-section,.how-note,.seo-callout{position:relative;isolation:isolate;overflow:hidden}
+.stars-section::after,.community-section::after,.contact-section::after,.how-note::after,.seo-callout::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;opacity:.42;background-image:radial-gradient(circle at 8% 18%,rgba(248,243,233,.78) 0 1px,transparent 1.7px),radial-gradient(circle at 29% 72%,rgba(244,215,146,.62) 0 1px,transparent 1.8px),radial-gradient(circle at 53% 31%,rgba(248,243,233,.72) 0 1px,transparent 1.6px),radial-gradient(circle at 76% 64%,rgba(244,215,146,.55) 0 1.1px,transparent 1.9px),radial-gradient(circle at 92% 22%,rgba(248,243,233,.7) 0 1px,transparent 1.7px);background-size:173px 157px,229px 211px,197px 181px,263px 239px,211px 193px;background-position:0 0,31px 47px,83px 19px,17px 91px,121px 53px}
+.stars-section>*,.community-section>*,.contact-section>*,.how-note>*,.seo-callout>*{position:relative;z-index:1}
