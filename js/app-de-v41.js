@@ -305,6 +305,15 @@
         <label>Land (optional)
           <input name="country" maxlength="80">
         </label>
+        <fieldset class="star-picker">
+          <legend>Sternform auswählen</legend>
+          <div class="star-picker-grid">
+            <label class="star-choice"><input type="radio" name="star_style" value="radiant" checked><span class="star-choice-preview star-radiant" aria-hidden="true"></span><span>Strahlend</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="classic"><span class="star-choice-preview star-classic" aria-hidden="true"></span><span>Klassisch</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="guiding"><span class="star-choice-preview star-guiding" aria-hidden="true"></span><span>Wegweiser</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="halo"><span class="star-choice-preview star-halo" aria-hidden="true"></span><span>Lichtkreis</span></label>
+          </div>
+        </fieldset>
         <label>
           <input type="checkbox" name="public_requested">
           Diesen Gedenkstern nach der Prüfung auf der öffentlichen Sternenwand zeigen
@@ -333,6 +342,7 @@
         child_name: values.get("child_name"),
         remembrance: values.get("remembrance"),
         country: values.get("country") || null,
+        star_style: values.get("star_style") || "radiant",
         birth_date: values.get("birth_date") || null,
         passing_date: values.get("passing_date") || null,
         public_requested: values.get("public_requested") === "on"
@@ -340,9 +350,10 @@
 
       let { error } = await db.from("memorials").insert(payload);
 
-      if (error && /birth_date|passing_date/i.test(error.message || "")) {
+      if (error && /birth_date|passing_date|star_style/i.test(error.message || "")) {
         delete payload.birth_date;
         delete payload.passing_date;
+        delete payload.star_style;
         ({ error } = await db.from("memorials").insert(payload));
       }
 
@@ -493,12 +504,14 @@
     return "standard";
   }
 
-  function memorialSymbolMarkup(state, detailed = false) {
+  function memorialSymbolMarkup(state, detailed = false, requestedStyle = "radiant") {
     if (state === "anniversary" && detailed) {
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Eine brennende Gedenkkerze" : ""}">`;
     }
 
-    return `<img class="memorial-star-image" src="assets/memorial-star.svg?v=55" alt="" aria-hidden="true">`;
+    const allowedStyles = ["radiant", "classic", "guiding", "halo"];
+    const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
+    return `<span class="memorial-star-shape star-${style}" aria-hidden="true"></span>`;
   }
 
   function openApprovedMemorial(item) {
@@ -515,7 +528,7 @@
       <article class="memorial-detail-card is-${state}">
         <p class="eyebrow">${dayLabel}</p>
         <div class="memorial-detail-symbol">
-          ${memorialSymbolMarkup(state, true)}
+          ${memorialSymbolMarkup(state, true, item.star_style)}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Für immer geliebt")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
@@ -572,7 +585,7 @@
 
       card.innerHTML = `
         <span class="memorial-symbol">
-          ${memorialSymbolMarkup(state)}
+          ${memorialSymbolMarkup(state, false, item.star_style)}
         </span>
         <span class="memorial-kicker">Ein Licht, das bleibt</span>
         <strong>${escapeHtml(item.child_name || "Für immer geliebt")}</strong>
@@ -601,12 +614,12 @@
     status.textContent = "Gedenksterne werden geladen …";
     let result = await db
       .from("memorials")
-      .select("id,child_name,remembrance,country,birth_date,passing_date,created_at")
+      .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,created_at")
       .eq("approved", true)
       .eq("public_requested", true)
       .order("created_at", { ascending: false });
 
-    if (result.error && /birth_date|passing_date/i.test(result.error.message || "")) {
+    if (result.error && /birth_date|passing_date|star_style/i.test(result.error.message || "")) {
       result = await db
         .from("memorials")
         .select("id,child_name,remembrance,country,created_at")
