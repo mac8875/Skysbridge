@@ -26,7 +26,7 @@
     .search{width:min(220px,22vw);height:40px;padding:0 15px;border:1px solid rgba(245,217,149,.2);border-radius:999px;color:#fff;background:rgba(2,10,20,.7);outline:none}.search:focus{border-color:rgba(245,217,149,.62)}
     .hint{position:absolute;z-index:2;left:50%;bottom:24px;transform:translateX(-50%);padding:9px 14px;border-radius:999px;color:#b9c8d5;background:rgba(2,9,18,.62);backdrop-filter:blur(12px);font-size:12px;pointer-events:none;white-space:nowrap}
     .counter{position:absolute;z-index:2;left:24px;bottom:24px;color:#9fb1bf;font-size:12px}.counter strong{color:var(--gold-soft);font-weight:600}
-    .zodiac-nav{position:absolute;z-index:3;left:50%;bottom:58px;transform:translateX(-50%);display:flex;gap:6px;width:min(1040px,calc(100vw - 28px));padding:8px;overflow-x:auto;border:1px solid rgba(245,217,149,.14);border-radius:18px;background:rgba(2,9,18,.7);box-shadow:0 14px 44px rgba(0,0,0,.26);backdrop-filter:blur(15px);scrollbar-width:none}.zodiac-nav::-webkit-scrollbar{display:none}.zodiac-nav button{flex:0 0 auto;min-height:36px;padding:0 12px;font-size:12px}.zodiac-nav button.current{color:#171d24;background:linear-gradient(135deg,var(--gold-soft),var(--gold));border-color:transparent}
+    .zodiac-nav{position:absolute;z-index:3;left:50%;bottom:58px;transform:translateX(-50%);display:flex;gap:6px;width:min(1040px,calc(100vw - 28px));padding:8px;overflow-x:auto;border:1px solid rgba(245,217,149,.14);border-radius:18px;background:rgba(2,9,18,.7);box-shadow:0 14px 44px rgba(0,0,0,.26);backdrop-filter:blur(15px);scrollbar-width:none}.zodiac-nav::-webkit-scrollbar{display:none}.zodiac-nav.is-hidden{display:none}.zodiac-nav button{flex:0 0 auto;min-height:36px;padding:0 12px;font-size:12px}.zodiac-nav button.current{color:#171d24;background:linear-gradient(135deg,var(--gold-soft),var(--gold));border-color:transparent}
     .panel{position:absolute;z-index:4;right:24px;top:98px;width:min(340px,calc(100vw - 32px));padding:27px;border:1px solid rgba(245,217,149,.28);border-radius:23px;background:linear-gradient(160deg,rgba(10,34,57,.94),rgba(2,11,22,.97));box-shadow:0 28px 90px rgba(0,0,0,.52);backdrop-filter:blur(18px)}
     .panel[hidden]{display:none}.panel .close{position:absolute;right:12px;top:12px;width:34px;min-height:34px;padding:0;border:0;background:transparent;font-size:22px}.panel .eyebrow{margin:0 0 7px;color:var(--gold);font-size:10px;letter-spacing:.18em;text-transform:uppercase}.panel h2{margin:0;color:var(--gold-soft);font:600 42px/1 "Cormorant Garamond",serif}.panel p{color:#c1ced9;line-height:1.65}.panel small{color:#8196a8}
     @media(max-width:800px){.topbar{align-items:flex-start;flex-wrap:wrap}.brand img{width:135px}.controls{width:100%;margin:0;overflow-x:auto;padding-bottom:2px}.search{min-width:150px;flex:1}.zodiac-nav{bottom:52px}.hint{bottom:12px;max-width:92vw;overflow:hidden;text-overflow:ellipsis}.counter{display:none}.panel{right:16px;top:145px}}
@@ -38,7 +38,8 @@
   <header class="topbar">
     <div class="brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge"><span class="demo-badge">360° Vorschau</span></div>
     <div class="controls" aria-label="Sternenhimmel steuern">
-      <button class="count-button active" data-count="1000">1.000 Sterne</button>
+      <button class="count-button active" data-count="50">50 Sterne</button>
+      <button class="count-button" data-count="1000">1.000 Sterne</button>
       <button class="count-button" data-count="2000">2.000 Sterne</button>
       <input class="search" id="search" type="search" placeholder="Sky oder Nr. 742" aria-label="Demo-Stern suchen">
       <button class="icon-button" id="zoomOut" aria-label="Herauszoomen">−</button>
@@ -46,7 +47,7 @@
       <button id="reset">Sky zeigen</button>
     </div>
   </header>
-  <div class="counter"><strong id="visibleCount">1.000</strong> Demo-Sterne · keine echten Einträge</div>
+  <div class="counter"><strong id="visibleCount">50</strong> Demo-Sterne · <span id="modeLabel">ein gemeinsamer Himmel</span> · keine echten Einträge</div>
   <nav class="zodiac-nav" id="zodiacNav" aria-label="Zu einem Sternzeichen springen"></nav>
   <div class="hint">Endlos nach links oder rechts ziehen · Sternzeichen direkt auswählen · Stern anklicken</div>
   <aside class="panel" id="panel" hidden>
@@ -72,7 +73,7 @@
   const world = { width: 14400, height: 4200, sectorWidth: 1200 };
   const leoIndex = 4;
   const view = { x: (leoIndex + .5) * world.sectorWidth, y: world.height / 2, zoom: .58 };
-  let count = 1000, stars = [], dragging = false, moved = false, start = null, raf = 0;
+  let count = 50, stars = [], dragging = false, moved = false, start = null, raf = 0, spaceLayer = null;
   const pointers = new Map();
 
   function seededRandom(seed) {
@@ -86,26 +87,39 @@
   function makeStars(total) {
     const random = seededRandom(8875 + total);
     const result = [];
-    for (let i = 0; i < total; i++) {
-      const sector = i % zodiac.length;
-      const lane = Math.floor(i / zodiac.length);
-      const lanes = Math.ceil(total / zodiac.length);
-      const band = lane / Math.max(1, lanes - 1);
-      result.push({
-        id:i + 1,
-        sector,
-        x:sector * world.sectorWidth + 90 + random() * (world.sectorWidth - 180),
-        y:260 + band * (world.height - 520) + (random() - .5) * 58,
-        size:2.4 + random() * 4.6,
-        alpha:.46 + random() * .5,
-        phase:random() * Math.PI * 2,
-        speed:.00035 + random() * .00055,
-        style:i % 5,
-        warmth:random() > .76 ? "warm" : random() > .52 ? "cool" : "white"
-      });
+    const skyX = (leoIndex + .5) * world.sectorWidth;
+    const skyY = world.height / 2;
+
+    if (total <= 50) {
+      for (let i = 0; i < total; i++) {
+        const angle = i * 2.399963 + random() * .22;
+        const radius = 180 + Math.sqrt(i / Math.max(1, total - 1)) * 1280;
+        result.push({
+          id:i + 1,sector:leoIndex,
+          x:skyX + Math.cos(angle) * radius,
+          y:skyY + Math.sin(angle) * radius * .64,
+          size:2.8 + random() * 4.5,alpha:.5 + random() * .46,
+          phase:random()*Math.PI*2,speed:.00035+random()*.00055,
+          style:i%5,warmth:random()>.76?"warm":random()>.52?"cool":"white"
+        });
+      }
+    } else {
+      for (let i = 0; i < total; i++) {
+        const sector = i % zodiac.length;
+        const lane = Math.floor(i / zodiac.length);
+        const lanes = Math.ceil(total / zodiac.length);
+        const band = lane / Math.max(1, lanes - 1);
+        result.push({
+          id:i + 1,sector,
+          x:sector*world.sectorWidth+90+random()*(world.sectorWidth-180),
+          y:260+band*(world.height-520)+(random()-.5)*58,
+          size:2.4+random()*4.6,alpha:.46+random()*.5,
+          phase:random()*Math.PI*2,speed:.00035+random()*.00055,
+          style:i%5,warmth:random()>.76?"warm":random()>.52?"cool":"white"
+        });
+      }
     }
-    const sky = result[0];
-    Object.assign(sky,{id:0,sector:leoIndex,x:(leoIndex+.5)*world.sectorWidth,y:world.height/2,size:13,alpha:1,style:5,name:"Sky"});
+    Object.assign(result[0],{id:0,sector:leoIndex,x:skyX,y:skyY,size:13,alpha:1,style:5,name:"Sky"});
     return result;
   }
 
@@ -116,6 +130,7 @@
     canvas.style.width = innerWidth + "px";
     canvas.style.height = innerHeight + "px";
     ctx.setTransform(ratio,0,0,ratio,0,0);
+    buildSpaceLayer();
     requestDraw();
   }
 
@@ -133,13 +148,57 @@
     view.y = Math.max(Math.min(world.height - verticalHalf, world.height - 250), Math.max(verticalHalf, 250));
   }
 
+  function buildSpaceLayer() {
+    spaceLayer = document.createElement("canvas");
+    spaceLayer.width = Math.max(1, innerWidth);
+    spaceLayer.height = Math.max(1, innerHeight);
+    const g = spaceLayer.getContext("2d");
+    const random = seededRandom(19082019 + innerWidth + innerHeight);
+
+    const bg = g.createRadialGradient(innerWidth*.48,innerHeight*.44,10,innerWidth*.48,innerHeight*.44,Math.max(innerWidth,innerHeight)*.82);
+    bg.addColorStop(0,"#0a213c");bg.addColorStop(.45,"#041225");bg.addColorStop(1,"#01040b");
+    g.fillStyle=bg;g.fillRect(0,0,innerWidth,innerHeight);
+
+    g.save();
+    g.translate(innerWidth*.5,innerHeight*.53);
+    g.rotate(-.34);
+    g.globalCompositeOperation="screen";
+
+    for(let i=0;i<180;i++){
+      const x=(random()-.5)*innerWidth*1.85;
+      const spread=(random()+random()+random()-1.5)*innerHeight*.17;
+      const radius=35+random()*145;
+      const cloud=g.createRadialGradient(x,spread,0,x,spread,radius);
+      const alpha=.012+random()*.025;
+      cloud.addColorStop(0,`rgba(185,207,224,${alpha})`);
+      cloud.addColorStop(.38,`rgba(98,145,180,${alpha*.62})`);
+      cloud.addColorStop(1,"rgba(24,63,96,0)");
+      g.fillStyle=cloud;g.fillRect(x-radius,spread-radius,radius*2,radius*2);
+    }
+
+    for(let i=0;i<1650;i++){
+      const x=(random()-.5)*innerWidth*1.9;
+      const gaussian=(random()+random()+random()+random()-2)*innerHeight*.105;
+      const size=random()<.93?.35+random()*.75:1.1+random()*1.4;
+      const alpha=.045+random()*.24;
+      g.fillStyle=random()>.82?`rgba(244,224,184,${alpha})`:`rgba(215,232,245,${alpha})`;
+      g.beginPath();g.arc(x,gaussian,size,0,Math.PI*2);g.fill();
+    }
+
+    g.globalCompositeOperation="source-over";
+    for(let i=0;i<24;i++){
+      const x=(i/23-.5)*innerWidth*1.7+(random()-.5)*90;
+      const y=(random()-.5)*innerHeight*.055;
+      const lane=g.createRadialGradient(x,y,0,x,y,70+random()*100);
+      lane.addColorStop(0,"rgba(0,5,13,.09)");
+      lane.addColorStop(1,"rgba(0,5,13,0)");
+      g.fillStyle=lane;g.fillRect(x-190,y-160,380,320);
+    }
+    g.restore();
+  }
+
   function drawBackground() {
-    const bg = ctx.createRadialGradient(innerWidth*.48,innerHeight*.45,20,innerWidth*.48,innerHeight*.45,Math.max(innerWidth,innerHeight)*.8);
-    bg.addColorStop(0,"#0a2340"); bg.addColorStop(.42,"#041326"); bg.addColorStop(1,"#01050d");
-    ctx.fillStyle=bg;ctx.fillRect(0,0,innerWidth,innerHeight);
-    ctx.save();ctx.translate(innerWidth*.5,innerHeight*.52);ctx.rotate(-.33);
-    for(let i=0;i<7;i++){ctx.beginPath();ctx.strokeStyle=`rgba(130,169,198,${.018+i*.008})`;ctx.lineWidth=70+i*24;ctx.shadowBlur=40;ctx.shadowColor="rgba(158,190,214,.08)";ctx.moveTo(-innerWidth,-20+i*3);ctx.lineTo(innerWidth,20-i*3);ctx.stroke()}
-    ctx.restore();
+    if (spaceLayer) ctx.drawImage(spaceLayer,0,0,innerWidth,innerHeight);
   }
 
   function drawStarShape(x,y,r,style,color,alpha) {
@@ -166,6 +225,7 @@
   }
 
   function drawSectorLabels() {
+    if (count <= 50) return;
     zodiac.forEach((sign,index) => {
       const p=screen({x:(index+.5)*world.sectorWidth,y:260});
       if(p.x < -200 || p.x > innerWidth + 200) return;
@@ -194,7 +254,7 @@
   }
 
   function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
-  function focusSky(){const sky=stars[0];view.x=sky.x;view.y=sky.y;view.zoom=innerWidth<700?.42:.58;normalizeView();updateCurrentSector();requestDraw()}
+  function focusSky(){const sky=stars[0];view.x=sky.x;view.y=sky.y;view.zoom=count<=50?(innerWidth<700?.34:.43):(innerWidth<700?.42:.58);normalizeView();updateCurrentSector();requestDraw()}
   function zoomAt(factor,cx=innerWidth/2,cy=innerHeight/2){
     const beforeX=(cx-innerWidth/2)/view.zoom+view.x,beforeY=(cy-innerHeight/2)/view.zoom+view.y;
     view.zoom=Math.max(.16,Math.min(1.5,view.zoom*factor));
@@ -203,6 +263,7 @@
   function centerOn(star){view.x=star.x;view.y=star.y;view.zoom=Math.max(view.zoom,.62);normalizeView();updateCurrentSector();requestDraw()}
   function goToSector(index){view.x=(index+.5)*world.sectorWidth;view.y=world.height/2;view.zoom=Math.max(view.zoom,.46);normalizeView();updateCurrentSector();requestDraw()}
   function updateCurrentSector(){
+    document.querySelector("#zodiacNav")?.classList.toggle("is-hidden",count<=50);
     const current=Math.floor((((view.x%world.width)+world.width)%world.width)/world.sectorWidth);
     document.querySelectorAll("#zodiacNav button").forEach((button,index)=>button.classList.toggle("current",index===current));
   }
@@ -218,7 +279,7 @@
   canvas.addEventListener("pointermove",e=>{if(!dragging||!start)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.hypot(dx,dy)>4)moved=true;view.x=start.vx-dx/view.zoom;view.y=start.vy-dy/view.zoom;normalizeView();updateCurrentSector();requestDraw()});
   canvas.addEventListener("pointerup",e=>{pointers.delete(e.pointerId);if(!moved){const star=hitTest(e.clientX,e.clientY);if(star)openStar(star)}dragging=false;start=null;canvas.classList.remove("dragging")});
   canvas.addEventListener("pointercancel",()=>{dragging=false;start=null;canvas.classList.remove("dragging")});
-  document.querySelectorAll(".count-button").forEach(button=>button.addEventListener("click",()=>{count=Number(button.dataset.count);stars=makeStars(count);document.querySelectorAll(".count-button").forEach(b=>b.classList.toggle("active",b===button));document.querySelector("#visibleCount").textContent=count.toLocaleString("de-DE");canvas.setAttribute("aria-label",`Interaktiver Demo-Sternenhimmel mit ${count.toLocaleString("de-DE")} Gedenksternen`);focusSky()}));
+  document.querySelectorAll(".count-button").forEach(button=>button.addEventListener("click",()=>{count=Number(button.dataset.count);stars=makeStars(count);document.querySelectorAll(".count-button").forEach(b=>b.classList.toggle("active",b===button));document.querySelector("#visibleCount").textContent=count.toLocaleString("de-DE");document.querySelector("#modeLabel").textContent=count<=50?"ein gemeinsamer Himmel":"auf zwölf Sternzeichen verteilt";canvas.setAttribute("aria-label",`Interaktiver Demo-Sternenhimmel mit ${count.toLocaleString("de-DE")} Gedenksternen`);document.querySelector(".hint").textContent=count<=50?"Bis 50 Sterne: ein gemeinsamer ruhiger Himmel · Stern anklicken":"Ab 51 Sternen: 360° durch die Sternzeichen ziehen · Stern anklicken";focusSky()}));
   document.querySelector("#zoomIn").onclick=()=>zoomAt(1.25);document.querySelector("#zoomOut").onclick=()=>zoomAt(.8);document.querySelector("#reset").onclick=focusSky;document.querySelector("#closePanel").onclick=()=>panel.hidden=true;
   document.querySelector("#search").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const raw=e.currentTarget.value.trim().toLowerCase();const id=raw==="sky"?0:Number(raw.replace(/\D/g,""));const star=stars.find(s=>s.id===id);if(star){centerOn(star);openStar(star)}});
   stars=makeStars(count);buildZodiacNav();addEventListener("resize",resize);resize();focusSky();
