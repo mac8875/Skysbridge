@@ -404,7 +404,7 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   position:absolute;
   z-index:3;
   left:calc(50% - (var(--logo-art-width) * .241));
-  top:calc(50% - (var(--logo-art-width) * .235));
+  top:calc(50% - (var(--logo-art-width) * .286));
   width:9px;
   height:9px;
   border-radius:50%;
