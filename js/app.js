@@ -300,6 +300,7 @@
             <label class="star-choice"><input type="radio" name="star_style" value="classic"><span class="star-choice-preview star-classic" aria-hidden="true"></span><span>Classic</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="guiding"><span class="star-choice-preview star-guiding" aria-hidden="true"></span><span>Guiding light</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="halo"><span class="star-choice-preview star-halo" aria-hidden="true"></span><span>Halo</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="signature"><span class="star-choice-preview star-signature" aria-hidden="true"></span><span>Sky's star</span></label>
           </div>
         </fieldset>
         <label>
@@ -462,6 +463,34 @@
   }
 
 
+  function buildCelestialSky() {
+    const sky = document.querySelector(".celestial-wall");
+    if (!sky || sky.querySelector(".ambient-star")) return;
+
+    let seed = 8875;
+    const random = () => {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
+
+    for (let index = 0; index < 118; index += 1) {
+      const star = document.createElement("span");
+      const size = random() < .82 ? .7 + random() * 1.25 : 2 + random() * 1.8;
+      star.className = "ambient-star";
+      star.setAttribute("aria-hidden", "true");
+      star.style.setProperty("--x", `${(random() * 100).toFixed(2)}%`);
+      star.style.setProperty("--y", `${(random() * 100).toFixed(2)}%`);
+      star.style.setProperty("--size", `${size.toFixed(2)}px`);
+      star.style.setProperty("--alpha", (.28 + random() * .66).toFixed(2));
+      star.style.setProperty("--duration", `${(3.8 + random() * 7.4).toFixed(2)}s`);
+      star.style.setProperty("--delay", `${(-random() * 9).toFixed(2)}s`);
+      star.style.setProperty("--warmth", random() > .82 ? "#f7e4b0" : random() > .55 ? "#d9ecff" : "#ffffff");
+      sky.appendChild(star);
+    }
+  }
+
+  buildCelestialSky();
+
   let approvedMemorials = [];
 
   function sameMonthAndDay(value, today = new Date()) {
@@ -497,7 +526,7 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "A lit memorial candle" : ""}">`;
     }
 
-    const allowedStyles = ["radiant", "classic", "guiding", "halo"];
+    const allowedStyles = ["radiant", "classic", "guiding", "halo", "signature"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
     return `<span class="memorial-star-shape star-${style}" aria-hidden="true"></span>`;
   }
