@@ -193,9 +193,10 @@
     });
   });
 
-  function showAuth() {
+  function showAuth(forMemorial = false) {
     openModal(`
-      <h2 id="modalTitle">Skysbridge beitreten</h2>
+      <h2 id="modalTitle">${forMemorial ? "Anmelden, um ein Kind zu ehren" : "Skysbridge beitreten"}</h2>
+      ${forMemorial ? "<p>Zum Schutz jeder Geschichte melde dich bitte an oder erstelle ein Konto, bevor du einen Gedenkstern anlegst.</p>" : ""}
       <div class="tabs">
         <button class="button button-gold" id="loginTab">Anmelden</button>
         <button class="button button-outline" id="signupTab">Konto erstellen</button>
@@ -208,7 +209,7 @@
           <input type="password" name="password" required minlength="8" autocomplete="current-password">
         </label>
         <button class="button button-gold" type="submit">Anmelden</button>
-        <div class="notice" id="authStatus">Dein Konto und deine Aktivitäten in den Räumen sind standardmäßig privat.</div>
+        <div class="notice" id="authStatus">${forMemorial ? "Nach der Anmeldung öffnet sich das Formular für den Gedenkstern automatisch." : "Dein Konto und deine Aktivitäten in den Räumen sind standardmäßig privat."}</div>
       </form>
     `);
 
@@ -258,13 +259,28 @@
       setTimeout(async () => {
         closeModal();
         await refreshSession();
-        openMemberArea();
+        if (forMemorial && mode === "login" && currentUser) {
+          showMemorial();
+        } else {
+          openMemberArea();
+        }
       }, 700);
     };
   }
 
   document.querySelectorAll("[data-open-memorial]").forEach(button => {
-    button.addEventListener("click", showMemorial);
+    button.addEventListener("click", async () => {
+      if (!currentUser && db) {
+        const { data: { user } } = await db.auth.getUser();
+        if (user) currentUser = user;
+      }
+
+      if (currentUser) {
+        showMemorial();
+      } else {
+        showAuth(true);
+      }
+    });
   });
 
   function showMemorial() {
