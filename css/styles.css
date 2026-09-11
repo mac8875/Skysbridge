@@ -752,3 +752,20 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   .celestial-wall [data-star="sky"] .sky-symbol{width:70px;height:80px}
 }
 @media(prefers-reduced-motion:reduce){.ambient-star,.celestial-wall .memorial-star-shape,.celestial-wall [data-star="sky"] .sky-symbol{animation:none!important}}
+
+
+/* V63 — defined Milky Way without overpowering the memorial stars */
+.celestial-wall::after{
+  inset:-25% -13%;
+  opacity:.96;
+  background:
+    radial-gradient(ellipse at 47% 51%,rgba(202,218,231,.13) 0%,rgba(120,158,188,.085) 21%,rgba(57,101,137,.035) 43%,transparent 67%),
+    linear-gradient(151deg,transparent 30%,rgba(63,105,140,.025) 38%,rgba(145,177,201,.08) 45%,rgba(220,230,238,.105) 49%,rgba(119,157,187,.075) 54%,rgba(47,88,124,.022) 62%,transparent 70%);
+  filter:blur(15px);
+  transform:rotate(-2deg);
+}
+.ambient-star.milky-star{
+  z-index:1;
+  filter:blur(.12px);
+  box-shadow:0 0 calc(var(--size) * 3.8) color-mix(in srgb,var(--warmth) 68%,transparent);
+}
