@@ -26,27 +26,29 @@
     .search{width:min(220px,22vw);height:40px;padding:0 15px;border:1px solid rgba(245,217,149,.2);border-radius:999px;color:#fff;background:rgba(2,10,20,.7);outline:none}.search:focus{border-color:rgba(245,217,149,.62)}
     .hint{position:absolute;z-index:2;left:50%;bottom:24px;transform:translateX(-50%);padding:9px 14px;border-radius:999px;color:#b9c8d5;background:rgba(2,9,18,.62);backdrop-filter:blur(12px);font-size:12px;pointer-events:none;white-space:nowrap}
     .counter{position:absolute;z-index:2;left:24px;bottom:24px;color:#9fb1bf;font-size:12px}.counter strong{color:var(--gold-soft);font-weight:600}
+    .zodiac-nav{position:absolute;z-index:3;left:50%;bottom:58px;transform:translateX(-50%);display:flex;gap:6px;width:min(1040px,calc(100vw - 28px));padding:8px;overflow-x:auto;border:1px solid rgba(245,217,149,.14);border-radius:18px;background:rgba(2,9,18,.7);box-shadow:0 14px 44px rgba(0,0,0,.26);backdrop-filter:blur(15px);scrollbar-width:none}.zodiac-nav::-webkit-scrollbar{display:none}.zodiac-nav button{flex:0 0 auto;min-height:36px;padding:0 12px;font-size:12px}.zodiac-nav button.current{color:#171d24;background:linear-gradient(135deg,var(--gold-soft),var(--gold));border-color:transparent}
     .panel{position:absolute;z-index:4;right:24px;top:98px;width:min(340px,calc(100vw - 32px));padding:27px;border:1px solid rgba(245,217,149,.28);border-radius:23px;background:linear-gradient(160deg,rgba(10,34,57,.94),rgba(2,11,22,.97));box-shadow:0 28px 90px rgba(0,0,0,.52);backdrop-filter:blur(18px)}
     .panel[hidden]{display:none}.panel .close{position:absolute;right:12px;top:12px;width:34px;min-height:34px;padding:0;border:0;background:transparent;font-size:22px}.panel .eyebrow{margin:0 0 7px;color:var(--gold);font-size:10px;letter-spacing:.18em;text-transform:uppercase}.panel h2{margin:0;color:var(--gold-soft);font:600 42px/1 "Cormorant Garamond",serif}.panel p{color:#c1ced9;line-height:1.65}.panel small{color:#8196a8}
-    @media(max-width:800px){.topbar{align-items:flex-start;flex-wrap:wrap}.brand img{width:135px}.controls{width:100%;margin:0;overflow-x:auto;padding-bottom:2px}.search{min-width:150px;flex:1}.hint{bottom:18px;max-width:90vw;overflow:hidden;text-overflow:ellipsis}.counter{display:none}.panel{right:16px;top:145px}}
+    @media(max-width:800px){.topbar{align-items:flex-start;flex-wrap:wrap}.brand img{width:135px}.controls{width:100%;margin:0;overflow-x:auto;padding-bottom:2px}.search{min-width:150px;flex:1}.zodiac-nav{bottom:52px}.hint{bottom:12px;max-width:92vw;overflow:hidden;text-overflow:ellipsis}.counter{display:none}.panel{right:16px;top:145px}}
   </style>
 </head>
 <body>
 <div class="app">
   <canvas id="sky" aria-label="Interaktiver Demo-Sternenhimmel mit eintausend Gedenksternen"></canvas>
   <header class="topbar">
-    <div class="brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge"><span class="demo-badge">Vorschau</span></div>
+    <div class="brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge"><span class="demo-badge">360° Vorschau</span></div>
     <div class="controls" aria-label="Sternenhimmel steuern">
       <button class="count-button active" data-count="1000">1.000 Sterne</button>
       <button class="count-button" data-count="2000">2.000 Sterne</button>
       <input class="search" id="search" type="search" placeholder="Sky oder Nr. 742" aria-label="Demo-Stern suchen">
       <button class="icon-button" id="zoomOut" aria-label="Herauszoomen">−</button>
       <button class="icon-button" id="zoomIn" aria-label="Hineinzoomen">+</button>
-      <button id="reset">Alle zeigen</button>
+      <button id="reset">Sky zeigen</button>
     </div>
   </header>
   <div class="counter"><strong id="visibleCount">1.000</strong> Demo-Sterne · keine echten Einträge</div>
-  <div class="hint">Ziehen zum Bewegen · Mausrad oder Tasten zum Zoomen · Stern anklicken</div>
+  <nav class="zodiac-nav" id="zodiacNav" aria-label="Zu einem Sternzeichen springen"></nav>
+  <div class="hint">Endlos nach links oder rechts ziehen · Sternzeichen direkt auswählen · Stern anklicken</div>
   <aside class="panel" id="panel" hidden>
     <button class="close" id="closePanel" aria-label="Schließen">×</button>
     <p class="eyebrow">Kapazitätsvorschau</p>
@@ -62,8 +64,14 @@
   const panel = document.querySelector("#panel");
   const nameEl = document.querySelector("#starName");
   const metaEl = document.querySelector("#starMeta");
-  const world = { width: 9000, height: 5600 };
-  const view = { x: world.width / 2, y: world.height / 2, zoom: .16 };
+  const zodiac = [
+    ["♈","Widder"],["♉","Stier"],["♊","Zwillinge"],["♋","Krebs"],
+    ["♌","Löwe"],["♍","Jungfrau"],["♎","Waage"],["♏","Skorpion"],
+    ["♐","Schütze"],["♑","Steinbock"],["♒","Wassermann"],["♓","Fische"]
+  ];
+  const world = { width: 14400, height: 4200, sectorWidth: 1200 };
+  const leoIndex = 4;
+  const view = { x: (leoIndex + .5) * world.sectorWidth, y: world.height / 2, zoom: .58 };
   let count = 1000, stars = [], dragging = false, moved = false, start = null, raf = 0;
   const pointers = new Map();
 
@@ -77,17 +85,17 @@
 
   function makeStars(total) {
     const random = seededRandom(8875 + total);
-    const cols = total === 1000 ? 40 : 50;
-    const rows = Math.ceil(total / cols);
-    const cellW = world.width / cols;
-    const cellH = world.height / rows;
     const result = [];
     for (let i = 0; i < total; i++) {
-      const col = i % cols, row = Math.floor(i / cols);
-      const x = (col + .18 + random() * .64) * cellW;
-      const y = (row + .18 + random() * .64) * cellH;
+      const sector = i % zodiac.length;
+      const lane = Math.floor(i / zodiac.length);
+      const lanes = Math.ceil(total / zodiac.length);
+      const band = lane / Math.max(1, lanes - 1);
       result.push({
-        id:i + 1,x,y,
+        id:i + 1,
+        sector,
+        x:sector * world.sectorWidth + 90 + random() * (world.sectorWidth - 180),
+        y:260 + band * (world.height - 520) + (random() - .5) * 58,
         size:2.4 + random() * 4.6,
         alpha:.46 + random() * .5,
         phase:random() * Math.PI * 2,
@@ -97,7 +105,7 @@
       });
     }
     const sky = result[0];
-    Object.assign(sky,{id:0,x:world.width/2,y:world.height/2,size:13,alpha:1,style:5,name:"Sky"});
+    Object.assign(sky,{id:0,sector:leoIndex,x:(leoIndex+.5)*world.sectorWidth,y:world.height/2,size:13,alpha:1,style:5,name:"Sky"});
     return result;
   }
 
@@ -111,8 +119,18 @@
     requestDraw();
   }
 
+  function wrappedDelta(x) {
+    return ((x - view.x + world.width * 1.5) % world.width) - world.width / 2;
+  }
+
   function screen(star) {
-    return {x:(star.x-view.x)*view.zoom+innerWidth/2,y:(star.y-view.y)*view.zoom+innerHeight/2};
+    return {x:wrappedDelta(star.x)*view.zoom+innerWidth/2,y:(star.y-view.y)*view.zoom+innerHeight/2};
+  }
+
+  function normalizeView() {
+    view.x = ((view.x % world.width) + world.width) % world.width;
+    const verticalHalf = innerHeight / (2 * view.zoom);
+    view.y = Math.max(Math.min(world.height - verticalHalf, world.height - 250), Math.max(verticalHalf, 250));
   }
 
   function drawBackground() {
@@ -140,13 +158,26 @@
 
   function drawLeo() {
     const pts=[[-420,0],[-610,-250],[-570,-460],[-310,-560],[-100,-390],[-420,0],[0,80],[310,-40],[520,100],[0,80]];
-    ctx.save();ctx.translate(innerWidth/2,innerHeight/2);ctx.scale(view.zoom,view.zoom);
+    const skyPoint=screen(stars[0]);
+    if(skyPoint.x < -700 || skyPoint.x > innerWidth + 700) return;
+    ctx.save();ctx.translate(skyPoint.x,skyPoint.y);ctx.scale(view.zoom,view.zoom);
     ctx.strokeStyle="rgba(210,227,240,.17)";ctx.lineWidth=1/view.zoom;ctx.beginPath();
     pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();ctx.restore();
   }
 
+  function drawSectorLabels() {
+    zodiac.forEach((sign,index) => {
+      const p=screen({x:(index+.5)*world.sectorWidth,y:260});
+      if(p.x < -200 || p.x > innerWidth + 200) return;
+      ctx.textAlign="center";
+      ctx.fillStyle="rgba(205,221,234,.34)";
+      ctx.font="500 11px Inter";
+      ctx.fillText(`${sign[0]}  ${sign[1].toUpperCase()}`,p.x,Math.max(126,p.y));
+    });
+  }
+
   function draw(time=0) {
-    raf=0;drawBackground();drawLeo();
+    raf=0;drawBackground();drawSectorLabels();drawLeo();
     for(const star of stars){
       const p=screen(star);if(p.x<-30||p.y<-30||p.x>innerWidth+30||p.y>innerHeight+30)continue;
       const twinkle=.78+.22*Math.sin(time*star.speed+star.phase);
@@ -163,25 +194,34 @@
   }
 
   function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
-  function fitAll(){view.x=world.width/2;view.y=world.height/2;view.zoom=Math.min(innerWidth/world.width,innerHeight/world.height)*.88;requestDraw()}
+  function focusSky(){const sky=stars[0];view.x=sky.x;view.y=sky.y;view.zoom=innerWidth<700?.42:.58;normalizeView();updateCurrentSector();requestDraw()}
   function zoomAt(factor,cx=innerWidth/2,cy=innerHeight/2){
     const beforeX=(cx-innerWidth/2)/view.zoom+view.x,beforeY=(cy-innerHeight/2)/view.zoom+view.y;
-    view.zoom=Math.max(.06,Math.min(1.5,view.zoom*factor));
-    view.x=beforeX-(cx-innerWidth/2)/view.zoom;view.y=beforeY-(cy-innerHeight/2)/view.zoom;requestDraw();
+    view.zoom=Math.max(.16,Math.min(1.5,view.zoom*factor));
+    view.x=beforeX-(cx-innerWidth/2)/view.zoom;view.y=beforeY-(cy-innerHeight/2)/view.zoom;normalizeView();updateCurrentSector();requestDraw();
   }
-  function centerOn(star){view.x=star.x;view.y=star.y;view.zoom=Math.max(view.zoom,.62);requestDraw()}
+  function centerOn(star){view.x=star.x;view.y=star.y;view.zoom=Math.max(view.zoom,.62);normalizeView();updateCurrentSector();requestDraw()}
+  function goToSector(index){view.x=(index+.5)*world.sectorWidth;view.y=world.height/2;view.zoom=Math.max(view.zoom,.46);normalizeView();updateCurrentSector();requestDraw()}
+  function updateCurrentSector(){
+    const current=Math.floor((((view.x%world.width)+world.width)%world.width)/world.sectorWidth);
+    document.querySelectorAll("#zodiacNav button").forEach((button,index)=>button.classList.toggle("current",index===current));
+  }
+  function buildZodiacNav(){
+    const nav=document.querySelector("#zodiacNav");
+    zodiac.forEach((sign,index)=>{const button=document.createElement("button");button.type="button";button.textContent=`${sign[0]} ${sign[1]}`;button.addEventListener("click",()=>goToSector(index));nav.appendChild(button)});
+  }
   function hitTest(x,y){let best=null,distance=22;for(const star of stars){const p=screen(star);const d=Math.hypot(p.x-x,p.y-y);if(d<distance){distance=d;best=star}}return best}
   function openStar(star){nameEl.textContent=star.id===0?"Sky":`Demo-Stern ${String(star.id).padStart(4,"0")}`;metaEl.textContent=star.id===0?"Fester Mittelpunkt im Sternbild Löwe":"Demonstration eines anklickbaren Gedenksterns";panel.hidden=false}
 
   canvas.addEventListener("wheel",e=>{e.preventDefault();zoomAt(e.deltaY<0?1.13:.885,e.clientX,e.clientY)},{passive:false});
   canvas.addEventListener("pointerdown",e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});dragging=true;moved=false;start={x:e.clientX,y:e.clientY,vx:view.x,vy:view.y};canvas.classList.add("dragging")});
-  canvas.addEventListener("pointermove",e=>{if(!dragging||!start)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.hypot(dx,dy)>4)moved=true;view.x=start.vx-dx/view.zoom;view.y=start.vy-dy/view.zoom;requestDraw()});
+  canvas.addEventListener("pointermove",e=>{if(!dragging||!start)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.hypot(dx,dy)>4)moved=true;view.x=start.vx-dx/view.zoom;view.y=start.vy-dy/view.zoom;normalizeView();updateCurrentSector();requestDraw()});
   canvas.addEventListener("pointerup",e=>{pointers.delete(e.pointerId);if(!moved){const star=hitTest(e.clientX,e.clientY);if(star)openStar(star)}dragging=false;start=null;canvas.classList.remove("dragging")});
   canvas.addEventListener("pointercancel",()=>{dragging=false;start=null;canvas.classList.remove("dragging")});
-  document.querySelectorAll(".count-button").forEach(button=>button.addEventListener("click",()=>{count=Number(button.dataset.count);stars=makeStars(count);document.querySelectorAll(".count-button").forEach(b=>b.classList.toggle("active",b===button));document.querySelector("#visibleCount").textContent=count.toLocaleString("de-DE");canvas.setAttribute("aria-label",`Interaktiver Demo-Sternenhimmel mit ${count.toLocaleString("de-DE")} Gedenksternen`);fitAll()}));
-  document.querySelector("#zoomIn").onclick=()=>zoomAt(1.25);document.querySelector("#zoomOut").onclick=()=>zoomAt(.8);document.querySelector("#reset").onclick=fitAll;document.querySelector("#closePanel").onclick=()=>panel.hidden=true;
+  document.querySelectorAll(".count-button").forEach(button=>button.addEventListener("click",()=>{count=Number(button.dataset.count);stars=makeStars(count);document.querySelectorAll(".count-button").forEach(b=>b.classList.toggle("active",b===button));document.querySelector("#visibleCount").textContent=count.toLocaleString("de-DE");canvas.setAttribute("aria-label",`Interaktiver Demo-Sternenhimmel mit ${count.toLocaleString("de-DE")} Gedenksternen`);focusSky()});
+  document.querySelector("#zoomIn").onclick=()=>zoomAt(1.25);document.querySelector("#zoomOut").onclick=()=>zoomAt(.8);document.querySelector("#reset").onclick=focusSky;document.querySelector("#closePanel").onclick=()=>panel.hidden=true;
   document.querySelector("#search").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const raw=e.currentTarget.value.trim().toLowerCase();const id=raw==="sky"?0:Number(raw.replace(/\D/g,""));const star=stars.find(s=>s.id===id);if(star){centerOn(star);openStar(star)}});
-  stars=makeStars(count);addEventListener("resize",resize);resize();fitAll();
+  stars=makeStars(count);buildZodiacNav();addEventListener("resize",resize);resize();focusSky();
 })();
 </script>
 </body>
