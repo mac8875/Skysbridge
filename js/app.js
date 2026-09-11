@@ -490,17 +490,18 @@
       sky.appendChild(star);
     }
 
-    for (let index = 0; index < 46; index += 1) {
+    for (let index = 0; index < 72; index += 1) {
       const star = document.createElement("span");
       const x = random() * 112 - 6;
-      const diagonalCenter = 83 - x * .56;
-      const y = diagonalCenter + (random() - .5) * 18;
+      const diagonalCenter = 82 - x * .58;
+      const spread = random() < .78 ? 9 : 16;
+      const y = diagonalCenter + (random() - .5) * spread;
       star.className = "ambient-star milky-star";
       star.setAttribute("aria-hidden", "true");
       star.style.setProperty("--x", `${x.toFixed(2)}%`);
       star.style.setProperty("--y", `${y.toFixed(2)}%`);
-      star.style.setProperty("--size", `${(.55 + random() * 1.45).toFixed(2)}px`);
-      star.style.setProperty("--alpha", (.25 + random() * .56).toFixed(2));
+      star.style.setProperty("--size", `${(.5 + random() * 1.25).toFixed(2)}px`);
+      star.style.setProperty("--alpha", (.22 + random() * .5).toFixed(2));
       star.style.setProperty("--duration", `${(5.5 + random() * 8).toFixed(2)}s`);
       star.style.setProperty("--delay", `${(-random() * 10).toFixed(2)}s`);
       star.style.setProperty("--warmth", random() > .74 ? "#f3e6c5" : "#dfefff");

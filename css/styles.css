@@ -570,19 +570,23 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   pointer-events:none;
   background:radial-gradient(ellipse at 50% 112%,rgba(58,118,162,.16),transparent 52%);
 }
-.leo-map{
+.constellation-map{
   position:absolute;
-  inset:11% 13% 12%;
   z-index:0;
-  width:74%;
-  height:72%;
   overflow:visible;
-  opacity:.7;
   pointer-events:none;
-  filter:drop-shadow(0 0 7px rgba(244,215,146,.22));
+  opacity:.14;
+  filter:drop-shadow(0 0 4px rgba(204,226,243,.16));
 }
-.leo-map polyline{fill:none;stroke:rgba(244,215,146,.32);stroke-width:.42;stroke-dasharray:1.2 1.8;vector-effect:non-scaling-stroke}
-.leo-map circle{fill:#f8efd3;filter:drop-shadow(0 0 3px rgba(244,215,146,.8))}
+.constellation-map polyline{fill:none;stroke:rgba(195,218,237,.32);stroke-width:.34;vector-effect:non-scaling-stroke}
+.constellation-map circle{fill:#e9f3fb;filter:drop-shadow(0 0 2px rgba(216,235,250,.64))}
+.leo-map{inset:11% 13% 12%;width:74%;height:72%;opacity:.3;filter:drop-shadow(0 0 5px rgba(244,215,146,.2))}
+.leo-map polyline{stroke:rgba(244,215,146,.34);stroke-width:.38}
+.leo-map circle{fill:#f8efd3;filter:drop-shadow(0 0 3px rgba(244,215,146,.75))}
+.constellation-map--cancer{left:2%;top:5%;width:25%;height:24%;transform:rotate(-8deg)}
+.constellation-map--virgo{right:1%;top:5%;width:29%;height:28%;transform:rotate(7deg)}
+.constellation-map--libra{left:2%;bottom:3%;width:27%;height:27%;transform:rotate(5deg)}
+.constellation-map--gemini{right:2%;bottom:2%;width:25%;height:29%;transform:rotate(-7deg)}
 .constellation-label{
   position:absolute;
   left:48%;
@@ -673,6 +677,8 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 @media(max-width:700px){
   .celestial-wall{min-height:580px;border-radius:25px}
   .leo-map{inset:10% 1% 18%;width:98%;height:68%}
+  .constellation-map--cancer,.constellation-map--virgo{top:3%;width:34%}
+  .constellation-map--libra,.constellation-map--gemini{bottom:1%;width:34%}
   .constellation-label{top:20%}
   .celestial-wall [data-star="sky"]{--star-x:46%;--star-y:49%}
   .celestial-wall .memorial-card.is-viewer-center{--star-x:46%;--star-y:49%;width:142px;height:142px}
@@ -761,9 +767,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   animation:naturalTwinkle var(--duration) ease-in-out var(--delay) infinite;
 }
 .ambient-star:nth-of-type(9n){filter:blur(.25px)}
-.leo-map{opacity:.27;filter:drop-shadow(0 0 5px rgba(210,225,239,.16))}
-.leo-map polyline{stroke:rgba(195,214,231,.3);stroke-width:.34;stroke-dasharray:none}
-.leo-map circle{fill:#e9f3fb;filter:drop-shadow(0 0 2px rgba(216,235,250,.7))}
+.leo-map{opacity:.3;filter:drop-shadow(0 0 5px rgba(244,215,146,.18))}
 .constellation-label{color:rgba(211,226,238,.48);font-size:10px;letter-spacing:.24em}
 .celestial-wall .memorial-card{animation:none}
 .celestial-wall .memorial-star-shape{width:54px;height:61px;animation:featuredStarGlow 5.8s ease-in-out infinite}
@@ -796,20 +800,20 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 @media(prefers-reduced-motion:reduce){.ambient-star,.celestial-wall .memorial-star-shape,.celestial-wall [data-star="sky"] .sky-symbol{animation:none!important}}
 
 
-/* V63 — defined Milky Way without overpowering the memorial stars */
+/* V72 — a narrow, layered Milky Way with quiet surrounding constellations */
 .celestial-wall::after{
-  inset:-25% -13%;
-  opacity:.96;
+  inset:-32% -18%;
+  opacity:.9;
   background:
-    radial-gradient(ellipse at 47% 51%,rgba(202,218,231,.13) 0%,rgba(120,158,188,.085) 21%,rgba(57,101,137,.035) 43%,transparent 67%),
-    linear-gradient(151deg,transparent 30%,rgba(63,105,140,.025) 38%,rgba(145,177,201,.08) 45%,rgba(220,230,238,.105) 49%,rgba(119,157,187,.075) 54%,rgba(47,88,124,.022) 62%,transparent 70%);
-  filter:blur(15px);
-  transform:rotate(-2deg);
+    radial-gradient(ellipse at 48% 50%,rgba(235,239,238,.105) 0%,rgba(150,183,206,.07) 17%,transparent 45%),
+    linear-gradient(146deg,transparent 38%,rgba(76,119,151,.025) 42%,rgba(150,181,202,.07) 46%,rgba(232,236,232,.12) 49%,rgba(167,193,209,.075) 52%,rgba(68,108,140,.025) 57%,transparent 62%);
+  filter:blur(12px);
+  transform:rotate(-1deg);
 }
 .ambient-star.milky-star{
   z-index:1;
-  filter:blur(.12px);
-  box-shadow:0 0 calc(var(--size) * 3.8) color-mix(in srgb,var(--warmth) 68%,transparent);
+  filter:blur(.08px);
+  box-shadow:0 0 calc(var(--size) * 3.2) color-mix(in srgb,var(--warmth) 65%,transparent);
 }
 
 
