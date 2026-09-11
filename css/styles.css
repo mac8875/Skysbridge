@@ -874,6 +874,51 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .how-note .button-outline{color:var(--gold-soft);border-color:rgba(244,215,146,.55);background:#061b2d}
 .how-note .button-outline:hover{color:#fff0bd;border-color:#f4d792;background:#092a43}
 
+/* V70 — one navy-and-gold action system on every light surface */
+.story-section .button-outline,
+.support-paths .button-outline,
+.help-page .button-outline,
+.privacy-section .button-outline,
+.guidelines-page .button-outline,
+.seo-content .button-outline{
+  color:var(--gold-soft);
+  border-color:rgba(244,215,146,.58);
+  background:linear-gradient(155deg,#0b304b 0%,#061b2d 72%,#041522 100%);
+  box-shadow:0 10px 26px rgba(5,20,33,.16),inset 0 1px rgba(255,255,255,.045);
+}
+.story-section .button-outline:hover,
+.support-paths .button-outline:hover,
+.help-page .button-outline:hover,
+.privacy-section .button-outline:hover,
+.guidelines-page .button-outline:hover,
+.seo-content .button-outline:hover{
+  color:#fff0bd;
+  border-color:#f4d792;
+  background:linear-gradient(155deg,#0d3a59 0%,#08253b 72%,#051a2a 100%);
+}
+
+/* Remove the remaining grey card surfaces across the public pages. */
+.support-card,
+.help-card,
+.help-disclaimer{
+  color:var(--ivory);
+  border-color:rgba(244,215,146,.32);
+  background:
+    radial-gradient(circle at 88% 8%,rgba(59,112,151,.18),transparent 35%),
+    linear-gradient(155deg,#0b304b 0%,#061b2d 72%,#041522 100%);
+  box-shadow:0 22px 58px rgba(5,20,33,.2),inset 0 1px rgba(255,255,255,.045);
+}
+.support-card .eyebrow,
+.help-card .eyebrow{color:var(--gold-soft)}
+.support-card h3,
+.help-card h2,
+.help-disclaimer strong{color:var(--gold-soft)}
+.support-card p,
+.help-card p,
+.help-disclaimer{color:#eef1f2}
+.help-card .text-link{color:var(--gold-soft);text-decoration-color:rgba(244,215,146,.7)}
+.help-card .text-link:hover{color:#fff0bd}
+
 .sky-story-page{
   position:relative;
   isolation:isolate;
