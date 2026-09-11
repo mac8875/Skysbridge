@@ -307,7 +307,7 @@
         </fieldset>
         <label>
           <input type="checkbox" name="public_requested">
-          Request a place on the public Wall of Stars
+          Request a place in the public star-filled sky
         </label>
         <button class="button button-gold">Submit privately for review</button>
         <div class="notice" id="memorialStatus">You remain in control of publication.</div>
@@ -366,7 +366,7 @@
     let star = {
       name: "Sky",
       story:
-        "Sky lived only a short time, but he changed our lives forever. His life taught us that love is not measured in years, but in the depth of the bond we share.\n\nAfter losing him, we discovered how lonely grief can become. Many parents carry their pain in silence, believing they are alone.\n\nSkysbridge was created in Sky’s memory so that children who left too soon can be named, honoured and remembered with dignity.\n\nSky is the first star on our Wall of Stars. His light became the beginning of a place where every child’s story may continue to shine."
+        "Sky lived only a short time, but he changed our lives forever. His life taught us that love is not measured in years, but in the depth of the bond we share.\n\nAfter losing him, we discovered how lonely grief can become. Many parents carry their pain in silence, believing they are alone.\n\nSkysbridge was created in Sky’s memory so that children who left too soon can be named, honoured and remembered with dignity.\n\nSky is the first star in A Sky Full of Stars. His light became the beginning of a place where every child’s story may continue to shine."
     };
 
     if (db) {
@@ -652,7 +652,7 @@
     });
 
     if (search && !rows.length) status.textContent = `No memorial found for “${document.querySelector("#memorialSearch").value.trim()}”.`;
-    else if (viewerCenter) status.textContent = `${viewerCenter.child_name || "Your child's light"} is at the centre of your Wall of Stars.`;
+    else if (viewerCenter) status.textContent = `${viewerCenter.child_name || "Your child's light"} is at the centre of your own sky full of stars.`;
     else if (approvedMemorials.length) status.textContent = `Sky and ${approvedMemorials.length} more ${approvedMemorials.length === 1 ? "light" : "lights"}.`;
     else status.textContent = "Sky is the first light. More memorials will appear after family consent and moderator approval.";
   }
@@ -1007,7 +1007,7 @@
     card.dataset.adminPublishedMemorials = "true";
     card.innerHTML = `
       <h3>Published stars</h3>
-      <p class="muted">Manage memorials that are currently visible on the Wall of Stars. Sky is permanently protected.</p>
+      <p class="muted">Manage memorials that are currently visible in A Sky Full of Stars. Sky is permanently protected.</p>
       <div id="publishedMemorials"><p class="muted">Loading…</p></div>
     `;
     grid.appendChild(card);
