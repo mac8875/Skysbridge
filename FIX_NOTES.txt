@@ -5,4 +5,4 @@ Fixed:
 - Honor a child now opens the login flow instead of appearing unresponsive.
 - A Supabase loading problem can no longer stop the rest of the page JavaScript.
 - Sky star, mobile navigation, modal close buttons and community actions remain active.
-- Footer remains: © 2026 Sky's Bridge by Marco Freund. All rights reserved.
+- Footer remains: © 2026 Sky's Bridge by M. F.. All rights reserved.
