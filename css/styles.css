@@ -430,6 +430,30 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   }
   .main-nav>a.is-current{color:var(--gold-soft)}
 }
+
+/* Full bridge artwork as a softly feathered watermark on light sections. */
+.story-section::before,
+.support-paths::before,
+.help-page::before,
+.privacy-section::before{
+  inset:3% -4%;
+  background:transparent url("../assets/skysbridge-logo.png") center 18%/min(1080px,88vw) auto no-repeat;
+  opacity:.065;
+  filter:saturate(.5) contrast(.9);
+  mix-blend-mode:multiply;
+  -webkit-mask:radial-gradient(ellipse at center,#000 30%,rgba(0,0,0,.74) 55%,transparent 78%);
+  mask:radial-gradient(ellipse at center,#000 30%,rgba(0,0,0,.74) 55%,transparent 78%);
+}
+
+@media(max-width:700px){
+  .story-section::before,
+  .support-paths::before,
+  .help-page::before,
+  .privacy-section::before{
+    background-size:145vw auto;
+    opacity:.045;
+  }
+}
 .button-outline{border-color:rgba(244,215,146,.32);box-shadow:inset 0 1px rgba(255,255,255,.035)}
 .button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 15px 36px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.3)}
 .seo-callout,.how-note{box-shadow:0 24px 65px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.045)}
