@@ -400,7 +400,7 @@
           <span class="star-remembrance-symbol" aria-hidden="true"><img src="assets/memorial-star.svg?v=55" alt=""></span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
-          ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p><p class="memorial-detail-meta">Expected due date: <time datetime="2019-08-18">18 August 2019</time></p>' : ""}
+          ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
