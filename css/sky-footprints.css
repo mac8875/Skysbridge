@@ -1,0 +1,5 @@
+/* Display a detail of the original photograph without changing Sky's prints. */
+.sky-footprints{width:min(100%,20rem);margin:0 auto 2rem;text-align:center}
+.sky-footprints-image{position:relative;aspect-ratio:450 / 370;overflow:hidden;border:1px solid rgba(213,180,115,.4);border-radius:.5rem;background:#e5dfd5}
+.sky-footprints-image img{position:absolute;width:192%;max-width:none;height:auto;left:-33.333333%;top:-81.081081%;display:block}
+.sky-footprints figcaption{margin-top:.75rem;font-size:.875rem;line-height:1.5;color:var(--gold-soft,#e4c58c)}
