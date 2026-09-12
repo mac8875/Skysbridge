@@ -1008,3 +1008,6 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .celestial-wall [data-star="sky"].is-anniversary .memorial-symbol{height:94px;margin-bottom:14px}
 .celestial-wall [data-star="sky"].is-anniversary .memorial-candle-image{width:42px;height:86px}
 .star-remembrance.is-anniversary .star-remembrance-symbol .memorial-candle-image{width:68px;height:150px;object-fit:contain}
+
+/* Resolve the signed-in family's centre before revealing memorial lights. */
+#memorialGrid[aria-busy="true"] .memorial-card{visibility:hidden;pointer-events:none}

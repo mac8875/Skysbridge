@@ -13,9 +13,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=85">
+  <link rel="stylesheet" href="css/styles.css?v=86">
   <link rel="stylesheet" href="css/typography.css?v=86">
   <link rel="stylesheet" href="css/sky-footprints.css?v=1">
+  <noscript><style>#memorialGrid[aria-busy="true"] .memorial-card{visibility:visible;pointer-events:auto}</style></noscript>
 </head>
 <body>
   <header class="site-header">
@@ -90,7 +91,7 @@
         </label>
       </div>
       <p class="wall-status" id="wallStatus" aria-live="polite">Loading memorials…</p>
-      <div class="memorial-grid celestial-wall" id="memorialGrid">
+      <div class="memorial-grid celestial-wall" id="memorialGrid" aria-busy="true">
         <svg class="constellation-map constellation-map--cancer" viewBox="0 0 100 100" aria-hidden="true">
           <polyline points="18,28 34,38 50,31 65,43 81,34"></polyline>
           <circle cx="18" cy="28" r=".8"></circle><circle cx="34" cy="38" r=".65"></circle>
@@ -238,6 +239,6 @@
   <script src="js/config.js?v=26-1"></script>
   <script src="js/sky-remembrance.js?v=1"></script>
   <script src="js/language-switch.js?v=69"></script>
-  <script src="js/app.js?v=76"></script>
+  <script src="js/app.js?v=77"></script>
 </body>
 </html>

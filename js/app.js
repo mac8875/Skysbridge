@@ -519,6 +519,12 @@
 
   let approvedMemorials = [];
   let viewerMemorialIds = new Set();
+  let memorialLoadGeneration = 0;
+  let wallUserId;
+
+  function setWallLoading(loading) {
+    document.querySelector("#memorialGrid")?.setAttribute("aria-busy", String(loading));
+  }
 
   function sameMonthAndDay(value, today = new Date()) {
     if (!value) return false;
@@ -583,10 +589,11 @@
     `, "star-modal-card");
   }
 
-  function renderApprovedMemorials() {
+  function renderApprovedMemorials(resolved = false) {
     const grid = document.querySelector("#memorialGrid");
     const status = document.querySelector("#wallStatus");
     if (!grid || !status) return;
+    if (grid.getAttribute("aria-busy") === "true" && resolved !== true) return;
 
     grid.querySelectorAll("[data-public-memorial]").forEach(card => card.remove());
 
@@ -666,15 +673,22 @@
   async function loadApprovedMemorials() {
     const status = document.querySelector("#wallStatus");
     if (!status) return;
+    const generation = ++memorialLoadGeneration;
+    setWallLoading(true);
     if (!db) {
-      renderApprovedMemorials();
+      viewerMemorialIds = new Set();
+      renderApprovedMemorials(true);
+      setWallLoading(false);
       return;
     }
 
     status.textContent = "Loading memorials…";
-    viewerMemorialIds = new Set();
+    let nextViewerMemorialIds = new Set();
 
-    const { data: { user } } = await db.auth.getUser();
+    try {
+    const { data: { user }, error: userError } = await db.auth.getUser();
+    if (userError) throw userError;
+    if (generation !== memorialLoadGeneration) return;
     if (user) {
       const ownResult = await db
         .from("memorials")
@@ -683,9 +697,8 @@
         .eq("approved", true)
         .eq("public_requested", true);
 
-      if (!ownResult.error) {
-        viewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
-      }
+      if (ownResult.error) throw ownResult.error;
+      nextViewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
     }
     let result = await db
       .from("memorials")
@@ -703,14 +716,22 @@
         .order("created_at", { ascending: false });
     }
 
-    if (result.error) {
-      approvedMemorials = [];
-      status.textContent = "The public memorials could not be loaded right now. Sky remains visible as the first light.";
-      return;
-    }
+    if (generation !== memorialLoadGeneration) return;
+    if (result.error) throw result.error;
 
+    viewerMemorialIds = nextViewerMemorialIds;
     approvedMemorials = result.data || [];
-    renderApprovedMemorials();
+    renderApprovedMemorials(true);
+    } catch (error) {
+      if (generation !== memorialLoadGeneration) return;
+      console.error("Memorial loading error:", error);
+      viewerMemorialIds = new Set();
+      approvedMemorials = [];
+      renderApprovedMemorials(true);
+      status.textContent = "The public memorials could not be loaded right now. Sky remains visible as the first light.";
+    } finally {
+      if (generation === memorialLoadGeneration) setWallLoading(false);
+    }
   }
 
   document.querySelector("#memorialSearch")?.addEventListener("input", renderApprovedMemorials);
@@ -1405,10 +1426,19 @@
   loadApprovedMemorials();
 
   if (db) {
-    db.auth.onAuthStateChange(() => {
+    db.auth.onAuthStateChange((event, session) => {
+      const nextUserId = session?.user?.id || null;
+      const accountChanged = ["INITIAL_SESSION", "SIGNED_IN", "SIGNED_OUT"].includes(event) && wallUserId !== nextUserId;
+      if (accountChanged) {
+        wallUserId = nextUserId;
+        ++memorialLoadGeneration;
+        setWallLoading(true);
+      }
       window.setTimeout(async () => {
-        await refreshSession();
-        await loadApprovedMemorials();
+        await Promise.all([
+          refreshSession(),
+          accountChanged ? loadApprovedMemorials() : Promise.resolve()
+        ]);
       }, 0);
     });
 
