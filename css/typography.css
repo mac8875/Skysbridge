@@ -45,6 +45,7 @@ main p,main li,.hero-copy .hero-intro,.hero-copy>p:last-of-type,
   font-size:var(--type-body);line-height:1.65;
 }
 .help-card h3{color:var(--gold-soft)}
+.story-section .section-heading>.eyebrow,.help-hero>.eyebrow,.help-region-heading>.eyebrow{color:#875514}
 main p{margin:0 0 1rem}
 main p:last-child{margin-bottom:0}
 .story-text,.sky-story-copy{font-family:Inter,Arial,sans-serif;font-weight:400;letter-spacing:0}
@@ -99,7 +100,7 @@ footer nav,footer p,.notice,.memory-intro,.star-choice>span:last-child{
 .guideline-card{justify-content:flex-start}
 .support-card p,.help-card p{margin:0 0 1.5rem}
 .support-card .button,.help-card .text-link{margin-top:auto}
-.account-guide{margin-bottom:var(--space-section);padding-bottom:var(--space-section)}
+.account-guide{margin-bottom:2rem;padding-bottom:2rem}
 .how-note,.seo-callout,.help-disclaimer{margin-top:2rem;margin-bottom:0}
 .seo-content h2{margin-top:2rem;margin-bottom:1rem}
 .seo-content>h2:first-child,.seo-callout h2{margin-top:0}
