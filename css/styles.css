@@ -998,3 +998,13 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   .hero-copy .hero-intro{font-size:16px;line-height:1.65}
   .section-heading h2,.story-layout h2,.community-section>.section-heading h2{font-size:clamp(30px,8vw,36px);line-height:1.12}
 }
+
+/* Sky's expected birthday is used only for the annual brighter light. */
+.celestial-wall [data-star="sky"].is-birthday .sky-symbol,
+.star-remembrance.is-birthday .star-remembrance-symbol img{
+  filter:brightness(1.3) drop-shadow(0 0 15px #fff7d5) drop-shadow(0 0 42px rgba(232,181,86,.95));
+  animation:none;
+}
+.celestial-wall [data-star="sky"].is-anniversary .memorial-symbol{height:94px;margin-bottom:14px}
+.celestial-wall [data-star="sky"].is-anniversary .memorial-candle-image{width:42px;height:86px}
+.star-remembrance.is-anniversary .star-remembrance-symbol .memorial-candle-image{width:68px;height:150px;object-fit:contain}
