@@ -83,7 +83,7 @@ footer nav,footer p,.notice,.memory-intro,.star-choice>span:last-child{
 .section-heading h2,.wall-first-intro h2,.help-region-heading h2{margin-bottom:1rem}
 .wall-first-intro p:last-child,.help-hero>p:last-child{margin-top:0}
 .hero-grid{gap:2rem}
-.logo-panel{margin-bottom:calc(-1 * var(--space-section))}
+.logo-panel{margin-top:0;margin-bottom:calc(-1 * var(--space-section))}
 .actions,.seo-actions,.how-actions,.wall-primary-actions,.community-login{
   gap:.75rem;margin-top:1.5rem;
 }
