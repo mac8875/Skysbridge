@@ -686,8 +686,17 @@
     let nextViewerMemorialIds = new Set();
 
     try {
-    const { data: { user }, error: userError } = await db.auth.getUser();
-    if (userError) throw userError;
+    // Public stars are available to guests even when no auth session exists.
+    let user = null;
+    try {
+      const authResult = await db.auth.getUser();
+      if (!authResult.error) user = authResult.data?.user || null;
+      else if (authResult.error.name !== "AuthSessionMissingError") {
+        console.warn("Star ownership lookup unavailable:", authResult.error);
+      }
+    } catch (authError) {
+      console.warn("Star ownership lookup unavailable:", authError);
+    }
     if (generation !== memorialLoadGeneration) return;
     if (user) {
       const ownResult = await db
@@ -697,8 +706,8 @@
         .eq("approved", true)
         .eq("public_requested", true);
 
-      if (ownResult.error) throw ownResult.error;
-      nextViewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
+      if (ownResult.error) console.warn("Star ownership lookup unavailable:", ownResult.error);
+      else nextViewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
     }
     let result = await db
       .from("memorials")
