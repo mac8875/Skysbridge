@@ -390,7 +390,7 @@
       star.story = `${personalSkyOpening}\n\n${star.story || ""}`.trim();
     }
 
-    const starName = escapeHtml(star.name || "A child remembered");
+    const starName = escapeHtml(slug === "sky" ? "Sky" : (star.name || "A child remembered"));
     const storyHtml = renderStoryParagraphs(star.story);
 
     openModal(`
@@ -400,7 +400,13 @@
           <span class="star-remembrance-symbol" aria-hidden="true"><img src="assets/memorial-star.svg?v=55" alt=""></span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
+          ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p>' : ""}
         </header>
+
+        ${slug === "sky" ? `<figure class="sky-footprints">
+          <div class="sky-footprints-image"><img src="assets/sky-footprints-original.jpg" width="864" height="1536" alt="Sky’s two blue footprints, preserved on paper" decoding="async"></div>
+          <figcaption>Sky’s footprints</figcaption>
+        </figure>` : ""}
 
         <div class="star-story-copy">
           ${storyHtml}
