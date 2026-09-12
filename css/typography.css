@@ -1,0 +1,129 @@
+/* Shared type scale and spacing for every language and public page. */
+:root{
+  --type-title:clamp(2.125rem,calc(1.5rem + 2.4vw),3.5rem);
+  --type-section:clamp(1.75rem,calc(1.25rem + 1.6vw),2.5rem);
+  --type-card:clamp(1.5rem,calc(1.3rem + .5vw),1.75rem);
+  --type-body:1rem;
+  --type-label:.875rem;
+  --space-section:clamp(3rem,calc(2rem + 2.4vw),4.5rem);
+  --space-heading:2rem;
+  --space-card:clamp(1.5rem,calc(1rem + 1.2vw),2rem);
+}
+body{font-family:Inter,Arial,sans-serif;font-size:var(--type-body);line-height:1.65}
+h1,h2,h3,
+html[lang="de"] h1,html[lang="de"] h2,html[lang="de"] h3{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-weight:600;
+  letter-spacing:0;
+  hyphens:none;
+  word-break:normal;
+  text-wrap:balance;
+}
+h1,.hero h1,.help-hero h1,.sky-story-article h1,
+.guidelines-page .section-heading h1,.privacy-section .story-layout h1{
+  font-size:var(--type-title);line-height:1.12;margin:0 0 1rem;
+}
+h2,.section h2,.section-heading h2,.story-layout h2,
+.wall-first-intro h2,.help-region-heading h2,
+.community-section>.section-heading h2,
+.subheading h2,.admin-heading h2,.room-view-header h2,
+.memorial-detail-card h2,.star-remembrance-header h2{
+  font-size:var(--type-section);line-height:1.18;margin:0 0 1rem;
+}
+h3,.room-card h3,.dashboard-card h3,.admin-card h3,
+.support-card h3,.guideline-card h3,.guidelines-page .guideline-card h3,
+.how-steps .room-card h3,.how-note h3,.memory-section h3,
+.help-card h2,.help-card h3{
+  font-size:var(--type-card);line-height:1.25;margin:0 0 1rem;
+}
+main p,main li,.hero-copy .hero-intro,.hero-copy>p:last-of-type,
+.wall-first-intro p:last-child,.section-heading>p:last-child,.story-text,.sky-story-copy,
+.star-story-copy,.memorial-detail-story,.help-hero>p:last-child,
+.help-region-heading>p:last-child,.guideline-card p,
+.how-steps .room-card p,.support-card p,.help-card p,
+.seo-content p,.seo-content li,.how-note p{
+  font-size:var(--type-body);line-height:1.65;
+}
+.help-card h3{color:var(--gold-soft)}
+main p{margin:0 0 1rem}
+main p:last-child{margin-bottom:0}
+.story-text,.sky-story-copy{font-family:Inter,Arial,sans-serif;font-weight:400;letter-spacing:0}
+.story-text p,.sky-story-copy p,.star-story-copy p,.memorial-detail-story p{margin:0 0 1rem}
+.eyebrow,.hero-copy .eyebrow,.help-card .eyebrow,.room-card>span,
+.wall-controls label,.form-grid label,.memory-form label,.star-picker legend{
+  font-size:var(--type-label);line-height:1.45;
+}
+.eyebrow,.hero-copy .eyebrow,.help-card .eyebrow{
+  letter-spacing:.12em;margin:0 0 .75rem;
+}
+.hero-copy .hero-note{font-size:var(--type-label);line-height:1.5;margin:1.5rem auto 0}
+.button,.text-link{font-size:var(--type-body);line-height:1.4}
+.button{padding:.8125rem 1.3125rem;max-width:100%;text-align:center}
+.main-nav a{font-size:var(--type-label);line-height:1.4}
+.main-nav .button{font-size:var(--type-label)}
+footer nav,footer p,.notice,.memory-intro,.star-choice>span:last-child{
+  font-size:var(--type-label);line-height:1.55;
+}
+.section,.hero,.hero.how-hero,.hero.seo-hero,.section.help-hero,
+.section.help-region,.sky-story-page{
+  padding-top:var(--space-section);padding-bottom:var(--space-section);
+}
+.hero-copy,.hero.how-hero .hero-copy,.hero.seo-hero .hero-copy{
+  max-width:48rem;margin-inline:auto;
+}
+.hero-copy .hero-intro,.hero-copy>p:last-of-type,
+.wall-first-intro p:last-child,.section-heading>p,
+.help-hero>p:last-child,.help-region-heading>p:last-child{
+  max-width:42rem;margin-inline:auto;
+}
+.section-heading,.wall-first-intro,.help-region-heading,
+.community-section>.section-heading,.account-guide .section-heading{
+  max-width:48rem;margin:0 auto var(--space-heading);
+}
+.section-heading h2,.wall-first-intro h2,.help-region-heading h2{margin-bottom:1rem}
+.wall-first-intro p:last-child,.help-hero>p:last-child{margin-top:0}
+.hero-grid{gap:2rem}
+.logo-panel{margin-bottom:calc(-1 * var(--space-section))}
+.actions,.seo-actions,.how-actions,.wall-primary-actions,.community-login{
+  gap:.75rem;margin-top:1.5rem;
+}
+.story-layout{gap:2rem}
+.room-grid,.support-grid,.help-directory,.guideline-grid{gap:1.25rem}
+.room-card,.support-card,.help-card,.guideline-card,
+.guidelines-page .guideline-card,.how-steps .room-card,
+.how-note,.seo-callout,.memory-section{
+  padding:var(--space-card);
+}
+.support-card,.help-region .help-card,.guideline-card,
+.how-steps .room-card{min-height:0}
+.guideline-card{justify-content:flex-start}
+.support-card p,.help-card p{margin:0 0 1.5rem}
+.support-card .button,.help-card .text-link{margin-top:auto}
+.account-guide{margin-bottom:var(--space-section);padding-bottom:var(--space-section)}
+.how-note,.seo-callout,.help-disclaimer{margin-top:2rem;margin-bottom:0}
+.seo-content h2{margin-top:2rem;margin-bottom:1rem}
+.seo-content>h2:first-child,.seo-callout h2{margin-top:0}
+.sky-story-article{max-width:46rem}
+.sky-story-subtitle,.star-remembrance-subtitle{
+  font-size:1.25rem;line-height:1.45;margin:0 auto 2rem;
+}
+.sky-story-emblem{width:5rem;height:5.75rem;margin-bottom:1rem}
+.sky-story-divider{margin:2rem auto}
+.star-story-copy,.memorial-detail-story{margin-top:1.5rem}
+.star-story-divider{margin:2rem 0}
+.memory-intro{margin:.75rem auto 1.5rem}
+.contact-section h2{font-size:var(--type-section);line-height:1.18}
+.contact-section h2 a{white-space:normal;overflow-wrap:anywhere}
+footer{padding:2rem 1.5rem}
+@media(max-width:600px){
+  :root{--space-heading:1.5rem}
+  .section,.hero,.sky-story-page{padding-left:1.5rem;padding-right:1.5rem}
+  .hero-copy .hero-intro{font-size:var(--type-body);line-height:1.65}
+  .logo-panel{margin-bottom:calc(-1 * var(--space-section))}
+  .contact-section h2{font-size:clamp(1.125rem,5.3vw,1.5rem)}
+  .contact-section h2 a{white-space:nowrap;letter-spacing:-.025em}
+  .how-note h3,.memory-section h3{font-size:var(--type-card)}
+  .star-story-copy{font-size:var(--type-body);line-height:1.65}
+  .star-remembrance-header h2{font-size:var(--type-section)}
+  .main-nav a{font-size:.9375rem}
+}
