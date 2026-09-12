@@ -989,3 +989,11 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
  .brand img{max-width:100%}
  .header-tools{margin-left:auto}
 }
+
+/* Readable, quieter typography on small screens. */
+@media(max-width:600px){
+  .hero h1,.help-hero h1{font-size:clamp(32px,9vw,38px);line-height:1.08}
+  h1,h2,h3,html[lang="de"] h1,html[lang="de"] h2,html[lang="de"] h3{hyphens:none;word-break:normal}
+  .hero-copy .hero-intro{font-size:16px;line-height:1.65}
+  .section-heading h2,.story-layout h2,.community-section>.section-heading h2{font-size:clamp(30px,8vw,36px);line-height:1.12}
+}
