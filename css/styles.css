@@ -9,6 +9,10 @@
   --success:#b8efca;--danger:#ffbcbc
 }
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ivory);background:linear-gradient(180deg,#071b2d 0%,var(--night) 58%,#020a12 100%);font-family:Inter,Arial,sans-serif}
+/* Keep long names and German compounds within their available space. */
+h1,h2,h3,p,a,button,label{overflow-wrap:anywhere}
+html[lang="de"] h1,html[lang="de"] h2,html[lang="de"] h3{hyphens:auto}
+.hero-copy,.section-heading,.story-layout>*,.room-card,.help-card,.support-card{min-width:0}
 a{color:inherit}button,input,textarea{font:inherit}
 .site-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px max(20px,calc((100vw - 1400px)/2));border-bottom:1px solid rgba(232,181,86,.14);background:rgba(5,22,36,.91);backdrop-filter:blur(16px)}
 .brand{display:flex;align-items:center;text-decoration:none;min-width:205px}.brand img{display:block;width:min(245px,24vw);height:64px;object-fit:contain;object-position:left center;filter:drop-shadow(0 0 15px rgba(232,181,86,.14))}
@@ -33,6 +37,7 @@ a{color:inherit}button,input,textarea{font:inherit}
 .section{padding:100px max(24px,calc((100vw - var(--max))/2))}.section-heading{max-width:730px;margin:0 auto 54px;text-align:center}
 .section-heading h2,.story-layout h2,.contact-section h2,.subheading h2,.admin-heading h2,.room-view-header h2{font-size:clamp(40px,5vw,62px)}
 .section-heading>p:last-child{color:var(--muted);line-height:1.7}
+.story-section .section-heading>p:not(.eyebrow){color:#354a5b}
 .stars-section{background:radial-gradient(circle at 50% 28%,rgba(64,124,166,.32),transparent 48%),linear-gradient(180deg,#08243a,#04131f)}
 .star-sky{min-height:410px;display:flex;align-items:center;justify-content:center;padding:52px;margin-bottom:30px;overflow:hidden;border-radius:32px;border:1px solid rgba(232,181,86,.18);background:radial-gradient(circle at 35% 30%,rgba(39,88,128,.2),transparent 32%),linear-gradient(rgba(2,8,18,.18),rgba(2,8,18,.75));box-shadow:inset 0 0 95px rgba(0,0,0,.38)}
 .memorial-star{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;background:none;color:var(--ivory);cursor:pointer}
@@ -85,7 +90,7 @@ a{color:inherit}button,input,textarea{font:inherit}
 .story-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}.story-text{color:#263c4d;line-height:1.85;font-size:17px}
 .text-link{padding:0;border:0;background:none;color:#996411;font-weight:600;cursor:pointer}
 .community-section{background:linear-gradient(180deg,#08253b,#0a2d46)}
-.room-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.room-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .room-card,.member-panel,.dashboard-card,.admin-card,.post-form,.post-card{padding:27px;border:1px solid rgba(232,181,86,.2);border-radius:22px;background:rgba(8,36,58,.62)}
 .room-card span,.room-status{color:var(--gold);font-size:11px;text-transform:uppercase;letter-spacing:.12em}
 .room-card h3,.dashboard-card h3,.admin-card h3{font:600 31px "Cormorant Garamond",serif;margin:.45em 0}.room-card p,.dashboard-card p{color:var(--muted);line-height:1.65}
@@ -972,3 +977,15 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .sky-story-return{margin-top:18px}
 @media(max-width:600px){.sky-story-page{padding-top:62px}.sky-story-copy{font-size:16px;line-height:1.82}.sky-story-emblem{width:88px;height:100px}}
 @media(prefers-reduced-motion:reduce){.sky-story-emblem,.logo-star-glow{animation:none}}
+
+/* Collapse navigation before the bilingual links overflow desktop headers. */
+@media(max-width:1400px){
+ .menu-button{display:block}
+ .main-nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;margin-left:0;padding:20px;background:#04111e;border-bottom:1px solid var(--line);z-index:30}
+ .main-nav.open{display:flex}
+ .main-nav a{white-space:normal;font-size:15px;line-height:1.5}
+ .main-nav>a::after{display:none!important}
+ .brand{min-width:0}
+ .brand img{max-width:100%}
+ .header-tools{margin-left:auto}
+}
