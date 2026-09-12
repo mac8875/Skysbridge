@@ -1,12 +1,13 @@
 (() => {
   const header = document.querySelector('.site-header');
   const path = window.location.pathname.split('/').pop() || 'index.html';
-  const isHome = path === 'index.html' || path === 'index-de.html';
+  const isHome = path === 'index.html' || path === 'index-de.html' || path === 'index-es.html';
 
   if (header && !isHome) {
     const isGerman = String(document.documentElement.lang || '').toLowerCase().startsWith('de');
-    const home = isGerman ? 'index-de.html' : 'index.html';
-    const items = isGerman ? [
+    const isSpanish = document.documentElement.lang.startsWith('es');
+    const home = isSpanish ? 'index-es.html' : isGerman ? 'index-de.html' : 'index.html';
+    const items = isSpanish ? [["Un cielo lleno de estrellas", "index-es.html#stars"], ["La historia de Sky", "skys-story-es.html"], ["Cómo funciona", "how-it-works-es.html"], ["Recordar a un hijo", "child-loss-memorial-es.html"], ["Comunidad", "index-es.html#community"], ["Ayuda profesional", "professional-help-es.html"]] : isGerman ? [
       ['Ein Himmel voller Sterne', `${home}#stars`],
       ['Skys Geschichte', 'skys-story-de.html'],
       ['So funktioniert es', 'how-it-works-de.html'],
@@ -34,7 +35,7 @@
       menuButton = document.createElement('button');
       menuButton.className = 'menu-button';
       menuButton.type = 'button';
-      menuButton.setAttribute('aria-label', isGerman ? 'Navigation öffnen' : 'Open navigation');
+      menuButton.setAttribute('aria-label', isSpanish ? 'Abrir navegación' : isGerman ? 'Navigation öffnen' : 'Open navigation');
       menuButton.setAttribute('aria-expanded', 'false');
       menuButton.textContent = '☰';
       tools.appendChild(menuButton);
@@ -43,7 +44,7 @@
     const existingNav = header.querySelector('.main-nav');
     const nav = existingNav || document.createElement('nav');
     nav.className = 'main-nav';
-    nav.setAttribute('aria-label', isGerman ? 'Hauptnavigation' : 'Primary');
+    nav.setAttribute('aria-label', isSpanish ? 'Navegación principal' : isGerman ? 'Hauptnavigation' : 'Primary');
     nav.replaceChildren();
 
     items.forEach(([label, href]) => {
@@ -60,7 +61,7 @@
     const honor = document.createElement('a');
     honor.href = `${home}#stars`;
     honor.className = 'button button-gold';
-    honor.textContent = isGerman ? 'Ein Kind ehren' : 'Honor a child';
+    honor.textContent = isSpanish ? 'Honrar a un hijo' : isGerman ? 'Ein Kind ehren' : 'Honor a child';
     nav.appendChild(honor);
     if (!existingNav) header.appendChild(nav);
 
@@ -116,7 +117,7 @@
   document.querySelectorAll('[data-language-link]').forEach(link => {
     link.addEventListener('click', event => {
       const target = new URL(link.getAttribute('href'), window.location.href);
-      const isHomePair = /index(?:-de)?\.html$/.test(target.pathname) || target.pathname.endsWith('/');
+      const isHomePair = /index(?:-(?:de|es))?\.html$/.test(target.pathname) || target.pathname.endsWith('/');
       if (isHomePair && window.location.hash) target.hash = window.location.hash;
       try { localStorage.setItem('skysbridge-language', link.dataset.languageLink || 'en'); } catch (_) {}
       event.preventDefault();
@@ -137,7 +138,25 @@
   const ALLOWED_PHOTO_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
   const isGerman = String(document.documentElement.lang || '').toLowerCase().startsWith('de');
 
-  const text = isGerman ? {
+  const isSpanish = document.documentElement.lang.startsWith("es");
+  const text = isSpanish ? {
+    photoLabel: 'Foto (opcional)',
+    photoHelp: 'JPG, PNG o WebP, máximo 5 MB. La foto permanece privada hasta que se apruebe el recuerdo.',
+    invalidType: 'Elige una imagen JPG, PNG o WebP.',
+    tooLarge: 'La foto no puede superar los 5 MB.',
+    signIn: 'Inicia sesión antes de compartir un recuerdo.',
+    uploading: 'Subiendo la foto de forma segura…',
+    submitting: 'Enviando el recuerdo para revisión…',
+    success: 'Tu recuerdo se ha enviado de forma privada para revisión.',
+    memoriesHeading: 'Recuerdos aprobados',
+    deleteMemory: 'Eliminar recuerdo',
+    deleting: 'Eliminando…',
+    confirmDelete: author => `¿Eliminar permanentemente este recuerdo de ${author || 'esta persona'}? Esta acción no se puede deshacer.`,
+    deleteFailed: message => `No se ha podido eliminar el recuerdo: ${message}`,
+    nothingDeleted: 'No se ha eliminado nada. Comprueba que has iniciado sesión como administrador.',
+    photoAlt: author => `Foto de recuerdo de ${author || 'una persona de la comunidad'}`,
+    reviewPhotoAlt: 'Foto enviada con este recuerdo'
+  } : isGerman ? {
     photoLabel: 'Foto (optional)',
     photoHelp: 'JPG, PNG oder WebP, maximal 5 MB. Das Foto bleibt privat, bis die Erinnerung freigegeben wurde.',
     invalidType: 'Bitte wähle ein Foto im Format JPG, PNG oder WebP.',
@@ -253,7 +272,7 @@
   function formatMemoryDate(value) {
     if (!value) return '';
     return new Intl.DateTimeFormat(
-      isGerman ? 'de-DE' : 'en-GB',
+      isSpanish ? 'es-ES' : isGerman ? 'de-DE' : 'en-GB',
       { day: 'numeric', month: 'long', year: 'numeric' }
     ).format(new Date(value));
   }

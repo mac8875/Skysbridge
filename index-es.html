@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#04121f">
+  <title>Memorial para hijos y apoyo a padres en duelo | Skysbridge</title>
+  <meta name="description" content="Un lugar para recordar a los hijos y bebés que fallecieron. Conserva su nombre y su historia, crea una estrella y encuentra compañía en el duelo.">
+  <link rel="canonical" href="https://skysbridge.org/index-es.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=86">
+  <link rel="stylesheet" href="css/typography.css?v=86">
+  <link rel="stylesheet" href="css/sky-footprints.css?v=1">
+  <noscript><style>#memorialGrid[aria-busy="true"] .memorial-card{visibility:visible;pointer-events:auto}</style></noscript>
+
+  <link rel="alternate" hreflang="en" href="https://skysbridge.org/">
+  <link rel="alternate" hreflang="de" href="https://skysbridge.org/index-de.html">
+  <link rel="alternate" hreflang="es" href="https://skysbridge.org/index-es.html">
+  <link rel="alternate" hreflang="x-default" href="https://skysbridge.org/">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Inicio de Skysbridge">
+      <img src="skys-bridge-wordmark.svg" alt="Skysbridge">
+    </a>
+    <div class="header-tools">
+      <div class="language-switch" role="group" aria-label="Idioma">
+      <a href="index-de.html" data-language-link="de" lang="de" aria-label="Deutsch" title="Deutsch">DE</a>
+      <a href="index.html" data-language-link="en" lang="en" aria-label="English" title="English">EN</a>
+      <a href="index-es.html" data-language-link="es" lang="es" aria-label="Español" title="Español" class="is-active" aria-current="page">ES</a>
+    </div>
+      <button class="menu-button" aria-label="Abrir navegación" aria-expanded="false">☰</button>
+    </div>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="#stars">Un cielo lleno de estrellas</a>
+      <a href="skys-story-es.html">La historia de Sky</a>
+      <a href="how-it-works-es.html">Cómo funciona</a>
+      <a href="child-loss-memorial-es.html">Recordar a un hijo</a>
+      <a href="#community">Comunidad</a>
+      <a href="professional-help-es.html">Ayuda profesional</a>
+      <button class="button button-gold" data-open-memorial>Honrar a un hijo</button>
+    </nav>
+  </header>
+  <main>
+    <section class="hero" id="home">
+      <div class="stars" aria-hidden="true"></div>
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Un lugar para cada hijo entre las estrellas</p>
+          <h1>Cada hijo merece ser recordado.</h1>
+          <p class="hero-intro">
+  Skysbridge es un lugar tranquilo para padres que llevan a un hijo en el corazón, aunque ya no puedan tenerlo en sus brazos. Las familias pueden crear una estrella, conservar su nombre y su historia, y decidir qué permanece privado. Aquí cuidamos cada recuerdo con amor y respeto.
+</p>
+          <p><a class="text-link" href="child-loss-memorial-es.html">Más sobre la pérdida de un hijo y su recuerdo →</a></p>
+          <div class="actions">
+            <a class="button button-gold" href="#stars">Visitar el cielo lleno de estrellas</a>
+            <button class="button button-outline" data-open-memorial>Honrar a un hijo</button>
+          </div>
+          <p class="hero-note">Porque una vida breve puede dejar un amor sin fin.</p>
+        </div>
+        <figure class="logo-panel">
+          <img src="assets/skysbridge-logo.png" alt="Skysbridge logo showing a golden bridge, stars and water">
+          <span class="logo-star-glow" aria-hidden="true"></span>
+        </figure>
+      </div>
+    </section>
+    <section class="trust-strip" aria-label="Skysbridge values">
+      <span>La familia decide qué compartir</span>
+      <span>Revisión personal</span>
+      <span>Sin publicidad en torno al duelo</span>
+      <span>Recuerdos con dignidad</span>
+    </section>
+    <section class="section stars-section" id="stars">
+      <div class="wall-first-intro">
+        <p class="eyebrow">El corazón de Skysbridge</p>
+        <h2>Un cielo lleno de estrellas</h2>
+        <p>
+          Cada luz lleva el nombre de un hijo amado que sigue formando parte de su familia. Su estrella solo aparece si la familia lo desea y después de una revisión personal.
+        </p>
+      </div>
+      <div class="wall-controls">
+        <label>Buscar una estrella
+          <input id="memorialSearch" type="search" placeholder="Search by name" autocomplete="off">
+        </label>
+        <label>Ordenar
+          <select id="memorialSort">
+            <option value="newest">Más recientes primero</option>
+            <option value="oldest">Más antiguas primero</option>
+            <option value="az">Nombre A–Z</option>
+          </select>
+        </label>
+      </div>
+      <p class="wall-status" id="wallStatus" aria-live="polite">Cargando recuerdos…</p>
+      <div class="memorial-grid celestial-wall" id="memorialGrid" aria-busy="true">
+        <svg class="constellation-map constellation-map--cancer" viewBox="0 0 100 100" aria-hidden="true">
+          <polyline points="18,28 34,38 50,31 65,43 81,34"></polyline>
+          <circle cx="18" cy="28" r=".8"></circle><circle cx="34" cy="38" r=".65"></circle>
+          <circle cx="50" cy="31" r=".72"></circle><circle cx="65" cy="43" r=".65"></circle><circle cx="81" cy="34" r=".7"></circle>
+        </svg>
+        <svg class="constellation-map constellation-map--virgo" viewBox="0 0 100 100" aria-hidden="true">
+          <polyline points="14,38 31,30 47,43 62,28 76,39 88,24"></polyline>
+          <polyline points="47,43 54,59 72,66"></polyline>
+          <circle cx="14" cy="38" r=".7"></circle><circle cx="31" cy="30" r=".62"></circle><circle cx="47" cy="43" r=".78"></circle>
+          <circle cx="62" cy="28" r=".68"></circle><circle cx="76" cy="39" r=".62"></circle><circle cx="88" cy="24" r=".7"></circle><circle cx="54" cy="59" r=".64"></circle><circle cx="72" cy="66" r=".72"></circle>
+        </svg>
+        <svg class="constellation-map leo-map" viewBox="0 0 100 100" aria-hidden="true">
+          <polyline points="48,51 40,42 42,31 52,25 60,34 48,51 65,55 79,48 89,56 65,55"></polyline>
+          <circle cx="40" cy="42" r=".8"></circle><circle cx="42" cy="31" r=".65"></circle>
+          <circle cx="52" cy="25" r=".72"></circle><circle cx="60" cy="34" r=".65"></circle>
+          <circle cx="65" cy="55" r=".72"></circle><circle cx="79" cy="48" r=".68"></circle>
+          <circle cx="89" cy="56" r=".62"></circle>
+        </svg>
+        <svg class="constellation-map constellation-map--libra" viewBox="0 0 100 100" aria-hidden="true">
+          <polyline points="18,26 37,38 57,27 78,42 57,64 37,38"></polyline>
+          <circle cx="18" cy="26" r=".72"></circle><circle cx="37" cy="38" r=".64"></circle><circle cx="57" cy="27" r=".75"></circle><circle cx="78" cy="42" r=".68"></circle><circle cx="57" cy="64" r=".7"></circle>
+        </svg>
+        <svg class="constellation-map constellation-map--gemini" viewBox="0 0 100 100" aria-hidden="true">
+          <polyline points="24,18 36,35 33,57 23,78"></polyline>
+          <polyline points="66,20 57,38 61,59 73,79"></polyline>
+          <polyline points="36,35 57,38 33,57 61,59"></polyline>
+          <circle cx="24" cy="18" r=".76"></circle><circle cx="36" cy="35" r=".62"></circle><circle cx="33" cy="57" r=".65"></circle><circle cx="23" cy="78" r=".7"></circle>
+          <circle cx="66" cy="20" r=".76"></circle><circle cx="57" cy="38" r=".62"></circle><circle cx="61" cy="59" r=".65"></circle><circle cx="73" cy="79" r=".7"></circle>
+        </svg>
+        <button class="memorial-card is-standard" data-star="sky" type="button" aria-label="Open Sky&#x27;s story">
+          <span class="memorial-symbol"><span class="sky-symbol">✦</span></span>
+          <span class="memorial-kicker">La primera luz</span>
+          <strong>Sky</strong>
+          <span class="memorial-day">Siempre en nuestra memoria</span>
+          <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
+          <small>Su vida fue breve. Su luz permanece.</small>
+        </button>
+      </div>
+      <div class="wall-primary-actions">
+        <button class="button button-gold" data-open-memorial>Honrar a un hijo</button>
+        <a class="button button-outline" href="skys-story-es.html">Por qué Sky es la primera estrella</a>
+      </div>
+    </section>
+    <section class="section story-section" id="story">
+      <div class="story-layout">
+        <div>
+          <p class="eyebrow">Nacido de la historia de Sky</p>
+          <h2>La vida de Sky fue breve. El amor que dejó no tiene fin.</h2>
+        </div>
+        <div class="story-text">
+          <p>
+            Skysbridge comenzó con mi hijo Sky. El amor por él dio origen a un lugar donde cada hijo tiene un nombre, una historia y un lugar que permanece.
+          </p>
+          <p>
+            Deseamos profundamente a Sky y lo amamos desde el primer momento. No pudimos llevarlo a casa, pero su lugar en nuestra familia permanece.
+          </p>
+          <p>
+            Un cielo lleno de estrellas conserva estos nombres e historias para las familias que desean compartirlos.
+          </p>
+          <a class="text-link" href="skys-story-es.html">Leer la historia de Sky →</a>
+        </div>
+      </div>
+    </section>
+    <section class="section support-paths" id="support">
+      <div class="section-heading">
+        <p class="eyebrow">Cuando recordar nos acerca a los demás</p>
+        <h2>Recuerda a tu manera.</h2>
+        <p>Recuerda en silencio, encuentra a otras personas o busca apoyo. Tú eliges lo que te hace bien.</p>
+      </div>
+      <div class="support-grid">
+        <article class="support-card">
+          <p class="eyebrow">Una comunidad tranquila</p>
+          <h3>Un lugar protegido donde no tienes que explicar nada</h3>
+          <p>Los miembros aprobados pueden entrar en salas privadas, escuchar en silencio y compartir cuando estén preparados. No hace falta explicar nada.</p>
+          <a class="button button-outline" href="#community">Explorar la comunidad</a>
+        </article>
+        <article class="support-card">
+          <p class="eyebrow">Apoyo de confianza</p>
+          <h3>Encontrar apoyo fuera de Skysbridge</h3>
+          <p>Skysbridge no sustituye a la terapia. Ofrece enlaces a organizaciones reconocidas para quienes buscan apoyo profesional.</p>
+          <a class="button button-gold" href="professional-help-es.html">Buscar ayuda profesional</a>
+        </article>
+      </div>
+    </section>
+    <section class="section community-section" id="community">
+      <div class="section-heading">
+        <p class="eyebrow">Una comunidad protegida, si la deseas</p>
+        <h2>Puedes hablar. Puedes escuchar. Puedes simplemente estar aquí.</h2>
+        <p>Las salas protegidas son para miembros aprobados. Tómate tu tiempo, escucha o comparte cuando te sientas preparado. Skysbridge es una comunidad, no un servicio de terapia.</p>
+      </div>
+      <div id="guestCommunity">
+        <div class="room-grid">
+          <article class="room-card"><span>🔒 Se requiere aprobación</span><h3>Duelo reciente</h3><p>Un lugar acogedor para los días en que todo parece todavía irreal.</p></article>
+          <article class="room-card"><span>🔒 Se requiere aprobación</span><h3>Espacio para padres</h3><p>Un lugar protegido para los padres cuyo duelo tantas veces queda en silencio.</p></article>
+          <article class="room-card"><span>🔒 Se requiere aprobación</span><h3>Recordar juntos</h3><p>Un lugar para nombres, aniversarios, recuerdos y rituales que mantienen cerca el amor.</p></article>
+        </div>
+        <div class="center community-login"><button class="button button-gold" data-open-auth>Iniciar sesión para solicitar acceso</button></div>
+      </div>
+      <div class="member-panel" id="memberPanel" hidden>
+        <div><p class="eyebrow">Área de miembros</p><h2 id="memberGreeting">Te damos la bienvenida a Skysbridge</h2><p id="memberEmail"></p><p class="admin-badge" id="adminBadge" hidden>Administrador</p></div>
+        <button class="button button-outline" id="signOut">Cerrar sesión</button>
+      </div>
+      <section id="roomArea" hidden>
+        <div class="subheading"><div><p class="eyebrow">Tu comunidad</p><h2>Salas protegidas</h2></div><p>Solicita acceso a una sala. Un administrador revisa cada solicitud.</p></div>
+        <div class="room-grid" id="roomList"></div>
+      </section>
+      <section class="room-view" id="roomView" hidden>
+        <div class="room-view-header"><button class="button button-outline" id="closeRoom">← Volver a las salas</button><div><p class="eyebrow">Sala protegida</p><h2 id="activeRoomName"></h2></div></div>
+        <form class="post-form" id="postForm">
+          <label for="postBody">Comparte algo con esta sala</label>
+          <textarea id="postBody" maxlength="5000" required placeholder="Write only what feels right to share..."></textarea>
+          <div class="post-form-footer"><small>Visible solo para los miembros aprobados de esta sala.</small><button class="button button-gold" type="submit">Publicar en la sala</button></div>
+          <div class="notice" id="postStatus" hidden></div>
+        </form>
+        <div class="post-list" id="postList"></div>
+      </section>
+      <section class="admin-panel" id="adminPanel" hidden>
+        <div class="admin-heading"><div><p class="eyebrow">Administración</p><h2>Revisión y moderación</h2></div><button class="button button-outline" id="refreshAdmin">Actualizar</button></div>
+        <div class="admin-grid">
+          <article class="admin-card"><h3>Solicitudes de acceso a salas</h3><div id="pendingMembers"><p class="muted">Cargando…</p></div></article>
+          <article class="admin-card"><h3>Recuerdos enviados</h3><div id="pendingMemorials"><p class="muted">Cargando…</p></div></article>
+          <article class="admin-card"><h3>Recuerdos pendientes de revisión</h3><div id="pendingMemories"><p class="muted">Cargando…</p></div></article>
+          <article class="admin-card" data-admin-published-memorials="true">
+            <h3>Estrellas publicadas</h3>
+            <p class="muted">Gestiona los recuerdos visibles en el cielo lleno de estrellas. Sky está protegido de forma permanente.</p>
+            <div id="publishedMemorials"><p class="muted">Cargando…</p></div>
+          </article>
+        </div>
+      </section>
+    </section>
+    <section class="section contact-section">
+      <p class="eyebrow">Contactar con Skysbridge</p>
+      <h2><a href="mailto:together@skysbridge.org">together@skysbridge.org</a></h2>
+      <p>Puedes escribirnos si tienes preguntas sobre un recuerdo, la privacidad o el cielo lleno de estrellas.</p>
+    </section>
+  </main>
+  <footer>
+    <div class="footer-brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge"></div>
+    <nav><a href="#stars">Un cielo lleno de estrellas</a><a href="how-it-works-es.html">Cómo funciona</a><a href="child-loss-memorial-es.html">Recordar a un hijo</a><a href="professional-help-es.html">Ayuda profesional</a><a href="privacy-es.html">Privacidad</a><a href="community-guidelines-es.html">Normas</a><a href="mailto:together@skysbridge.org">Contacto</a></nav>
+    <p>Sky’s Bridge por M. F.  |  © 2026 Skysbridge. Todos los derechos reservados.</p>
+    <p class="site-version" style="font-size:0.75rem;line-height:1.5;margin-top:0.5rem">Versión 2.1</p>
+  </footer>
+  <div class="modal" id="modal" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" aria-label="Cerrar">×</button><div id="modalContent"></div></div></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js?v=26-1"></script>
+  <script src="js/sky-remembrance.js?v=1"></script>
+  <script src="js/language-switch.js?v=70"></script>
+  <script src="js/app-es.js?v=1"></script>
+</body>
+</html>
