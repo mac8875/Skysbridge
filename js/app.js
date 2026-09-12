@@ -394,10 +394,10 @@
     const storyHtml = renderStoryParagraphs(star.story);
 
     openModal(`
-      <article class="star-remembrance">
+      <article class="star-remembrance ${slug === "sky" ? `is-${window.SkyRemembrance.state()}` : ""}">
         <header class="star-remembrance-header">
           <p class="eyebrow">A light remembered</p>
-          <span class="star-remembrance-symbol" aria-hidden="true"><img src="assets/memorial-star.svg?v=55" alt=""></span>
+          <span class="star-remembrance-symbol" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}</span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p>' : ""}
