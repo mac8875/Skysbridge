@@ -94,7 +94,8 @@ a{color:inherit}button,input,textarea{font:inherit}
 .room-card,.member-panel,.dashboard-card,.admin-card,.post-form,.post-card{padding:27px;border:1px solid rgba(232,181,86,.2);border-radius:22px;background:rgba(8,36,58,.62)}
 .room-card span,.room-status{color:var(--gold);font-size:11px;text-transform:uppercase;letter-spacing:.12em}
 .room-card h3,.dashboard-card h3,.admin-card h3{font:600 31px "Cormorant Garamond",serif;margin:.45em 0}.room-card p,.dashboard-card p{color:var(--muted);line-height:1.65}
-.community-login{margin-top:30px}.member-panel{margin:34px 0 55px;display:flex;justify-content:space-between;align-items:center}
+.community-login{margin-top:30px}.member-panel{margin:34px 0 55px;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center}
+.member-panel>div{min-width:0;max-width:100%}.member-panel #memberEmail{overflow-wrap:anywhere}.member-panel>.button{flex-shrink:0}
 .admin-badge{display:inline-flex;margin-top:8px;padding:6px 10px;border-radius:999px;color:#1b2025;background:linear-gradient(135deg,var(--gold-soft),var(--gold));font-size:12px;font-weight:700}
 .subheading,.admin-heading,.room-view-header{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin:35px 0 28px}
 .subheading>p{max-width:520px;color:var(--muted);line-height:1.65}.dashboard-card{display:flex;flex-direction:column}.dashboard-card .button{margin-top:auto}
