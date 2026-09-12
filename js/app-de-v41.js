@@ -398,7 +398,7 @@
       }
     }
 
-    const rawStarName = String(star.name || "").trim();
+    const rawStarName = slug === "sky" ? "Sky" : String(star.name || "").trim();
     const starName = escapeHtml(rawStarName || "Ein geliebtes Kind");
     const memoryHeading = rawStarName
       ? `Eine Erinnerung an ${starName} teilen`
@@ -412,7 +412,13 @@
           <span class="star-remembrance-symbol" aria-hidden="true"><img src="assets/memorial-star.svg?v=55" alt=""></span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">Sein Leben war kurz. Sein Licht bleibt.</p>
+          ${slug === "sky" ? '<p class="memorial-detail-meta">Geboren am <time datetime="2019-02-09">9. Februar 2019</time></p>' : ""}
         </header>
+
+        ${slug === "sky" ? `<figure class="sky-footprints">
+          <div class="sky-footprints-image"><img src="assets/sky-footprints-original.jpg" width="864" height="1536" alt="Skys zwei blaue Fußabdrücke auf Papier" decoding="async"></div>
+          <figcaption>Skys Fußabdrücke</figcaption>
+        </figure>` : ""}
 
         <div class="star-story-copy">
           ${storyHtml}
