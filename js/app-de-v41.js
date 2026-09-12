@@ -246,7 +246,8 @@
         : await db.auth.signUp({ email, password });
 
       if (result.error) {
-        setStatus(status, result.error.message, "error");
+        const emailLimitReached = result.error.code === "over_email_send_rate_limit" || /email rate limit exceeded/i.test(result.error.message || "");
+        setStatus(status, emailLimitReached ? 'Bestätigungs-E-Mails können vorübergehend nicht versendet werden, weil das Versandlimit erreicht ist. Bitte versuche es später erneut. Wenn du bereits ein bestätigtes Konto hast, wähle Anmelden.' : result.error.message, "error");
         return;
       }
 

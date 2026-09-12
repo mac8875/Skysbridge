@@ -234,7 +234,8 @@
         : await db.auth.signUp({ email, password });
 
       if (result.error) {
-        setStatus(status, result.error.message, "error");
+        const emailLimitReached = result.error.code === "over_email_send_rate_limit" || /email rate limit exceeded/i.test(result.error.message || "");
+        setStatus(status, emailLimitReached ? 'Confirmation emails are temporarily unavailable because the sending limit has been reached. Please try again later. If you already have a confirmed account, choose Sign in.' : result.error.message, "error");
         return;
       }
 

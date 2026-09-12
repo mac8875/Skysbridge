@@ -236,7 +236,8 @@
         : await db.auth.signUp({ email, password });
 
       if (result.error) {
-        setStatus(status, ({"Invalid login credentials":"El correo o la contraseña no son correctos.","Email not confirmed":"Confirma tu correo electrónico antes de iniciar sesión.","User already registered":"Ya existe una cuenta con este correo electrónico."})[result.error.message] || result.error.message, "error");
+        const emailLimitReached = result.error.code === "over_email_send_rate_limit" || /email rate limit exceeded/i.test(result.error.message || "");
+        setStatus(status, emailLimitReached ? 'No se pueden enviar correos de confirmación temporalmente porque se ha alcanzado el límite de envío. Inténtalo de nuevo más tarde. Si ya tienes una cuenta confirmada, elige Iniciar sesión.' : ({"Invalid login credentials":"El correo o la contraseña no son correctos.","Email not confirmed":"Confirma tu correo electrónico antes de iniciar sesión.","User already registered":"Ya existe una cuenta con este correo electrónico."})[result.error.message] || result.error.message, "error");
         return;
       }
 
