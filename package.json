@@ -3,6 +3,9 @@
   "private": true,
   "version": "41.0.0",
   "description": "Skysbridge platform — Version 41 with complete and natural German localization",
+  "scripts": {
+    "test:smoke": "node tests/smoke.mjs"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4"
   }
