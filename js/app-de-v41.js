@@ -308,6 +308,10 @@
         <label>Land (optional)
           <input name="country" maxlength="80">
         </label>
+        <label>Foto deines Kindes (freiwillig, JPEG, PNG oder WebP, bis 5 MB)
+          <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
+        </label>
+        <p class="muted">Das Foto bleibt privat, solange du keinen öffentlichen Stern beantragst und die Gedenkseite nicht freigegeben wurde.</p>
         <fieldset class="star-picker">
           <legend>Sternform auswählen</legend>
           <div class="star-picker-grid">
@@ -352,9 +356,29 @@
         public_requested: values.get("public_requested") === "on"
       };
 
+      const photo = values.get("photo");
+      let photoPath = null;
+      if (photo instanceof File && photo.size) {
+        if (!["image/jpeg", "image/png", "image/webp"].includes(photo.type) || photo.size > 5 * 1024 * 1024) {
+          setStatus(status, "Bitte wähle ein JPEG-, PNG- oder WebP-Bild mit höchstens 5 MB.", "error");
+          return;
+        }
+        const extension = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" }[photo.type];
+        photoPath = `${user.id}/${crypto.randomUUID()}.${extension}`;
+        const { error: uploadError } = await db.storage.from("memorial-photos").upload(photoPath, photo, {
+          contentType: photo.type,
+          upsert: false
+        });
+        if (uploadError) {
+          setStatus(status, "Das Foto konnte nicht hochgeladen werden: " + uploadError.message, "error");
+          return;
+        }
+        payload.photo_path = photoPath;
+      }
+
       let { error } = await db.from("memorials").insert(payload);
 
-      if (error && /birth_date|passing_date|star_style/i.test(error.message || "")) {
+      if (error && !photoPath && /birth_date|passing_date|star_style/i.test(error.message || "")) {
         delete payload.birth_date;
         delete payload.passing_date;
         delete payload.star_style;
@@ -362,6 +386,7 @@
       }
 
       if (error) {
+        if (photoPath) await db.storage.from("memorial-photos").remove([photoPath]);
         setStatus(status, error.message, "error");
         return;
       }
@@ -577,7 +602,18 @@
     return `<span class="memorial-star-shape star-${style}" aria-hidden="true"></span>`;
   }
 
-  function openApprovedMemorial(item) {
+  async function memorialPhotoUrl(path) {
+    if (!path || !db) return null;
+    const { data, error } = await db.storage.from("memorial-photos").createSignedUrl(path, 3600);
+    if (error) {
+      console.warn("Memorial photo unavailable:", error);
+      return null;
+    }
+    return data.signedUrl;
+  }
+
+  async function openApprovedMemorial(item) {
+    const photoUrl = item.photo_path ? await memorialPhotoUrl(item.photo_path) : null;
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
@@ -596,6 +632,7 @@
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Für immer geliebt")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
+        ${photoUrl ? `<img class="memorial-detail-photo" src="${escapeHtml(photoUrl)}" alt="${escapeHtml(item.child_name || "")}">` : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
       </article>
@@ -725,7 +762,7 @@
     }
     let result = await db
       .from("memorials")
-      .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,created_at")
+      .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at")
       .eq("approved", true)
       .eq("public_requested", true)
       .order("created_at", { ascending: false });
@@ -1078,7 +1115,7 @@
 
     let result = await db
       .from("memorials")
-      .select("id,child_name,country,created_at")
+      .select("id,child_name,country,photo_path,created_at")
       .eq("approved", true)
       .eq("public_requested", true)
       .order("created_at", { ascending: false });
@@ -1124,6 +1161,7 @@
     target.querySelectorAll(".delete-published-memorial").forEach(button => {
       button.onclick = async () => {
         const memorialId = button.dataset.id;
+        const photoPath = memorials.find(item => item.id === memorialId)?.photo_path;
         const childName = button.dataset.name || "dieses Kind";
 
         if (!memorialId) return;
@@ -1178,6 +1216,8 @@
           );
           return;
         }
+
+        if (photoPath) await db.storage.from("memorial-photos").remove([photoPath]);
 
         await Promise.all([
           loadPublishedMemorials(),
@@ -1295,7 +1335,7 @@
 
     const { data, error } = await db
       .from("memorials")
-      .select("id,child_name,remembrance,country,public_requested,created_at")
+      .select("id,child_name,remembrance,country,public_requested,photo_path,created_at")
       .eq("approved", false)
       .is("rejection_reason", null)
       .order("created_at", { ascending: true });
@@ -1314,6 +1354,7 @@
       <div class="review-item">
         <strong>${escapeHtml(item.child_name)}</strong>
         <p>${escapeHtml(item.remembrance)}</p>
+        ${item.photo_path ? `<p class="muted">Foto zur Prüfung eingereicht</p><img class="memorial-review-photo" data-photo-path="${escapeHtml(item.photo_path)}" alt="">` : ""}
         <p>${item.public_requested ? "Öffentlichen Sternenhimmel beantragt" : "Private Erinnerung"}</p>
         <div class="review-actions">
           <button class="button button-gold review-memorial" data-id="${item.id}" data-decision="approve">Freigeben</button>
@@ -1321,6 +1362,11 @@
         </div>
       </div>
     `).join("");
+
+    target.querySelectorAll(".memorial-review-photo").forEach(async img => {
+      const url = await memorialPhotoUrl(img.dataset.photoPath);
+      if (url && img.isConnected) img.src = url;
+    });
 
     target.querySelectorAll(".review-memorial").forEach(button => {
       button.onclick = async () => {
