@@ -1011,3 +1011,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 
 /* Resolve the signed-in family's centre before revealing memorial lights. */
 #memorialGrid[aria-busy="true"] .memorial-card{visibility:hidden;pointer-events:none}
+
+/* Optional child photo on approved memorials and in the moderator review. */
+.memorial-detail-photo{display:block;width:min(100%,420px);max-height:420px;object-fit:contain;margin:18px auto;border-radius:12px;border:1px solid rgba(225,187,113,.35)}
+.memorial-review-photo{display:block;max-width:220px;max-height:180px;object-fit:contain;margin:12px 0;border-radius:8px}
