@@ -13,6 +13,14 @@
   let currentUser = null;
   let currentProfile = null;
   let activeRoomId = null;
+  let modalPhotoUrl = null;
+  const reviewPhotoUrls = new Set();
+
+  function clearReviewPhotoUrls() {
+    document.querySelectorAll('.memorial-review-photo').forEach(img => img.removeAttribute('src'));
+    reviewPhotoUrls.forEach(url => URL.revokeObjectURL(url));
+    reviewPhotoUrls.clear();
+  }
 
   const modal = document.querySelector("#modal");
   const modalContent = document.querySelector("#modalContent");
@@ -80,6 +88,8 @@
   function openModal(html, cardClass = "") {
     if (!modal || !modalContent) return;
 
+    if (modalPhotoUrl) URL.revokeObjectURL(modalPhotoUrl);
+    modalPhotoUrl = null;
     modalContent.innerHTML = html;
 
     if (modalCard) {
@@ -96,6 +106,8 @@
 
     setHidden(modal, true);
     modalContent.innerHTML = "";
+    if (modalPhotoUrl) URL.revokeObjectURL(modalPhotoUrl);
+    modalPhotoUrl = null;
 
     if (modalCard) {
       modalCard.className = "modal-card";
@@ -311,7 +323,7 @@
         <label>Foto deines Kindes (freiwillig, JPEG, PNG oder WebP, bis 5 MB)
           <input type="file" name="photo" accept="image/jpeg,image/png,image/webp">
         </label>
-        <p class="muted">Das Foto bleibt privat, solange du keinen öffentlichen Stern beantragst und die Gedenkseite nicht freigegeben wurde.</p>
+        <p class="muted">Erst wenn du einen öffentlichen Stern beantragst und die Gedenkseite freigegeben wurde, können angemeldete Mitglieder das Foto sehen.</p>
         <fieldset class="star-picker">
           <legend>Sternform auswählen</legend>
           <div class="star-picker-grid">
@@ -604,12 +616,16 @@
 
   async function memorialPhotoUrl(path) {
     if (!path || !db) return null;
-    const { data, error } = await db.storage.from("memorial-photos").createSignedUrl(path, 3600);
-    if (error) {
-      console.warn("Memorial photo unavailable:", error);
+    const { data: before } = await db.auth.getUser();
+    if (!before?.user) return null;
+    const { data, error } = await db.storage.from("memorial-photos").download(path);
+    if (error || !data) {
+      if (error) console.warn("Memorial photo unavailable:", error);
       return null;
     }
-    return data.signedUrl;
+    const { data: after } = await db.auth.getUser();
+    if (after?.user?.id !== before.user.id) return null;
+    return URL.createObjectURL(data);
   }
 
   async function openApprovedMemorial(item) {
@@ -637,6 +653,7 @@
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
       </article>
     `, "star-modal-card");
+    modalPhotoUrl = photoUrl;
   }
 
   function renderApprovedMemorials(resolved = false) {
@@ -837,6 +854,8 @@
     const memberEmail = document.querySelector("#memberEmail");
 
     if (!session) {
+      if (modalPhotoUrl) closeModal();
+      clearReviewPhotoUrls();
       currentUser = null;
       currentProfile = null;
       activeRoomId = null;
@@ -1328,6 +1347,7 @@
   }
 
   async function loadPendingMemorials() {
+    clearReviewPhotoUrls();
     const target = document.querySelector("#pendingMemorials");
     if (!target) return;
 
@@ -1365,7 +1385,10 @@
 
     target.querySelectorAll(".memorial-review-photo").forEach(async img => {
       const url = await memorialPhotoUrl(img.dataset.photoPath);
-      if (url && img.isConnected) img.src = url;
+      if (url && img.isConnected && currentUser) {
+        img.src = url;
+        reviewPhotoUrls.add(url);
+      } else if (url) URL.revokeObjectURL(url);
     });
 
     target.querySelectorAll(".review-memorial").forEach(button => {
