@@ -12,11 +12,13 @@ values ('memorial-photos', 'memorial-photos', false, 5242880,
 on conflict (id) do update set public = false, file_size_limit = excluded.file_size_limit,
   allowed_mime_types = excluded.allowed_mime_types;
 
+drop policy if exists "Members can upload own memorial photos" on storage.objects;
 create policy "Members can upload own memorial photos"
 on storage.objects for insert to authenticated
 with check (bucket_id = 'memorial-photos'
   and split_part(name, '/', 1) = (select auth.uid())::text);
 
+drop policy if exists "Memorial photos readable when permitted" on storage.objects;
 create policy "Memorial photos readable when permitted"
 on storage.objects for select to anon, authenticated
 using (bucket_id = 'memorial-photos'
@@ -28,6 +30,7 @@ using (bucket_id = 'memorial-photos'
         and m.approved = true and m.public_requested = true and m.archived = false
     )));
 
+drop policy if exists "Owners and admins can remove memorial photos" on storage.objects;
 create policy "Owners and admins can remove memorial photos"
 on storage.objects for delete to authenticated
 using (bucket_id = 'memorial-photos'
