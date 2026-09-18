@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://skysbridge.org/</loc><lastmod>2026-09-12</lastmod><priority>1.0</priority></url>
-  <url><loc>https://skysbridge.org/index-de.html</loc><lastmod>2026-09-12</lastmod><priority>1.0</priority></url>
+  <url><loc>https://skysbridge.org/index-de.html</loc><lastmod>2026-09-18</lastmod><priority>1.0</priority></url>
   <url><loc>https://skysbridge.org/child-loss-memorial.html</loc><lastmod>2026-09-09</lastmod><priority>0.9</priority></url>
-  <url><loc>https://skysbridge.org/sternenkind-kindsverlust.html</loc><lastmod>2026-09-09</lastmod><priority>0.9</priority></url>
+  <url><loc>https://skysbridge.org/sternenkind-kindsverlust.html</loc><lastmod>2026-09-18</lastmod><priority>0.9</priority></url>
   <url><loc>https://skysbridge.org/how-it-works.html</loc><lastmod>2026-09-12</lastmod><priority>0.8</priority></url>
   <url><loc>https://skysbridge.org/how-it-works-de.html</loc><lastmod>2026-09-12</lastmod><priority>0.8</priority></url>
   <url><loc>https://skysbridge.org/community-guidelines.html</loc><lastmod>2026-09-02</lastmod><priority>0.6</priority></url>
@@ -12,6 +12,8 @@
   <url><loc>https://skysbridge.org/professional-help-de.html</loc><lastmod>2026-09-12</lastmod><priority>0.8</priority></url>
   <url><loc>https://skysbridge.org/wall-of-stars-v2.html</loc><lastmod>2026-09-02</lastmod><priority>0.8</priority></url>
   <url><loc>https://skysbridge.org/index-es.html</loc><lastmod>2026-09-12</lastmod><priority>0.8</priority></url>
+  <url><loc>https://skysbridge.org/skys-story.html</loc></url>
+  <url><loc>https://skysbridge.org/skys-story-de.html</loc></url>
   <url><loc>https://skysbridge.org/skys-story-es.html</loc><lastmod>2026-09-12</lastmod><priority>0.8</priority></url>
   <url><loc>https://skysbridge.org/how-it-works-es.html</loc><lastmod>2026-09-12</lastmod><priority>0.8</priority></url>
   <url><loc>https://skysbridge.org/child-loss-memorial-es.html</loc><lastmod>2026-09-12</lastmod><priority>0.8</priority></url>
