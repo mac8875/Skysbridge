@@ -203,15 +203,15 @@
         </div>
         <div class="center community-login"><button class="button button-gold" data-open-auth>Sign in to request access</button></div>
       </div>
-      <div class="member-panel" id="memberPanel" hidden>
+      <div class="member-panel" id="memberPanel" hidden data-nosnippet>
         <div><p class="eyebrow">Member area</p><h2 id="memberGreeting">Welcome to Skysbridge</h2><p id="memberEmail"></p><p class="admin-badge" id="adminBadge" hidden>Administrator</p></div>
         <button class="button button-outline" id="signOut">Sign out</button>
       </div>
-      <section id="roomArea" hidden>
+      <section id="roomArea" hidden data-nosnippet>
         <div class="subheading"><div><p class="eyebrow">Your community</p><h2>Protected rooms</h2></div><p>Request access to a room. An administrator reviews every request.</p></div>
         <div class="room-grid" id="roomList"></div>
       </section>
-      <section class="room-view" id="roomView" hidden>
+      <section class="room-view" id="roomView" hidden data-nosnippet>
         <div class="room-view-header"><button class="button button-outline" id="closeRoom">← Back to rooms</button><div><p class="eyebrow">Protected room</p><h2 id="activeRoomName"></h2></div></div>
         <form class="post-form" id="postForm">
           <label for="postBody">Share something with this room</label>
@@ -221,7 +221,7 @@
         </form>
         <div class="post-list" id="postList"></div>
       </section>
-      <section class="admin-panel" id="adminPanel" hidden>
+      <section class="admin-panel" id="adminPanel" hidden data-nosnippet>
         <div class="admin-heading"><div><p class="eyebrow">Administration</p><h2>Review and moderation</h2></div><button class="button button-outline" id="refreshAdmin">Refresh</button></div>
         <div class="admin-grid">
           <article class="admin-card"><h3>Room access requests</h3><div id="pendingMembers"><p class="muted">Loading…</p></div></article>
