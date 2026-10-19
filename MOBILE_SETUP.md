@@ -1,6 +1,6 @@
 # Build and test the Skysbridge mobile app
 
-The iOS and Android apps package the existing Skysbridge pages locally with Capacitor. They keep using the configured Supabase project; the browser client is bundled locally at the pinned package version for reproducible app builds. `www/`, `android/` and `ios/` are generated locally and ignored by Git.
+The iOS and Android apps package the existing Skysbridge pages locally with Capacitor. They keep using the configured Supabase project; the browser client is bundled locally at the pinned package version for reproducible app builds. `assets/logo.svg` is the source design for the gold-star-and-bridge launcher icon; its Android and iOS native renditions live under `native-assets/` and are copied into generated native projects during sync. `www/`, `android/` and `ios/` are generated locally and ignored by Git.
 
 ## Requirements
 

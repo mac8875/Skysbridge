@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build:mobile": "node scripts/build-mobile-web.mjs",
-    "sync:mobile": "npm run build:mobile && node scripts/ensure-native-projects.mjs && cap sync",
+    "sync:mobile": "npm run build:mobile && node scripts/ensure-native-projects.mjs && node scripts/copy-native-icons.mjs && cap sync",
     "android:debug": "npm run sync:mobile && cd android && ./gradlew assembleDebug",
     "ios:open": "npm run sync:mobile && cap open ios"
   }
