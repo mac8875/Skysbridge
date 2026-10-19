@@ -1128,4 +1128,53 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   to{opacity:1;filter:blur(0);margin-top:0}
 }
 @keyframes scrollNudge{0%,100%{transform:translateY(-1px);opacity:.75}50%{transform:translateY(3px);opacity:1}}
-@media(m
+@media(max-width:700px){
+  .celestial-wall{height:min(68vh,650px);min-height:410px;border-radius:22px}
+  .celestial-plane{border-radius:inherit}
+  .celestial-wall .memorial-card strong{max-width:64vw;font-size:18px;line-height:1.08}
+  .celestial-wall [data-star="sky"] strong{max-width:64vw;font-size:24px}
+  .sky-map-scroll-hint{font-size:10px;letter-spacing:.035em}
+}
+@media(prefers-reduced-motion:reduce){
+  .celestial-plane::before,.sky-map-scroll-arrow,.celestial-wall .memorial-card.is-map-entering{animation:none!important}
+  .celestial-wall{scroll-behavior:auto}
+}
+
+/* Stable mobile hero rendering in Android and iOS WebViews. */
+@media(max-width:700px){
+  html,body{max-width:100%;overflow-x:clip}
+  .hero{min-width:0;padding-left:clamp(18px,6vw,24px);padding-right:clamp(18px,6vw,24px)}
+  .hero-grid,.hero-copy{width:100%;min-width:0}
+  .hero-copy .hero-intro,.hero-copy>p:last-of-type{width:100%;max-width:45rem;overflow-wrap:break-word}
+  .actions{width:100%;align-items:stretch}
+  .hero .actions .button,
+  .hero .actions a.button:link,
+  .hero .actions a.button:visited{
+    display:flex;
+    width:min(100%,20rem);
+    min-height:3.25rem;
+    margin-inline:auto;
+    padding:.82rem 1.1rem;
+    border:1px solid transparent;
+    border-radius:999px;
+    font:600 1rem/1.35 Inter,Arial,sans-serif;
+    text-align:center;
+    text-decoration:none;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .hero .actions .button-gold,
+  .hero .actions a.button-gold:link,
+  .hero .actions a.button-gold:visited{
+    color:#151b22!important;
+    background:linear-gradient(135deg,#f6dc9d 0%,#e8b556 52%,#c98724 100%)!important;
+    box-shadow:0 10px 28px rgba(183,121,28,.16),inset 0 1px rgba(255,255,255,.42);
+  }
+  .hero .actions .button-outline{
+    color:#f8f3e9!important;
+    border-color:rgba(244,215,146,.42)!important;
+    background:rgba(3,20,34,.72)!important;
+  }
+  .logo-panel{width:100%;min-width:0;margin-inline:auto;overflow:hidden}
+  .logo-panel img{display:block;width:100%;max-width:100%;height:auto}
+}
