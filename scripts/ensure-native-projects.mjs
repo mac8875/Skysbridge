@@ -23,6 +23,35 @@ if (!manifest.includes('android:scheme="skysbridge"')) {
   writeFileSync(manifestPath, manifest);
 }
 
+// Keep generated Android projects ready for a Play release without checking in
+// signing credentials. CI supplies the upload key only through protected secrets.
+const androidBuildPath = path.join(root, 'android/app/build.gradle');
+let androidBuild = readFileSync(androidBuildPath, 'utf8');
+androidBuild = androidBuild.replace(/versionCode\s+\d+/, 'versionCode 2');
+androidBuild = androidBuild.replace(/versionName\s+"[^"]*"/, 'versionName "1.0.1"');
+if (!androidBuild.includes('def playUploadKeyReady')) {
+  androidBuild = `def playUploadKeyReady = System.getenv('ANDROID_KEYSTORE_PATH') && System.getenv('ANDROID_KEYSTORE_PASSWORD') && System.getenv('ANDROID_KEY_ALIAS') && System.getenv('ANDROID_KEY_PASSWORD')\n\n${androidBuild}`;
+}
+if (!androidBuild.includes('signingConfigs {')) {
+  androidBuild = androidBuild.replace('android {', `android {
+    signingConfigs {
+        release {
+            if (playUploadKeyReady) {
+                storeFile file(System.getenv('ANDROID_KEYSTORE_PATH'))
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+            }
+        }
+    }`);
+}
+if (!androidBuild.includes('if (playUploadKeyReady) signingConfig signingConfigs.release')) {
+  androidBuild = androidBuild.replace('release {\n            minifyEnabled false', `release {
+            if (playUploadKeyReady) signingConfig signingConfigs.release
+            minifyEnabled false`);
+}
+writeFileSync(androidBuildPath, androidBuild);
+
 const plistPath = path.join(root, 'ios/App/App/Info.plist');
 let plist = readFileSync(plistPath, 'utf8');
 if (!plist.includes('<key>CFBundleURLTypes</key>')) {
