@@ -522,47 +522,7 @@
 
 
   function buildCelestialSky() {
-    const sky = document.querySelector(".celestial-wall");
-    if (!sky || sky.querySelector(".ambient-star")) return;
-
-    let seed = 8875;
-    const random = () => {
-      seed = (seed * 9301 + 49297) % 233280;
-      return seed / 233280;
-    };
-
-    for (let index = 0; index < 118; index += 1) {
-      const star = document.createElement("span");
-      const size = random() < .82 ? .7 + random() * 1.25 : 2 + random() * 1.8;
-      star.className = "ambient-star";
-      star.setAttribute("aria-hidden", "true");
-      star.style.setProperty("--x", `${(random() * 100).toFixed(2)}%`);
-      star.style.setProperty("--y", `${(random() * 100).toFixed(2)}%`);
-      star.style.setProperty("--size", `${size.toFixed(2)}px`);
-      star.style.setProperty("--alpha", (.28 + random() * .66).toFixed(2));
-      star.style.setProperty("--duration", `${(3.8 + random() * 7.4).toFixed(2)}s`);
-      star.style.setProperty("--delay", `${(-random() * 9).toFixed(2)}s`);
-      star.style.setProperty("--warmth", random() > .82 ? "#f7e4b0" : random() > .55 ? "#d9ecff" : "#ffffff");
-      sky.appendChild(star);
-    }
-
-    for (let index = 0; index < 72; index += 1) {
-      const star = document.createElement("span");
-      const x = random() * 112 - 6;
-      const diagonalCenter = 82 - x * .58;
-      const spread = random() < .78 ? 9 : 16;
-      const y = diagonalCenter + (random() - .5) * spread;
-      star.className = "ambient-star milky-star";
-      star.setAttribute("aria-hidden", "true");
-      star.style.setProperty("--x", `${x.toFixed(2)}%`);
-      star.style.setProperty("--y", `${y.toFixed(2)}%`);
-      star.style.setProperty("--size", `${(.5 + random() * 1.25).toFixed(2)}px`);
-      star.style.setProperty("--alpha", (.22 + random() * .5).toFixed(2));
-      star.style.setProperty("--duration", `${(5.5 + random() * 8).toFixed(2)}s`);
-      star.style.setProperty("--delay", `${(-random() * 10).toFixed(2)}s`);
-      star.style.setProperty("--warmth", random() > .74 ? "#f3e6c5" : "#dfefff");
-      sky.appendChild(star);
-    }
+    window.SkysbridgeSkyMap?.init();
   }
 
   buildCelestialSky();
@@ -729,8 +689,14 @@
       }
 
       card.addEventListener("click", () => openApprovedMemorial(item));
-      grid.appendChild(card);
+      (window.SkysbridgeSkyMap?.plane || grid).appendChild(card);
     });
+
+    window.SkysbridgeSkyMap?.layout(
+      [...grid.querySelectorAll("[data-public-memorial]")],
+      skyCard,
+      viewerCenter?.id ?? null
+    );
 
     if (search && !rows.length) status.textContent = `Kein Gedenkstern für „${document.querySelector("#memorialSearch").value.trim()}“ gefunden.`;
     else if (viewerCenter) status.textContent = `${viewerCenter.child_name || "Der Stern deines Kindes"} steht im Zentrum deines persönlichen Sternenhimmels.`;
