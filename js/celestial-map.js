@@ -89,7 +89,7 @@
   const layout = (cards = [], skyCard = null, viewerCenterId = null) => {
     const mobile = window.matchMedia('(max-width: 700px)').matches;
     const columns = mobile ? 1 : 3;
-    const xPositions = mobile ? [72, 30, 67, 35, 76, 43] : [20, 50, 80];
+    const xPositions = mobile ? [64, 36, 62, 38, 65, 42] : [20, 50, 80];
     const viewerCard = cards.find(card => card.dataset.publicMemorial === String(viewerCenterId));
     const otherCards = cards.filter(card => card !== viewerCard);
     const topStart = viewerCard ? (mobile ? 625 : 610) : (mobile ? 390 : 365);
