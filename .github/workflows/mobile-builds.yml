@@ -24,7 +24,9 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: android-actions/setup-android@v3
-      - run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+        with:
+          packages: platform-tools
+      - run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
       - run: npm ci
       - run: npm run sync:mobile
       - run: cd android && ./gradlew --no-daemon assembleDebug
