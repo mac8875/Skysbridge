@@ -2,8 +2,22 @@
   "name": "skysbridge-platform",
   "private": true,
   "version": "41.0.0",
-  "description": "Skysbridge platform — Version 41 with complete and natural German localization",
+  "description": "Skysbridge platform \u2014 Version 41 with complete and natural German localization",
   "dependencies": {
-    "@supabase/supabase-js": "^2.57.4"
+    "@capacitor/android": "8.5.3",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/cli": "8.5.3",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/ios": "8.5.3",
+    "@supabase/supabase-js": "2.118.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  },
+  "scripts": {
+    "build:mobile": "node scripts/build-mobile-web.mjs",
+    "sync:mobile": "npm run build:mobile && node scripts/ensure-native-projects.mjs && cap sync",
+    "android:debug": "npm run sync:mobile && cd android && ./gradlew assembleDebug",
+    "ios:open": "npm run sync:mobile && cap open ios"
   }
 }

@@ -2,7 +2,9 @@
 // Never use the service-role key here.
 window.SKYSBRIDGE_CONFIG = {
   SUPABASE_URL: "https://urlnadzbsccvtvijgyrs.supabase.co",
-  SUPABASE_ANON_KEY: "sb_publishable_pExSYS2erdZw2EatmQ5x-g_X50v3oaR"
+  SUPABASE_ANON_KEY: "sb_publishable_pExSYS2erdZw2EatmQ5x-g_X50v3oaR",
+  // Set after adding this URL to Supabase Auth → URL Configuration → Additional Redirect URLs.
+  NATIVE_AUTH_REDIRECT_URL: ""
 };
 
 // SKYBRIDGE V48 — load administrator controls for private-room posts.

@@ -5,3 +5,12 @@ Thumbs.db
 !.env.example
 .netlify/
 node_modules/
+www/
+android/
+ios/
+.gradle/
+android/.gradle/
+android/local.properties
+ios/Pods/
+ios/build/
+DerivedData/
