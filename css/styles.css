@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 17069)
-Total output lines: 1187
-
 /* SKYBRIDGE V39 — bilingual English/German website */
 [hidden] {
   display: none !important;
@@ -208,7 +205,529 @@ footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;marg
   margin:12px auto 25px;
   color:var(--muted);
   text-align:center;
-  font-s…7069 tokens truncated…:radial-gradient(circle,#fffbea 0 14%,#f4d792 24%,rgba(232,181,86,.76) 43%,rgba(232,181,86,.16) 66%,transparent 72%);box-shadow:0 0 17px rgba(244,215,146,.72)}
+  font-size:14px;
+  line-height:1.65;
+}
+.memory-form{gap:18px}
+.memory-form label{font-size:14px;font-weight:500}
+.memory-form input,.memory-form textarea{
+  margin-top:8px;
+  padding:15px 16px;
+  border-radius:15px;
+  border-color:rgba(232,181,86,.27);
+  background:rgba(1,12,21,.74);
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.memory-form input:focus,.memory-form textarea:focus{
+  outline:none;
+  border-color:rgba(244,215,146,.7);
+  box-shadow:0 0 0 3px rgba(232,181,86,.09);
+}
+.memory-form textarea{min-height:155px}
+.memory-form .button{width:100%;margin-top:2px;padding:15px 22px;font-size:16px}
+.memory-notice{text-align:center;background:transparent;padding:2px 8px;color:var(--muted)}
+.memory-notice.success,.memory-notice.error{padding:12px;background:rgba(232,181,86,.08)}
+
+@media(max-width:1000px){.admin-grid{grid-template-columns:1fr}.story-layout{grid-template-columns:1fr}}
+@media(max-width:900px){.menu-button{display:block}.main-nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;padding:20px;background:#04111e;border-bottom:1px solid var(--line)}.main-nav.open{display:flex}.trust-strip{grid-template-columns:1fr 1fr}.room-grid{grid-template-columns:1fr}.subheading,.admin-heading{align-items:flex-start;flex-direction:column}}
+@media(max-width:600px){
+  .brand{min-width:0}.brand img{width:min(270px,72vw);height:60px}.hero{padding-top:68px;padding-bottom:58px}.hero-grid{gap:38px}.hero h1{font-size:45px}.trust-strip{grid-template-columns:1fr}.section{padding-top:76px;padding-bottom:76px}.star-sky{min-height:320px;padding:35px}.star-shape{width:96px;height:114px}.modal-card{padding:28px 20px}.member-panel,.post-form-footer,.room-view-header{align-items:flex-start;flex-direction:column}.room-view-header h2{font-size:38px}
+  .star-modal-card{max-height:92vh;padding:30px 19px 24px;border-radius:24px}
+  .star-modal-card .modal-close{right:10px;top:10px;width:38px;height:38px;font-size:28px}
+  .star-remembrance-header{padding:9px 28px 0}
+  .star-remembrance-header h2{font-size:54px}
+  .star-remembrance-subtitle{font-size:19px}
+  .star-story-copy{margin-top:29px;font-size:15.5px;line-height:1.78}
+  .star-story-copy p{margin-bottom:17px}
+  .star-story-divider{margin:30px 0 27px}
+  .memory-section{padding:25px 18px 20px;border-radius:19px}
+  .memory-section h3{font-size:34px}
+  .memory-intro{margin-bottom:22px}
+  .memory-form textarea{min-height:140px}
+}
+@media(max-width:600px){
+  .contact-section{padding-left:12px;padding-right:12px}
+  .contact-section h2{font-size:clamp(19px,5.35vw,30px)}
+}
+#guestCommunity[hidden],
+.member-panel[hidden],
+.admin-badge[hidden],
+#roomArea[hidden],
+#roomView[hidden],
+#adminPanel[hidden] {
+  display: none !important;
+}
+
+@media(max-width:1000px){.memorial-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.brand img{width:min(290px,38vw)}}
+@media(max-width:700px){.wall-controls{grid-template-columns:1fr}.memorial-grid{grid-template-columns:1fr}.memorial-card{min-height:390px}.date-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.brand img{width:min(250px,70vw);height:56px}.site-header{padding-block:10px}.memorial-grid{gap:18px}.memorial-card{padding:30px 22px 25px}.memorial-symbol{height:132px}.memorial-card.is-anniversary .memorial-symbol{height:164px;margin-bottom:20px}.footer-brand img{height:75px}footer nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;width:min(100%,360px);margin:22px auto;font-size:15px;padding-inline:0}footer nav a{display:block}footer nav a:last-child{grid-column:1/-1}footer p{line-height:1.5;overflow-wrap:anywhere;font-size:15px}}
+
+@media(prefers-reduced-motion:reduce){.memorial-star-image{animation:none!important}}
+
+
+/* V35 — remembrance-first information architecture */
+.hero-copy .hero-intro{max-width:720px;margin-left:auto;margin-right:auto;color:#d4dde5;line-height:1.8;font-size:18px}
+.hero-copy .hero-note{display:inline-flex;align-items:center;justify-content:center;gap:9px;margin-top:24px;color:var(--gold-soft);font-size:13px;letter-spacing:.02em}
+.hero-copy .hero-note::before{content:"✦";color:var(--gold)}
+.wall-first-intro{max-width:820px;margin:0 auto 46px;text-align:center}
+.wall-first-intro h2{font-size:clamp(42px,5.5vw,70px)}
+.wall-first-intro p:last-child{max-width:680px;margin:18px auto 0;color:var(--muted);font-size:17px;line-height:1.75}
+.wall-primary-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:30px}
+.support-paths{color:var(--ink);background:#f4eddf}
+.support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:1000px;margin:0 auto}
+.support-card{display:flex;flex-direction:column;align-items:flex-start;min-height:280px;padding:34px;border:1px solid rgba(10,33,53,.13);border-radius:25px;background:rgba(255,255,255,.48);box-shadow:0 18px 48px rgba(30,39,47,.07)}
+.support-card .eyebrow{color:#9a6615}
+.support-card h3{margin:.15em 0 .45em;font:600 clamp(32px,4vw,46px)/1.05 "Cormorant Garamond",serif;color:#0a2135}
+.support-card p{margin:0 0 24px;color:#314657;line-height:1.75}
+.support-card .button{margin-top:auto;align-self:center;text-align:center;white-space:normal}
+.support-card .button-outline{color:#0a2135;border-color:rgba(10,33,53,.25);background:rgba(255,255,255,.4)}
+.community-section{background:linear-gradient(180deg,#09263a,#061b2b)}
+.community-section>.section-heading{max-width:680px}
+.community-section>.section-heading h2{font-size:clamp(38px,4.7vw,58px)}
+.help-page{min-height:70vh;color:var(--ink);background:var(--cream)}
+.help-hero{padding-bottom:56px;text-align:center}
+.help-hero h1{max-width:850px;margin:.15em auto;font:600 clamp(48px,7vw,82px)/.98 "Cormorant Garamond",serif}
+.help-hero>p:last-child{max-width:720px;margin:22px auto 0;color:#314657;font-size:17px;line-height:1.8}
+.help-directory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:1050px;margin:0 auto}
+.help-card{display:flex;flex-direction:column;padding:30px;border:1px solid rgba(10,33,53,.13);border-radius:23px;background:rgba(255,255,255,.5)}
+.help-card h2{margin:.15em 0 .35em;font:600 36px/1.05 "Cormorant Garamond",serif;color:#0a2135}
+.help-card p{color:#314657;line-height:1.7}
+.help-card .text-link{margin-top:auto;text-decoration:none}
+.help-disclaimer{max-width:900px;margin:38px auto 0;padding:25px;border-left:3px solid #c68a26;background:rgba(255,255,255,.4);color:#314657;line-height:1.7}
+.help-disclaimer strong{color:#0a2135}
+@media(max-width:800px){.support-grid,.help-directory{grid-template-columns:1fr}.support-card{min-height:0}}
+
+.help-return{flex:0 0 auto}
+@media(max-width:900px){.help-return{display:inline-flex}.help-page+.site-footer{padding-top:36px}}
+
+/* V38 — expanded professional support directory */
+.help-region{padding-top:64px;padding-bottom:72px}
+.help-region-alt{background:rgba(225,211,184,.24)}
+.help-region-heading{max-width:820px;margin:0 auto 38px;text-align:center}
+.help-region-heading h2{margin:.12em 0 .25em;font:600 clamp(42px,5.5vw,66px)/1 "Cormorant Garamond",serif;color:#0a2135}
+.help-region-heading>p:last-child{max-width:700px;margin:0 auto;color:#415565;font-size:17px;line-height:1.75}
+.help-region .help-card{min-height:300px}
+@media(max-width:800px){.help-region{padding-top:48px;padding-bottom:56px}.help-region-heading{margin-bottom:28px}.help-region .help-card{min-height:0}}
+
+
+/* V39 — bilingual language switch */
+.header-tools{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.language-switch{display:inline-flex;align-items:center;padding:3px;border:1px solid rgba(232,181,86,.34);border-radius:999px;background:rgba(2,14,24,.62);box-shadow:inset 0 1px rgba(255,255,255,.025)}
+.language-switch a{display:grid;place-items:center;min-width:39px;height:34px;padding:0 10px;border-radius:999px;color:#cbd4dc;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.08em;transition:.2s ease}
+.language-switch a:hover{color:var(--gold-soft)}
+.language-switch a.is-active{color:#17202a;background:linear-gradient(135deg,var(--gold-soft),var(--gold));box-shadow:0 7px 18px rgba(232,181,86,.17)}
+.language-switch a:focus-visible{outline:2px solid var(--gold-soft);outline-offset:2px}
+@media(max-width:1120px) and (min-width:901px){.main-nav{gap:15px}.main-nav a{font-size:13px}.brand img{width:min(275px,27vw)}}
+@media(max-width:900px){.site-header{gap:12px}.main-nav{margin-left:0}.header-tools{margin-left:auto}.language-switch a{min-width:36px;height:32px;padding:0 8px}.main-nav{z-index:30}}
+@media(max-width:600px){.brand img{width:min(205px,52vw)!important}.header-tools{gap:6px}.language-switch a{min-width:32px;height:30px;padding:0 7px;font-size:11px}.menu-button{padding:4px}}
+
+
+/* V42 — centered support buttons */
+.support-card .button{align-self:center;text-align:center;white-space:normal}
+@media(max-width:600px){.support-card .button{width:auto;max-width:100%;padding-left:28px;padding-right:28px}}
+
+/* V43 — readable privacy page copy */
+.privacy-section .story-text{color:#d6dee6}
+
+/* V45 — subtle star field across the dark blue content areas */
+.stars-section,.community-section,.contact-section,.how-note,.seo-callout{position:relative;isolation:isolate;overflow:hidden}
+.stars-section::after,.community-section::after,.contact-section::after,.how-note::after,.seo-callout::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;opacity:.42;background-image:radial-gradient(circle at 8% 18%,rgba(248,243,233,.78) 0 1px,transparent 1.7px),radial-gradient(circle at 29% 72%,rgba(244,215,146,.62) 0 1px,transparent 1.8px),radial-gradient(circle at 53% 31%,rgba(248,243,233,.72) 0 1px,transparent 1.6px),radial-gradient(circle at 76% 64%,rgba(244,215,146,.55) 0 1.1px,transparent 1.9px),radial-gradient(circle at 92% 22%,rgba(248,243,233,.7) 0 1px,transparent 1.7px);background-size:173px 157px,229px 211px,197px 181px,263px 239px,211px 193px;background-position:0 0,31px 47px,83px 19px,17px 91px,121px 53px}
+.stars-section>*,.community-section>*,.contact-section>*,.how-note>*,.seo-callout>*{position:relative;z-index:1}
+
+/* V49 — refined, memorial-quality visual finish */
+body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10%,rgba(42,91,128,.18),transparent 34%),linear-gradient(180deg,#071b2d 0%,#04121f 58%,#020a12 100%)}
+.site-header{box-shadow:0 12px 38px rgba(0,0,0,.18),inset 0 -1px rgba(255,255,255,.025)}
+.hero{border-bottom:1px solid rgba(244,215,146,.12);box-shadow:inset 0 -42px 80px rgba(0,0,0,.12)}
+.hero h1{text-wrap:balance;text-shadow:0 2px 24px rgba(0,0,0,.22)}
+.hero-copy .hero-intro,.hero-copy>p:last-of-type{text-wrap:pretty}
+.section{border-top:1px solid rgba(255,255,255,.025)}
+.section-heading h2,.story-layout h2{text-wrap:balance}
+
+.story-section::before{inset:3% -6%;opacity:.052;-webkit-mask-size:min(1220px,94vw) auto;mask-size:min(1220px,94vw) auto}
+.support-paths,.help-page,.privacy-section{position:relative;isolation:isolate;overflow:hidden}
+.support-paths::before,.help-page::before,.privacy-section::before{content:"";position:absolute;z-index:-1;inset:0;background:#0a2135;opacity:.032;pointer-events:none;-webkit-mask:url("../skys-bridge-wordmark.svg") center 18%/min(1180px,92vw) auto no-repeat;mask:url("../skys-bridge-wordmark.svg") center 18%/min(1180px,92vw) auto no-repeat}
+.support-paths>*,.help-page>*,.privacy-section>*{position:relative;z-index:1}
+
+.stars-section::before,.community-section::before,.contact-section::before{content:"";position:absolute;z-index:-1;width:min(680px,58vw);aspect-ratio:1;right:-9%;top:9%;background:#f8f3e9;opacity:.026;pointer-events:none;-webkit-mask:url("../assets/memorial-star.svg") center/contain no-repeat;mask:url("../assets/memorial-star.svg") center/contain no-repeat}
+.community-section::before{left:-12%;right:auto;top:18%;opacity:.022}
+.contact-section::before{width:min(310px,30vw);right:6%;top:50%;transform:translateY(-50%);opacity:.024}
+
+.support-card,.help-card,.room-card,.dashboard-card,.admin-card,.post-form,.post-card{border-color:rgba(244,215,146,.18);box-shadow:0 22px 55px rgba(0,0,0,.09),inset 0 1px rgba(255,255,255,.055)}
+.support-card,.help-card{background:rgba(255,255,255,.58);box-shadow:0 22px 60px rgba(20,34,45,.085),inset 0 1px rgba(255,255,255,.78)}
+.memorial-card{box-shadow:0 26px 70px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.045)}
+.button{letter-spacing:.01em;box-shadow:inset 0 1px rgba(255,255,255,.2);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.button-gold{background:linear-gradient(135deg,#f6dc9d 0%,#e8b556 52%,#c98724 100%);box-shadow:0 12px 32px rgba(183,121,28,.2),inset 0 1px rgba(255,255,255,.5)}
+
+/* Let the bridge artwork become part of the sky instead of a framed image. */
+.hero-grid{max-width:none}
+.logo-panel{
+  --logo-art-width:min(1080px,92vw);
+  width:100vw;
+  min-height:clamp(500px,58vw,790px);
+  margin:-34px calc(50% - 50vw) -74px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  isolation:isolate;
+  background:transparent;
+}
+.logo-panel::before{
+  content:"";
+  position:absolute;
+  z-index:-2;
+  inset:-45px;
+  background:
+    linear-gradient(180deg,rgba(6,26,43,.12),rgba(6,26,43,.03) 48%,rgba(3,16,28,.22)),
+    url("../assets/skysbridge-logo.png") center/cover no-repeat;
+  filter:blur(30px) saturate(.85);
+  transform:scale(1.08);
+  opacity:.58;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.72) 0%,#000 12%,#000 92%,rgba(0,0,0,.78) 100%);
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.72) 0%,#000 12%,#000 92%,rgba(0,0,0,.78) 100%);
+}
+.logo-panel::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(6,26,43,.08) 0%,transparent 12%,transparent 91%,rgba(3,16,28,.22) 100%),
+    linear-gradient(90deg,rgba(6,26,43,.62) 0%,transparent 10%,transparent 90%,rgba(6,26,43,.62) 100%);
+}
+.logo-panel img{
+  width:var(--logo-art-width);
+  max-width:none;
+  margin:0;
+  border-radius:0;
+  box-shadow:none;
+  -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9) 0%,#000 7%,#000 96%,rgba(0,0,0,.9) 100%);
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.9) 0%,#000 7%,#000 96%,rgba(0,0,0,.9) 100%);
+  filter:saturate(1.03) brightness(1.07) contrast(1.03) drop-shadow(0 24px 52px rgba(0,0,0,.2));
+}
+
+.logo-star-glow{
+  position:absolute;
+  z-index:3;
+  left:calc(50% - (var(--logo-art-width) * .241) - 4.5px);
+  top:calc(50% - (var(--logo-art-width) * .286) - 4.5px);
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  pointer-events:none;
+  background:#fff9dc;
+  box-shadow:0 0 9px 3px #fff6c8,0 0 25px 10px rgba(255,215,120,.78),0 0 58px 19px rgba(232,181,86,.38);
+  animation:logoStarTwinkle 2.8s ease-in-out infinite;
+}
+.logo-star-glow::before,.logo-star-glow::after{content:"";position:absolute;left:50%;top:50%;background:linear-gradient(90deg,transparent,#fff9df,transparent);transform:translate(-50%,-50%)}
+.logo-star-glow::before{width:78px;height:1px}
+.logo-star-glow::after{width:1px;height:78px;background:linear-gradient(180deg,transparent,#fff9df,transparent)}
+@keyframes logoStarTwinkle{0%,100%{opacity:.72;transform:scale(.72)}46%{opacity:1;transform:scale(1.18)}67%{opacity:.84;transform:scale(.92)}}
+
+@media(max-width:700px){
+  .logo-panel{
+    --logo-art-width:100vw;
+    min-height:0;
+    margin-top:0;
+    margin-bottom:-40px;
+  }
+  /* Keep the logo's star field single and in register on narrow screens. */
+  .logo-panel::before{display:none}
+  .logo-panel img{width:var(--logo-art-width);max-width:100%;height:auto}
+  .logo-panel::after{
+    background:linear-gradient(180deg,rgba(6,26,43,.18) 0%,transparent 8%,transparent 94%,rgba(3,16,28,.22) 100%);
+  }
+  .logo-star-glow{
+    left:26.1%;
+    top:14.4%;
+    margin:-4.5px 0 0 -4.5px;
+    transform-origin:center;
+  }
+}
+
+/* Calm, centered hero composition on the child-loss information pages. */
+.seo-hero .hero-copy{
+  max-width:900px;
+  margin-inline:auto;
+  text-align:center;
+}
+.seo-hero .hero-intro{
+  max-width:790px;
+  margin-inline:auto;
+}
+.seo-hero .seo-actions{
+  justify-content:center;
+}
+
+/* Every standard memorial light has equal visual weight. */
+.sky-symbol{
+  width:110px;
+  height:122px;
+  background-size:contain;
+  filter:drop-shadow(0 0 8px rgba(232,181,86,.32)) drop-shadow(0 0 18px rgba(232,181,86,.12));
+  animation:memorialTwinkle 3.8s ease-in-out infinite;
+}
+.memorial-star-image{animation:memorialTwinkle 3.8s ease-in-out infinite}
+@keyframes memorialTwinkle{
+  0%,100%{transform:scale(.98);opacity:.9}
+  50%{transform:scale(1.035);opacity:1}
+}
+@media(prefers-reduced-motion:reduce){.memorial-star-image,.sky-symbol{animation:none!important}}
+
+/* Quiet star separators make the desktop navigation easier to scan. */
+@media(min-width:901px){
+  .main-nav{gap:clamp(9px,1vw,15px)}
+  .main-nav>a:not(:last-of-type)::after{
+    content:"✦";
+    display:inline-block;
+    margin-left:clamp(9px,1vw,15px);
+    color:var(--gold-soft);
+    font-size:10px;
+    line-height:1;
+    opacity:.66;
+    transform:translateY(-1px);
+    text-shadow:0 0 9px rgba(244,215,146,.5);
+    transition:opacity .2s ease,text-shadow .2s ease;
+  }
+  .main-nav>a:hover::after{
+    opacity:.76;
+    text-shadow:0 0 11px rgba(244,215,146,.65);
+  }
+  .main-nav>a.is-current{color:var(--gold-soft)}
+}
+
+.main-nav>a.is-current,
+.main-nav>a[aria-current="page"],
+.main-nav>a[aria-current="location"]{
+  color:var(--gold-soft);
+  text-shadow:0 0 14px rgba(244,215,146,.24);
+}
+
+/* Full bridge artwork as a softly feathered watermark on light sections. */
+.story-section::before,
+.support-paths::before,
+.help-page::before,
+.privacy-section::before{
+  inset:0;
+  background-color:transparent;
+  background-image:url("../skys-bridge-wordmark.svg?v=56"),url("../skys-bridge-wordmark.svg?v=56");
+  background-position:center 16%,center 78%;
+  background-size:min(760px,72vw) auto,min(650px,62vw) auto;
+  background-repeat:no-repeat;
+  opacity:.045;
+  filter:none;
+  mix-blend-mode:multiply;
+  -webkit-mask:none;
+  mask:none;
+}
+
+@media(max-width:700px){
+  .story-section::before,
+  .support-paths::before,
+  .help-page::before,
+  .privacy-section::before{
+    background-position:center 14%,center 82%;
+    background-size:118vw auto,104vw auto;
+    opacity:.032;
+  }
+}
+
+.button-outline{border-color:rgba(244,215,146,.32);box-shadow:inset 0 1px rgba(255,255,255,.035)}
+.button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 15px 36px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.3)}
+.seo-callout,.how-note{box-shadow:0 24px 65px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.045)}
+.contact-section{box-shadow:inset 0 28px 70px rgba(0,0,0,.1)}
+footer{position:relative;border-top-color:rgba(244,215,146,.24);box-shadow:inset 0 1px rgba(255,255,255,.025)}
+footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font-size:16px;opacity:.75;text-shadow:0 0 18px rgba(244,215,146,.5)}
+
+@media(max-width:700px){.story-section::before,.support-paths::before,.help-page::before,.privacy-section::before{opacity:.028;-webkit-mask-size:145vw auto;mask-size:145vw auto}.stars-section::before,.community-section::before{width:95vw;opacity:.018}.contact-section::before{width:min(240px,54vw);right:-4%;top:50%;opacity:.016}.support-card,.help-card{box-shadow:0 14px 36px rgba(20,34,45,.07),inset 0 1px rgba(255,255,255,.7)}}
+
+
+/* V60 — celestial Wall of Stars: memorial cards appear only after selecting a light */
+.celestial-wall{
+  position:relative;
+  display:block;
+  width:min(1120px,100%);
+  max-width:1120px;
+  min-height:clamp(560px,64vw,720px);
+  margin:0 auto 30px;
+  overflow:hidden;
+  isolation:isolate;
+  border:1px solid rgba(244,215,146,.2);
+  border-radius:34px;
+  background:
+    radial-gradient(circle at 48% 51%,rgba(232,181,86,.10),transparent 14%),
+    radial-gradient(circle at 74% 28%,rgba(58,117,166,.22),transparent 25%),
+    radial-gradient(circle at 25% 76%,rgba(26,74,113,.28),transparent 30%),
+    linear-gradient(180deg,#061a30 0%,#03101f 62%,#020a13 100%);
+  box-shadow:inset 0 0 120px rgba(0,0,0,.48),0 28px 80px rgba(0,0,0,.22);
+}
+.celestial-wall::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  opacity:.76;
+  background-image:
+    radial-gradient(circle,#fff8dc 0 1px,transparent 1.7px),
+    radial-gradient(circle,#b8d9f2 0 1px,transparent 1.8px),
+    radial-gradient(circle,#f4d792 0 1.15px,transparent 2px);
+  background-size:89px 83px,137px 129px,211px 193px;
+  background-position:13px 19px,41px 67px,93px 31px;
+  animation:celestialDrift 34s linear infinite alternate;
+}
+.celestial-wall::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 50% 112%,rgba(58,118,162,.16),transparent 52%);
+}
+.constellation-map{
+  position:absolute;
+  z-index:0;
+  overflow:visible;
+  pointer-events:none;
+  opacity:.14;
+  filter:drop-shadow(0 0 4px rgba(204,226,243,.16));
+}
+.constellation-map polyline{fill:none;stroke:rgba(195,218,237,.32);stroke-width:.34;vector-effect:non-scaling-stroke}
+.constellation-map circle{fill:#e9f3fb;filter:drop-shadow(0 0 2px rgba(216,235,250,.64))}
+.leo-map{inset:11% 13% 12%;width:74%;height:72%;opacity:.3;filter:drop-shadow(0 0 5px rgba(244,215,146,.2))}
+.leo-map polyline{stroke:rgba(244,215,146,.34);stroke-width:.38}
+.leo-map circle{fill:#f8efd3;filter:drop-shadow(0 0 3px rgba(244,215,146,.75))}
+.constellation-map--cancer{left:2%;top:5%;width:25%;height:24%;transform:rotate(-8deg)}
+.constellation-map--virgo{right:1%;top:5%;width:29%;height:28%;transform:rotate(7deg)}
+.constellation-map--libra{left:2%;bottom:3%;width:27%;height:27%;transform:rotate(5deg)}
+.constellation-map--gemini{right:2%;bottom:2%;width:25%;height:29%;transform:rotate(-7deg)}
+.constellation-label{
+  position:absolute;
+  left:48%;
+  top:22%;
+  z-index:1;
+  transform:translateX(-50%);
+  color:rgba(244,215,146,.68);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  pointer-events:none;
+}
+.celestial-wall .memorial-card{
+  position:absolute;
+  z-index:2;
+  left:var(--star-x,48%);
+  top:var(--star-y,51%);
+  width:132px;
+  min-height:0;
+  height:132px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  box-shadow:none;
+  transform:translate(-50%,-50%);
+  animation:starFloat 6s ease-in-out infinite;
+}
+.celestial-wall .memorial-card:hover,
+.celestial-wall .memorial-card:focus-visible{
+  z-index:4;
+  border:0;
+  box-shadow:none;
+  transform:translate(-50%,-50%) scale(1.12);
+  outline:none;
+}
+.celestial-wall .memorial-card:focus-visible::after{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border:1px solid rgba(244,215,146,.72);
+  border-radius:50%;
+  box-shadow:0 0 24px rgba(232,181,86,.32);
+}
+.celestial-wall [data-star="sky"]{--star-x:48%;--star-y:51%;width:166px;height:166px}
+.celestial-wall .memorial-card.is-viewer-center{--star-x:48%;--star-y:51%;width:166px;height:166px;z-index:3}
+.celestial-wall [data-star="sky"].is-secondary-light{width:132px;height:132px}
+.celestial-wall .memorial-symbol{height:78px;margin:0;overflow:visible}
+.celestial-wall [data-star="sky"] .memorial-symbol{height:94px}
+.celestial-wall .memorial-card.is-viewer-center .memorial-symbol{height:94px}
+.celestial-wall [data-star="sky"].is-secondary-light .memorial-symbol{height:78px}
+.celestial-wall .sky-symbol,
+.celestial-wall .memorial-star-image{
+  width:76px;
+  height:86px;
+  filter:drop-shadow(0 0 9px #fff4bd) drop-shadow(0 0 26px rgba(232,181,86,.78));
+  animation:celestialPulse 3.8s ease-in-out infinite;
+}
+.celestial-wall [data-star="sky"] .sky-symbol{width:94px;height:106px}
+.celestial-wall .memorial-card.is-viewer-center .memorial-star-shape{width:76px;height:86px}
+.celestial-wall [data-star="sky"].is-secondary-light .sky-symbol{width:76px;height:86px}
+.celestial-wall .memorial-card strong{
+  position:absolute;
+  left:50%;
+  top:calc(50% + 38px);
+  transform:translateX(-50%);
+  margin:0;
+  color:#f7dda0;
+  font:600 22px/1 "Cormorant Garamond",serif;
+  text-shadow:0 2px 10px #020812,0 0 15px rgba(232,181,86,.38);
+  white-space:nowrap;
+}
+.celestial-wall [data-star="sky"] strong{top:calc(50% + 48px);font-size:27px}
+.celestial-wall .memorial-card.is-viewer-center strong{top:calc(50% + 42px);font-size:25px}
+.celestial-wall [data-star="sky"].is-secondary-light strong{top:calc(50% + 38px);font-size:22px}
+.celestial-wall .memorial-kicker,
+.celestial-wall .memorial-day,
+.celestial-wall .memorial-rule,
+.celestial-wall .memorial-card small{display:none}
+@keyframes celestialPulse{0%,100%{transform:scale(.94);opacity:.82}50%{transform:scale(1.08);opacity:1}}
+@keyframes starFloat{0%,100%{margin-top:0}50%{margin-top:-5px}}
+@keyframes celestialDrift{from{transform:translate3d(-4px,-3px,0)}to{transform:translate3d(5px,4px,0)}}
+@media(max-width:700px){
+  .celestial-wall{min-height:580px;border-radius:25px}
+  .leo-map{inset:10% 1% 18%;width:98%;height:68%}
+  .constellation-map--cancer,.constellation-map--virgo{top:3%;width:34%}
+  .constellation-map--libra,.constellation-map--gemini{bottom:1%;width:34%}
+  .constellation-label{top:20%}
+  .celestial-wall [data-star="sky"]{--star-x:46%;--star-y:49%}
+  .celestial-wall .memorial-card.is-viewer-center{--star-x:46%;--star-y:49%;width:142px;height:142px}
+  .celestial-wall [data-star="sky"].is-secondary-light{width:112px;height:112px}
+  .celestial-wall .memorial-card{width:112px;height:112px}
+  .celestial-wall [data-star="sky"]{width:142px;height:142px}
+  .celestial-wall .sky-symbol,.celestial-wall .memorial-star-image{width:64px;height:74px}
+  .celestial-wall [data-star="sky"] .sky-symbol{width:82px;height:92px}
+  .celestial-wall .memorial-card.is-viewer-center .memorial-star-shape{width:70px;height:80px}
+  .celestial-wall [data-star="sky"].is-secondary-light .sky-symbol{width:64px;height:74px}
+  .celestial-wall .memorial-card strong{top:calc(50% + 33px);font-size:20px}
+  .celestial-wall [data-star="sky"] strong{top:calc(50% + 42px);font-size:25px}
+  .celestial-wall .memorial-card.is-viewer-center strong{top:calc(50% + 38px);font-size:24px}
+  .celestial-wall [data-star="sky"].is-secondary-light strong{top:calc(50% + 33px);font-size:20px}
+}
+@media(prefers-reduced-motion:reduce){
+  .celestial-wall::before,.celestial-wall .memorial-card,.celestial-wall .sky-symbol,.celestial-wall .memorial-star-image{animation:none!important}
+}
+
+
+/* V61 — selectable memorial star forms */
+.star-picker{margin:4px 0;padding:0;border:0}
+.star-picker legend{margin-bottom:10px;color:#d5dde5;font-size:13px;font-weight:600}
+.star-picker-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.star-choice{position:relative;display:grid;grid-template-rows:58px auto;place-items:center;gap:7px;min-height:96px;padding:11px 7px;border:1px solid rgba(232,181,86,.22);border-radius:15px;color:#d5dde5;text-align:center;background:rgba(1,12,21,.48);cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .2s ease}
+.star-choice:hover{border-color:rgba(244,215,146,.48);transform:translateY(-1px)}
+.star-choice input{position:absolute;width:1px!important;height:1px;margin:0!important;opacity:0}
+.star-choice:has(input:checked){border-color:var(--gold-soft);background:rgba(232,181,86,.11);box-shadow:0 0 0 2px rgba(232,181,86,.08),inset 0 1px rgba(255,255,255,.06)}
+.star-choice:has(input:focus-visible){outline:2px solid var(--gold-soft);outline-offset:2px}
+.star-choice>span:last-child{font-size:12px;line-height:1.25}
+.star-choice-preview,.memorial-star-shape{position:relative;display:block;width:58px;height:58px;filter:drop-shadow(0 0 8px rgba(255,244,189,.8)) drop-shadow(0 0 19px rgba(232,181,86,.5))}
+.star-choice-preview::before,.memorial-star-shape::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#fff6c9 3%,#f2c45e 52%,#d79027 100%)}
+.star-radiant::before{clip-path:polygon(50% 0,58% 36%,85% 15%,64% 42%,100% 50%,64% 58%,85% 85%,58% 64%,50% 100%,42% 64%,15% 85%,36% 58%,0 50%,36% 42%,15% 15%,42% 36%)}
+.star-classic::before{clip-path:polygon(50% 3%,61% 36%,96% 36%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,4% 36%,39% 36%)}
+.star-guiding::before{clip-path:polygon(50% 0,58% 40%,100% 50%,58% 60%,50% 100%,42% 60%,0 50%,42% 40%)}
+.star-halo::before{inset:10%;border-radius:50%;background:radial-gradient(circle,#fffbea 0 14%,#f4d792 24%,rgba(232,181,86,.76) 43%,rgba(232,181,86,.16) 66%,transparent 72%);box-shadow:0 0 17px rgba(244,215,146,.72)}
 .star-halo::after{content:"";position:absolute;inset:25%;border:1px solid rgba(255,247,208,.66);border-radius:50%;box-shadow:0 0 10px rgba(244,215,146,.68)}
 .celestial-wall .memorial-star-shape{width:76px;height:86px;animation:celestialPulse 3.8s ease-in-out infinite}
 .celestial-wall [data-star="sky"] .sky-symbol{animation:celestialPulse 3.8s ease-in-out infinite}
