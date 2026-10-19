@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#102d45"/>
+      <stop offset=".52" stop-color="#071b2d"/>
+      <stop offset="1" stop-color="#020c18"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2=".12" y2="1">
+      <stop offset="0" stop-color="#fff0b5"/>
+      <stop offset=".28" stop-color="#f6cf72"/>
+      <stop offset=".66" stop-color="#dca844"/>
+      <stop offset="1" stop-color="#9f6825"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#d9aa56" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#d9aa56" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop stop-color="#e9b951" stop-opacity=".23"/>
+      <stop offset="1" stop-color="#e9b951" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <circle cx="512" cy="505" r="410" fill="url(#halo)"/>
+  <g fill="#d4e5ef" opacity=".62">
+    <circle cx="193" cy="231" r="5"/><circle cx="794" cy="208" r="4"/>
+    <circle cx="856" cy="374" r="5"/><circle cx="137" cy="446" r="4"/>
+    <circle cx="706" cy="287" r="3"/><circle cx="325" cy="179" r="3"/>
+  </g>
+  <g fill="#f5d184" opacity=".8">
+    <circle cx="513" cy="147" r="4"/><circle cx="885" cy="554" r="3"/>
+    <circle cx="238" cy="329" r="3"/><circle cx="602" cy="239" r="3"/>
+  </g>
+  <path d="M92 752 C236 775 351 805 512 812 C674 805 790 775 932 752 L932 1024 L92 1024Z" fill="#0b2940" opacity=".74"/>
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main suspension cables -->
+    <path d="M94 674 C227 659 292 430 418 405 C461 396 481 477 512 488 C543 477 563 396 606 405 C732 430 797 659 930 674" stroke-width="18" filter="url(#glow)"/>
+    <!-- Deck and bridge truss -->
+    <path d="M82 684 Q512 652 942 684" stroke-width="25"/>
+    <path d="M102 714 Q512 691 922 714" stroke-width="11" opacity=".92"/>
+    <path d="M130 718 L190 777 L250 714 L310 772 L370 709 L430 767 L490 707 L550 767 L610 709 L670 772 L730 714 L790 777 L850 718 L894 724" stroke-width="8" opacity=".8"/>
+    <!-- Tower legs -->
+    <path d="M285 431 L285 698 M337 420 L337 695 M687 420 L687 695 M739 431 L739 698" stroke-width="19"/>
+    <path d="M274 429 L348 429 M676 429 L750 429" stroke-width="24"/>
+    <!-- Vertical hangers -->
+    <path d="M180 608 L180 676 M222 554 L222 672 M254 501 L254 669 M285 431 L285 666 M337 420 L337 663 M398 424 L398 659 M455 461 L455 655 M512 488 L512 652 M569 461 L569 655 M626 424 L626 659 M687 420 L687 663 M739 431 L739 666 M770 501 L770 669 M802 554 L802 672 M844 608 L844 676" stroke-width="7" opacity=".95"/>
+    <!-- Anchor piers -->
+    <path d="M255 696 L367 696 M657 696 L769 696" stroke-width="23"/>
+  </g>
+  <path d="M112 821 Q512 845 912 821" fill="none" stroke="url(#water)" stroke-width="8" opacity=".75"/>
+  <path d="M196 870 Q512 888 828 870 M277 914 Q512 928 747 914" fill="none" stroke="#d9aa56" stroke-width="5" opacity=".24"/>
+  <!-- Small north star above the bridge -->
+  <path d="M512 249 L523 292 L566 303 L523 314 L512 357 L501 314 L458 303 L501 292Z" fill="url(#gold)" opacity=".96" filter="url(#glow)"/>
+</svg>
