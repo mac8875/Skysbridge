@@ -2,16 +2,16 @@
   "name": "skysbridge-platform",
   "private": true,
   "version": "41.0.0",
-  "description": "Skysbridge platform \u2014 Version 41 with complete and natural German localization",
+  "description": "Skysbridge platform — Version 41 with complete and natural German localization",
   "dependencies": {
-    "@capacitor/android": "8.5.3",
     "@capacitor/app": "8.1.2",
-    "@capacitor/cli": "8.5.3",
     "@capacitor/core": "8.5.3",
-    "@capacitor/ios": "8.5.3",
     "@supabase/supabase-js": "2.118.0"
   },
   "devDependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/cli": "8.5.3",
+    "@capacitor/ios": "8.5.3",
     "esbuild": "0.28.2"
   },
   "scripts": {
