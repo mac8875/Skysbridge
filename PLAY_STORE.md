@@ -9,6 +9,7 @@
 - **Website:** https://skysbridge.org/
 - **Privacy policy:** https://skysbridge.org/privacy.html
 - **Account deletion URL:** https://skysbridge.org/delete-account.html
+- **App icon:** `play-store/app-icon-512.png` (512 × 512, 32-bit PNG)
 - **Feature graphic:** `play-store/feature-graphic.jpg` (1024 × 500)
 - **Package name:** `org.skysbridge.app`
 - **Target SDK:** Android 16 / API 36
