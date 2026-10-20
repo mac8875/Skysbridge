@@ -839,7 +839,7 @@
           .eq("public_requested", true)
           .order("created_at", { ascending: false })
       : await db.from("memorials")
-          .select("star_style")
+          .select("id")
           .eq("approved", true)
           .eq("public_requested", true)
           .order("created_at", { ascending: false });
