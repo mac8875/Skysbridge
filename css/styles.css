@@ -727,6 +727,9 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .star-radiant::before{clip-path:polygon(50% 0,58% 36%,85% 15%,64% 42%,100% 50%,64% 58%,85% 85%,58% 64%,50% 100%,42% 64%,15% 85%,36% 58%,0 50%,36% 42%,15% 15%,42% 36%)}
 .star-classic::before{clip-path:polygon(50% 3%,61% 36%,96% 36%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,4% 36%,39% 36%)}
 .star-guiding::before{clip-path:polygon(50% 0,58% 40%,100% 50%,58% 60%,50% 100%,42% 60%,0 50%,42% 40%)}
+.star-comet::before{clip-path:polygon(50% 0,60% 34%,96% 4%,68% 42%,100% 50%,66% 58%,95% 96%,58% 66%,50% 100%,42% 66%,4% 96%,34% 58%,0 50%,34% 42%,4% 4%,42% 34%)}
+.star-petal::before{clip-path:polygon(50% 0,61% 28%,88% 12%,72% 39%,100% 50%,72% 61%,88% 88%,61% 72%,50% 100%,39% 72%,12% 88%,28% 61%,0 50%,28% 39%,12% 12%,39% 28%);border-radius:50%}
+.star-north::before{clip-path:polygon(50% 0,58% 39%,84% 16%,61% 42%,100% 50%,61% 58%,84% 84%,58% 61%,50% 100%,42% 61%,16% 84%,39% 58%,0 50%,39% 42%,16% 16%,42% 39%)}
 .star-halo::before{inset:10%;border-radius:50%;background:radial-gradient(circle,#fffbea 0 14%,#f4d792 24%,rgba(232,181,86,.76) 43%,rgba(232,181,86,.16) 66%,transparent 72%);box-shadow:0 0 17px rgba(244,215,146,.72)}
 .star-halo::after{content:"";position:absolute;inset:25%;border:1px solid rgba(255,247,208,.66);border-radius:50%;box-shadow:0 0 10px rgba(244,215,146,.68)}
 .celestial-wall .memorial-star-shape{width:76px;height:86px;animation:celestialPulse 3.8s ease-in-out infinite}
@@ -738,7 +741,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 
 
 /* V62 — deep-space refinement: natural depth, restrained motion and Sky's signature star */
-.star-picker-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.star-picker-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 .star-signature::before{opacity:0}
 .star-choice-preview.star-signature,
 .memorial-star-shape.star-signature{

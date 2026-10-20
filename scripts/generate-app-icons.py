@@ -29,7 +29,7 @@ for y in range(720, 1024):
 master = Image.alpha_composite(master, shade)
 
 font_path = next((path for path in FONT_CANDIDATES if Path(path).exists()), None)
-font = ImageFont.truetype(font_path, 158) if font_path else ImageFont.load_default(size=158)
+font = ImageFont.truetype(font_path, 124) if font_path else ImageFont.load_default(size=124)
 
 def text_mask_at(position, stroke_width=0):
     mask = Image.new("L", master.size, 0)
@@ -37,10 +37,10 @@ def text_mask_at(position, stroke_width=0):
                               stroke_width=stroke_width, stroke_fill=255)
     return mask
 
-fill_mask = text_mask_at((512, 882))
-stroke_mask = text_mask_at((512, 882), stroke_width=5)
+fill_mask = text_mask_at((512, 720))
+stroke_mask = text_mask_at((512, 720), stroke_width=4)
 stroke_only = ImageChops.subtract(stroke_mask, fill_mask)
-shadow_mask = text_mask_at((512, 889), stroke_width=6).filter(ImageFilter.GaussianBlur(6))
+shadow_mask = text_mask_at((512, 726), stroke_width=5).filter(ImageFilter.GaussianBlur(6))
 shadow = Image.new("RGBA", master.size, (0, 0, 0, 0))
 shadow.putalpha(shadow_mask.point(lambda a: int(a * 0.68)))
 master = Image.alpha_composite(master, shadow)

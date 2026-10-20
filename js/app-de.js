@@ -13,6 +13,7 @@
   let currentUser = null;
   let currentProfile = null;
   let activeRoomId = null;
+  let modalPhotoUrl = null;
 
   const modal = document.querySelector("#modal");
   const modalContent = document.querySelector("#modalContent");
@@ -80,6 +81,8 @@
   function openModal(html, cardClass = "") {
     if (!modal || !modalContent) return;
 
+    if (modalPhotoUrl) URL.revokeObjectURL(modalPhotoUrl);
+    modalPhotoUrl = null;
     modalContent.innerHTML = html;
 
     if (modalCard) {
@@ -96,6 +99,8 @@
 
     setHidden(modal, true);
     modalContent.innerHTML = "";
+    if (modalPhotoUrl) URL.revokeObjectURL(modalPhotoUrl);
+    modalPhotoUrl = null;
 
     if (modalCard) {
       modalCard.className = "modal-card";
@@ -289,6 +294,19 @@
         <label>Land (optional)
           <input name="country" maxlength="80">
         </label>
+        <fieldset class="star-picker">
+          <legend>Wähle deinen Stern</legend>
+          <div class="star-picker-grid">
+            <label class="star-choice"><input type="radio" name="star_style" value="radiant" checked><span class="star-choice-preview star-radiant" aria-hidden="true"></span><span>Strahlend</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="classic"><span class="star-choice-preview star-classic" aria-hidden="true"></span><span>Klassisch</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="guiding"><span class="star-choice-preview star-guiding" aria-hidden="true"></span><span>Wegweiser</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="halo"><span class="star-choice-preview star-halo" aria-hidden="true"></span><span>Lichtkreis</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="signature"><span class="star-choice-preview star-signature" aria-hidden="true"></span><span>Skys Stern</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="comet"><span class="star-choice-preview star-comet" aria-hidden="true"></span><span>Komet</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="petal"><span class="star-choice-preview star-petal" aria-hidden="true"></span><span>Blütenstern</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="north"><span class="star-choice-preview star-north" aria-hidden="true"></span><span>Polarstern</span></label>
+          </div>
+        </fieldset>
         <label>
           <input type="checkbox" name="public_requested">
           Einen Platz auf der öffentlichen Sternenhimmel beantragen
@@ -319,6 +337,7 @@
         country: values.get("country") || null,
         birth_date: values.get("birth_date") || null,
         passing_date: values.get("passing_date") || null,
+        star_style: values.get("star_style") || "radiant",
         public_requested: values.get("public_requested") === "on"
       };
 
@@ -341,32 +360,23 @@
   }
 
   document.querySelectorAll("[data-star]").forEach(element => {
-    element.addEventListener("click", () => showStar(element.dataset.star));
+    element.addEventListener("click", () => {
+      if (wallUserId) showStar(element.dataset.star);
+    });
   });
 
   async function showStar(slug) {
-    const germanSkyStory =
-      "Der Moment, in dem ich zum ersten Mal von Sky erfuhr, war das größte Glück meines Lebens. Ihn gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.\n\nSky war nur für kurze Zeit bei uns, doch er hat unser Leben für immer verändert. Sein Leben hat uns gelehrt, dass Liebe nicht in Jahren gemessen wird, sondern an der Tiefe der Verbundenheit, die wir miteinander teilen.\n\nNach seinem Verlust haben wir erfahren, wie einsam Trauer sein kann. Viele Eltern tragen ihren Schmerz still in sich und glauben, damit allein zu sein.\n\nSkysbridge entstand in Erinnerung an Sky – als würdevoller Ort, an dem Kinder, die viel zu früh gegangen sind, beim Namen genannt, geehrt und in Erinnerung bewahrt werden können.\n\nSky ist der erste Stern im Himmel voller Sterne. Sein Licht wurde zum Anfang eines Ortes, an dem die Geschichte jedes Kindes weiterleuchten darf.";
+    if (!db || !wallUserId) return;
+    const { data: authData, error: authError } = await db.auth.getUser();
+    if (authError || !authData?.user || authData.user.is_anonymous || authData.user.id !== wallUserId) return;
 
-    let star = {
-      name: "Sky",
-      story: germanSkyStory
-    };
-
-    if (db) {
-      const { data } = await db
-        .from("stars")
-        .select("name,story")
-        .eq("slug", slug)
-        .eq("is_public", true)
-        .maybeSingle();
-
-      if (data) {
-        star = slug === "sky"
-          ? { name: data.name || "Sky", story: germanSkyStory }
-          : data;
-      }
-    }
+    const { data: star, error } = await db
+      .from("stars")
+      .select("name,story")
+      .eq("slug", slug)
+      .eq("is_public", true)
+      .maybeSingle();
+    if (error || !star) return;
 
     const starName = escapeHtml(star.name || "Ein Kind, an das erinnert wird");
     const storyHtml = renderStoryParagraphs(star.story);
@@ -444,6 +454,27 @@
 
 
   let approvedMemorials = [];
+  let wallUserId = null;
+  let wallIsMember = false;
+
+  function updateSkyCardAccess(isMember) {
+    const skyCard = document.querySelector('[data-star="sky"]');
+    if (skyCard) {
+      skyCard.disabled = !isMember;
+      skyCard.setAttribute("aria-label", isMember ? "Skys Geschichte öffnen" : "Gedenkstern");
+      skyCard.innerHTML = isMember
+        ? `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span><span class="memorial-kicker">Das erste Licht</span><strong>Sky</strong><span class="memorial-day">Für immer unvergessen</span><span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span><small>Sein Leben war kurz. Sein Licht bleibt.</small>`
+        : `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span>`;
+    }
+    setHidden(document.querySelector(".wall-controls"), !isMember);
+  }
+
+  async function getMemberUser() {
+    if (!db) return null;
+    const { data, error } = await db.auth.getUser();
+    const user = data?.user;
+    return !error && user && !user.is_anonymous && user.id === wallUserId ? user : null;
+  }
 
   function sameMonthAndDay(value, today = new Date()) {
     if (!value) return false;
@@ -473,15 +504,29 @@
     return "standard";
   }
 
-  function memorialSymbolMarkup(state, detailed = false) {
+  function memorialSymbolMarkup(state, detailed = false, requestedStyle = "radiant") {
     if (state === "anniversary") {
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Eine brennende Gedenkkerze" : ""}">`;
     }
 
-    return `<img class="memorial-star-image" src="assets/memorial-star.svg" alt="" aria-hidden="true">`;
+    const allowedStyles = ["radiant", "classic", "guiding", "halo", "signature", "comet", "petal", "north"];
+    const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
+    return `<span class="memorial-star-shape star-${style}" aria-hidden="true"></span>`;
   }
 
-  function openApprovedMemorial(item) {
+  async function memorialPhotoUrl(path) {
+    const before = await getMemberUser();
+    if (!path || !before) return null;
+    const { data, error } = await db.storage.from("memorial-photos").download(path);
+    if (error || !data) return null;
+    const after = await getMemberUser();
+    if (!after || after.id !== before.id) return null;
+    return URL.createObjectURL(data);
+  }
+
+  async function openApprovedMemorial(item) {
+    if (!wallIsMember || !(await getMemberUser())) return;
+    const photoUrl = item.photo_path ? await memorialPhotoUrl(item.photo_path) : null;
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
@@ -500,10 +545,12 @@
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Für immer geliebt")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
+        ${photoUrl ? `<img class="memorial-detail-photo" src="${escapeHtml(photoUrl)}" alt="${escapeHtml(item.child_name || "")}">` : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
       </article>
     `, "star-modal-card");
+    modalPhotoUrl = photoUrl;
   }
 
   function renderApprovedMemorials() {
@@ -512,6 +559,22 @@
     if (!grid || !status) return;
 
     grid.querySelectorAll("[data-public-memorial]").forEach(card => card.remove());
+    const skyCard = grid.querySelector('[data-star="sky"]');
+    updateSkyCardAccess(wallIsMember);
+
+    if (!wallIsMember) {
+      approvedMemorials.forEach((item, index) => {
+        const star = document.createElement("span");
+        star.className = "memorial-card is-standard guest-star-only";
+        star.dataset.publicMemorial = `guest-${index}`;
+        star.setAttribute("aria-hidden", "true");
+        star.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span>`;
+        grid.appendChild(star);
+      });
+      window.SkysbridgeSkyMap?.layout([...grid.querySelectorAll(".guest-star-only")], skyCard, null);
+      status.textContent = "Ein Himmel voller Sterne.";
+      return;
+    }
 
     const search = String(document.querySelector("#memorialSearch")?.value || "").trim().toLowerCase();
     const sort = document.querySelector("#memorialSort")?.value || "newest";
@@ -542,7 +605,7 @@
 
       card.innerHTML = `
         <span class="memorial-symbol">
-          ${memorialSymbolMarkup(state)}
+          ${memorialSymbolMarkup(state, true, item.star_style)}
         </span>
         <span class="memorial-kicker">Ein Licht, das bleibt</span>
         <strong>${escapeHtml(item.child_name || "Für immer geliebt")}</strong>
@@ -564,22 +627,31 @@
     const status = document.querySelector("#wallStatus");
     if (!status) return;
     if (!db) {
+      wallUserId = null;
+      wallIsMember = false;
       renderApprovedMemorials();
       return;
     }
 
     status.textContent = "Gedenksterne werden geladen …";
-    let result = await db
-      .from("memorials")
-      .select("id,child_name,remembrance,country,birth_date,passing_date,created_at")
-      .eq("approved", true)
-      .eq("public_requested", true)
-      .order("created_at", { ascending: false });
+    const { data: authData, error: authError } = await db.auth.getUser();
+    const user = authError ? null : authData?.user || null;
+    wallIsMember = Boolean(user && !user.is_anonymous);
+    wallUserId = wallIsMember ? user.id : null;
+    updateSkyCardAccess(wallIsMember);
 
-    if (result.error && /birth_date|passing_date/i.test(result.error.message || "")) {
+    let result = wallIsMember
+      ? await db.from("memorials")
+          .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at")
+          .eq("approved", true)
+          .eq("public_requested", true)
+          .order("created_at", { ascending: false })
+      : await db.from("memorials").select("star_style");
+
+    if (wallIsMember && result.error && /birth_date|passing_date|photo_path/i.test(result.error.message || "")) {
       result = await db
         .from("memorials")
-        .select("id,child_name,remembrance,country,created_at")
+        .select("id,child_name,remembrance,country,star_style,created_at")
         .eq("approved", true)
         .eq("public_requested", true)
         .order("created_at", { ascending: false });
@@ -1264,7 +1336,24 @@
 
   if (db) {
     db.auth.onAuthStateChange(() => {
-      window.setTimeout(refreshSession, 0);
+      window.setTimeout(async () => {
+        const previousUserId = wallUserId;
+        const { data } = await db.auth.getUser();
+        const user = data?.user;
+        const nextUserId = user && !user.is_anonymous ? user.id : null;
+        if (previousUserId !== nextUserId) {
+          wallUserId = nextUserId;
+          wallIsMember = Boolean(nextUserId);
+          if (!wallIsMember) {
+            approvedMemorials = [];
+            closeModal();
+          }
+          updateSkyCardAccess(wallIsMember);
+          renderApprovedMemorials();
+          await loadApprovedMemorials();
+        }
+        await refreshSession();
+      }, 0);
     });
 
     refreshSession();
