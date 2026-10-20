@@ -1215,3 +1215,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   .logo-panel{width:100%;min-width:0;margin-inline:auto;overflow:hidden}
   .logo-panel img{display:block;width:100%;max-width:100%;height:auto}
 }
+
+
+/* Improve muted introductory text contrast on the warm support section. */
+.support-paths .section-heading>p:last-child{color:#314657}
