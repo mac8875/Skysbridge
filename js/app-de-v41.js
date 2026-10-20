@@ -426,7 +426,9 @@
   }
 
   document.querySelectorAll("[data-star]").forEach(element => {
-    element.addEventListener("click", () => {
+    element.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       if (!wallIsMember) {
         showStarAccessPrompt();
         return;
