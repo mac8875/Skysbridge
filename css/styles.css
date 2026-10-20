@@ -739,7 +739,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   filter:drop-shadow(0 0 8px #fff6c9) drop-shadow(0 0 22px rgba(232,181,86,.72));
 }
 .celestial-wall{
-  min-height:clamp(620px,66vw,770px);
+  min-height:calc(clamp(620px,66vw,770px) + var(--wall-extra-height,0px));
   border:0;
   border-radius:26px;
   background:
@@ -779,6 +779,14 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .celestial-wall .memorial-star-shape{width:54px;height:61px;animation:featuredStarGlow 5.8s ease-in-out infinite}
 .celestial-wall [data-star="sky"] .sky-symbol{width:76px;height:86px;animation:featuredStarGlow 6.4s ease-in-out infinite}
 .celestial-wall .memorial-card strong{top:calc(50% + 29px);font-size:20px;color:#f3dcaa}
+.celestial-wall .memorial-card strong{
+  width:min(230px,calc(50vw - 18px));
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-align:center;
+  line-height:1.08;
+  text-wrap:balance;
+}
 .celestial-wall [data-star="sky"] strong{top:calc(50% + 42px);font-size:25px}
 .celestial-wall .memorial-card:hover .memorial-star-shape,
 .celestial-wall .memorial-card:focus-visible .memorial-star-shape,
@@ -799,7 +807,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 @media(max-width:760px){
   .star-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .star-choice:last-child{grid-column:1/-1;width:calc(50% - 5px);justify-self:center}
-  .celestial-wall{min-height:630px;border-radius:20px}
+  .celestial-wall{min-height:calc(630px + var(--wall-extra-height,0px));border-radius:20px}
   .celestial-wall .memorial-star-shape{width:48px;height:55px}
   .celestial-wall [data-star="sky"] .sky-symbol{width:70px;height:80px}
 }
