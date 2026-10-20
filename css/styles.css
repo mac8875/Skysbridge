@@ -307,6 +307,11 @@ footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;marg
 .help-region-heading h2{margin:.12em 0 .25em;font:600 clamp(42px,5.5vw,66px)/1 "Cormorant Garamond",serif;color:#0a2135}
 .help-region-heading>p:last-child{max-width:700px;margin:0 auto;color:#415565;font-size:17px;line-height:1.75}
 .help-region .help-card{min-height:300px}
+.help-country-picker{max-width:600px;margin:28px auto 0;padding:0 24px;text-align:center}
+.help-country-picker label{display:block;margin-bottom:8px;color:#0a2135;font-weight:600}
+.help-country-picker select{width:min(100%,480px);padding:12px 42px 12px 15px;border:1px solid rgba(10,33,53,.25);border-radius:12px;background:#fff;color:#0a2135;font:inherit}
+.help-country-picker select:focus-visible{outline:2px solid #c68a26;outline-offset:3px}
+.help-country-picker p{max-width:540px;margin:9px auto 0;color:#526271;font-size:14px;line-height:1.55}
 @media(max-width:800px){.help-region{padding-top:48px;padding-bottom:56px}.help-region-heading{margin-bottom:28px}.help-region .help-card{min-height:0}}
 
 

@@ -47,6 +47,23 @@
       <p>Skysbridge es una plataforma de recuerdo. No ofrece terapia, diagnósticos, consejo clínico ni selección de terapeutas. Las organizaciones siguientes ofrecen información sobre el duelo, apoyo entre personas que han vivido pérdidas o acceso a ayuda local adecuada.</p>
     </section>
 
+    <div class="help-country-picker">
+      <label for="helpCountry">Priorizar ayuda para un país</label>
+      <select id="helpCountry" aria-describedby="helpCountryHint">
+        <option value="">Usar el idioma del navegador si incluye un país</option>
+        <option value="ES-LATAM">Latinoamérica hispanohablante · recursos en español</option>
+          <option value="AE">Emiratos Árabes Unidos</option>
+          <option value="DE">Alemania</option>
+          <option value="AT">Austria</option>
+          <option value="CH">Suiza</option>
+          <option value="US">Estados Unidos</option>
+          <option value="ES">España</option>
+          <option value="MX">México</option>
+          <option value="GB">Reino Unido</option>
+      </select>
+      <p id="helpCountryHint">El idioma del navegador solo sirve como aproximación. Puedes elegir un país aquí; la selección se guarda en este navegador.</p>
+    </div>
+
     <section class="section help-region" aria-labelledby="help-uae" style="padding-top:0">
       <div class="help-region-heading">
         <p class="eyebrow">Apoyo local y especializado</p>
@@ -204,7 +221,7 @@
   </main>
   <footer><div class="footer-brand"><img src="skys-bridge-wordmark.svg" alt="Skysbridge"></div><nav><a href="index-es.html#stars">Un cielo lleno de estrellas</a><a href="privacy-es.html">Privacidad</a><a href="community-guidelines-es.html">Normas</a><a href="mailto:together@skysbridge.org">Contacto</a></nav><p>Sky’s Bridge por M. F.  |  © 2026 Skysbridge. Todos los derechos reservados.</p>  <p class="site-version" style="font-size:0.75rem;line-height:1.5;margin-top:0.5rem">Versión 2.1</p>
   </footer>
-  <script src="js/professional-help-country.js?v=1"></script>
+  <script src="js/professional-help-country.js?v=2"></script>
   <script src="js/language-switch.js?v=70"></script>
 </body>
 </html>
