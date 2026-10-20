@@ -82,7 +82,7 @@ jobs:
           name: skysbridge-android-debug
       - name: Prepare public APK filename
         run: mv app-debug.apk skysbridge-android.apk
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           tag_name: android-v47
           name: Skysbridge Android v47
