@@ -424,7 +424,11 @@
 
   async function waitForMemoryForm() {
     for (let i = 0; i < 40; i++) {
-      const form = document.querySelector('#memoryForm');
+      // German retains a hidden static modal with a legacy #memoryForm.
+      // Wait for the form inside the modal that is actually open so approved
+      // memories and their photos appear in the visible dialog in every language.
+      const form = document.querySelector('#modal:not([hidden]) #memoryForm')
+        || document.querySelector('.sky-native-modal:target #memoryForm');
       if (form) return form;
       await new Promise(resolve => setTimeout(resolve, 100));
     }
