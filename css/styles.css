@@ -1024,6 +1024,27 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .celestial-wall [data-star="sky"].is-anniversary .memorial-candle-image{width:42px;height:86px}
 .star-remembrance.is-anniversary .star-remembrance-symbol .memorial-candle-image{width:68px;height:150px;object-fit:contain}
 
+/* Match the anniversary and birthday treatments to the current inline star markup. */
+.memorial-card.is-anniversary .memorial-candle-image{width:52px;height:112px;object-fit:contain}
+.celestial-wall .memorial-card.is-anniversary .memorial-symbol{height:78px;margin:0}
+.celestial-wall .memorial-card.is-anniversary .memorial-candle-image{width:34px;height:62px}
+.memorial-card.is-birthday .memorial-star-shape,
+.memorial-detail-card.is-birthday .memorial-star-shape{
+  animation:birthdayStarTwinkle 2.35s ease-in-out infinite;
+  filter:brightness(1.2) saturate(1.1) drop-shadow(0 0 13px #fff7d5) drop-shadow(0 0 37px rgba(232,181,86,.92));
+}
+.celestial-wall .memorial-card.is-birthday .memorial-star-shape{animation-duration:2.8s}
+.memorial-card.is-birthday .memorial-symbol{position:relative}
+.memorial-card.is-birthday .memorial-symbol::before,
+.memorial-card.is-birthday .memorial-symbol::after{top:50%;left:50%}
+.memorial-card.is-birthday .memorial-symbol::before{transform:translate(39px,-39px)}
+.memorial-card.is-birthday .memorial-symbol::after{transform:translate(-43px,31px)}
+@media(prefers-reduced-motion:reduce){
+  .memorial-card.is-birthday .memorial-star-shape,
+  .memorial-card.is-birthday .memorial-symbol::before,
+  .memorial-card.is-birthday .memorial-symbol::after{animation:none!important}
+}
+
 /* Resolve the signed-in family's centre before revealing memorial lights. */
 #memorialGrid[aria-busy="true"] .memorial-card{visibility:hidden;pointer-events:none}
 

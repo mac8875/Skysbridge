@@ -540,14 +540,18 @@
   }
 
   function sameMonthAndDay(value, today = new Date()) {
-    if (!value) return false;
-    const parts = String(value).slice(0, 10).split("-").map(Number);
-    return parts.length === 3 && parts[1] === today.getMonth() + 1 && parts[2] === today.getDate();
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || "").slice(0, 10));
+    if (!match) return false;
+    const [, year, month, day] = match.map(Number);
+    const parsed = new Date(Date.UTC(year, month - 1, day));
+    if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) return false;
+    return month === today.getMonth() + 1 && day === today.getDate();
   }
 
   function formatPlainDate(value) {
     if (!value) return "";
     const date = new Date(`${String(value).slice(0, 10)}T12:00:00`);
+    if (Number.isNaN(date.getTime())) return "";
     return new Intl.DateTimeFormat("de-DE", { day: "numeric", month: "long", year: "numeric" }).format(date);
   }
 
@@ -560,15 +564,15 @@
     return "";
   }
 
-  function memorialDayState(item) {
-    // A remembrance anniversary takes priority if both dates fall on the same day.
-    if (sameMonthAndDay(item.passing_date)) return "anniversary";
-    if (sameMonthAndDay(item.birth_date)) return "birthday";
+  function memorialDayState(item, today = new Date()) {
+    // The remembrance anniversary takes priority when both dates share the same month and day.
+    if (sameMonthAndDay(item.passing_date, today)) return "anniversary";
+    if (sameMonthAndDay(item.birth_date, today)) return "birthday";
     return "standard";
   }
 
   function memorialSymbolMarkup(state, detailed = false, requestedStyle = "radiant") {
-    if (state === "anniversary" && detailed) {
+    if (state === "anniversary") {
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Eine brennende Gedenkkerze" : ""}">`;
     }
 
@@ -596,9 +600,9 @@
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
-        ? "Heute erinnern wir"
+        ? "Heute in liebevoller Erinnerung"
         : state === "birthday"
-          ? "Heute feiern wir"
+          ? "Zum Geburtstag in liebevoller Erinnerung"
           : "Ein Licht, das bleibt";
     const dateLine = memorialDateLine(item);
 
@@ -664,9 +668,9 @@
       const dateLine = memorialDateLine(item);
       const dayLabel =
         state === "anniversary"
-          ? "Heute erinnern wir"
+          ? "Heute in liebevoller Erinnerung"
           : state === "birthday"
-            ? "Heute feiern wir"
+            ? "Zum Geburtstag in liebevoller Erinnerung"
             : "Für immer unvergessen";
 
       card.innerHTML = `
