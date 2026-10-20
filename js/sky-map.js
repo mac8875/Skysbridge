@@ -17,6 +17,7 @@
     const centerY = 50;
     center.style.setProperty("--star-x", `${centerX}%`);
     center.style.setProperty("--star-y", `${centerY}%`);
+    container.style.setProperty("--wall-extra-height", "0px");
 
     const satellites = stars.filter(card => card !== center);
     if (!satellites.length) return;
@@ -33,10 +34,15 @@
         : card.dataset.star === "sky"
           ? 0
           : index + 1;
-      const [x, y] = positions[positionIndex % positions.length];
+      const cycle = Math.floor(positionIndex / positions.length);
+      const [x, baseY] = positions[positionIndex % positions.length];
+      const y = 23 + (baseY - 19) * 0.78;
       card.style.setProperty("--star-x", `${x}%`);
-      card.style.setProperty("--star-y", `${y}%`);
+      card.style.setProperty("--star-y", cycle ? `calc(${y}% + ${cycle * 260}px)` : `${y}%`);
     });
+
+    const extraHeight = Math.max(0, Math.ceil(satellites.length / positions.length) - 1) * 300;
+    container.style.setProperty("--wall-extra-height", `${extraHeight}px`);
   }
 
   window.SkysbridgeSkyMap = { layout };
