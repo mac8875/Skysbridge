@@ -5,3 +5,9 @@ Thumbs.db
 !.env.example
 .netlify/
 node_modules/
+www/
+assets/icon-only.png
+android/local.properties
+android/.gradle/
+android/**/build/
+ios/DerivedData/

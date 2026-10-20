@@ -1,0 +1,70 @@
+name: Skysbridge mobile builds
+
+on:
+  push:
+    branches: [main, codex/skysbridge-capacitor-build]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    name: Android debug APK
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci
+      - run: npm run build:mobile
+      - run: npx cap add android
+      - run: npx @capacitor/assets generate --android
+      - run: npx cap sync android
+      - run: sed -i 's/versionCode 1/versionCode 42/' android/app/build.gradle
+      - run: sed -i 's/versionName "1.0"/versionName "42.0.0"/' android/app/build.gradle
+      - run: ./gradlew --no-daemon assembleDebug
+        working-directory: android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: skysbridge-android-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+  ios-simulator:
+    name: iOS Simulator app
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:mobile
+      - run: npx cap add ios
+      - run: npx @capacitor/assets generate --ios
+      - run: npx cap sync ios
+      - name: Build for iOS Simulator
+        run: >-
+          xcodebuild -project ios/App/App.xcodeproj -scheme App
+          -configuration Debug -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath "$RUNNER_TEMP/DerivedData"
+          CURRENT_PROJECT_VERSION=42 MARKETING_VERSION=42.0.0
+          CODE_SIGNING_ALLOWED=NO build
+      - name: Package simulator app
+        run: ditto -c -k --sequesterRsrc --keepParent "$RUNNER_TEMP/DerivedData/Build/Products/Debug-iphonesimulator/App.app" "$RUNNER_TEMP/skysbridge-ios-simulator.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: skysbridge-ios-simulator
+          path: ${{ runner.temp }}/skysbridge-ios-simulator.zip
+          if-no-files-found: error

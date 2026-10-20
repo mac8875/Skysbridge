@@ -3,7 +3,18 @@
   "private": true,
   "version": "41.0.0",
   "description": "Skysbridge platform — Version 41 with complete and natural German localization",
+  "scripts": {
+    "build:mobile": "node scripts/prepare-mobile.mjs"
+  },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
     "@supabase/supabase-js": "^2.57.4"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.5.3",
+    "sharp": "^0.35.5"
   }
 }
