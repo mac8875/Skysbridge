@@ -596,7 +596,7 @@
       skyCard.setAttribute("aria-label", isMember ? "Abrir la historia de Sky" : "Inicia sesión para descubrir la historia de Sky");
       skyCard.innerHTML = isMember
         ? skyCard.dataset.memberMarkup
-        : `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span>`;
+        : `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span><strong>Sky</strong>`;
     }
     setHidden(document.querySelector(".wall-controls"), !isMember);
   }

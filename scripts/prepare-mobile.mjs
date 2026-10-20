@@ -5,8 +5,14 @@ import sharp from 'sharp';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'www');
-await sharp(path.join(root, 'assets/icon-source.jpg'))
-  .resize(1024, 1024, { fit: 'cover' })
+const wordmark = await sharp(path.join(root, 'skys-bridge-wordmark.svg'))
+  .resize({ width: 940 })
+  .png()
+  .toBuffer();
+await sharp({
+  create: { width: 1024, height: 1024, channels: 4, background: '#04121f' }
+})
+  .composite([{ input: wordmark, left: 42, top: 394 }])
   .png()
   .toFile(path.join(root, 'assets/icon-only.png'));
 const excludedDirectories = new Set([
