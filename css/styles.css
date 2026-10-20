@@ -260,7 +260,7 @@ footer nav{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 22px;marg
 
 @media(max-width:1000px){.memorial-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.brand img{width:min(290px,38vw)}}
 @media(max-width:700px){.wall-controls{grid-template-columns:1fr}.memorial-grid{grid-template-columns:1fr}.memorial-card{min-height:390px}.date-grid{grid-template-columns:1fr}}
-@media(max-width:600px){.brand img{width:min(250px,70vw);height:56px}.site-header{padding-block:10px}.memorial-grid{gap:18px}.memorial-card{padding:30px 22px 25px}.memorial-symbol{height:132px}.memorial-card.is-anniversary .memorial-symbol{height:164px;margin-bottom:20px}.footer-brand img{height:75px}footer nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;width:min(100%,360px);margin:22px auto;font-size:15px;padding-inline:0}footer nav a{display:block}footer nav a:last-child{grid-column:1/-1}footer p{line-height:1.5;overflow-wrap:anywhere;font-size:15px}}
+@media(max-width:600px){.brand img{width:min(250px,70vw);height:56px}.site-header{padding-block:10px}.memorial-grid{gap:18px}.memorial-card{padding:30px 22px 25px}.memorial-symbol{height:132px}.memorial-card.is-anniversary .memorial-symbol{height:164px;margin-bottom:20px}.footer-brand img{height:75px}footer nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;width:min(100%,360px);margin:22px auto;font-size:15px;padding-inline:0}footer nav a{display:block}footer nav a:last-child{grid-column:2}footer p{line-height:1.5;overflow-wrap:anywhere;font-size:15px}}
 
 @media(prefers-reduced-motion:reduce){.memorial-star-image{animation:none!important}}
 
@@ -808,7 +808,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 }
 @media(max-width:760px){
   .star-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .star-choice:last-child{grid-column:1/-1;width:calc(50% - 5px);justify-self:center}
+  .star-choice:last-child{grid-column:auto;width:auto;justify-self:stretch}
   .celestial-wall{min-height:630px;border-radius:20px}
   .celestial-wall .memorial-star-shape{width:48px;height:55px}
   .celestial-wall [data-star="sky"] .sky-symbol{width:70px;height:80px}
