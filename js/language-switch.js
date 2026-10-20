@@ -149,6 +149,7 @@
     submitting: 'Enviando el recuerdo para revisión…',
     success: 'Tu recuerdo se ha enviado de forma privada para revisión.',
     memoriesHeading: 'Recuerdos aprobados',
+    noApprovedMemories: 'Aún no hay recuerdos aprobados.',
     deleteMemory: 'Eliminar recuerdo',
     deleting: 'Eliminando…',
     confirmDelete: author => `¿Eliminar permanentemente este recuerdo de ${author || 'esta persona'}? Esta acción no se puede deshacer.`,
@@ -166,6 +167,7 @@
     submitting: 'Erinnerung wird zur Prüfung gesendet …',
     success: 'Deine Erinnerung wurde sicher und zunächst privat zur Prüfung übermittelt.',
     memoriesHeading: 'Freigegebene Erinnerungen',
+    noApprovedMemories: 'Es gibt noch keine freigegebenen Erinnerungen.',
     deleteMemory: 'Erinnerung löschen',
     deleting: 'Wird gelöscht …',
     confirmDelete: author => `Diese Erinnerung von ${author || 'dieser Person'} dauerhaft löschen? Das kann nicht rückgängig gemacht werden.`,
@@ -183,6 +185,7 @@
     submitting: 'Submitting memory for review…',
     success: 'Your memory was submitted privately for review.',
     memoriesHeading: 'Approved memories',
+    noApprovedMemories: 'There are no approved memories yet.',
     deleteMemory: 'Delete memory',
     deleting: 'Deleting…',
     confirmDelete: author => `Permanently delete this memory from ${author || 'this author'}? This cannot be undone.`,
@@ -459,10 +462,11 @@
         .order('created_at', { ascending: false });
     }
 
-    if (result.error || !result.data?.length) return;
+    if (result.error) return;
 
-    const canDelete = await currentUserIsAdmin();
-    const rows = await Promise.all(result.data.map(async item => ({
+    const memories = result.data || [];
+    const canDelete = memories.length ? await currentUserIsAdmin() : false;
+    const rows = await Promise.all(memories.map(async item => ({
       ...item,
       photoUrl: item.photo_path ? await signedPhotoUrl(item.photo_path) : null
     })));
@@ -475,6 +479,13 @@
     listHeading.className = 'approved-memories-heading';
     listHeading.textContent = text.memoriesHeading;
     list.appendChild(listHeading);
+
+    if (!rows.length) {
+      const empty = document.createElement('p');
+      empty.className = 'muted';
+      empty.textContent = text.noApprovedMemories;
+      list.appendChild(empty);
+    }
 
     rows.forEach(item => {
       const card = document.createElement('article');
