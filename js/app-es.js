@@ -322,6 +322,9 @@
             <label class="star-choice"><input type="radio" name="star_style" value="guiding"><span class="star-choice-preview star-guiding" aria-hidden="true"></span><span>Luz guía</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="halo"><span class="star-choice-preview star-halo" aria-hidden="true"></span><span>Halo</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="signature"><span class="star-choice-preview star-signature" aria-hidden="true"></span><span>La estrella de Sky</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="comet"><span class="star-choice-preview star-comet" aria-hidden="true"></span><span>Cometa</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="petal"><span class="star-choice-preview star-petal" aria-hidden="true"></span><span>Pétalo</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="north"><span class="star-choice-preview star-north" aria-hidden="true"></span><span>Estrella polar</span></label>
           </div>
         </fieldset>
         <label>
@@ -567,14 +570,18 @@
   }
 
   function sameMonthAndDay(value, today = new Date()) {
-    if (!value) return false;
-    const parts = String(value).slice(0, 10).split("-").map(Number);
-    return parts.length === 3 && parts[1] === today.getMonth() + 1 && parts[2] === today.getDate();
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || "").slice(0, 10));
+    if (!match) return false;
+    const [, year, month, day] = match.map(Number);
+    const parsed = new Date(Date.UTC(year, month - 1, day));
+    if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) return false;
+    return month === today.getMonth() + 1 && day === today.getDate();
   }
 
   function formatPlainDate(value) {
     if (!value) return "";
     const date = new Date(`${String(value).slice(0, 10)}T12:00:00`);
+    if (Number.isNaN(date.getTime())) return "";
     return new Intl.DateTimeFormat("es", { day: "numeric", month: "long", year: "numeric" }).format(date);
   }
 
@@ -587,19 +594,19 @@
     return "";
   }
 
-  function memorialDayState(item) {
-    // A remembrance anniversary takes priority if both dates fall on the same day.
-    if (sameMonthAndDay(item.passing_date)) return "anniversary";
-    if (sameMonthAndDay(item.birth_date)) return "birthday";
+  function memorialDayState(item, today = new Date()) {
+    // The remembrance anniversary takes priority when both dates share the same month and day.
+    if (sameMonthAndDay(item.passing_date, today)) return "anniversary";
+    if (sameMonthAndDay(item.birth_date, today)) return "birthday";
     return "standard";
   }
 
   function memorialSymbolMarkup(state, detailed = false, requestedStyle = "radiant") {
-    if (state === "anniversary" && detailed) {
+    if (state === "anniversary") {
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Una vela encendida en su memoria" : ""}">`;
     }
 
-    const allowedStyles = ["radiant", "classic", "guiding", "halo", "signature"];
+    const allowedStyles = ["radiant", "classic", "guiding", "halo", "signature", "comet", "petal", "north"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
     return `<span class="memorial-star-shape star-${style}" aria-hidden="true"></span>`;
   }
@@ -623,9 +630,9 @@
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
-        ? "Hoy recordamos"
+        ? "Hoy, en su memoria"
         : state === "birthday"
-          ? "Hoy celebramos"
+          ? "En su cumpleaños, le recordamos"
           : "Una luz que permanece";
     const dateLine = memorialDateLine(item);
 
