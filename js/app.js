@@ -746,16 +746,6 @@
       if (item.id === viewerCenter?.id) card.classList.add("is-viewer-center");
       card.setAttribute("aria-label", `Open memorial for ${item.child_name || "a child remembered"}`);
 
-      const starPositions = [
-        ["72%","34%"],["76%","62%"],["25%","66%"],["19%","35%"],
-        ["87%","43%"],["61%","76%"],["35%","79%"],["31%","24%"],
-        ["90%","72%"],["12%","56%"],["66%","19%"],["44%","88%"]
-      ];
-      if (item.id !== viewerCenter?.id) {
-        const [starX, starY] = starPositions[(index + (viewerCenter ? 1 : 0)) % starPositions.length];
-        card.style.setProperty("--star-x", starX);
-        card.style.setProperty("--star-y", starY);
-      }
       card.style.animationDelay = `${(index % 7) * -.65}s`;
 
       const dateLine = memorialDateLine(item);
@@ -780,6 +770,12 @@
       card.addEventListener("click", () => openApprovedMemorial(item));
       grid.appendChild(card);
     });
+
+    const wallStars = [...grid.querySelectorAll(".memorial-card")];
+    const centerStar = viewerCenter
+      ? wallStars.find(card => card.dataset.publicMemorial === viewerCenter.id)
+      : skyCard;
+    window.SkysbridgeSkyMap?.layout(wallStars, centerStar, grid);
 
     if (search && !rows.length) status.textContent = `No memorial found for “${document.querySelector("#memorialSearch").value.trim()}”.`;
     else if (viewerCenter) status.textContent = `${viewerCenter.child_name || "Your child's light"} is at the centre of your own sky full of stars.`;
