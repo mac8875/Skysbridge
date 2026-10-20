@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate native launcher icons from the real bridge in the Skysbridge logo."""
+"""Generate native launcher icons from the approved Sky’s Bridge SB launcher artwork."""
 
 from pathlib import Path
 
@@ -7,15 +7,17 @@ from PIL import Image, ImageDraw
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "native-assets/app-icon/skysbridge-real-bridge-source.jpg"
+SOURCE = ROOT / "native-assets/app-icon/skysbridge-sb-source.jpg"
 ANDROID = ROOT / "native-assets/android-icons/res"
 IOS_ICON = ROOT / "native-assets/ios-icons/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png"
+PLAY_ICON = ROOT / "play-store/app-icon-512.png"
 ICON_DIR = ROOT / "native-assets/app-icon"
 ICON_DIR.mkdir(parents=True, exist_ok=True)
 
 master = Image.open(SOURCE).convert("RGB").resize((1024, 1024), Image.Resampling.LANCZOS)
 master_rgba = master.convert("RGBA")
 master.save(IOS_ICON, optimize=True)
+master.resize((512, 512), Image.Resampling.LANCZOS).save(PLAY_ICON, optimize=True)
 
 densities = {
     "ldpi": 36,

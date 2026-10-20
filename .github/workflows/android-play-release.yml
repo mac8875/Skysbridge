@@ -38,6 +38,8 @@ jobs:
           echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/skysbridge-upload-key.jks"
           echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/skysbridge-upload-key.jks" >> "$GITHUB_ENV"
       - run: npm ci
+      - run: python -m pip install Pillow
+      - run: python scripts/generate-app-icons.py
       - run: npm run sync:mobile
       - name: Build signed Play bundle
         env:

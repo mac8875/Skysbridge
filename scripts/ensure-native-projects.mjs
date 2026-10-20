@@ -27,8 +27,8 @@ if (!manifest.includes('android:scheme="skysbridge"')) {
 // signing credentials. CI supplies the upload key only through protected secrets.
 const androidBuildPath = path.join(root, 'android/app/build.gradle');
 let androidBuild = readFileSync(androidBuildPath, 'utf8');
-androidBuild = androidBuild.replace(/versionCode\s+\d+/, 'versionCode 2');
-androidBuild = androidBuild.replace(/versionName\s+"[^"]*"/, 'versionName "1.0.1"');
+androidBuild = androidBuild.replace(/versionCode\s+\d+/, 'versionCode 3');
+androidBuild = androidBuild.replace(/versionName\s+"[^"]*"/, 'versionName "1.0.2"');
 if (!androidBuild.includes('def playUploadKeyReady')) {
   androidBuild = `def playUploadKeyReady = System.getenv('ANDROID_KEYSTORE_PATH') && System.getenv('ANDROID_KEYSTORE_PASSWORD') && System.getenv('ANDROID_KEY_ALIAS') && System.getenv('ANDROID_KEY_PASSWORD')\n\n${androidBuild}`;
 }
