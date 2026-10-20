@@ -811,7 +811,6 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 }
 @media(max-width:760px){
   .star-picker-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .star-choice:last-child{grid-column:1/-1;width:calc(50% - 5px);justify-self:center}
   .celestial-wall{min-height:calc(630px + var(--wall-extra-height,0px));border-radius:20px}
   .celestial-wall .memorial-star-shape{width:48px;height:55px}
   .celestial-wall [data-star="sky"] .sky-symbol{width:70px;height:80px}
