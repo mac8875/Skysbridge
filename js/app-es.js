@@ -195,6 +195,20 @@
     });
   });
 
+  function showStarAccessPrompt() {
+    openModal(`
+      <p class="eyebrow">Una invitación serena</p>
+      <h2 id="modalTitle">Cada estrella guarda una historia</h2>
+      <p>Inicia sesión o crea una cuenta gratuita para descubrir los nombres y recuerdos que hay detrás de las estrellas. Puedes explorarlos a tu ritmo.</p>
+      <div class="tabs">
+        <button class="button button-gold" id="starAccessLogin" type="button">Iniciar sesión</button>
+        <button class="button button-outline" id="starAccessSignup" type="button">Crear cuenta</button>
+      </div>
+    `, "star-access-card");
+    document.querySelector("#starAccessLogin")?.addEventListener("click", () => showAuth(false, "login"));
+    document.querySelector("#starAccessSignup")?.addEventListener("click", () => showAuth(false, "signup"));
+  }
+
   function showAuth(forMemorial = false, initialMode = "login") {
     openModal(`
       <h2 id="modalTitle">${forMemorial ? "Inicia sesión para honrar a un hijo" : "Únete a Skysbridge"}</h2>
@@ -403,7 +417,11 @@
 
   document.querySelectorAll("[data-star]").forEach(element => {
     element.addEventListener("click", () => {
-      if (wallUserId) showStar(element.dataset.star);
+      if (!wallIsMember) {
+        showStarAccessPrompt();
+        return;
+      }
+      showStar(element.dataset.star);
     });
   });
 
@@ -516,10 +534,11 @@
   function updateSkyCardAccess(isMember) {
     const skyCard = document.querySelector('[data-star="sky"]');
     if (skyCard) {
-      skyCard.disabled = !isMember;
-      skyCard.setAttribute("aria-label", isMember ? "Abrir la historia de Sky" : "Estrella conmemorativa");
+      if (!skyCard.dataset.memberMarkup) skyCard.dataset.memberMarkup = skyCard.innerHTML;
+      skyCard.disabled = false;
+      skyCard.setAttribute("aria-label", isMember ? "Abrir la historia de Sky" : "Inicia sesión para descubrir la historia de Sky");
       skyCard.innerHTML = isMember
-        ? `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span><span class="memorial-kicker">La primera luz</span><strong>Sky</strong><span class="memorial-day">Siempre en nuestra memoria</span><span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span><small>Su vida fue breve. Su luz permanece.</small>`
+        ? skyCard.dataset.memberMarkup
         : `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span>`;
     }
     setHidden(document.querySelector(".wall-controls"), !isMember);
@@ -634,11 +653,13 @@
       const plane = window.SkysbridgeSkyMap?.plane || grid;
       plane.querySelectorAll(".guest-star-only").forEach(card => card.remove());
       approvedMemorials.forEach((item, index) => {
-        const star = document.createElement("span");
+        const star = document.createElement("button");
+        star.type = "button";
         star.className = "memorial-card is-standard guest-star-only";
         star.dataset.publicMemorial = `guest-${index}`;
-        star.setAttribute("aria-hidden", "true");
+        star.setAttribute("aria-label", "Inicia sesión para descubrir la historia detrás de esta estrella.");
         star.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span>`;
+        star.addEventListener("click", showStarAccessPrompt);
         plane.appendChild(star);
       });
       window.SkysbridgeSkyMap?.layout([...plane.querySelectorAll(".guest-star-only")], skyCard, null);
@@ -738,7 +759,6 @@
     let nextViewerMemorialIds = new Set();
 
     try {
-    // Public stars are available to guests even when no auth session exists.
     let user = null;
     try {
       const authResult = await db.auth.getUser();
@@ -753,6 +773,7 @@
     wallIsMember = Boolean(user && !user.is_anonymous);
     wallUserId = wallIsMember ? user.id : null;
     updateSkyCardAccess(wallIsMember);
+
     if (wallIsMember) {
       const ownResult = await db
         .from("memorials")
@@ -760,17 +781,21 @@
         .eq("user_id", user.id)
         .eq("approved", true)
         .eq("public_requested", true);
-
       if (ownResult.error) console.warn("Star ownership lookup unavailable:", ownResult.error);
       else nextViewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
     }
+
     let result = wallIsMember
       ? await db.from("memorials")
           .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at")
           .eq("approved", true)
           .eq("public_requested", true)
           .order("created_at", { ascending: false })
-      : await db.from("memorials").select("star_style");
+      : await db.from("memorials")
+          .select("star_style")
+          .eq("approved", true)
+          .eq("public_requested", true)
+          .order("created_at", { ascending: false });
 
     if (wallIsMember && result.error && /birth_date|passing_date|star_style/i.test(result.error.message || "")) {
       result = await db
