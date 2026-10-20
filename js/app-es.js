@@ -793,11 +793,7 @@
           .eq("approved", true)
           .eq("public_requested", true)
           .order("created_at", { ascending: false })
-      : await db.from("memorials")
-          .select("id")
-          .eq("approved", true)
-          .eq("public_requested", true)
-          .order("created_at", { ascending: false });
+      : await db.from("memorials").select("star_style");
 
     if (wallIsMember && result.error && /birth_date|passing_date|star_style/i.test(result.error.message || "")) {
       result = await db
