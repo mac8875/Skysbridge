@@ -332,6 +332,9 @@
             <label class="star-choice"><input type="radio" name="star_style" value="guiding"><span class="star-choice-preview star-guiding" aria-hidden="true"></span><span>Wegweiser</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="halo"><span class="star-choice-preview star-halo" aria-hidden="true"></span><span>Lichtkreis</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="signature"><span class="star-choice-preview star-signature" aria-hidden="true"></span><span>Skys Stern</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="comet"><span class="star-choice-preview star-comet" aria-hidden="true"></span><span>Komet</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="petal"><span class="star-choice-preview star-petal" aria-hidden="true"></span><span>Blütenstern</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="north"><span class="star-choice-preview star-north" aria-hidden="true"></span><span>Polarstern</span></label>
           </div>
         </fieldset>
         <label>
@@ -569,7 +572,7 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Eine brennende Gedenkkerze" : ""}">`;
     }
 
-    const allowedStyles = ["radiant", "classic", "guiding", "halo", "signature"];
+    const allowedStyles = ["radiant", "classic", "guiding", "halo", "signature", "comet", "petal", "north"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
     return `<span class="memorial-star-shape star-${style}" aria-hidden="true"></span>`;
   }
