@@ -1015,3 +1015,19 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 /* Optional child photo on approved memorials and in the moderator review. */
 .memorial-detail-photo{display:block;width:min(100%,420px);max-height:420px;object-fit:contain;margin:18px auto;border-radius:12px;border:1px solid rgba(225,187,113,.35)}
 .memorial-review-photo{display:block;max-width:220px;max-height:180px;object-fit:contain;margin:12px 0;border-radius:8px}
+
+
+/* Additional matching star choices and special-day treatments. */
+.star-comet::before{clip-path:polygon(50% 0,60% 34%,96% 4%,68% 42%,100% 50%,66% 58%,95% 96%,58% 66%,50% 100%,42% 66%,4% 96%,34% 58%,0 50%,34% 42%,4% 4%,42% 34%)}
+.star-petal::before{clip-path:polygon(50% 0,61% 28%,88% 12%,72% 39%,100% 50%,72% 61%,88% 88%,61% 72%,50% 100%,39% 72%,12% 88%,28% 61%,0 50%,28% 39%,12% 12%,39% 28%);border-radius:50%}
+.star-north::before{clip-path:polygon(50% 0,58% 39%,84% 16%,61% 42%,100% 50%,61% 58%,84% 84%,58% 61%,50% 100%,42% 61%,16% 84%,39% 58%,0 50%,39% 42%,16% 16%,42% 39%)}
+.memorial-card.is-anniversary .memorial-candle-image{width:52px;height:112px;object-fit:contain}
+.celestial-wall .memorial-card.is-anniversary .memorial-symbol{height:78px;margin:0}
+.celestial-wall .memorial-card.is-anniversary .memorial-candle-image{width:34px;height:62px}
+.memorial-card.is-birthday .memorial-star-shape,.memorial-detail-card.is-birthday .memorial-star-shape{animation:birthdayStarTwinkle 2.35s ease-in-out infinite;filter:brightness(1.2) saturate(1.1) drop-shadow(0 0 13px #fff7d5) drop-shadow(0 0 37px rgba(232,181,86,.92))}
+.celestial-wall .memorial-card.is-birthday .memorial-star-shape{animation-duration:2.8s}
+.memorial-card.is-birthday .memorial-symbol{position:relative}
+.memorial-card.is-birthday .memorial-symbol::before,.memorial-card.is-birthday .memorial-symbol::after{top:50%;left:50%}
+.memorial-card.is-birthday .memorial-symbol::before{transform:translate(39px,-39px)}
+.memorial-card.is-birthday .memorial-symbol::after{transform:translate(-43px,31px)}
+@media(prefers-reduced-motion:reduce){.memorial-card.is-birthday .memorial-star-shape,.memorial-card.is-birthday .memorial-symbol::before,.memorial-card.is-birthday .memorial-symbol::after{animation:none!important}}
