@@ -1031,3 +1031,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .memorial-card.is-birthday .memorial-symbol::before{transform:translate(39px,-39px)}
 .memorial-card.is-birthday .memorial-symbol::after{transform:translate(-43px,31px)}
 @media(prefers-reduced-motion:reduce){.memorial-card.is-birthday .memorial-star-shape,.memorial-card.is-birthday .memorial-symbol::before,.memorial-card.is-birthday .memorial-symbol::after{animation:none!important}}
+
+
+/* Keep the introduction copy readable on the warm light support section. */
+.support-paths .section-heading>p:last-child{color:#314657}
