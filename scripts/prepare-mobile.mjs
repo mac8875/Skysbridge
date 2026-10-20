@@ -1,14 +1,21 @@
-import { cp, mkdir, readdir, rm, stat } from 'node:fs/promises';
+import { cp, mkdir, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import sharp from 'sharp';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'www');
-await sharp(path.join(root, 'assets/icon-source.jpg'))
+const icon = await sharp(path.join(root, 'assets/icon-source.jpg'))
   .resize(1024, 1024, { fit: 'cover' })
   .png()
-  .toFile(path.join(root, 'assets/icon-only.png'));
+  .toBuffer();
+await Promise.all([
+  writeFile(path.join(root, 'assets/icon-only.png'), icon),
+  writeFile(path.join(root, 'assets/icon-foreground.png'), icon),
+  sharp({ create: { width: 1024, height: 1024, channels: 4, background: '#061827' } })
+    .png()
+    .toFile(path.join(root, 'assets/icon-background.png')),
+]);
 const excludedDirectories = new Set([
   '.git', '.github', '.netlify', 'android', 'ios', 'node_modules', 'supabase', 'www'
 ]);
