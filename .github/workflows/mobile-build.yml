@@ -31,7 +31,8 @@ jobs:
       - run: npx cap sync android
       - run: sed -i 's/versionCode 1/versionCode 42/' android/app/build.gradle
       - run: sed -i 's/versionName "1.0"/versionName "42.0.0"/' android/app/build.gradle
-      - run: ./android/gradlew --no-daemon assembleDebug
+      - run: ./gradlew --no-daemon assembleDebug
+        working-directory: android
       - uses: actions/upload-artifact@v4
         with:
           name: skysbridge-android-debug
