@@ -205,6 +205,20 @@
     });
   });
 
+  function showStarAccessPrompt() {
+    openModal(`
+      <p class="eyebrow">Eine behutsame Einladung</p>
+      <h2 id="modalTitle">Hinter jedem Stern steckt eine Geschichte</h2>
+      <p>Melde dich an oder erstelle ein kostenloses Konto, um die Namen und Erinnerungen hinter den Sternen zu entdecken. Du kannst alles in deinem eigenen Tempo erkunden.</p>
+      <div class="tabs">
+        <button class="button button-gold" id="starAccessLogin" type="button">Anmelden</button>
+        <button class="button button-outline" id="starAccessSignup" type="button">Konto erstellen</button>
+      </div>
+    `, "star-access-card");
+    document.querySelector("#starAccessLogin")?.addEventListener("click", () => showAuth(false, "login"));
+    document.querySelector("#starAccessSignup")?.addEventListener("click", () => showAuth(false, "signup"));
+  }
+
   function showAuth(forMemorial = false, initialMode = "login") {
     openModal(`
       <h2 id="modalTitle">${forMemorial ? "Anmelden, um ein Kind zu ehren" : "Skysbridge beitreten"}</h2>
@@ -412,7 +426,13 @@
   }
 
   document.querySelectorAll("[data-star]").forEach(element => {
-    element.addEventListener("click", () => showStar(element.dataset.star));
+    element.addEventListener("click", () => {
+      if (!wallIsMember) {
+        showStarAccessPrompt();
+        return;
+      }
+      showStar(element.dataset.star);
+    });
   });
 
   async function showStar(slug) {
@@ -574,6 +594,20 @@
   let viewerMemorialIds = new Set();
   let memorialLoadGeneration = 0;
   let wallUserId;
+  let wallIsMember = false;
+
+  function updateSkyCardAccess(isMember) {
+    const skyCard = document.querySelector('[data-star="sky"]');
+    if (skyCard) {
+      if (!skyCard.dataset.memberMarkup) skyCard.dataset.memberMarkup = skyCard.innerHTML;
+      skyCard.disabled = false;
+      skyCard.setAttribute("aria-label", isMember ? "Skys Geschichte öffnen" : "Anmelden, um Skys Geschichte zu entdecken");
+      skyCard.innerHTML = isMember
+        ? skyCard.dataset.memberMarkup
+        : `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span>`;
+    }
+    setHidden(document.querySelector(".wall-controls"), !isMember);
+  }
 
   function setWallLoading(loading) {
     document.querySelector("#memorialGrid")?.setAttribute("aria-busy", String(loading));
@@ -672,9 +706,28 @@
     grid.querySelectorAll("[data-public-memorial]").forEach(card => card.remove());
 
     const skyCard = grid.querySelector('[data-star="sky"]');
+    updateSkyCardAccess(wallIsMember);
     skyCard?.classList.remove("is-secondary-light");
     skyCard?.style.removeProperty("--star-x");
     skyCard?.style.removeProperty("--star-y");
+
+    if (!wallIsMember) {
+      const plane = window.SkysbridgeSkyMap?.plane || grid;
+      plane.querySelectorAll(".guest-star-only").forEach(card => card.remove());
+      approvedMemorials.forEach((item, index) => {
+        const star = document.createElement("button");
+        star.type = "button";
+        star.className = "memorial-card is-standard guest-star-only";
+        star.dataset.publicMemorial = `guest-${index}`;
+        star.setAttribute("aria-label", "Melde dich an, um die Geschichte hinter diesem Stern zu entdecken.");
+        star.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span>`;
+        star.addEventListener("click", showStarAccessPrompt);
+        plane.appendChild(star);
+      });
+      window.SkysbridgeSkyMap?.layout([...plane.querySelectorAll(".guest-star-only")], skyCard, null);
+      status.textContent = "Ein Himmel voller Sterne.";
+      return;
+    }
 
     const search = String(document.querySelector("#memorialSearch")?.value || "").trim().toLowerCase();
     const sort = document.querySelector("#memorialSort")?.value || "newest";
@@ -752,6 +805,9 @@
     setWallLoading(true);
     if (!db) {
       viewerMemorialIds = new Set();
+      wallIsMember = false;
+      wallUserId = null;
+      updateSkyCardAccess(false);
       renderApprovedMemorials(true);
       setWallLoading(false);
       return;
@@ -761,7 +817,6 @@
     let nextViewerMemorialIds = new Set();
 
     try {
-    // Public stars are available to guests even when no auth session exists.
     let user = null;
     try {
       const authResult = await db.auth.getUser();
@@ -773,25 +828,34 @@
       console.warn("Star ownership lookup unavailable:", authError);
     }
     if (generation !== memorialLoadGeneration) return;
-    if (user) {
+    wallIsMember = Boolean(user && !user.is_anonymous);
+    wallUserId = wallIsMember ? user.id : null;
+    updateSkyCardAccess(wallIsMember);
+
+    if (wallIsMember) {
       const ownResult = await db
         .from("memorials")
         .select("id")
         .eq("user_id", user.id)
         .eq("approved", true)
         .eq("public_requested", true);
-
       if (ownResult.error) console.warn("Star ownership lookup unavailable:", ownResult.error);
       else nextViewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
     }
-    let result = await db
-      .from("memorials")
-      .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at")
-      .eq("approved", true)
-      .eq("public_requested", true)
-      .order("created_at", { ascending: false });
 
-    if (result.error && /birth_date|passing_date|star_style/i.test(result.error.message || "")) {
+    let result = wallIsMember
+      ? await db.from("memorials")
+          .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at")
+          .eq("approved", true)
+          .eq("public_requested", true)
+          .order("created_at", { ascending: false })
+      : await db.from("memorials")
+          .select("star_style")
+          .eq("approved", true)
+          .eq("public_requested", true)
+          .order("created_at", { ascending: false });
+
+    if (wallIsMember && result.error && /birth_date|passing_date|star_style/i.test(result.error.message || "")) {
       result = await db
         .from("memorials")
         .select("id,child_name,remembrance,country,created_at")
@@ -810,6 +874,9 @@
       if (generation !== memorialLoadGeneration) return;
       console.error("Memorial loading error:", error);
       viewerMemorialIds = new Set();
+      wallIsMember = false;
+      wallUserId = null;
+      updateSkyCardAccess(false);
       approvedMemorials = [];
       renderApprovedMemorials(true);
       status.textContent = "Die öffentlichen Gedenksterne konnten gerade nicht geladen werden. Sky bleibt als erstes Licht sichtbar.";
