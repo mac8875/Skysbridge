@@ -1051,3 +1051,10 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 
 /* Keep Contact separate from the paired footer navigation. */
 .footer-contact{display:flex;flex-direction:column;align-items:center;gap:8px;margin:18px auto 0}.footer-contact-star{color:var(--gold-soft);font-size:18px;line-height:1}.footer-contact a{text-decoration:none;text-align:center}
+
+
+/* A language-aware return link, visible on every content page. */
+.site-home-return{display:inline-flex;align-items:center;gap:.45em;width:max-content;margin:12px 24px 0;padding:9px 14px;border:1px solid rgba(232,181,86,.42);border-radius:999px;color:var(--gold-soft,#f4d792);background:rgba(4,18,31,.72);font-size:.9rem;font-weight:600;line-height:1.2;text-decoration:none;transition:background .18s ease,border-color .18s ease}
+.site-home-return:hover,.site-home-return:focus-visible{background:rgba(232,181,86,.12);border-color:var(--gold,#e8b556);outline:none}
+.footer-contact{position:relative;display:flex;width:100%;grid-column:1/-1;justify-self:stretch;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin:18px auto 0;text-align:center}
+@media(max-width:600px){.site-home-return{margin:10px 14px 0}}
