@@ -116,6 +116,27 @@ footer nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));justify-co
 .form-grid{display:grid;gap:14px}.form-grid label{color:#d5dde5;font-size:13px}.form-grid input,.form-grid textarea{width:100%;margin-top:6px;padding:13px;color:white;border-radius:12px;border:1px solid rgba(232,181,86,.24);background:#03101c}.form-grid textarea{min-height:125px;resize:vertical}
 .tabs{display:flex;gap:8px;margin-bottom:20px}.tabs .button{flex:1}.notice{padding:12px;border-radius:12px;color:var(--gold-soft);background:rgba(232,181,86,.1);line-height:1.5;font-size:13px}.notice[hidden]{display:none}.error{color:var(--danger)}.success{color:var(--success)}
 
+/* Compact, evenly sized sign-in choices on the public star wall. */
+.star-access-card{
+  width:min(440px,calc(100vw - 64px));
+  padding:26px clamp(18px,5vw,28px);
+}
+.star-access-card .tabs{gap:10px;margin:20px 0 0}
+.star-access-card .tabs .button{
+  flex:1 1 0;
+  min-width:0;
+  min-height:50px;
+  padding:10px 8px;
+  font-size:15px;
+  line-height:1.15;
+  white-space:nowrap;
+}
+@media(max-width:380px){
+  .star-access-card{padding:22px 18px}
+  .star-access-card .tabs{flex-direction:column}
+  .star-access-card .tabs .button{width:100%}
+}
+
 /* Refined Wall of Stars remembrance modal */
 .star-modal-card{
   width:min(760px,100%);
