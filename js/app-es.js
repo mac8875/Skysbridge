@@ -209,6 +209,21 @@
     document.querySelector("#starAccessSignup")?.addEventListener("click", () => showAuth(false, "signup"));
   }
 
+  async function hasSignedInWallAccess() {
+    if (!db) return false;
+
+    try {
+      const { data, error } = await db.auth.getUser();
+      if (error) throw error;
+      wallIsMember = Boolean(data?.user && !data.user.is_anonymous);
+      return wallIsMember;
+    } catch (error) {
+      wallIsMember = false;
+      console.warn("No se pudo comprobar el acceso a las estrellas:", error);
+      return false;
+    }
+  }
+
   function showAuth(forMemorial = false, initialMode = "login") {
     openModal(`
       <h2 id="modalTitle">${forMemorial ? "Inicia sesión para honrar a un hijo" : "Únete a Skysbridge"}</h2>
@@ -416,10 +431,10 @@
   }
 
   document.querySelectorAll("[data-star]").forEach(element => {
-    element.addEventListener("click", (event) => {
+    element.addEventListener("click", async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (!wallIsMember) {
+      if (!(await hasSignedInWallAccess())) {
         showStarAccessPrompt();
         return;
       }
