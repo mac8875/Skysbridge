@@ -5,6 +5,16 @@
 
   const sections = [...page.querySelectorAll(".help-region[aria-labelledby]")];
   const originalSections = [...sections];
+  const pageLanguage = (document.documentElement.lang || "en").split("-")[0].toLowerCase();
+  const defaultCountriesByLanguage = {
+    de: ["DE", "AT", "CH"],
+    en: ["US", "GB"],
+    es: ["ES", "MX"],
+  };
+  const defaultCountries = defaultCountriesByLanguage[pageLanguage]
+    || defaultCountriesByLanguage.en;
+  const storageKey = `skysbridge-help-country-${pageLanguage}`;
+  const legacyStorageKey = "skysbridge-help-country";
   const sectionByCountry = {
     AE: "help-uae",
     DE: "help-germany",
@@ -26,44 +36,44 @@
       || (spanishSpeakingCountries.has(countryCode) ? "help-mexico" : null);
   }
 
-  function regionFromLocale(locale) {
-    try {
-      return new Intl.Locale(locale).region || null;
-    } catch {
-      const parts = locale.replaceAll("_", "-").split("-");
-      return parts.find((part) => /^[A-Za-z]{2}$/.test(part))?.toUpperCase() || null;
-    }
-  }
-
   function initialCountry() {
     try {
-      const saved = localStorage.getItem("skysbridge-help-country");
+      const saved = localStorage.getItem(storageKey);
       if (saved && sectionForCountry(saved)) return saved;
-    } catch {
-      // Private browsing may block local storage; browser-language detection still works.
-    }
 
-    const locales = [...(navigator.languages || []), navigator.language].filter(Boolean);
-    for (const locale of locales) {
-      const countryCode = regionFromLocale(locale);
-      if (!countryCode) continue;
-      if (sectionByCountry[countryCode]) return countryCode;
-      if (spanishSpeakingCountries.has(countryCode)) return "ES-LATAM";
+      // Preserve a country selected before language-specific preferences were added.
+      const legacySaved = localStorage.getItem(legacyStorageKey);
+      if (legacySaved && sectionForCountry(legacySaved)) {
+        localStorage.setItem(storageKey, legacySaved);
+        localStorage.removeItem(legacyStorageKey);
+        return legacySaved;
+      }
+    } catch {
+      // Private browsing may block local storage; language defaults still work.
     }
-    return "";
+    return defaultCountries[0] || "";
   }
 
   function prioritize(countryCode) {
-    const sectionId = sectionForCountry(countryCode);
-    const preferredSection = sections.find(
-      (section) => section.getAttribute("aria-labelledby") === sectionId,
-    );
+    const preferredSections = [];
+    const addCountry = (code) => {
+      const sectionId = sectionForCountry(code);
+      const section = sections.find(
+        (item) => item.getAttribute("aria-labelledby") === sectionId,
+      );
+      if (section && !preferredSections.includes(section)) {
+        preferredSections.push(section);
+      }
+    };
 
-    const currentFirstSection = page.querySelector(".help-region[aria-labelledby]");
-    if (preferredSection && preferredSection !== currentFirstSection) {
-      page.insertBefore(preferredSection, currentFirstSection);
-    }
-    else originalSections.forEach((section) => page.append(section));
+    if (countryCode) addCountry(countryCode);
+    defaultCountries.forEach(addCountry);
+
+    const orderedSections = [
+      ...preferredSections,
+      ...originalSections.filter((section) => !preferredSections.includes(section)),
+    ];
+    orderedSections.forEach((section) => page.append(section));
   }
 
   picker.value = initialCountry();
@@ -71,8 +81,8 @@
 
   picker.addEventListener("change", () => {
     try {
-      if (picker.value) localStorage.setItem("skysbridge-help-country", picker.value);
-      else localStorage.removeItem("skysbridge-help-country");
+      if (picker.value) localStorage.setItem(storageKey, picker.value);
+      else localStorage.removeItem(storageKey);
     } catch {
       // The selection still applies for this page view if storage is unavailable.
     }
