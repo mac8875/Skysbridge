@@ -17,7 +17,7 @@ await Promise.all([
     .toFile(path.join(root, 'assets/icon-background.png')),
 ]);
 const excludedDirectories = new Set([
-  '.git', '.github', '.netlify', 'android', 'ios', 'node_modules', 'supabase', 'www'
+  '.git', '.github', '.netlify', 'android', 'ios', 'node_modules', 'supabase', 'www', 'mobile-assets'
 ]);
 const excludedFiles = new Set([
   'capacitor.config.json', 'package.json', 'package-lock.json', 'README.md', 'README.txt'
@@ -40,6 +40,11 @@ async function copyPublicFiles(source, destination) {
 }
 
 await copyPublicFiles(root, output);
+await mkdir(path.join(output, 'assets'), { recursive: true });
+await cp(
+  path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v13.gif'),
+  path.join(output, 'assets/app-intro-v13.gif')
+);
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
 if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html');

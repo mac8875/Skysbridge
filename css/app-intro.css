@@ -1,94 +1,13 @@
-
-/* Native app opening: Sky's star passes the bridge, then the wordmark appears. */
 .app-intro{
   position:fixed;inset:0;z-index:100000;overflow:hidden;display:grid;place-items:center;
-  color:#f7e2b2;background:
-    radial-gradient(ellipse at 50% 43%,rgba(39,83,119,.44),transparent 42%),
-    radial-gradient(ellipse at 50% 90%,rgba(14,50,74,.5),transparent 48%),
-    linear-gradient(180deg,#020914 0%,#061a2b 57%,#020b14 100%);
-  opacity:1;visibility:visible;transition:opacity .55s ease,visibility .55s ease;
-  isolation:isolate
-}
-.app-intro::before{
-  content:"";position:absolute;inset:0;z-index:-1;opacity:.62;
-  background-image:
-    radial-gradient(circle,#fff 0 1px,transparent 1.55px),
-    radial-gradient(circle,#f4d792 0 1px,transparent 1.7px),
-    radial-gradient(circle,#b9d6ee 0 .8px,transparent 1.45px);
-  background-size:117px 129px,191px 173px,79px 91px;
-  background-position:17px 31px,78px 54px,41px 12px;
-  animation:app-intro-sky-drift 18s linear infinite
+  background:#020914;opacity:1;visibility:visible;
+  transition:opacity .65s ease,visibility .65s ease
 }
 .app-intro.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
-.app-intro__horizon{
-  position:absolute;left:-12%;right:-12%;top:57%;height:35%;
-  background:radial-gradient(ellipse at 50% 0,rgba(235,183,89,.2),transparent 54%);
-  filter:blur(15px);pointer-events:none
-}
-.app-intro__bridge{position:absolute;left:3%;top:32%;width:94%;height:31%;overflow:visible}
-.app-intro__bridge path{
-  fill:none;stroke:#e9b85d;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
-  filter:drop-shadow(0 0 5px rgba(232,181,86,.48));
-  stroke-dasharray:900;stroke-dashoffset:900;animation:app-intro-bridge-draw 1.5s .08s ease-out forwards
-}
-.app-intro__bridge .app-intro__bridge-deck{stroke:#f5d89a;stroke-width:3}
-.app-intro__bridge .app-intro__bridge-water{stroke:#b9d6ee;stroke-width:.8;opacity:.22}
-.app-intro__star{
-  position:absolute;left:7%;top:53%;z-index:2;width:44px;height:44px;
-  color:#fff3c3;filter:drop-shadow(0 0 8px #ffe7a3) drop-shadow(0 0 23px rgba(255,202,92,.95));
-  transform:translate(-50%,-50%) scale(.55);opacity:.45;
-  animation:app-intro-flight 2s .15s cubic-bezier(.22,.72,.25,1) forwards,
-           app-intro-twinkle 1.05s ease-in-out 2.15s infinite
-}
-.app-intro__star svg{display:block;width:100%;height:100%;overflow:visible}
-.app-intro__star path{fill:currentColor}
-.app-intro__wordmark{
-  position:absolute;left:6%;right:6%;top:66%;display:flex;flex-direction:column;align-items:center;
-  text-align:center;opacity:1
-}
-.app-intro__name{
-  display:flex;align-items:baseline;justify-content:center;gap:.22em;
-  white-space:nowrap;font:500 clamp(40px,11vw,62px)/1 "Cormorant Garamond",Georgia,serif;
-  letter-spacing:-.045em
-}
-.app-intro__sky{display:inline-flex;color:#f1c66e}
-.app-intro__sky span{opacity:0;transform:translateY(12px);animation:app-intro-letter .24s ease-out calc(2.5s + var(--letter-index)*.12s) forwards}
-.app-intro__bridge-word{
-  color:#e7edf2;opacity:0;transform:translateY(10px);
-  animation:app-intro-word .55s cubic-bezier(.2,.75,.25,1) 3.18s forwards
-}
-.app-intro__tagline{
-  margin-top:14px;color:#d9b978;font:500 clamp(8px,2.3vw,11px)/1.5 Inter,Arial,sans-serif;
-  letter-spacing:.32em;text-transform:uppercase;opacity:0;
-  animation:app-intro-word .5s ease-out 3.58s forwards
-}
+.app-intro__animation{width:100%;height:100%;object-fit:cover;display:block}
 .app-intro__skip{
-  position:absolute;right:18px;bottom:max(22px,env(safe-area-inset-bottom));
-  border:1px solid rgba(244,215,146,.4);border-radius:999px;padding:9px 15px;
-  color:#f2dcaa;background:rgba(2,9,20,.32);font:500 13px/1.2 Inter,Arial,sans-serif
+  position:absolute;right:18px;bottom:max(22px,env(safe-area-inset-bottom));z-index:1;
+  border:1px solid rgba(244,215,146,.55);border-radius:999px;padding:9px 15px;
+  color:#f2dcaa;background:rgba(2,9,20,.5);font:500 13px/1.2 Inter,Arial,sans-serif
 }
-@keyframes app-intro-bridge-draw{to{stroke-dashoffset:0}}
-@keyframes app-intro-flight{
-  0%{left:7%;top:53%;opacity:0;transform:translate(-50%,-50%) scale(.5)}
-  12%{opacity:1}
-  57%{left:39%;top:37%;transform:translate(-50%,-50%) scale(.92)}
-  100%{left:54%;top:14%;opacity:1;transform:translate(-50%,-50%) scale(.76)}
-}
-@keyframes app-intro-twinkle{
-  0%,100%{opacity:1;filter:drop-shadow(0 0 7px #fff4c8) drop-shadow(0 0 15px rgba(255,202,92,.64))}
-  50%{opacity:.42;filter:drop-shadow(0 0 16px #fff8df) drop-shadow(0 0 34px rgba(255,202,92,1))}
-}
-@keyframes app-intro-letter{to{opacity:1;transform:translateY(0)}}
-@keyframes app-intro-word{to{opacity:1;transform:translateY(0)}}
-@keyframes app-intro-sky-drift{to{background-position:90px 5px,15px 109px,93px 77px}}
-@media(max-height:680px){
-  .app-intro__bridge{top:28%;height:29%}
-  .app-intro__wordmark{top:62%}
-  .app-intro__name{font-size:clamp(36px,10vw,52px)}
-}
-@media(prefers-reduced-motion:reduce){
-  .app-intro::before{animation:none}
-  .app-intro__bridge path{stroke-dashoffset:0;animation:none}
-  .app-intro__star{left:54%;top:14%;opacity:1;transform:translate(-50%,-50%) scale(.8);animation:none}
-  .app-intro__sky span,.app-intro__bridge-word,.app-intro__tagline{opacity:1;transform:none;animation:none}
-}
+@media(prefers-reduced-motion:reduce){.app-intro{transition:none}}
