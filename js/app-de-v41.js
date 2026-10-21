@@ -252,7 +252,7 @@
         <button class="button button-gold" type="submit">Anmelden</button>
         <div class="notice" id="authStatus">${forMemorial ? "Nach der Anmeldung öffnet sich das Formular für den Gedenkstern automatisch." : "Dein Konto und deine Aktivitäten in den Räumen sind standardmäßig privat."}</div>
       </form>
-    `);
+    `, "auth-modal-card");
 
     let mode = initialMode === "signup" ? "signup" : "login";
     const form = document.querySelector("#authForm");

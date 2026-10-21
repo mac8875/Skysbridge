@@ -1083,3 +1083,29 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .public-request-option__copy strong{color:var(--gold-soft,#f4d792);font-size:16px;line-height:1.35}
 .public-request-option__copy>span{color:#d5dde5;font-size:14px;font-weight:400;line-height:1.5}
 @media(max-width:600px){.form-grid .public-request-option{gap:11px;padding:14px}.public-request-option__copy strong{font-size:15px}}
+
+
+/* Compact, consistent authentication dialog controls */
+.auth-modal-card{width:min(560px,100%);padding:28px}
+.auth-modal-card>h2{margin:0 42px 14px 0;font-size:clamp(25px,3vw,32px);line-height:1.15}
+.auth-modal-card>p{margin:0 0 16px;font-size:16px;line-height:1.55}
+.auth-modal-card .modal-close{display:grid;place-items:center;width:38px;height:38px;right:10px;top:8px;font-size:28px;line-height:1}
+.auth-modal-card .tabs{gap:10px;margin:0 0 14px}
+.auth-modal-card .tabs .button{flex:1;min-width:0;min-height:48px;padding:10px 12px;font-size:15px;line-height:1.2;white-space:nowrap}
+.auth-modal-card .form-grid{gap:12px}
+.auth-modal-card .form-grid label{font-size:14px}
+.auth-modal-card .form-grid input[type="email"],.auth-modal-card .form-grid input[type="password"]{height:48px;min-height:48px;margin-top:5px;padding:9px 12px;font-size:16px;line-height:1.25}
+.auth-modal-card .form-grid>button[type="submit"]{min-height:48px;padding:10px 16px;font-size:16px;line-height:1.2}
+.auth-modal-card .notice{padding:10px 12px;font-size:13px;line-height:1.45}
+@media(max-width:600px){
+  .auth-modal-card{max-height:calc(100vh - 24px);padding:22px 18px;border-radius:22px}
+  .auth-modal-card>h2{margin-right:38px;margin-bottom:12px;font-size:clamp(24px,6vw,28px);line-height:1.14}
+  .auth-modal-card>p{margin-bottom:12px;font-size:16px;line-height:1.5}
+  .auth-modal-card .tabs{gap:8px;margin-bottom:12px}
+  .auth-modal-card .tabs .button{min-height:48px;padding:9px 8px;font-size:14px}
+  .auth-modal-card .form-grid{gap:10px}
+  .auth-modal-card .form-grid label{font-size:13px}
+  .auth-modal-card .form-grid input[type="email"],.auth-modal-card .form-grid input[type="password"]{height:46px;min-height:46px;padding:8px 11px;font-size:15px}
+  .auth-modal-card .form-grid>button[type="submit"]{min-height:48px;padding:10px 14px;font-size:15px}
+  .auth-modal-card .notice{padding:9px 11px;font-size:12px;line-height:1.4}
+}

@@ -240,7 +240,7 @@
         <button class="button button-gold" type="submit">Sign in</button>
         <div class="notice" id="authStatus">${forMemorial ? "After signing in, the memorial form will open automatically." : "Your account and room activity are private by default."}</div>
       </form>
-    `);
+    `, "auth-modal-card");
 
     let mode = initialMode === "signup" ? "signup" : "login";
     const form = document.querySelector("#authForm");

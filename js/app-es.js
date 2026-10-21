@@ -242,7 +242,7 @@
         <button class="button button-gold" type="submit">Iniciar sesión</button>
         <div class="notice" id="authStatus">${forMemorial ? "Después de iniciar sesión, el formulario se abrirá automáticamente." : "Tu cuenta y tu actividad en las salas son privadas por defecto."}</div>
       </form>
-    `);
+    `, "auth-modal-card");
 
     let mode = initialMode === "signup" ? "signup" : "login";
     const form = document.querySelector("#authForm");
