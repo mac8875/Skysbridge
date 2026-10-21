@@ -13,7 +13,7 @@
   document.documentElement.classList.add('native-app');
   const stylesheet = document.createElement('link');
   stylesheet.rel = 'stylesheet';
-  stylesheet.href = '/css/app-intro.css?v=4';
+  stylesheet.href = '/css/app-intro.css?v=5';
   document.head.appendChild(stylesheet);
 
   const start = () => {
