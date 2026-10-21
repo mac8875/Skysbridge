@@ -164,3 +164,9 @@ h1{font-size:clamp(55px,8vw,92px);line-height:.95;margin:0;font-weight:600;lette
 
 @media (min-width:701px) and (max-width:1100px){.memorial-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Keep memorial dialog controls clear of titles on narrow screens. */
+.memorial-dialog{box-sizing:border-box;position:relative;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+.memorial-dialog .dialog-close{z-index:3;display:grid;place-items:center;line-height:1}
+.memorial-dialog h2{overflow-wrap:anywhere}
+@media(max-width:600px){.memorial-dialog{padding:56px 20px 24px}.memorial-dialog h2{font-size:clamp(28px,9vw,42px)}}
