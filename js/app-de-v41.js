@@ -606,7 +606,7 @@
       skyCard.setAttribute("aria-label", isMember ? "Skys Geschichte öffnen" : "Anmelden, um Skys Geschichte zu entdecken");
       skyCard.innerHTML = isMember
         ? skyCard.dataset.memberMarkup
-        : `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span>`;
+        : `<span class="memorial-symbol"><span class="sky-symbol">✦</span></span><strong>Sky</strong>`;
     }
     setHidden(document.querySelector(".wall-controls"), !isMember);
   }
@@ -779,20 +779,16 @@
         <small>${dateLine ? `<span class="memorial-dates">${escapeHtml(dateLine)}</span>` : "Für immer geliebt. Für immer unvergessen."}${item.country ? `<span class="memorial-dates">${escapeHtml(item.country)}</span>` : ""}</small>
       `;
 
-      const starPositions = [
-        ["72%","34%"],["76%","62%"],["25%","66%"],["19%","35%"],
-        ["87%","43%"],["61%","76%"],["35%","79%"],["31%","24%"],
-        ["90%","72%"],["12%","56%"],["66%","19%"],["44%","88%"]
-      ];
-      if (item.id !== viewerCenter?.id) {
-        const [starX, starY] = starPositions[(index + (viewerCenter ? 1 : 0)) % starPositions.length];
-        card.style.setProperty("--star-x", starX);
-        card.style.setProperty("--star-y", starY);
-      }
 
       card.addEventListener("click", () => openApprovedMemorial(item));
       grid.appendChild(card);
     });
+
+    const wallStars = [...grid.querySelectorAll(".memorial-card")];
+    const centerStar = viewerCenter
+      ? wallStars.find(card => card.dataset.publicMemorial === viewerCenter.id)
+      : skyCard;
+    window.SkysbridgeSkyMap?.layout(wallStars, centerStar, grid);
 
     if (search && !rows.length) status.textContent = `Kein Gedenkstern für „${document.querySelector("#memorialSearch").value.trim()}“ gefunden.`;
     else if (viewerCenter) status.textContent = `${viewerCenter.child_name || "Der Stern deines Kindes"} steht im Zentrum deines persönlichen Sternenhimmels.`;

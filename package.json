@@ -4,7 +4,8 @@
   "version": "41.0.0",
   "description": "Skysbridge platform — Version 41 with complete and natural German localization",
   "scripts": {
-    "build:mobile": "node scripts/prepare-mobile.mjs"
+    "build:mobile": "node scripts/prepare-mobile.mjs",
+    "build:site": "node scripts/prepare-site.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",

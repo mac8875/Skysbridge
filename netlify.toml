@@ -1,5 +1,6 @@
 [build]
-  publish = "."
+  command = "npm run build:site"
+  publish = "site-dist"
 
 [[headers]]
   for = "/*"
