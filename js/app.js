@@ -354,9 +354,12 @@
             <label class="star-choice"><input type="radio" name="star_style" value="north"><span class="star-choice-preview star-north" aria-hidden="true"></span><span>North star</span></label>
           </div>
         </fieldset>
-        <label>
-          <input type="checkbox" name="public_requested">
-          Request a place in the public star-filled sky
+        <label class="public-request-option">
+          <input class="public-request-option__checkbox" type="checkbox" name="public_requested">
+          <span class="public-request-option__copy">
+            <strong>Request public display (optional)</strong>
+            <span>When checked, your star is submitted for public display. It appears only after moderator approval. Leave unchecked to keep it private.</span>
+          </span>
         </label>
         <button class="button button-gold">Submit privately for review</button>
         <div class="notice" id="memorialStatus">You remain in control of publication.</div>

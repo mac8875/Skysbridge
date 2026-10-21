@@ -366,9 +366,12 @@
             <label class="star-choice"><input type="radio" name="star_style" value="north"><span class="star-choice-preview star-north" aria-hidden="true"></span><span>Polarstern</span></label>
           </div>
         </fieldset>
-        <label>
-          <input type="checkbox" name="public_requested">
-          Diesen Gedenkstern nach der Prüfung im öffentlichen Sternenhimmel zeigen
+        <label class="public-request-option">
+          <input class="public-request-option__checkbox" type="checkbox" name="public_requested">
+          <span class="public-request-option__copy">
+            <strong>Öffentlich im Sternenhimmel zeigen lassen (optional)</strong>
+            <span>Wenn du das Kästchen aktivierst, beantragst du die öffentliche Anzeige. Der Stern erscheint erst nach Freigabe durch die Moderation. Ohne Häkchen bleibt er privat.</span>
+          </span>
         </label>
         <button class="button button-gold">Gedenkstern zur Prüfung senden</button>
         <div class="notice" id="memorialStatus">Du entscheidest, ob der Gedenkstern privat bleibt oder öffentlich werden soll.</div>

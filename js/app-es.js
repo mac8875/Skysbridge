@@ -356,9 +356,12 @@
             <label class="star-choice"><input type="radio" name="star_style" value="north"><span class="star-choice-preview star-north" aria-hidden="true"></span><span>Estrella polar</span></label>
           </div>
         </fieldset>
-        <label>
-          <input type="checkbox" name="public_requested">
-          Solicitar un lugar en el cielo público de estrellas
+        <label class="public-request-option">
+          <input class="public-request-option__checkbox" type="checkbox" name="public_requested">
+          <span class="public-request-option__copy">
+            <strong>Solicitar que la estrella aparezca en el cielo público (opcional)</strong>
+            <span>Al marcar la casilla, solicitas que la estrella se muestre públicamente. Solo aparecerá tras la aprobación de moderación. Si la dejas sin marcar, seguirá siendo privada.</span>
+          </span>
         </label>
         <button class="button button-gold">Enviar de forma privada para revisión</button>
         <div class="notice" id="memorialStatus">Tú decides sobre la publicación.</div>
