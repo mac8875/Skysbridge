@@ -1166,3 +1166,22 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
     font-size:15px;
   }
 }
+
+
+/* Responsive dialog safety: shared by EN/DE/ES and Android WebView. */
+.modal-card{box-sizing:border-box;max-width:100%;max-height:min(90dvh,calc(100dvh - 24px));overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+.modal-card .modal-close{z-index:5;display:grid;place-items:center;box-sizing:border-box;width:44px;height:44px;top:12px;right:12px;line-height:1;flex-shrink:0}
+.modal-card #modalContent>h2,
+.modal-card #modalContent>article>h2,
+.modal-card #modalContent>section>h2,
+.modal-card>h2{padding-right:52px;overflow-wrap:break-word}
+.modal-card #modalContent,.modal-card .form-grid,.modal-card .tabs{min-width:0}
+.modal-card .tabs{flex-wrap:wrap}
+.modal-card .tabs .button{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.modal-card input,.modal-card textarea,.modal-card select{box-sizing:border-box;max-width:100%}
+@media(max-width:600px){
+ .modal{padding:12px}
+ .modal-card{padding:24px 18px;max-height:calc(100dvh - 24px)}
+ .modal-card .modal-close,.auth-modal-card .modal-close{top:8px;right:8px;width:40px;height:40px}
+ .modal-card #modalContent>h2,.modal-card #modalContent>article>h2,.modal-card #modalContent>section>h2,.modal-card>h2{padding-right:44px}
+}
