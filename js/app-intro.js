@@ -10,6 +10,14 @@
   );
   if (!isNative) return;
 
+  const introSessionKey = 'skysbridge-intro-shown';
+  try {
+    if (window.sessionStorage.getItem(introSessionKey) === '1') return;
+    window.sessionStorage.setItem(introSessionKey, '1');
+  } catch {
+    // Keep the intro available if session storage is disabled.
+  }
+
   document.documentElement.classList.add('native-app');
   const stylesheet = document.createElement('link');
   stylesheet.rel = 'stylesheet';
