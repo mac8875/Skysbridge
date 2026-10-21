@@ -669,7 +669,13 @@
     const homeLink = document.createElement('a');
     homeLink.className = 'site-home-return';
     homeLink.href = lang === 'de' ? 'index-de.html' : lang === 'es' ? 'index-es.html' : 'index.html';
-    homeLink.textContent = lang === 'de' ? '← Startseite' : lang === 'es' ? '← Inicio' : '← Home';
+    const arrow = document.createElement('span');
+    arrow.className = 'site-home-return__arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '←';
+    const label = document.createElement('span');
+    label.textContent = lang === 'de' ? 'Startseite' : lang === 'es' ? 'Inicio' : 'Home';
+    homeLink.append(arrow, label);
     homeLink.setAttribute('aria-label', lang === 'de' ? 'Zur Startseite' : lang === 'es' ? 'Volver al inicio' : 'Return to the home page');
     header.insertAdjacentElement('afterend', homeLink);
   }
