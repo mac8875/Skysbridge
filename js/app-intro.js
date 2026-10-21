@@ -21,7 +21,7 @@
   document.documentElement.classList.add('native-app');
   const stylesheet = document.createElement('link');
   stylesheet.rel = 'stylesheet';
-  stylesheet.href = '/css/app-intro.css?v=5';
+  stylesheet.href = '/css/app-intro.css?v=6';
   document.head.appendChild(stylesheet);
 
   const start = () => {
