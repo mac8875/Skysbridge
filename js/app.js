@@ -621,6 +621,69 @@
     document.querySelector("#memorialGrid")?.setAttribute("aria-busy", String(loading));
   }
 
+  const publicWallCacheKey = "skysbridge-public-stars-v1";
+  const memberWallCachePrefix = "skysbridge-member-stars-v1:";
+
+  function readWallCache(key) {
+    try {
+      const cache = JSON.parse(localStorage.getItem(key) || "null");
+      return cache && Array.isArray(cache.items) ? cache : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeWallCache(key, cache) {
+    try {
+      localStorage.setItem(key, JSON.stringify({ ...cache, saved_at: Date.now() }));
+    } catch (error) {
+      console.warn("Saved star cache unavailable:", error);
+    }
+  }
+
+  function restoreWallCache(user) {
+    wallIsMember = Boolean(user && !user.is_anonymous);
+    wallUserId = wallIsMember ? user.id : null;
+
+    const memberCache = wallIsMember
+      ? readWallCache(`${memberWallCachePrefix}${user.id}`)
+      : null;
+    if (memberCache && memberCache.user_id === user.id) {
+      approvedMemorials = memberCache.items;
+      viewerMemorialIds = new Set(Array.isArray(memberCache.viewer_ids) ? memberCache.viewer_ids : []);
+    } else {
+      const publicCache = readWallCache(publicWallCacheKey);
+      approvedMemorials = publicCache
+        ? publicCache.items.map(item => ({ star_style: item.star_style }))
+        : [];
+      viewerMemorialIds = new Set();
+    }
+
+    updateSkyCardAccess(wallIsMember);
+    renderApprovedMemorials(true);
+    return Boolean(memberCache || readWallCache(publicWallCacheKey));
+  }
+
+  function rememberWallCache(user, items, viewerIds) {
+    const publicItems = (items || []).map(item => ({
+      star_style: item.star_style || "radiant"
+    }));
+    writeWallCache(publicWallCacheKey, { items: publicItems });
+
+    if (!user || user.is_anonymous) return;
+    writeWallCache(`${memberWallCachePrefix}${user.id}`, {
+      user_id: user.id,
+      items: items || [],
+      viewer_ids: [...(viewerIds || [])]
+    });
+  }
+
+  function showOfflineWallStatus(status, hasSavedStars) {
+    status.textContent = hasSavedStars
+      ? 'Showing saved stars. They will refresh when you reconnect.'
+      : 'You are offline. Sky remains visible; the star wall will update when you reconnect.';
+  }
+
   function sameMonthAndDay(value, today = new Date()) {
     const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || "").slice(0, 10));
     if (!match) return false;
@@ -816,69 +879,83 @@
       return;
     }
 
-    status.textContent = "Loading memorials…";
+    let user = null;
+    try {
+      const sessionResult = await db.auth.getSession();
+      user = sessionResult.data?.session?.user || null;
+    } catch (sessionError) {
+      console.warn("Saved star session unavailable:", sessionError);
+    }
+    if (generation !== memorialLoadGeneration) return;
+
+    const hasSavedStars = restoreWallCache(user);
+    if (hasSavedStars) setWallLoading(false);
+    if (!navigator.onLine) {
+      showOfflineWallStatus(status, hasSavedStars);
+      setWallLoading(false);
+      return;
+    }
+
+    status.textContent = 'Loading memorials…';
+    if (!hasSavedStars) setWallLoading(true);
     let nextViewerMemorialIds = new Set();
 
     try {
-    let user = null;
-    try {
-      const authResult = await db.auth.getUser();
-      if (!authResult.error) user = authResult.data?.user || null;
-      else if (authResult.error.name !== "AuthSessionMissingError") {
-        console.warn("Star ownership lookup unavailable:", authResult.error);
+      try {
+        const authResult = await db.auth.getUser();
+        if (!authResult.error) user = authResult.data?.user || null;
+        else if (authResult.error.name === "AuthSessionMissingError") user = null;
+        else console.warn("Star ownership lookup unavailable:", authResult.error);
+      } catch (authError) {
+        console.warn("Star ownership lookup unavailable:", authError);
       }
-    } catch (authError) {
-      console.warn("Star ownership lookup unavailable:", authError);
-    }
-    if (generation !== memorialLoadGeneration) return;
-    wallIsMember = Boolean(user && !user.is_anonymous);
-    wallUserId = wallIsMember ? user.id : null;
-    updateSkyCardAccess(wallIsMember);
+      if (generation !== memorialLoadGeneration) return;
+      wallIsMember = Boolean(user && !user.is_anonymous);
+      wallUserId = wallIsMember ? user.id : null;
+      updateSkyCardAccess(wallIsMember);
 
-    if (wallIsMember) {
-      const ownResult = await db
-        .from("memorials")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("approved", true)
-        .eq("public_requested", true);
-      if (ownResult.error) console.warn("Star ownership lookup unavailable:", ownResult.error);
-      else nextViewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
-    }
+      if (wallIsMember) {
+        const ownResult = await db
+          .from("memorials")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("approved", true)
+          .eq("public_requested", true);
+        if (ownResult.error) console.warn("Star ownership lookup unavailable:", ownResult.error);
+        else nextViewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
+      }
 
-    let result = wallIsMember
-      ? await db.from("memorials")
-          .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at")
+      let result = wallIsMember
+        ? await db.from("memorials")
+            .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at")
+            .eq("approved", true)
+            .eq("public_requested", true)
+            .order("created_at", { ascending: false })
+        : await db.from("memorials").select("star_style");
+
+      if (wallIsMember && result.error && /birth_date|passing_date|star_style/i.test(result.error.message || "")) {
+        result = await db
+          .from("memorials")
+          .select("id,child_name,remembrance,country,created_at")
           .eq("approved", true)
           .eq("public_requested", true)
-          .order("created_at", { ascending: false })
-      : await db.from("memorials").select("star_style");
+          .order("created_at", { ascending: false });
+      }
 
-    if (wallIsMember && result.error && /birth_date|passing_date|star_style/i.test(result.error.message || "")) {
-      result = await db
-        .from("memorials")
-        .select("id,child_name,remembrance,country,created_at")
-        .eq("approved", true)
-        .eq("public_requested", true)
-        .order("created_at", { ascending: false });
-    }
+      if (generation !== memorialLoadGeneration) return;
+      if (result.error) throw result.error;
 
-    if (generation !== memorialLoadGeneration) return;
-    if (result.error) throw result.error;
-
-    viewerMemorialIds = nextViewerMemorialIds;
-    approvedMemorials = result.data || [];
-    renderApprovedMemorials(true);
+      viewerMemorialIds = nextViewerMemorialIds;
+      approvedMemorials = result.data || [];
+      rememberWallCache(user, approvedMemorials, viewerMemorialIds);
+      renderApprovedMemorials(true);
     } catch (error) {
       if (generation !== memorialLoadGeneration) return;
       console.error("Memorial loading error:", error);
-      viewerMemorialIds = new Set();
-      wallIsMember = false;
-      wallUserId = null;
-      updateSkyCardAccess(false);
-      approvedMemorials = [];
-      renderApprovedMemorials(true);
-      status.textContent = "The public memorials could not be loaded right now. Sky remains visible as the first light.";
+      restoreWallCache(user);
+      status.textContent = approvedMemorials.length
+        ? 'Showing saved stars. They will refresh when you reconnect.'
+        : 'The public memorials could not be loaded right now. Sky remains visible as the first light.';
     } finally {
       if (generation === memorialLoadGeneration) setWallLoading(false);
     }
@@ -1589,6 +1666,7 @@
   openRequestedEntryPoint();
 
   loadApprovedMemorials();
+  window.addEventListener("online", loadApprovedMemorials);
 
   if (db) {
     db.auth.onAuthStateChange((event, session) => {
