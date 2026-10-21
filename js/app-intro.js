@@ -1,9 +1,20 @@
 (() => {
-  if (!document.documentElement.classList.contains('native-app')) return;
-  try {
-    if (sessionStorage.getItem('skysbridge-app-intro-shown') === '1') return;
-    sessionStorage.setItem('skysbridge-app-intro-shown', '1');
-  } catch (_) {}
+  const capacitor = window.Capacitor;
+  const host = window.location.hostname.toLowerCase();
+  const isNative = Boolean(
+    capacitor?.isNativePlatform?.() ||
+    ['android', 'ios'].includes(capacitor?.getPlatform?.()) ||
+    ['localhost', '127.0.0.1'].includes(host) ||
+    ['capacitor:', 'ionic:'].includes(window.location.protocol) ||
+    /\bCapacitor\b/i.test(window.navigator.userAgent)
+  );
+  if (!isNative) return;
+
+  document.documentElement.classList.add('native-app');
+  const stylesheet = document.createElement('link');
+  stylesheet.rel = 'stylesheet';
+  stylesheet.href = '/css/app-intro.css?v=3';
+  document.head.appendChild(stylesheet);
 
   const start = () => {
     if (!document.body || document.querySelector('.app-intro')) return;
@@ -15,7 +26,7 @@
     intro.setAttribute('role', 'status');
     intro.setAttribute('aria-label', label);
     intro.innerHTML = `
-      <img class="app-intro__animation" src="assets/app-intro-v13.gif" alt="" fetchpriority="high">
+      <img class="app-intro__animation" src="/assets/app-intro-v13.gif" alt="" fetchpriority="high">
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
