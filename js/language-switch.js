@@ -657,3 +657,37 @@
 
   schedulePendingPhotoEnhancement();
 })();
+
+/* Keep a clear route home from every content page and normalize Contact across languages. */
+(() => {
+  const lang = (document.documentElement.lang || 'en').toLowerCase().split('-')[0];
+  const path = location.pathname.split('/').pop().toLowerCase();
+  const isHome = path === '' || path === 'index.html' || path === 'index-de.html' || path === 'index-es.html';
+  const header = document.querySelector('.site-header');
+
+  if (header && !isHome && !document.querySelector('.site-home-return')) {
+    const homeLink = document.createElement('a');
+    homeLink.className = 'site-home-return';
+    homeLink.href = lang === 'de' ? 'index-de.html' : lang === 'es' ? 'index-es.html' : 'index.html';
+    homeLink.textContent = lang === 'de' ? '← Startseite' : lang === 'es' ? '← Inicio' : '← Home';
+    homeLink.setAttribute('aria-label', lang === 'de' ? 'Zur Startseite' : lang === 'es' ? 'Volver al inicio' : 'Return to the home page');
+    header.insertAdjacentElement('afterend', homeLink);
+  }
+
+  const footerNav = document.querySelector('footer nav');
+  if (footerNav && !document.querySelector('footer .footer-contact')) {
+    const contactLink = Array.from(footerNav.querySelectorAll('a')).find(link =>
+      /^mailto:together@skysbridge\.org(?:\?|$)/i.test(link.getAttribute('href') || '')
+    );
+    if (contactLink) {
+      const contact = document.createElement('div');
+      contact.className = 'footer-contact';
+      const star = document.createElement('span');
+      star.className = 'footer-contact-star';
+      star.setAttribute('aria-hidden', 'true');
+      star.textContent = '✦';
+      contact.append(star, contactLink);
+      footerNav.insertAdjacentElement('afterend', contact);
+    }
+  }
+})();
