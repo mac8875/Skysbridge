@@ -20,7 +20,7 @@ const excludedDirectories = new Set([
   '.git', '.github', '.netlify', 'android', 'ios', 'node_modules', 'supabase', 'www', 'mobile-assets'
 ]);
 const excludedFiles = new Set([
-  'capacitor.config.json', 'package.json', 'package-lock.json', 'README.md', 'README.txt'
+  'capacitor.config.json', 'package.json', 'package-lock.json', 'README.md', 'README.txt', 'skysbridge-android.apk'
 ]);
 const excludedExtensions = new Set(['.md', '.sql', '.txt']);
 
