@@ -1,6 +1,6 @@
 # Mobile builds
 
-Skysbridge packages the existing static website in a Capacitor shell. The mobile bundle is generated from the tracked site files. The Android launch animation is included only in the mobile bundle. The website build stages a separate `site-dist` directory without mobile-only assets.
+Skysbridge packages the existing static website in a Capacitor shell. The mobile bundle is generated from the tracked site files. The Android launch animation and its launcher icon are included only in the mobile bundle. The website build stages a separate `site-dist` directory without mobile-only assets.
 
 ## Build locally
 
