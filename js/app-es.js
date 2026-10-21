@@ -605,6 +605,7 @@
   let memorialLoadGeneration = 0;
   let wallUserId;
   let wallIsMember = false;
+  const offlineWallEnabled = document.documentElement.classList.contains("native-app");
 
   function updateSkyCardAccess(isMember) {
     const skyCard = document.querySelector('[data-star="sky"]');
@@ -882,24 +883,26 @@
     }
 
     let user = null;
-    try {
-      const sessionResult = await db.auth.getSession();
-      user = sessionResult.data?.session?.user || null;
-    } catch (sessionError) {
-      console.warn("Saved star session unavailable:", sessionError);
+    if (offlineWallEnabled) {
+      try {
+        const sessionResult = await db.auth.getSession();
+        user = sessionResult.data?.session?.user || null;
+      } catch (sessionError) {
+        console.warn("Saved star session unavailable:", sessionError);
+      }
     }
     if (generation !== memorialLoadGeneration) return;
 
-    const hasSavedStars = restoreWallCache(user);
-    if (hasSavedStars) setWallLoading(false);
-    if (!navigator.onLine) {
+    const hasSavedStars = offlineWallEnabled ? restoreWallCache(user) : false;
+    if (offlineWallEnabled && hasSavedStars) setWallLoading(false);
+    if (offlineWallEnabled && !navigator.onLine) {
       showOfflineWallStatus(status, hasSavedStars);
       setWallLoading(false);
       return;
     }
 
     status.textContent = 'Cargando recuerdos…';
-    if (!hasSavedStars) setWallLoading(true);
+    if (!offlineWallEnabled || !hasSavedStars) setWallLoading(true);
     let nextViewerMemorialIds = new Set();
 
     try {
@@ -949,15 +952,25 @@
 
       viewerMemorialIds = nextViewerMemorialIds;
       approvedMemorials = result.data || [];
-      rememberWallCache(user, approvedMemorials, viewerMemorialIds);
+      if (offlineWallEnabled) rememberWallCache(user, approvedMemorials, viewerMemorialIds);
       renderApprovedMemorials(true);
     } catch (error) {
       if (generation !== memorialLoadGeneration) return;
       console.error("Memorial loading error:", error);
-      restoreWallCache(user);
-      status.textContent = approvedMemorials.length
-        ? 'Se muestran las estrellas guardadas. Se actualizarán al volver a conectarte.'
-        : 'No se han podido cargar los recuerdos públicos. Sky sigue visible como la primera luz.';
+      if (!offlineWallEnabled) {
+        viewerMemorialIds = new Set();
+        wallIsMember = false;
+        wallUserId = null;
+        updateSkyCardAccess(false);
+        approvedMemorials = [];
+        renderApprovedMemorials(true);
+        status.textContent = 'No se han podido cargar los recuerdos públicos. Sky sigue visible como la primera luz.';
+      } else {
+        restoreWallCache(user);
+        status.textContent = approvedMemorials.length
+          ? 'Se muestran las estrellas guardadas. Se actualizarán al volver a conectarte.'
+          : 'No se han podido cargar los recuerdos públicos. Sky sigue visible como la primera luz.';
+      }
     } finally {
       if (generation === memorialLoadGeneration) setWallLoading(false);
     }
@@ -1668,7 +1681,7 @@
   openRequestedEntryPoint();
 
   loadApprovedMemorials();
-  window.addEventListener("online", loadApprovedMemorials);
+  if (offlineWallEnabled) window.addEventListener("online", loadApprovedMemorials);
 
   if (db) {
     db.auth.onAuthStateChange((event, session) => {
