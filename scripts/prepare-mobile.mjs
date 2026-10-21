@@ -37,9 +37,25 @@ await copyPublicFiles(root, output);
 // The launch animation is app-only: keep its source out of both website
 // publishing and the ordinary static-file copy, then add it to the mobile bundle.
 const mobileIntro = path.join(root, 'mobile', 'intro');
+const appVersion = (await readFile(path.join(mobileIntro, 'APP_VERSION'), 'utf8')).trim();
+if (!/^\d+\.\d+\.\d+$/.test(appVersion)) throw new Error(`Invalid app version: ${appVersion}`);
 await mkdir(path.join(output, 'assets'), { recursive: true });
 await cp(path.join(mobileIntro, 'skysbridge-intro.mp4'), path.join(output, 'assets', 'skysbridge-intro.mp4'));
 await cp(path.join(mobileIntro, 'app-intro.js'), path.join(output, 'js', 'app-intro.js'));
+
+const versionLabels = {
+  'index.html': 'App version',
+  'index-de.html': 'App-Version',
+  'index-es.html': 'Versión de la app'
+};
+for (const [page, label] of Object.entries(versionLabels)) {
+  const pagePath = path.join(output, page);
+  let pageHtml = await readFile(pagePath, 'utf8');
+  const versionLine = /(<p class="site-version"[^>]*>)[\s\S]*?(<\/p>)/;
+  if (!versionLine.test(pageHtml)) throw new Error(`Could not locate the version footer in ${page}`);
+  pageHtml = pageHtml.replace(versionLine, `$1${label} ${appVersion}$2`);
+  await writeFile(pagePath, pageHtml);
+}
 
 const mobileIndex = path.join(output, 'index.html');
 let html = await readFile(mobileIndex, 'utf8');
