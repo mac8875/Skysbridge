@@ -1058,3 +1058,5 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .site-home-return:hover,.site-home-return:focus-visible{background:rgba(232,181,86,.12);border-color:var(--gold,#e8b556);outline:none}
 .footer-contact{position:relative;display:flex;width:100%;grid-column:1/-1;justify-self:stretch;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin:18px auto 0;text-align:center}
 @media(max-width:600px){.site-home-return{margin:10px 14px 0}}
+
+.site-home-return__arrow{display:inline-block;line-height:1;transform:translateY(-2px)}
