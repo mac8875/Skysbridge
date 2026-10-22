@@ -1197,3 +1197,39 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 
 /* Lift the return arrow within its circular icon to match its optical centre. */
 .privacy-back-link__arrow{display:block;line-height:1;transform:translateY(-1.5px)}
+
+
+/* A quieter rhythm for Sky's story and its transition into support. */
+.story-section .story-text > .text-link{
+  display:inline-flex;
+  align-items:center;
+  gap:.45em;
+  margin:6px 0 0;
+  padding:10px 15px;
+  border:1px solid rgba(153,100,17,.34);
+  border-radius:999px;
+  background:rgba(255,255,255,.42);
+  color:#87570f;
+  font-size:.94rem;
+  line-height:1.25;
+  text-decoration:none;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,color .18s ease;
+}
+.story-section .story-text > .text-link:hover,
+.story-section .story-text > .text-link:focus-visible{
+  border-color:rgba(153,100,17,.62);
+  background:rgba(255,255,255,.78);
+  color:#6f460b;
+  box-shadow:0 4px 12px rgba(10,33,53,.08);
+}
+.story-section .story-text > .text-link:focus-visible{
+  outline:2px solid rgba(153,100,17,.55);
+  outline-offset:3px;
+}
+@media(max-width:700px){
+  .story-section.section{padding-top:54px;padding-bottom:38px}
+  .story-section .story-layout{gap:24px}
+  .story-section .story-text{font-size:16px;line-height:1.68}
+  .story-section .story-text p{margin:0 0 12px}
+  .support-paths.section{padding-top:46px}
+}
