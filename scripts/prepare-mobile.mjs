@@ -41,10 +41,10 @@ async function copyPublicFiles(source, destination) {
 
 await copyPublicFiles(root, output);
 await mkdir(path.join(output, 'assets'), { recursive: true });
-await cp(
-  path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v13.gif'),
-  path.join(output, 'assets/app-intro-v13.gif')
-);
+await Promise.all([
+  cp(path.join(root, 'mobile-assets/skysbridge-app-intro-v14.mp4'), path.join(output, 'assets/app-intro-v14.mp4')),
+  cp(path.join(root, 'mobile-assets/skysbridge-app-intro-v14-poster.jpg'), path.join(output, 'assets/app-intro-v14-poster.jpg')),
+]);
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
 if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html');
@@ -52,7 +52,7 @@ if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html')
 const mobileIndexPath = path.join(output, 'index.html');
 let mobileIndex = await readFile(mobileIndexPath, 'utf8');
 const introBootstrap = `
-  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=7">
+  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=8">
   <style>
     html.skysbridge-intro-pending,html.skysbridge-intro-pending body{background:#020914!important}
     html.skysbridge-intro-pending body>:not(.app-intro){visibility:hidden!important}
