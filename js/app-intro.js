@@ -19,10 +19,13 @@
   }
 
   document.documentElement.classList.add('native-app');
-  const stylesheet = document.createElement('link');
-  stylesheet.rel = 'stylesheet';
-  stylesheet.href = '/css/app-intro.css?v=6';
-  document.head.appendChild(stylesheet);
+  if (!document.getElementById('app-intro-stylesheet')) {
+    const stylesheet = document.createElement('link');
+    stylesheet.id = 'app-intro-stylesheet';
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = '/css/app-intro.css?v=7';
+    document.head.appendChild(stylesheet);
+  }
 
   const start = () => {
     if (!document.body || document.querySelector('.app-intro')) return;
@@ -42,7 +45,7 @@
     const close = () => {
       if (!intro.isConnected || intro.classList.contains('is-leaving')) return;
       intro.classList.add('is-leaving');
-      window.setTimeout(() => intro.remove(), 650);
+      window.setTimeout(() => { intro.remove(); document.documentElement.classList.remove('skysbridge-intro-pending'); }, 650);
     };
     intro.querySelector('.app-intro__skip').addEventListener('click', close, { once: true });
     window.setTimeout(close, 8750);

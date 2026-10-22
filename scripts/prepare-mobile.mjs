@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readdir, rm, stat, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -48,4 +48,28 @@ await cp(
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
 if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html');
-console.log(`Prepared ${output}`);
+
+const mobileIndexPath = path.join(output, 'index.html');
+let mobileIndex = await readFile(mobileIndexPath, 'utf8');
+const introBootstrap = `
+  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=7">
+  <style>
+    html.skysbridge-intro-pending,html.skysbridge-intro-pending body{background:#020914!important}
+    html.skysbridge-intro-pending body>:not(.app-intro){visibility:hidden!important}
+  </style>
+  <script>
+    (() => {
+      const c = window.Capacitor;
+      const native = Boolean(c?.isNativePlatform?.() || ['android','ios'].includes(c?.getPlatform?.()) ||
+        ['localhost','127.0.0.1'].includes(location.hostname.toLowerCase()) ||
+        ['capacitor:','ionic:'].includes(location.protocol) || /\\bCapacitor\\b/i.test(navigator.userAgent));
+      if (!native) return;
+      try { if (sessionStorage.getItem('skysbridge-intro-shown') === '1') return; } catch {}
+      document.documentElement.classList.add('skysbridge-intro-pending');
+      setTimeout(() => document.documentElement.classList.remove('skysbridge-intro-pending'), 15000);
+    })();
+  </script>`;
+if (!/<head[^>]*>/i.test(mobileIndex)) throw new Error('Mobile index is missing its head element');
+mobileIndex = mobileIndex.replace(/<head[^>]*>/i, match => match + introBootstrap);
+await writeFile(mobileIndexPath, mobileIndex);
+console.log(`Prepared ${output} with early native intro cover`);
