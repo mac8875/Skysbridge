@@ -797,7 +797,7 @@
         plane.appendChild(star);
       });
       window.SkysbridgeSkyMap?.layout([...plane.querySelectorAll(".guest-star-only")], skyCard, null);
-      status.textContent = "A sky full of stars.";
+      status.textContent = "";
       return;
     }
 
