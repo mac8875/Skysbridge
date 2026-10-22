@@ -1186,3 +1186,11 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
  .modal-card .modal-close,.auth-modal-card .modal-close{top:8px;right:8px;width:40px;height:40px}
  .modal-card #modalContent>h2,.modal-card #modalContent>article>h2,.modal-card #modalContent>section>h2,.modal-card>h2{padding-right:44px}
 }
+
+/* Centered, quiet return link on privacy pages */
+.privacy-back-home{display:flex;justify-content:center;margin:2.25rem 0 0}
+.privacy-back-link{display:inline-flex;align-items:center;justify-content:center;gap:.75rem;min-height:48px;padding:8px 12px;color:var(--gold-soft);font-weight:600;line-height:1.4;text-decoration:none;transition:color .18s ease,transform .18s ease}
+.privacy-back-link__icon{display:grid;place-items:center;width:32px;height:32px;border:1px solid rgba(232,181,86,.48);border-radius:50%;background:rgba(232,181,86,.08);color:var(--gold-soft);font-size:1.1rem;line-height:1}
+.privacy-back-link:hover{color:#fff;transform:translateX(-2px)}
+.privacy-back-link:hover .privacy-back-link__icon{background:rgba(232,181,86,.18);border-color:rgba(232,181,86,.8)}
+.privacy-back-link:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:999px}
