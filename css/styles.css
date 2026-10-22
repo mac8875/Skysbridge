@@ -1194,3 +1194,6 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .privacy-back-link:hover{color:#fff;transform:translateX(-2px)}
 .privacy-back-link:hover .privacy-back-link__icon{background:rgba(232,181,86,.18);border-color:rgba(232,181,86,.8)}
 .privacy-back-link:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:999px}
+
+/* Lift the return arrow within its circular icon to match its optical centre. */
+.privacy-back-link__arrow{display:block;line-height:1;transform:translateY(-1.5px)}
