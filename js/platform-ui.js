@@ -49,7 +49,7 @@
       <div class="android-beta-banner__content">
         <span class="android-beta-banner__message"></span>
         <a class="android-beta-banner__link" data-web-download-link href="https://github.com/mac8875/Skysbridge/releases/latest/download/skysbridge-android.apk" target="_blank" rel="noopener">
-          <span class="android-beta-banner__action"></span><svg class="android-beta-banner__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.1 4.3 5.7 1.9a.6.6 0 0 1 1-.6l1.5 2.5a8.3 8.3 0 0 1 7.6 0l1.5-2.5a.6.6 0 0 1 1 .6l-1.4 2.4A7.8 7.8 0 0 1 21 11H3a7.8 7.8 0 0 1 4.1-6.7ZM8 7.8a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6Zm8 0a.8.8 0 1 0 0 1.6.8.8 0 0 0-1.6 0ZM3 12h18v6.5a1.5 1.5 0 0 1-1.5 1.5H18v2a1 1 0 0 1-2 0v-2H8v2a1 1 0 0 1-2 0v-2h-1.5A1.5 1.5 0 0 1 3 18.5V12Zm-2 1a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm20 0a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Z"/></svg>
+          <span class="android-beta-banner__action"></span><svg class="android-beta-banner__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.1 4.3 5.7 1.9a.6.6 0 0 1 1-.6l1.5 2.5a8.3 8.3 0 0 1 7.6 0l1.5-2.5a.6.6 0 0 1 1 .6l-1.4 2.4A7.8 7.8 0 0 1 21 11H3a7.8 7.8 0 0 1 4.1-6.7ZM8 7.8a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6Zm8 0a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6ZM3 12h18v6.5a1.5 1.5 0 0 1-1.5 1.5H18v2a1 1 0 0 1-2 0v-2H8v2a1 1 0 0 1-2 0v-2h-1.5A1.5 1.5 0 0 1 3 18.5V12Zm-2 1a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Zm20 0a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0v-4Z"/></svg>
         </a>
       </div>
       <button class="android-beta-banner__close" type="button" aria-label=""></button>
