@@ -799,7 +799,7 @@
         plane.appendChild(star);
       });
       window.SkysbridgeSkyMap?.layout([...plane.querySelectorAll(".guest-star-only")], skyCard, null);
-      status.textContent = "Un cielo lleno de estrellas.";
+      status.textContent = "";
       return;
     }
 
