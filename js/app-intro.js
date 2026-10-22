@@ -37,7 +37,7 @@
     intro.setAttribute('role', 'status');
     intro.setAttribute('aria-label', label);
     intro.innerHTML = `
-      <img class="app-intro__animation" src="/assets/app-intro-v13.gif" alt="" fetchpriority="high">
+      <img class="app-intro__animation" src="/assets/app-intro-v16.gif" alt="" fetchpriority="high">
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
