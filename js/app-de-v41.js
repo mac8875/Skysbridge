@@ -809,7 +809,7 @@
         plane.appendChild(star);
       });
       window.SkysbridgeSkyMap?.layout([...plane.querySelectorAll(".guest-star-only")], skyCard, null);
-      status.textContent = "Ein Himmel voller Sterne.";
+      status.textContent = "";
       return;
     }
 
