@@ -793,8 +793,20 @@
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
+        <section class="memory-section" aria-labelledby="memoryHeading">
+          <p class="eyebrow">Words of remembrance</p>
+          <h3 id="memoryHeading">Leave a memory</h3>
+          <p class="memory-intro">Share a remembrance or a photo. Private memories and photos are visible only to the star’s owner and accepted family members.</p>
+          <form class="form-grid memory-form" id="memoryForm">
+            <label>Your name<input type="text" name="author_name" required maxlength="80" autocomplete="name"></label>
+            <label>Your memory<textarea name="message" required maxlength="3000"></textarea></label>
+            <button class="button button-gold" type="submit">Submit memory privately</button>
+            <div class="notice" id="memoryStatus">Memories are reviewed before they become visible.</div>
+          </form>
+        </section>
       </article>
     `, "star-modal-card");
+    window.dispatchEvent(new CustomEvent("skysbridge:open-memorial", { detail: { memorialId: item.id } }));
 
     const photoGeneration = modalRequestGeneration;
     if (item.photo_path) {
@@ -1163,6 +1175,16 @@
       target.innerHTML = `<p class="notice error">Could not load your stars: ${escapeHtml(error.message)}</p>`;
       return;
     }
+    const memorialIds = [...new Set((data || []).map(item => item.memorial_id).filter(Boolean))];
+    const memorialNames = new Map();
+    if (memorialIds.length) {
+      const { data: memorials } = await db
+        .from("memorials")
+        .select("id,child_name")
+        .in("id", memorialIds);
+      (memorials || []).forEach(memorial => memorialNames.set(memorial.id, memorial.child_name));
+    }
+
     if (!data?.length) {
       target.innerHTML = `<p class="muted">You have not created any stars yet.</p>`;
       return;
@@ -2077,7 +2099,7 @@
 
     const { data, error } = await db
       .from("memories")
-      .select("id,star_slug,author_name,message,created_at")
+      .select("id,star_slug,memorial_id,author_name,message,created_at")
       .eq("approved", false)
       .is("rejection_reason", null)
       .order("created_at", { ascending: true });
@@ -2094,7 +2116,7 @@
 
     target.innerHTML = data.map(item => `
       <div class="review-item">
-        <strong>${escapeHtml(item.author_name)} · ${escapeHtml(item.star_slug)}</strong>
+        <strong>${escapeHtml(item.author_name)} · ${escapeHtml(item.star_slug || memorialNames.get(item.memorial_id) || "Memorial star")}</strong>
         <p>${escapeHtml(item.message)}</p>
         <div class="review-actions">
           <button class="button button-gold review-memory" data-id="${item.id}" data-decision="approve">Approve</button>
