@@ -19,6 +19,7 @@
   let currentProfile = null;
   let activeRoomId = null;
   let modalPhotoUrl = null;
+  let modalRequestGeneration = 0;
   const reviewPhotoUrls = new Set();
 
   function clearReviewPhotoUrls() {
@@ -92,6 +93,7 @@
 
   function openModal(html, cardClass = "") {
     if (!modal || !modalContent) return;
+    modalRequestGeneration += 1;
 
     if (modalPhotoUrl) URL.revokeObjectURL(modalPhotoUrl);
     modalPhotoUrl = null;
@@ -108,6 +110,7 @@
 
   function closeModal() {
     if (!modal || !modalContent) return;
+    modalRequestGeneration += 1;
 
     setHidden(modal, true);
     modalContent.innerHTML = "";
@@ -224,19 +227,8 @@
     document.querySelector("#starAccessSignup")?.addEventListener("click", () => showAuth(false, "signup"));
   }
 
-  async function hasSignedInWallAccess() {
-    if (!db) return false;
-
-    try {
-      const { data, error } = await db.auth.getUser();
-      if (error) throw error;
-      wallIsMember = Boolean(data?.user && !data.user.is_anonymous);
-      return wallIsMember;
-    } catch (error) {
-      wallIsMember = false;
-      console.warn("Prüfung des Sternzugangs nicht verfügbar:", error);
-      return false;
-    }
+  function hasSignedInWallAccess() {
+    return Boolean((currentUser && !currentUser.is_anonymous) || wallIsMember);
   }
 
   function showAuth(forMemorial = false, initialMode = "login") {
@@ -450,10 +442,10 @@
   }
 
   document.querySelectorAll("[data-star]").forEach(element => {
-    element.addEventListener("click", async (event) => {
+    element.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (!(await hasSignedInWallAccess())) {
+      if (!hasSignedInWallAccess()) {
         showStarAccessPrompt();
         return;
       }
@@ -461,7 +453,7 @@
     });
   });
 
-  async function showStar(slug) {
+  function showStar(slug) {
     const germanSkyStory =
       "Als ich von Sky erfuhr, war das der glücklichste Moment meines Lebens. Ihn wieder gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.\n\nSky war nur kurze Zeit bei uns, und doch hat er unser Leben für immer verändert. Durch ihn haben wir verstanden, dass Liebe nicht in Jahren gemessen wird, sondern in der Tiefe der Verbindung, die bleibt.\n\nNach seinem Tod haben wir erlebt, wie still und einsam Trauer werden kann. Viele Eltern tragen ihren Schmerz allein, weil sie glauben, niemand könne wirklich verstehen, was sie verloren haben.\n\nAus der Liebe zu Sky entstand Skysbridge: ein würdevoller Ort, an dem Kinder, die viel zu früh gehen mussten, einen Namen, einen Stern und einen sichtbaren Platz in unserer Erinnerung behalten.\n\nSky ist der erste Stern im Himmel voller Sterne. Sein Licht steht am Anfang eines Ortes, an dem die Geschichten vieler Kinder weiterleuchten dürfen.";
 
@@ -469,21 +461,6 @@
       name: "Sky",
       story: germanSkyStory
     };
-
-    if (db) {
-      const { data } = await db
-        .from("stars")
-        .select("name,story")
-        .eq("slug", slug)
-        .eq("is_public", true)
-        .maybeSingle();
-
-      if (data) {
-        star = slug === "sky"
-          ? { name: data.name || "Sky", story: germanSkyStory }
-          : data;
-      }
-    }
 
     const rawStarName = slug === "sky" ? "Sky" : String(star.name || "").trim();
     const starName = escapeHtml(rawStarName || "Ein geliebtes Kind");
@@ -567,6 +544,26 @@
       form.reset();
       setStatus(status, "Deine persönlichen Worte wurden sicher und zunächst privat zur Prüfung übermittelt.", "success");
     };
+    const starModalGeneration = modalRequestGeneration;
+    if (db && slug !== "sky") {
+      db.from("stars")
+        .select("name,story")
+        .eq("slug", slug)
+        .eq("is_public", true)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (!data || starModalGeneration !== modalRequestGeneration || modal.hidden) return;
+          const storyCopy = modalContent.querySelector(".star-story-copy");
+          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(data.story || "");
+          const title = modalContent.querySelector("#modalTitle");
+          if (title) title.textContent = data.name || "Ein geliebtes Kind";
+          const heading = modalContent.querySelector("#memoryHeading");
+          if (heading) heading.textContent = data.name
+            ? `Eine Erinnerung an ${data.name} teilen`
+            : "Eine persönliche Erinnerung teilen";
+        })
+        .catch(error => console.warn("Der Sterntext konnte nicht geladen werden:", error));
+    }
   }
 
 
@@ -777,8 +774,7 @@
     return URL.createObjectURL(data);
   }
 
-  async function openApprovedMemorial(item) {
-    const photoUrl = item.photo_path ? await memorialPhotoUrl(item.photo_path) : null;
+  function openApprovedMemorial(item) {
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
@@ -797,12 +793,29 @@
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Für immer geliebt")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${photoUrl ? `<img class="memorial-detail-photo" src="${escapeHtml(photoUrl)}" alt="${escapeHtml(item.child_name || "")}">` : ""}
+        ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
       </article>
     `, "star-modal-card");
-    modalPhotoUrl = photoUrl;
+
+    const photoGeneration = modalRequestGeneration;
+    if (item.photo_path) {
+      memorialPhotoUrl(item.photo_path).then(photoUrl => {
+        const slot = modalContent.querySelector(".memorial-detail-photo-slot");
+        if (!photoUrl) return;
+        if (photoGeneration !== modalRequestGeneration || modal.hidden || !slot) {
+          URL.revokeObjectURL(photoUrl);
+          return;
+        }
+        const photo = document.createElement("img");
+        photo.className = "memorial-detail-photo";
+        photo.src = photoUrl;
+        photo.alt = item.child_name || "";
+        slot.replaceWith(photo);
+        modalPhotoUrl = photoUrl;
+      }).catch(error => console.warn("Could not load the memorial photo:", error));
+    }
   }
 
   function showPrivateStarNotice(item) {
