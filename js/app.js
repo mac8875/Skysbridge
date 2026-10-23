@@ -19,6 +19,7 @@
   let currentProfile = null;
   let activeRoomId = null;
   let modalPhotoUrl = null;
+  let modalRequestGeneration = 0;
   const reviewPhotoUrls = new Set();
 
   function clearReviewPhotoUrls() {
@@ -92,6 +93,7 @@
 
   function openModal(html, cardClass = "") {
     if (!modal || !modalContent) return;
+    modalRequestGeneration += 1;
 
     if (modalPhotoUrl) URL.revokeObjectURL(modalPhotoUrl);
     modalPhotoUrl = null;
@@ -108,6 +110,7 @@
 
   function closeModal() {
     if (!modal || !modalContent) return;
+    modalRequestGeneration += 1;
 
     setHidden(modal, true);
     modalContent.innerHTML = "";
@@ -212,19 +215,8 @@
     document.querySelector("#starAccessSignup")?.addEventListener("click", () => showAuth(false, "signup"));
   }
 
-  async function hasSignedInWallAccess() {
-    if (!db) return false;
-
-    try {
-      const { data, error } = await db.auth.getUser();
-      if (error) throw error;
-      wallIsMember = Boolean(data?.user && !data.user.is_anonymous);
-      return wallIsMember;
-    } catch (error) {
-      wallIsMember = false;
-      console.warn("Star access check unavailable:", error);
-      return false;
-    }
+  function hasSignedInWallAccess() {
+    return Boolean((currentUser && !currentUser.is_anonymous) || wallIsMember);
   }
 
   function showAuth(forMemorial = false, initialMode = "login") {
@@ -438,10 +430,10 @@
   }
 
   document.querySelectorAll("[data-star]").forEach(element => {
-    element.addEventListener("click", async (event) => {
+    element.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (!(await hasSignedInWallAccess())) {
+      if (!hasSignedInWallAccess()) {
         showStarAccessPrompt();
         return;
       }
@@ -449,23 +441,12 @@
     });
   });
 
-  async function showStar(slug) {
+  function showStar(slug) {
     let star = {
       name: "Sky",
       story:
         "Sky lived only a short time, but he changed our lives forever. His life taught us that love is not measured in years, but in the depth of the bond we share.\n\nAfter losing him, we discovered how lonely grief can become. Many parents carry their pain in silence, believing they are alone.\n\nSkysbridge was created in Sky’s memory so that children who left too soon can be named, honoured and remembered with dignity.\n\nSky is the first star in A Sky Full of Stars. His light became the beginning of a place where every child’s story may continue to shine."
     };
-
-    if (db) {
-      const { data } = await db
-        .from("stars")
-        .select("name,story")
-        .eq("slug", slug)
-        .eq("is_public", true)
-        .maybeSingle();
-
-      if (data) star = data;
-    }
 
     const personalSkyOpening =
       "The moment I first learned of Sky was the greatest happiness of my life. Having to let him go became my deepest pain.";
@@ -555,6 +536,30 @@
       form.reset();
       setStatus(status, "Your memory was submitted privately for review.", "success");
     };
+    const starModalGeneration = modalRequestGeneration;
+    if (db) {
+      db.from("stars")
+        .select("name,story")
+        .eq("slug", slug)
+        .eq("is_public", true)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (!data || starModalGeneration !== modalRequestGeneration || modal.hidden) return;
+          let updatedStory = data.story || "";
+          if (slug === "sky" && !updatedStory.includes(personalSkyOpening)) {
+            updatedStory = `${personalSkyOpening}\\n\\n${updatedStory}`.trim();
+          }
+          const storyCopy = modalContent.querySelector(".star-story-copy");
+          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(updatedStory);
+          if (slug !== "sky") {
+            const title = modalContent.querySelector("#modalTitle");
+            if (title) title.textContent = data.name || "A child remembered";
+            const heading = modalContent.querySelector("#memoryHeading");
+            if (heading) heading.textContent = `Leave a memory for ${data.name || "A child remembered"}`;
+          }
+        })
+        .catch(error => console.warn("Could not load the star story:", error));
+    }
   }
 
 
@@ -765,8 +770,7 @@
     return URL.createObjectURL(data);
   }
 
-  async function openApprovedMemorial(item) {
-    const photoUrl = item.photo_path ? await memorialPhotoUrl(item.photo_path) : null;
+  function openApprovedMemorial(item) {
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
@@ -785,12 +789,29 @@
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${photoUrl ? `<img class="memorial-detail-photo" src="${escapeHtml(photoUrl)}" alt="${escapeHtml(item.child_name || "")}">` : ""}
+        ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
       </article>
     `, "star-modal-card");
-    modalPhotoUrl = photoUrl;
+
+    const photoGeneration = modalRequestGeneration;
+    if (item.photo_path) {
+      memorialPhotoUrl(item.photo_path).then(photoUrl => {
+        const slot = modalContent.querySelector(".memorial-detail-photo-slot");
+        if (!photoUrl) return;
+        if (photoGeneration !== modalRequestGeneration || modal.hidden || !slot) {
+          URL.revokeObjectURL(photoUrl);
+          return;
+        }
+        const photo = document.createElement("img");
+        photo.className = "memorial-detail-photo";
+        photo.src = photoUrl;
+        photo.alt = item.child_name || "";
+        slot.replaceWith(photo);
+        modalPhotoUrl = photoUrl;
+      }).catch(error => console.warn("Could not load the memorial photo:", error));
+    }
   }
 
   function showPrivateStarNotice(item) {
