@@ -76,3 +76,19 @@ revoke all on function public.admin_delete_private_memorial(uuid) from public;
 grant execute on function public.admin_delete_private_memorial(uuid) to authenticated;
 
 notify pgrst, 'reload schema';
+
+-- Public wall stars always show the child's name; remembrance details remain protected.
+drop policy if exists "Guests can see anonymous active star shapes" on public.memorials;
+drop policy if exists "Guests can see active wall stars with names" on public.memorials;
+create policy "Guests can see active wall stars with names"
+on public.memorials for select to anon
+using (
+  archived = false
+  and rejection_reason is null
+  and (public_requested = false or (public_requested = true and approved = true))
+);
+
+grant select (id, child_name, star_style, public_requested, approved)
+on public.memorials to anon;
+
+notify pgrst, 'reload schema';
