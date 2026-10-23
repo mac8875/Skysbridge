@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: skysbridge-mobile-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   android:
     name: Android debug APK
@@ -31,7 +35,7 @@ jobs:
       - run: npx cap add android
       - run: npx @capacitor/assets generate --android
       - run: npx cap sync android
-      - run: sed -i 's/versionCode 1/versionCode 64/' android/app/build.gradle
+      - run: sed -i 's/versionCode 1/versionCode 68/' android/app/build.gradle
       - run: sed -i 's/versionName "1.0"/versionName "1.0"/' android/app/build.gradle
       - run: ./gradlew --no-daemon assembleDebug
         working-directory: android
@@ -89,20 +93,10 @@ jobs:
         run: mv app-debug.apk skysbridge-android.apk
       - uses: softprops/action-gh-release@v3
         with:
-          tag_name: android-v64
+          tag_name: android-v68
           name: Skysbridge Android v1.0
-          body: Skysbridge Android app version 1.0, build 64. Install on Android to try it.
+          body: Skysbridge Android app version 1.0, build 68. Install on Android to try it.
           files: skysbridge-android.apk
           make_latest: true
+          overwrite_files: true
           fail_on_unmatched_files: true
-      - name: Publish APK to the website
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- skysbridge-android.apk
-          if git diff --cached --quiet; then
-            echo "Website APK is already current."
-          else
-            git commit -m "Publish Android APK download"
-            git push origin main
-          fi
