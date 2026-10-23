@@ -701,7 +701,7 @@
     const safeMemberItems = (items || []).filter(item => !item.is_family).map(item => item.is_public
       ? item
       : { id: item.id, child_name: item.child_name, star_style: item.star_style || "radiant", is_public: false });
-    const publicViewerIds = (items || []).filter(item => item.is_public && item.is_owner).map(item => item.id);
+    const publicViewerIds = (items || []).filter(item => item.is_public && item.is_owner && !item.is_family).map(item => item.id);
     writeWallCache(`${memberWallCachePrefix}${user.id}`, {
       user_id: user.id,
       items: safeMemberItems,
