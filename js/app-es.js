@@ -22,6 +22,7 @@
   let activeRoomId = null;
   let modalPhotoUrl = null;
   let modalRequestGeneration = 0;
+  let familySharingGeneration = 0;
   const reviewPhotoUrls = new Set();
 
   function clearReviewPhotoUrls() {
@@ -693,7 +694,7 @@
     writeWallCache(publicWallCacheKey, { items: publicItems });
 
     if (!user || user.is_anonymous) return;
-    const safeMemberItems = (items || []).map(item => item.is_public
+    const safeMemberItems = (items || []).filter(item => !item.is_family).map(item => item.is_public
       ? item
       : { id: item.id, child_name: item.child_name, star_style: item.star_style || "radiant", is_public: false });
     const publicViewerIds = (items || []).filter(item => item.is_public && item.is_owner).map(item => item.id);
@@ -998,6 +999,7 @@
       updateSkyCardAccess(wallIsMember);
 
       let ownDetails = [];
+      let familyDetails = [];
       let publicDetails = [];
       if (wallIsMember) {
         const ownResult = await db
@@ -1008,6 +1010,23 @@
           .is("rejection_reason", null);
         if (ownResult.error) throw ownResult.error;
         ownDetails = ownResult.data || [];
+
+        const familyMembershipResult = await db
+          .from("memorial_family_members")
+          .select("owner_user_id")
+          .eq("member_user_id", user.id);
+        if (familyMembershipResult.error) throw familyMembershipResult.error;
+        const familyOwnerIds = [...new Set((familyMembershipResult.data || []).map(item => item.owner_user_id))];
+        if (familyOwnerIds.length) {
+          const familyResult = await db
+            .from("memorials")
+            .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at,public_requested,approved")
+            .in("user_id", familyOwnerIds)
+            .eq("archived", false)
+            .is("rejection_reason", null);
+          if (familyResult.error) throw familyResult.error;
+          familyDetails = familyResult.data || [];
+        }
 
         const publicResult = await db
           .from("memorials")
@@ -1027,14 +1046,16 @@
       if (shapeResult.error) throw shapeResult.error;
 
       const ownById = new Map(ownDetails.map(item => [item.id, item]));
+      const familyById = new Map(familyDetails.map(item => [item.id, item]));
       const publicById = new Map(publicDetails.map(item => [item.id, item]));
       viewerMemorialIds = nextViewerMemorialIds;
       approvedMemorials = (shapeResult.data || []).map(shape => {
-        const details = ownById.get(shape.id) || publicById.get(shape.id);
+        const details = ownById.get(shape.id) || familyById.get(shape.id) || publicById.get(shape.id);
         return {
           ...shape,
           ...(details || {}),
-          is_owner: ownById.has(shape.id),
+          is_owner: ownById.has(shape.id) || familyById.has(shape.id),
+          is_family: familyById.has(shape.id) && !ownById.has(shape.id),
           is_public: publicById.has(shape.id) || Boolean(shape.public_requested && shape.approved)
         };
       });
@@ -1155,6 +1176,144 @@
     });
   }
 
+  async function loadFamilySharing() {
+    const section = document.querySelector("#familySharingSection");
+    const outgoingList = document.querySelector("#familyShares");
+    const incomingList = document.querySelector("#incomingFamilyInvites");
+    const status = document.querySelector("#familySharingStatus");
+    if (!section || !outgoingList || !incomingList) return;
+
+    const generation = ++familySharingGeneration;
+    if (!currentUser || currentUser.is_anonymous) {
+      setHidden(section, true);
+      outgoingList.innerHTML = "";
+      incomingList.innerHTML = "";
+      return;
+    }
+
+    setHidden(section, false);
+    outgoingList.innerHTML = `<p class="muted">Cargando el acceso familiar…</p>`;
+    incomingList.innerHTML = `<p class="muted">Cargando el acceso familiar…</p>`;
+
+    const email = String(currentUser.email || "").trim().toLowerCase();
+    const [invitesResult, membershipsResult, incomingResult, acceptedResult] = await Promise.all([
+      db.from("memorial_family_invites")
+        .select("id,owner_user_id,owner_name,invited_email,created_at")
+        .eq("owner_user_id", currentUser.id)
+        .order("created_at", { ascending: false }),
+      db.from("memorial_family_members")
+        .select("invite_id")
+        .eq("owner_user_id", currentUser.id),
+      email
+        ? db.from("memorial_family_invites")
+            .select("id,owner_user_id,owner_name,invited_email,created_at")
+            .eq("invited_email", email)
+        : Promise.resolve({ data: [], error: null }),
+      db.from("memorial_family_members")
+        .select("invite_id")
+        .eq("member_user_id", currentUser.id)
+    ]);
+
+    if (generation !== familySharingGeneration || !currentUser) return;
+    const failed = [invitesResult, membershipsResult, incomingResult, acceptedResult].find(result => result.error);
+    if (failed) {
+      console.warn("Family sharing unavailable:", failed.error);
+      outgoingList.innerHTML = `<p class="notice error">No se pudo cargar el acceso familiar. Inténtalo de nuevo.</p>`;
+      incomingList.innerHTML = "";
+      return;
+    }
+
+    const acceptedByOwner = new Set((membershipsResult.data || []).map(item => item.invite_id));
+    const acceptedForUser = new Set((acceptedResult.data || []).map(item => item.invite_id));
+    const outgoing = invitesResult.data || [];
+    const incoming = (incomingResult.data || []).filter(item => !acceptedForUser.has(item.id));
+
+    outgoingList.innerHTML = outgoing.length
+      ? outgoing.map(invite => `
+          <div class="review-item">
+            <strong>${escapeHtml(invite.invited_email)}</strong>
+            <p>${acceptedByOwner.has(invite.id) ? "Puede leer las estrellas de tu familia" : "Invitación pendiente de aceptación"}</p>
+            <button class="button button-outline family-remove-access" type="button" data-invite-id="${escapeHtml(invite.id)}">Retirar acceso</button>
+          </div>
+        `).join("")
+      : `<p class="muted">Todavía no has invitado a nadie.</p>`;
+
+    incomingList.innerHTML = incoming.length
+      ? incoming.map(invite => `
+          <div class="review-item">
+            <strong>${escapeHtml(invite.owner_name || "Skysbridge")}</strong>
+            <p>${escapeHtml(invite.owner_name || "Skysbridge")} te ha invitado a leer sus recuerdos familiares.</p>
+            <button class="button button-gold family-accept-access" type="button"
+              data-invite-id="${escapeHtml(invite.id)}"
+              data-owner-id="${escapeHtml(invite.owner_user_id)}">Aceptar acceso familiar</button>
+          </div>
+        `).join("")
+      : `<p class="muted">No tienes invitaciones familiares pendientes.</p>`;
+
+    outgoingList.querySelectorAll(".family-remove-access").forEach(button => {
+      button.addEventListener("click", async () => {
+        button.disabled = true;
+        const { error } = await db.from("memorial_family_invites")
+          .delete()
+          .eq("id", button.dataset.inviteId)
+          .eq("owner_user_id", currentUser.id);
+        if (error) {
+          button.disabled = false;
+          setStatus(status, "No se pudo retirar el acceso. Inténtalo de nuevo.", "error");
+          return;
+        }
+        setStatus(status, "Acceso familiar retirado.", "success");
+        await Promise.all([loadFamilySharing(), loadApprovedMemorials()]);
+      });
+    });
+
+    incomingList.querySelectorAll(".family-accept-access").forEach(button => {
+      button.addEventListener("click", async () => {
+        button.disabled = true;
+        const { error } = await db.from("memorial_family_members").insert({
+          invite_id: button.dataset.inviteId,
+          owner_user_id: button.dataset.ownerId,
+          member_user_id: currentUser.id
+        });
+        if (error) {
+          button.disabled = false;
+          setStatus(status, "No se pudo aceptar la invitación. Es posible que se haya eliminado o ya se haya aceptado.", "error");
+          return;
+        }
+        setStatus(status, "Acceso familiar aceptado. Sus estrellas ya aparecen en tu cielo.", "success");
+        await Promise.all([loadFamilySharing(), loadApprovedMemorials()]);
+      });
+    });
+  }
+
+  document.querySelector("#familyInviteForm")?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const status = document.querySelector("#familySharingStatus");
+    if (!currentUser || currentUser.is_anonymous || !requireDatabase(status)) return;
+
+    const email = String(new FormData(form).get("family_email") || "").trim().toLowerCase();
+    if (!email || email === String(currentUser.email || "").trim().toLowerCase()) {
+      setStatus(status, "Introduce un correo distinto al de tu propia cuenta.", "error");
+      return;
+    }
+
+    const { error } = await db.from("memorial_family_invites").insert({
+      owner_user_id: currentUser.id,
+      owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80),
+      invited_email: email
+    });
+    if (error) {
+      console.warn("Family invitation failed:", error);
+      setStatus(status, error.code === "23505" ? "Esta persona ya tiene una invitación o acceso." : "No se pudo crear la invitación. Inténtalo de nuevo.", "error");
+      return;
+    }
+
+    form.reset();
+    setStatus(status, "Invitación creada. La persona la verá en su cuenta al iniciar sesión con este correo.", "success");
+    await loadFamilySharing();
+  });
+
   async function refreshSession() {
     if (!db) return;
 
@@ -1188,6 +1347,8 @@
       setHidden(roomView, true);
       setHidden(adminPanel, true);
       setHidden(document.querySelector("#myMemorialSection"), true);
+      setHidden(document.querySelector("#familySharingSection"), true);
+      familySharingGeneration += 1;
       setHidden(adminBadge, true);
 
       if (memberGreeting) memberGreeting.textContent = "Te damos la bienvenida a Skysbridge";
@@ -1228,6 +1389,7 @@
 
     await loadRooms();
     await loadMyMemorials();
+    await loadFamilySharing();
 
     setHidden(adminPanel, !currentProfile.is_admin);
 
