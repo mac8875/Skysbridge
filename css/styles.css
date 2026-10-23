@@ -1283,3 +1283,9 @@ html:not(.skysbridge-native) .section-heading>p:last-child{
   margin-right:0;
   text-align:left;
 }
+
+
+html:not(.skysbridge-native) .section-heading>.eyebrow{
+  margin-left:0;
+  margin-right:0;
+}
