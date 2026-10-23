@@ -816,13 +816,41 @@
   }
 
   function showPrivateStarNotice(item) {
+    const canRequest = Boolean(item?.id && !item.is_owner && !item.is_family);
     openModal(`
       <p class="eyebrow">This star is private</p>
       <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
       <p>The remembrance behind this star is private and can only be viewed by the child’s family.</p>
+      ${canRequest ? `<button class="button button-gold family-access-request-button" type="button">${currentUser && !currentUser.is_anonymous ? "Request family access" : "Sign in to request family access"}</button>` : ""}
     `, "star-access-card");
+    if (!canRequest) return;
+    modalContent?.querySelector(".family-access-request-button")?.addEventListener("click", async event => {
+      const button = event.currentTarget;
+      if (!currentUser || currentUser.is_anonymous) { showStarAccessPrompt(); return; }
+      if (!db) return;
+      button.disabled = true;
+      const { error } = await db.from("memorial_family_requests").insert({
+        memorial_id: item.id,
+        requester_user_id: currentUser.id,
+        requester_email: String(currentUser.email || "").trim().toLowerCase(),
+        requester_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80)
+      });
+      if (error) {
+        button.disabled = false;
+        const notice = document.createElement("p");
+        notice.className = "notice error";
+        notice.textContent = error.code === "23505" ? "You have already requested family access for this star." : "The request could not be sent. Please try again.";
+        button.insertAdjacentElement("afterend", notice);
+        return;
+      }
+      button.textContent = "Request sent";
+      button.disabled = true;
+      const notice = document.createElement("p");
+      notice.className = "notice success";
+      notice.textContent = "Your request was sent to the child’s family. They can invite you to read this star.";
+      button.insertAdjacentElement("afterend", notice);
+    });
   }
-
   function renderApprovedMemorials(resolved = false) {
     const grid = document.querySelector("#memorialGrid");
     const status = document.querySelector("#wallStatus");
@@ -1185,13 +1213,15 @@
     const outgoingList = document.querySelector("#familyShares");
     const incomingList = document.querySelector("#incomingFamilyInvites");
     const status = document.querySelector("#familySharingStatus");
-    if (!section || !outgoingList || !incomingList) return;
+    const requestsList = document.querySelector("#incomingFamilyRequests");
+    if (!section || !outgoingList || !incomingList || !requestsList) return;
 
     const generation = ++familySharingGeneration;
     if (!currentUser || currentUser.is_anonymous) {
       setHidden(section, true);
       outgoingList.innerHTML = "";
       incomingList.innerHTML = "";
+      requestsList.innerHTML = "";
       return;
     }
 
@@ -1200,7 +1230,7 @@
     incomingList.innerHTML = `<p class="muted">Loading family access…</p>`;
 
     const email = String(currentUser.email || "").trim().toLowerCase();
-    const [invitesResult, membershipsResult, incomingResult, acceptedResult] = await Promise.all([
+    const [invitesResult, membershipsResult, incomingResult, acceptedResult, requestsResult] = await Promise.all([
       db.from("memorial_family_invites")
         .select("id,owner_user_id,owner_name,invited_email,created_at")
         .eq("owner_user_id", currentUser.id)
@@ -1215,11 +1245,14 @@
         : Promise.resolve({ data: [], error: null }),
       db.from("memorial_family_members")
         .select("invite_id")
-        .eq("member_user_id", currentUser.id)
+        .eq("member_user_id", currentUser.id),
+      db.from("memorial_family_requests")
+        .select("id,memorial_id,requester_email,requester_name,created_at")
+        .order("created_at", { ascending: false })
     ]);
 
     if (generation !== familySharingGeneration || !currentUser) return;
-    const failed = [invitesResult, membershipsResult, incomingResult, acceptedResult].find(result => result.error);
+    const failed = [invitesResult, membershipsResult, incomingResult, acceptedResult, requestsResult].find(result => result.error);
     if (failed) {
       console.warn("Family sharing unavailable:", failed.error);
       outgoingList.innerHTML = `<p class="notice error">Family access could not be loaded. Please try again.</p>`;
@@ -1253,7 +1286,56 @@
           </div>
         `).join("")
       : `<p class="muted">You have no pending family invitations.</p>`;
+    const requests = requestsResult.data || [];
+    requestsList.innerHTML = requests.length
+      ? requests.map(request => `
+          <div class="review-item">
+            <strong>${escapeHtml(request.requester_name || request.requester_email)}</strong>
+            <p>${escapeHtml(request.requester_email)} wants to join your family</p>
+            <button class="button button-gold family-request-approve" type="button" data-request-id="${escapeHtml(request.id)}">Send family invitation</button>
+            <button class="button button-outline family-request-reject" type="button" data-request-id="${escapeHtml(request.id)}">Dismiss request</button>
+          </div>
+        `).join("")
+      : `<p class="muted">No pending requests to join your family.</p>`;
 
+    requestsList.querySelectorAll(".family-request-approve").forEach(button => {
+      button.addEventListener("click", async () => {
+        const request = requests.find(item => item.id === button.dataset.requestId);
+        if (!request) return;
+        button.disabled = true;
+        const { error } = await db.from("memorial_family_invites").insert({
+          owner_user_id: currentUser.id,
+          owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80),
+          invited_email: request.requester_email
+        });
+        if (error) {
+          button.disabled = false;
+          setStatus(status, "The request could not be processed. Please try again.", "error");
+          return;
+        }
+        const removed = await db.from("memorial_family_requests").delete().eq("id", request.id);
+        if (removed.error) {
+          button.disabled = false;
+          setStatus(status, "The request could not be processed. Please try again.", "error");
+          return;
+        }
+        setStatus(status, "Invitation sent. They can accept it in their account.", "success");
+        await loadFamilySharing();
+      });
+    });
+    requestsList.querySelectorAll(".family-request-reject").forEach(button => {
+      button.addEventListener("click", async () => {
+        button.disabled = true;
+        const { error } = await db.from("memorial_family_requests").delete().eq("id", button.dataset.requestId);
+        if (error) {
+          button.disabled = false;
+          setStatus(status, "The request could not be processed. Please try again.", "error");
+          return;
+        }
+        setStatus(status, "Request dismissed.", "success");
+        await loadFamilySharing();
+      });
+    });
     outgoingList.querySelectorAll(".family-remove-access").forEach(button => {
       button.addEventListener("click", async () => {
         button.disabled = true;
