@@ -1247,7 +1247,7 @@
         .select("invite_id")
         .eq("member_user_id", currentUser.id),
       db.from("memorial_family_requests")
-        .select("id,memorial_id,requester_email,requester_name,created_at")
+        .select("id,memorial_id,requester_user_id,requester_email,requester_name,created_at")
         .order("created_at", { ascending: false })
     ]);
 
@@ -1286,7 +1286,7 @@
           </div>
         `).join("")
       : `<p class="muted">You have no pending family invitations.</p>`;
-    const requests = requestsResult.data || [];
+    const requests = (requestsResult.data || []).filter(request => request.requester_user_id !== currentUser.id);
     requestsList.innerHTML = requests.length
       ? requests.map(request => `
           <div class="review-item">
