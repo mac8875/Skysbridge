@@ -1233,3 +1233,38 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   .story-section .story-text p{margin:0 0 12px}
   .support-paths.section{padding-top:46px}
 }
+
+
+/* V107 — brief, staggered glints on memorial stars */
+.celestial-wall .memorial-card:nth-of-type(3n + 1){--glint-delay:.7s}
+.celestial-wall .memorial-card:nth-of-type(3n + 2){--glint-delay:2.1s}
+.celestial-wall .memorial-card:nth-of-type(3n){--glint-delay:3.5s}
+.celestial-wall .memorial-star-shape::after,
+.celestial-wall [data-star="sky"] .sky-symbol::after{
+  content:"";
+  position:absolute;
+  top:14%;
+  right:12%;
+  z-index:1;
+  width:14px;
+  height:14px;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 42%,rgba(255,251,230,.98) 49%,transparent 57%),
+    linear-gradient(0deg,transparent 42%,rgba(255,251,230,.98) 49%,transparent 57%);
+  filter:drop-shadow(0 0 5px rgba(255,248,216,.9));
+  opacity:0;
+  transform:scale(.18) rotate(0deg);
+  transform-origin:center;
+  animation:memorialStarGlint 4.8s ease-in-out var(--glint-delay,1.4s) infinite;
+}
+.celestial-wall [data-star="sky"] .sky-symbol{position:relative}
+@keyframes memorialStarGlint{
+  0%,63%,100%{opacity:0;transform:scale(.18) rotate(0deg)}
+  68%{opacity:.95;transform:scale(1) rotate(45deg)}
+  74%{opacity:0;transform:scale(.28) rotate(90deg)}
+}
+@media(prefers-reduced-motion:reduce){
+  .celestial-wall .memorial-star-shape::after,
+  .celestial-wall [data-star="sky"] .sky-symbol::after{animation:none!important}
+}
