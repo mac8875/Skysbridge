@@ -425,14 +425,13 @@
     };
   }
 
-  async function waitForMemoryForm() {
+  async function waitForMemorySection() {
     for (let i = 0; i < 40; i++) {
-      // German retains a hidden static modal with a legacy #memoryForm.
-      // Wait for the form inside the modal that is actually open so approved
-      // memories and their photos appear in the visible dialog in every language.
-      const form = document.querySelector('#modal:not([hidden]) #memoryForm')
-        || document.querySelector('.sky-native-modal:target #memoryForm');
-      if (form) return form;
+      const section = document.querySelector('#modal:not([hidden]) #memorySection')
+        || document.querySelector('#modal:not([hidden]) .memory-section')
+        || document.querySelector('.sky-native-modal:target #memorySection')
+        || document.querySelector('.sky-native-modal:target .memory-section');
+      if (section) return section;
       await new Promise(resolve => setTimeout(resolve, 100));
     }
     return null;
@@ -443,13 +442,11 @@
     const starSlug = typeof target === 'string' ? target : String(target?.starSlug || '');
     if (!db || (!memorialId && !starSlug)) return;
 
-    const form = await waitForMemoryForm();
-    if (!form) return;
-
-    enhanceMemoryForm(form, memorialId ? { memorialId } : starSlug);
-
-    const section = form.closest('.memory-section');
+    const section = await waitForMemorySection();
     if (!section) return;
+
+    const form = section.querySelector('#memoryForm');
+    if (form) enhanceMemoryForm(form, memorialId ? { memorialId } : starSlug);
 
     const previousList = section.querySelector('#approvedMemories');
     previousList?.querySelectorAll('img').forEach(image => {
@@ -478,6 +475,12 @@
     if (result.error) return;
 
     const memories = result.data || [];
+    if (!memories.length && !form) {
+      section.hidden = true;
+      return;
+    }
+    section.hidden = false;
+
     const canDelete = memories.length ? await currentUserIsAdmin() : false;
     const rows = await Promise.all(memories.map(async item => ({
       ...item,
@@ -585,8 +588,8 @@
       list.appendChild(card);
     });
 
-    const heading = section.querySelector('#memoryHeading');
-    section.insertBefore(list, heading || form);
+    if (form) form.insertAdjacentElement('beforebegin', list);
+    else section.appendChild(list);
   }
 
   async function enhancePendingMemoryPhotos() {
