@@ -1346,3 +1346,40 @@ html.skysbridge-native .section-heading>.eyebrow{
   margin-left:0;
   margin-right:0;
 }
+
+
+/* V108 — let the memorial stars themselves carry the twinkle */
+.celestial-wall .memorial-card:nth-of-type(3n + 1){--star-glow-delay:0s}
+.celestial-wall .memorial-card:nth-of-type(3n + 2){--star-glow-delay:1.4s}
+.celestial-wall .memorial-card:nth-of-type(3n){--star-glow-delay:2.8s}
+.celestial-wall .memorial-star-shape,
+.celestial-wall [data-star="sky"] .sky-symbol{
+  animation:memorialStarGlow 5.8s ease-in-out var(--star-glow-delay,0s) infinite;
+}
+.celestial-wall [data-star="sky"] .sky-symbol{
+  animation-duration:6.4s;
+  --star-glow-delay:.5s;
+}
+.celestial-wall .memorial-star-shape::after,
+.celestial-wall [data-star="sky"] .sky-symbol::after,
+.memorial-card.is-birthday .memorial-symbol::before,
+.memorial-card.is-birthday .memorial-symbol::after{
+  content:none;
+  animation:none;
+}
+@keyframes memorialStarGlow{
+  0%,100%{
+    opacity:.92;
+    transform:scale(.985);
+    filter:drop-shadow(0 0 6px rgba(255,247,211,.62)) drop-shadow(0 0 20px rgba(232,181,86,.50));
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.035);
+    filter:drop-shadow(0 0 11px rgba(255,250,224,.92)) drop-shadow(0 0 34px rgba(232,181,86,.82));
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .celestial-wall .memorial-star-shape,
+  .celestial-wall [data-star="sky"] .sky-symbol{animation:none!important}
+}
