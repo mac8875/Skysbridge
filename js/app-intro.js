@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=7';
+    stylesheet.href = '/css/app-intro.css?v=8';
     document.head.appendChild(stylesheet);
   }
 
@@ -37,7 +37,7 @@
     intro.setAttribute('role', 'status');
     intro.setAttribute('aria-label', label);
     intro.innerHTML = `
-      <img class="app-intro__animation" src="/assets/app-intro-v13.gif" alt="" fetchpriority="high">
+      <video class="app-intro__animation" autoplay muted playsinline preload="auto" poster="/assets/app-intro-v14-poster.jpg"><source src="/assets/app-intro-v14.mp4" type="video/mp4"></video>
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
