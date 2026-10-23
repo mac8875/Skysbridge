@@ -776,6 +776,7 @@
           ? "En su cumpleaños, le recordamos"
           : "Una luz que permanece";
     const dateLine = memorialDateLine(item);
+    const canWriteMemory = Boolean(item.is_star_owner);
 
     openModal(`
       <article class="memorial-detail-card is-${state}">
@@ -789,16 +790,16 @@
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
-        <section class="memory-section" aria-labelledby="memoryHeading">
+        <section class="memory-section" id="memorySection" aria-labelledby="memoryHeading">
           <p class="eyebrow">Palabras para recordar</p>
-          <h3 id="memoryHeading">Dejar un recuerdo</h3>
-          <p class="memory-intro">Tu recuerdo escrito se revisa antes de que pueda hacerse público. Las fotos adjuntas a los recuerdos siempre son privadas y solo las ve quien creó la estrella y sus familiares aceptados.</p>
+          <h3 id="memoryHeading">Recuerdos</h3>
+${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se revisa antes de que pueda hacerse público. Las fotos adjuntas a los recuerdos siempre son privadas y solo las ve quien creó la estrella y sus familiares aceptados.</p>
           <form class="form-grid memory-form" id="memoryForm">
             <label>Tu nombre<input type="text" name="author_name" required maxlength="80" autocomplete="name"></label>
             <label>Tu recuerdo<textarea name="message" required maxlength="3000"></textarea></label>
             <button class="button button-gold" type="submit">Enviar recuerdo para revisión</button>
             <div class="notice" id="memoryStatus">Los recuerdos se revisan antes de hacerse visibles.</div>
-          </form>
+          </form>` : ""}
         </section>
       </article>
     `, "star-modal-card");
@@ -1094,6 +1095,7 @@
         return {
           ...shape,
           ...(details || {}),
+          is_star_owner: ownById.has(shape.id),
           is_owner: ownById.has(shape.id) || familyById.has(shape.id),
           is_family: familyById.has(shape.id) && !ownById.has(shape.id),
           is_public: publicById.has(shape.id) || Boolean(shape.public_requested && shape.approved)
