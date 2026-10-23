@@ -784,6 +784,7 @@
           ? "Zum Geburtstag in liebevoller Erinnerung"
           : "Ein Licht, das bleibt";
     const dateLine = memorialDateLine(item);
+    const canWriteMemory = Boolean(item.is_star_owner);
 
     openModal(`
       <article class="memorial-detail-card is-${state}">
@@ -797,16 +798,16 @@
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
-        <section class="memory-section" aria-labelledby="memoryHeading">
+        <section class="memory-section" id="memorySection" aria-labelledby="memoryHeading">
           <p class="eyebrow">Worte der Erinnerung</p>
-          <h3 id="memoryHeading">Eine Erinnerung hinterlassen</h3>
-          <p class="memory-intro">Dein Erinnerungstext wird geprüft, bevor er öffentlich erscheinen kann. Fotos zu Erinnerungen bleiben immer privat und sind nur für den Besitzer des Sterns und akzeptierte Familienmitglieder sichtbar.</p>
+          <h3 id="memoryHeading">Erinnerungen</h3>
+${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird geprüft, bevor er öffentlich erscheinen kann. Fotos zu Erinnerungen bleiben immer privat und sind nur für den Besitzer des Sterns und akzeptierte Familienmitglieder sichtbar.</p>
           <form class="form-grid memory-form" id="memoryForm">
             <label>Dein Name<input type="text" name="author_name" required maxlength="80" autocomplete="name"></label>
             <label>Deine Erinnerung<textarea name="message" required maxlength="3000"></textarea></label>
             <button class="button button-gold" type="submit">Erinnerung zur Prüfung einreichen</button>
             <div class="notice" id="memoryStatus">Erinnerungen werden geprüft, bevor sie sichtbar werden.</div>
-          </form>
+          </form>` : ""}
         </section>
       </article>
     `, "star-modal-card");
@@ -1102,6 +1103,7 @@
         return {
           ...shape,
           ...(details || {}),
+          is_star_owner: ownById.has(shape.id),
           is_owner: ownById.has(shape.id) || familyById.has(shape.id),
           is_family: familyById.has(shape.id) && !ownById.has(shape.id),
           is_public: publicById.has(shape.id) || Boolean(shape.public_requested && shape.approved)
