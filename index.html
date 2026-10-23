@@ -214,6 +214,27 @@
         <div id="myMemorials"><p class="muted">Loading your stars…</p></div>
         <div class="notice" id="myMemorialsStatus" hidden></div>
       </section>
+      <section class="admin-card member-stars family-sharing" id="familySharingSection" hidden data-nosnippet>
+        <h3>Family access</h3>
+        <p class="muted">Invite a trusted family member using the email address of their Skysbridge account. After accepting in their own account, they can read your stars, remembrances, dates and photos. They cannot edit or delete them. You can remove access at any time.</p>
+        <form class="form-grid" id="familyInviteForm">
+          <label>Family member’s account email
+            <input type="email" name="family_email" required maxlength="254" autocomplete="email" placeholder="name@example.com">
+          </label>
+          <button class="button button-gold" type="submit">Create invitation</button>
+        </form>
+        <div class="notice" id="familySharingStatus" hidden></div>
+        <div class="family-sharing-lists">
+          <div>
+            <h4>People with access</h4>
+            <div id="familyShares"><p class="muted">Loading…</p></div>
+          </div>
+          <div>
+            <h4>Invitations for you</h4>
+            <div id="incomingFamilyInvites"><p class="muted">Loading…</p></div>
+          </div>
+        </div>
+      </section>
       <section id="roomArea" hidden data-nosnippet>
         <div class="subheading"><div><p class="eyebrow">Your community</p><h2>Protected rooms</h2></div><p>Request access to a room. An administrator reviews every request.</p></div>
         <div class="room-grid" id="roomList"></div>
@@ -268,6 +289,6 @@
   <script src="js/platform-ui.js?v=4"></script>
   <script src="js/app-intro.js?v=6"></script>
   <script src="js/sky-map.js?v=2"></script>
-  <script src="js/app.js?v=109"></script>
+  <script src="js/app.js?v=110"></script>
 </body>
 </html>
