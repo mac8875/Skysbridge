@@ -257,9 +257,16 @@ on public.memorials for select to authenticated
 using (auth.uid() = user_id or public.is_admin());
 
 drop policy if exists "Anyone can read approved memorials" on public.memorials;
-create policy "Anyone can read approved memorials"
-on public.memorials for select to anon, authenticated
-using (approved = true and public_requested = true);
+drop policy if exists "Guests can see anonymous active star shapes" on public.memorials;
+create policy "Guests can see anonymous active star shapes"
+on public.memorials for select to anon
+using (archived = false and rejection_reason is null);
+
+drop policy if exists "Members can read approved memorial details" on public.memorials;
+create policy "Members can read approved memorial details"
+on public.memorials for select to authenticated
+using ((auth.jwt() ->> 'is_anonymous') is distinct from 'true'
+  and approved = true and public_requested = true and archived = false);
 
 drop policy if exists "Members can update their own unapproved memorials" on public.memorials;
 create policy "Members can update their own unapproved memorials"
@@ -398,7 +405,9 @@ on public.group_posts (group_id, created_at desc);
 -- ---------------------------------------------------------------------------
 grant usage on schema public to anon, authenticated;
 grant select on public.stars to anon, authenticated;
-grant select on public.memorials to anon, authenticated;
+revoke select on public.memorials from anon;
+grant select (id, star_style) on public.memorials to anon;
+grant select on public.memorials to authenticated;
 grant select on public.memories to anon, authenticated;
 grant select, insert, update, delete on public.profiles to authenticated;
 grant select, insert, update, delete on public.memorials to authenticated;
