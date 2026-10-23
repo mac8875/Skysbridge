@@ -267,9 +267,9 @@
     if (!db || !path) return null;
     const { data, error } = await db.storage
       .from(PHOTO_BUCKET)
-      .createSignedUrl(path, 60 * 60);
-    if (error) return null;
-    return data?.signedUrl || null;
+      .download(path);
+    if (error || !data) return null;
+    return URL.createObjectURL(data);
   }
 
   function formatMemoryDate(value) {
@@ -446,7 +446,11 @@
     const section = form.closest('.memory-section');
     if (!section) return;
 
-    section.querySelector('#approvedMemories')?.remove();
+    const previousList = section.querySelector('#approvedMemories');
+    previousList?.querySelectorAll('img').forEach(image => {
+      if (image.src.startsWith('blob:')) URL.revokeObjectURL(image.src);
+    });
+    previousList?.remove();
 
     let result = await db
       .from('memories')
