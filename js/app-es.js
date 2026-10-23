@@ -607,7 +607,7 @@
       comet.style.setProperty("--comet-x", `${Math.ceil(sky.clientWidth + 220)}px`);
       comet.style.setProperty("--comet-fall", `${Math.ceil(sky.clientHeight * .16)}px`);
       comet.style.setProperty("--comet-period", `${(50 + random() * 16).toFixed(1)}s`);
-      comet.style.setProperty("--comet-delay", `${(16 + random() * 24).toFixed(1)}s`);
+      comet.style.setProperty("--comet-delay", `${(12 + random() * 12).toFixed(1)}s`);
       sky.appendChild(comet);
     }
   }

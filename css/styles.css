@@ -1290,7 +1290,7 @@ html:not(.skysbridge-native) .section-heading>.eyebrow{
   margin-right:0;
 }
 
-/* V110 — an occasional, restrained comet on the website star wall */
+/* V111 — an occasional, restrained comet on the website star wall */
 html:not(.skysbridge-native) .celestial-wall .shooting-comet{
   position:absolute;
   z-index:0;
@@ -1320,9 +1320,9 @@ html:not(.skysbridge-native) .celestial-wall .shooting-comet::after{
   transform:translateY(-50%);
 }
 @keyframes websiteCometPass{
-  0%,72%,100%{opacity:0;transform:translate3d(0,0,0) rotate(16deg) scale(.82)}
-  73%{opacity:.86}
-  78%{opacity:0;transform:translate3d(var(--comet-x,1200px),var(--comet-fall,100px),0) rotate(16deg) scale(.82)}
+  0%,1%,92%,100%{opacity:0;transform:translate3d(0,0,0) rotate(16deg) scale(.82)}
+  2%{opacity:.86}
+  7%{opacity:0;transform:translate3d(var(--comet-x,1200px),var(--comet-fall,100px),0) rotate(16deg) scale(.82)}
 }
 @media(prefers-reduced-motion:reduce){
   html:not(.skysbridge-native) .celestial-wall .shooting-comet{display:none!important;animation:none!important}
