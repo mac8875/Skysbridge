@@ -366,7 +366,7 @@
             <span>When checked, your star is submitted for public display. It appears only after moderator approval. Leave unchecked for an anonymous star; only you can see its name and remembrance.</span>
           </span>
         </label>
-        <button class="button button-gold">Add private star</button>
+        <button class="button button-gold">Submit memorial</button>
         <div class="notice" id="memorialStatus">You remain in control of publication.</div>
       </form>
     `);
