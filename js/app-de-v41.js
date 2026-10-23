@@ -1081,6 +1081,75 @@
     return inserted;
   }
 
+  async function loadMyMemorials() {
+    const section = document.querySelector("#myMemorialSection");
+    const target = document.querySelector("#myMemorials");
+    const status = document.querySelector("#myMemorialsStatus");
+    if (!section || !target) return;
+    if (!currentUser) {
+      setHidden(section, true);
+      return;
+    }
+
+    setHidden(section, false);
+    target.innerHTML = `<p class="muted">Deine Sterne werden geladen …</p>`;
+    const { data, error } = await db
+      .from("memorials")
+      .select("id,child_name,public_requested,approved,created_at")
+      .eq("user_id", currentUser.id)
+      .eq("archived", false)
+      .is("rejection_reason", null)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      target.innerHTML = `<p class="notice error">Deine Sterne konnten nicht geladen werden: ${escapeHtml(error.message)}</p>`;
+      return;
+    }
+    if (!data?.length) {
+      target.innerHTML = `<p class="muted">Du hast noch keine Sterne angelegt.</p>`;
+      return;
+    }
+
+    target.innerHTML = data.map(item => {
+      const visibility = item.public_requested
+        ? (item.approved ? "Öffentlich — für alle sichtbar." : "Öffentlich beantragt — wartet auf Freigabe.")
+        : "Privat — Stern und Name sind am Himmel sichtbar; die Angaben bleiben privat.";
+      const actionLabel = item.public_requested ? "Privat setzen" : "Öffentlich setzen";
+      return `
+        <div class="review-item">
+          <strong>${escapeHtml(item.child_name)}</strong>
+          <p>${visibility}</p>
+          <p class="muted">${escapeHtml(formatDate(item.created_at))}</p>
+          <div class="review-actions">
+            <button class="button button-outline toggle-memorial-visibility" data-id="${item.id}" data-public="${!item.public_requested}">
+              ${actionLabel}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    target.querySelectorAll(".toggle-memorial-visibility").forEach(button => {
+      button.onclick = async () => {
+        button.disabled = true;
+        const { error: updateError } = await db.rpc("set_memorial_visibility", {
+          p_memorial_id: button.dataset.id,
+          p_public: button.dataset.public === "true"
+        });
+        if (updateError) {
+          button.disabled = false;
+          setStatus(status, "Dieser Stern konnte nicht aktualisiert werden: " + updateError.message, "error");
+          return;
+        }
+        await loadMyMemorials();
+        await loadApprovedMemorials();
+        setStatus(status, button.dataset.public === "true"
+          ? "Die öffentliche Anzeige wurde beantragt. Angaben erscheinen nach der Freigabe."
+          : "Dieser Stern ist jetzt privat.", "success");
+      };
+    });
+  }
+
   async function refreshSession() {
     if (!db) return;
 
@@ -1113,6 +1182,7 @@
       setHidden(roomArea, true);
       setHidden(roomView, true);
       setHidden(adminPanel, true);
+      setHidden(document.querySelector("#myMemorialSection"), true);
       setHidden(adminBadge, true);
 
       if (memberGreeting) memberGreeting.textContent = "Willkommen bei Skysbridge";
@@ -1152,6 +1222,7 @@
     setHidden(adminBadge, !currentProfile.is_admin);
 
     await loadRooms();
+    await loadMyMemorials();
 
     setHidden(adminPanel, !currentProfile.is_admin);
 
