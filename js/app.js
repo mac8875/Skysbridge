@@ -794,7 +794,7 @@
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
-        <section class="memory-section" id="memorySection" aria-labelledby="memoryHeading">
+        <section class="memory-section" id="memorySection" aria-labelledby="memoryHeading"${canWriteMemory ? "" : " hidden"}>
           <p class="eyebrow">Words of remembrance</p>
           <h3 id="memoryHeading">Memories</h3>
 ${canWriteMemory ? `          <p class="memory-intro">Your written memory is reviewed before it may appear publicly. Photos attached to memories always remain private to the star’s owner and accepted family members.</p>
