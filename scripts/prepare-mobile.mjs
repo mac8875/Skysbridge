@@ -42,8 +42,8 @@ async function copyPublicFiles(source, destination) {
 await copyPublicFiles(root, output);
 await mkdir(path.join(output, 'assets'), { recursive: true });
 await cp(
-  path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v16.gif'),
-  path.join(output, 'assets/app-intro-v16.gif')
+  path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v13.gif'),
+  path.join(output, 'assets/app-intro-v13.gif')
 );
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);

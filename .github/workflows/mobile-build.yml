@@ -29,7 +29,7 @@ jobs:
       - run: npx cap add android
       - run: npx @capacitor/assets generate --android
       - run: npx cap sync android
-      - run: sed -i 's/versionCode 1/versionCode 66/' android/app/build.gradle
+      - run: sed -i 's/versionCode 1/versionCode 67/' android/app/build.gradle
       - run: sed -i 's/versionName "1.0"/versionName "1.0"/' android/app/build.gradle
       - run: ./gradlew --no-daemon assembleDebug
         working-directory: android
