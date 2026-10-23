@@ -1383,3 +1383,28 @@ html.skysbridge-native .section-heading>.eyebrow{
   .celestial-wall .memorial-star-shape,
   .celestial-wall [data-star="sky"] .sky-symbol{animation:none!important}
 }
+
+
+/* V109 — begin the gentle star pulse already in motion and keep its glow smooth */
+.celestial-wall .memorial-card:nth-of-type(3n + 1){--star-glow-delay:-1.2s}
+.celestial-wall .memorial-card:nth-of-type(3n + 2){--star-glow-delay:-3.6s}
+.celestial-wall .memorial-card:nth-of-type(3n){--star-glow-delay:-6s}
+.celestial-wall .memorial-star-shape,
+.celestial-wall [data-star="sky"] .sky-symbol{
+  animation-duration:7.2s;
+  animation-timing-function:cubic-bezier(.45,0,.55,1);
+  animation-fill-mode:both;
+  will-change:transform,opacity;
+  filter:drop-shadow(0 0 7px rgba(255,247,211,.68)) drop-shadow(0 0 23px rgba(232,181,86,.58));
+}
+.celestial-wall [data-star="sky"] .sky-symbol{
+  --star-glow-delay:-2.1s;
+  animation-duration:7.8s;
+  filter:drop-shadow(0 0 9px rgba(255,247,211,.78)) drop-shadow(0 0 28px rgba(232,181,86,.68));
+}
+@keyframes memorialStarGlow{
+  0%,100%{opacity:.96;transform:scale(.99)}
+  25%{opacity:.98;transform:scale(.998)}
+  50%{opacity:1;transform:scale(1.018)}
+  75%{opacity:.98;transform:scale(1)}
+}
