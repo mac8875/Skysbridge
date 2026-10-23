@@ -23,6 +23,19 @@
     .account-guide .section-heading{margin-bottom:32px}
     .account-guide strong{color:#f4d792;font-weight:600}
     @media(max-width:600px){.how-note{padding:24px 18px}.how-note h3{font-size:32px}.account-guide{margin-bottom:58px;padding-bottom:58px}}
+    .special-day-previews{width:min(1100px,100%);margin:48px auto 0}
+    .special-day-previews .section-heading{margin-bottom:24px}
+    .special-day-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+    .special-day-preview{overflow:hidden;padding:24px;border:1px solid rgba(232,181,86,.28);border-radius:22px;background:radial-gradient(circle at 50% 0%,rgba(232,181,86,.13),transparent 48%),linear-gradient(155deg,#0b304b 0%,#061b2d 72%,#041522 100%);text-align:center}
+    .special-day-preview-visual{height:116px;display:grid;place-items:center;margin:-4px -4px 18px;border-radius:16px;background:radial-gradient(ellipse at center,rgba(255,211,105,.16),transparent 58%)}
+    .special-day-preview-visual img{width:76px;height:76px;object-fit:contain;filter:drop-shadow(0 0 15px rgba(255,198,69,.6))}
+    .special-day-preview--birthday .special-day-preview-visual img{animation:specialDayStarPulse 2.8s ease-in-out infinite}
+    .special-day-preview--anniversary .special-day-preview-visual img{filter:drop-shadow(0 0 11px rgba(255,177,78,.64))}
+    .special-day-preview h3{margin:0 0 8px;font:600 27px/1.1 "Cormorant Garamond",serif;color:#f8f3e9}
+    .special-day-preview p{margin:0;color:#b7c1cb;line-height:1.65}
+    @keyframes specialDayStarPulse{0%,100%{opacity:.9;transform:scale(.96);filter:drop-shadow(0 0 11px rgba(255,198,69,.58))}50%{opacity:1;transform:scale(1.04);filter:drop-shadow(0 0 23px rgba(255,211,105,.92))}}
+    @media(max-width:600px){.special-day-preview-grid{grid-template-columns:1fr}.special-day-preview{padding:20px}.special-day-preview-visual{height:100px}}
+    @media(prefers-reduced-motion:reduce){.special-day-preview--birthday .special-day-preview-visual img{animation:none}}
   </style>
   <link rel="stylesheet" href="css/typography.css?v=86">
 
@@ -124,6 +137,26 @@
           <p>Your child's place can be visited and shared with the people you choose. You may also ask us to correct or delete a memorial by contacting Skysbridge.</p>
         </article>
       </div>
+
+      <section class="special-day-previews" aria-labelledby="specialDaysHeading">
+        <div class="section-heading">
+          <p class="eyebrow">Special days in the sky</p>
+          <h2 id="specialDaysHeading">A birthday glow. A candle of remembrance.</h2>
+          <p>On a child’s birthday, their star glows brighter and gently pulses. On the anniversary of their passing, a candle appears in remembrance.</p>
+        </div>
+        <div class="special-day-preview-grid">
+          <article class="special-day-preview special-day-preview--birthday">
+            <div class="special-day-preview-visual" aria-hidden="true"><img src="assets/memorial-star.svg?v=55" alt=""></div>
+            <h3>On their birthday</h3>
+            <p>Their star shines a little brighter.</p>
+          </article>
+          <article class="special-day-preview special-day-preview--anniversary">
+            <div class="special-day-preview-visual" aria-hidden="true"><img src="assets/memorial-candle.svg?v=55" alt=""></div>
+            <h3>On the anniversary of their passing</h3>
+            <p>A candle glows in their memory.</p>
+          </article>
+        </div>
+      </section>
 
       <div class="how-note">
         <p class="eyebrow">Privacy and dignity</p>
