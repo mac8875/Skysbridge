@@ -1408,3 +1408,12 @@ html.skysbridge-native .section-heading>.eyebrow{
   50%{opacity:1;transform:scale(1.018)}
   75%{opacity:.98;transform:scale(1)}
 }
+
+
+/* V110 — a slightly brighter, steady halo around each memorial star */
+.celestial-wall .memorial-star-shape{
+  filter:drop-shadow(0 0 9px rgba(255,247,211,.84)) drop-shadow(0 0 29px rgba(232,181,86,.72));
+}
+.celestial-wall [data-star="sky"] .sky-symbol{
+  filter:drop-shadow(0 0 11px rgba(255,247,211,.94)) drop-shadow(0 0 34px rgba(232,181,86,.82));
+}
