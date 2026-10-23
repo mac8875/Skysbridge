@@ -798,7 +798,7 @@
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
-        <section class="memory-section" id="memorySection" aria-labelledby="memoryHeading">
+        <section class="memory-section" id="memorySection" aria-labelledby="memoryHeading"${canWriteMemory ? "" : " hidden"}>
           <p class="eyebrow">Worte der Erinnerung</p>
           <h3 id="memoryHeading">Erinnerungen</h3>
 ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird geprüft, bevor er öffentlich erscheinen kann. Fotos zu Erinnerungen bleiben immer privat und sind nur für den Besitzer des Sterns und akzeptierte Familienmitglieder sichtbar.</p>
