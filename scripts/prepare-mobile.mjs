@@ -63,6 +63,7 @@ const introBootstrap = `
       const native = Boolean(c?.isNativePlatform?.() || ['android','ios'].includes(c?.getPlatform?.()) ||
         ['localhost','127.0.0.1'].includes(location.hostname.toLowerCase()) ||
         ['capacitor:','ionic:'].includes(location.protocol) || /\\bCapacitor\\b/i.test(navigator.userAgent));
+      if (native) document.documentElement.classList.add('skysbridge-native');
       if (!native) return;
       try { if (sessionStorage.getItem('skysbridge-intro-shown') === '1') return; } catch {}
       document.documentElement.classList.add('skysbridge-intro-pending');

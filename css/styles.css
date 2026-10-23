@@ -1268,3 +1268,18 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   .celestial-wall .memorial-star-shape::after,
   .celestial-wall [data-star="sky"] .sky-symbol::after{animation:none!important}
 }
+
+
+/* V108 — align section headings with the page's left edge on the website */
+html:not(.skysbridge-native) .section-heading{
+  max-width:1120px;
+  margin:0 auto 54px;
+  text-align:left;
+}
+html:not(.skysbridge-native) .section-heading h2{max-width:900px}
+html:not(.skysbridge-native) .section-heading>p:last-child{
+  max-width:760px;
+  margin-left:0;
+  margin-right:0;
+  text-align:left;
+}
