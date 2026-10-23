@@ -402,7 +402,7 @@
             <label>Eine Erinnerung hinterlassen
               <textarea name="message" maxlength="800" required></textarea>
             </label>
-            <button class="button button-gold" type="submit">Erinnerung privat einreichen</button>
+            <button class="button button-gold" type="submit">Erinnerung zur Prüfung einreichen</button>
             <div class="notice memory-notice" id="memoryStatus">
               Erinnerungen werden geprüft, bevor sie sichtbar werden.
             </div>
@@ -505,7 +505,7 @@
         <section class="memory-section" aria-labelledby="memoryHeading">
           <p class="eyebrow">Worte der Erinnerung</p>
           <h3 id="memoryHeading">Eine Erinnerung hinterlassen</h3>
-          <p class="memory-intro">Teile eine Erinnerung oder ein Foto. Private Erinnerungen und Fotos sind nur für den Besitzer des Sterns und akzeptierte Familienmitglieder sichtbar.</p>
+          <p class="memory-intro">Dein Erinnerungstext wird geprüft, bevor er öffentlich erscheinen kann. Fotos zu Erinnerungen bleiben immer privat und sind nur für den Besitzer des Sterns und akzeptierte Familienmitglieder sichtbar.</p>
           <form class="form-grid memory-form" id="memoryForm">
             <label>Dein Name<input type="text" name="author_name" required maxlength="80" autocomplete="name"></label>
             <label>Deine Erinnerung<textarea name="message" required maxlength="3000"></textarea></label>
