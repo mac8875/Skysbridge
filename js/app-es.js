@@ -596,6 +596,20 @@
       star.style.setProperty("--warmth", random() > .74 ? "#f3e6c5" : "#dfefff");
       sky.appendChild(star);
     }
+
+    // Keep the comet on the website only; the native app keeps its calm starfield.
+    const root = document.documentElement;
+    if (!root.classList.contains("skysbridge-native") && !root.classList.contains("native-app")) {
+      const comet = document.createElement("span");
+      comet.className = "shooting-comet";
+      comet.setAttribute("aria-hidden", "true");
+      comet.style.setProperty("--comet-y", `${(12 + random() * 48).toFixed(2)}%`);
+      comet.style.setProperty("--comet-x", `${Math.ceil(sky.clientWidth + 220)}px`);
+      comet.style.setProperty("--comet-fall", `${Math.ceil(sky.clientHeight * .16)}px`);
+      comet.style.setProperty("--comet-period", `${(50 + random() * 16).toFixed(1)}s`);
+      comet.style.setProperty("--comet-delay", `${(16 + random() * 24).toFixed(1)}s`);
+      sky.appendChild(comet);
+    }
   }
 
   buildCelestialSky();

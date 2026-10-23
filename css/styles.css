@@ -1289,3 +1289,41 @@ html:not(.skysbridge-native) .section-heading>.eyebrow{
   margin-left:0;
   margin-right:0;
 }
+
+/* V110 — an occasional, restrained comet on the website star wall */
+html:not(.skysbridge-native) .celestial-wall .shooting-comet{
+  position:absolute;
+  z-index:0;
+  top:var(--comet-y,24%);
+  left:-108px;
+  display:block;
+  width:100px;
+  height:2px;
+  border-radius:999px;
+  opacity:0;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent 0%,rgba(244,215,146,.12) 26%,rgba(244,215,146,.72) 82%,#fff9dc 100%);
+  filter:drop-shadow(0 0 4px rgba(244,215,146,.8)) drop-shadow(0 0 11px rgba(232,181,86,.48));
+  transform:translate3d(0,0,0) rotate(16deg) scale(.82);
+  animation:websiteCometPass var(--comet-period,58s) linear var(--comet-delay,22s) infinite;
+}
+html:not(.skysbridge-native) .celestial-wall .shooting-comet::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  right:-2px;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#fff9dc;
+  box-shadow:0 0 7px 2px rgba(255,248,218,.78),0 0 16px 5px rgba(232,181,86,.42);
+  transform:translateY(-50%);
+}
+@keyframes websiteCometPass{
+  0%,72%,100%{opacity:0;transform:translate3d(0,0,0) rotate(16deg) scale(.82)}
+  73%{opacity:.86}
+  78%{opacity:0;transform:translate3d(var(--comet-x,1200px),var(--comet-fall,100px),0) rotate(16deg) scale(.82)}
+}
+@media(prefers-reduced-motion:reduce){
+  html:not(.skysbridge-native) .celestial-wall .shooting-comet{display:none!important;animation:none!important}
+}
