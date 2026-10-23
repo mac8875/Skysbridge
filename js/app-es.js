@@ -790,7 +790,7 @@
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
-        <section class="memory-section" id="memorySection" aria-labelledby="memoryHeading">
+        <section class="memory-section" id="memorySection" aria-labelledby="memoryHeading"${canWriteMemory ? "" : " hidden"}>
           <p class="eyebrow">Palabras para recordar</p>
           <h3 id="memoryHeading">Recuerdos</h3>
 ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se revisa antes de que pueda hacerse público. Las fotos adjuntas a los recuerdos siempre son privadas y solo las ve quien creó la estrella y sus familiares aceptados.</p>
