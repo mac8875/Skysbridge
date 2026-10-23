@@ -46,3 +46,33 @@ grant execute on function public.admin_delete_published_memorial(uuid) to authen
 
 -- Ask Supabase/PostgREST to refresh the function schema promptly.
 notify pgrst, 'reload schema';
+
+-- Secure deletion for administrator-managed private anonymous stars.
+create or replace function public.admin_delete_private_memorial(
+  p_memorial_id uuid
+)
+returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  deleted_count integer := 0;
+begin
+  if auth.uid() is null or not public.is_admin() then
+    raise exception 'Administrator access is required.' using errcode = '42501';
+  end if;
+
+  delete from public.memorials
+  where id = p_memorial_id
+    and public_requested = false;
+
+  get diagnostics deleted_count = row_count;
+  return deleted_count = 1;
+end;
+$$;
+
+revoke all on function public.admin_delete_private_memorial(uuid) from public;
+grant execute on function public.admin_delete_private_memorial(uuid) to authenticated;
+
+notify pgrst, 'reload schema';
