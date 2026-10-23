@@ -641,8 +641,8 @@
     document.querySelector("#memorialGrid")?.setAttribute("aria-busy", String(loading));
   }
 
-  const publicWallCacheKey = "skysbridge-public-stars-v2";
-  const memberWallCachePrefix = "skysbridge-member-stars-v2:";
+  const publicWallCacheKey = "skysbridge-public-stars-v3";
+  const memberWallCachePrefix = "skysbridge-member-stars-v3:";
 
   function readWallCache(key) {
     try {
