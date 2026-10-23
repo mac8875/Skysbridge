@@ -499,7 +499,7 @@
             <label>Leave a memory
               <textarea name="message" maxlength="800" required></textarea>
             </label>
-            <button class="button button-gold" type="submit">Submit memory privately</button>
+            <button class="button button-gold" type="submit">Submit memory for review</button>
             <div class="notice memory-notice" id="memoryStatus">
               Memories are reviewed before they become visible.
             </div>
@@ -796,7 +796,7 @@
         <section class="memory-section" aria-labelledby="memoryHeading">
           <p class="eyebrow">Words of remembrance</p>
           <h3 id="memoryHeading">Leave a memory</h3>
-          <p class="memory-intro">Share a remembrance or a photo. Private memories and photos are visible only to the star’s owner and accepted family members.</p>
+          <p class="memory-intro">Your written memory is reviewed before it may appear publicly. Photos attached to memories always remain private to the star’s owner and accepted family members.</p>
           <form class="form-grid memory-form" id="memoryForm">
             <label>Your name<input type="text" name="author_name" required maxlength="80" autocomplete="name"></label>
             <label>Your memory<textarea name="message" required maxlength="3000"></textarea></label>
