@@ -1322,7 +1322,19 @@
 
   function ensurePublishedMemorialAdminSection() {
     const grid = document.querySelector("#adminPanel .admin-grid");
-    if (!grid || document.querySelector("#publishedMemorials")) return;
+    if (!grid) return;
+    if (document.querySelector("#publishedMemorials")) {
+      const publishedCard = document.querySelector("#publishedMemorials").closest(".admin-card");
+      if (publishedCard && !document.querySelector("#anonymousMemorials")) {
+        publishedCard.insertAdjacentHTML("beforeend", `
+          <hr>
+          <h3>Anonymous stars</h3>
+          <p class="muted">Delete private stars from the wall. Names and stories are not shown here.</p>
+          <div id="anonymousMemorials"><p class="muted">Loading…</p></div>
+        `);
+      }
+      return;
+    }
 
     const card = document.createElement("article");
     card.className = "admin-card";
