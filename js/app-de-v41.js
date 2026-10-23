@@ -378,7 +378,7 @@
             <span>Wenn du das Kästchen aktivierst, beantragst du die öffentliche Anzeige mit Namen und Erinnerungstext. Ohne Häkchen erscheint der Stern anonym; nur du siehst seine Angaben.</span>
           </span>
         </label>
-        <button class="button button-gold">Privaten Stern hinzufügen</button>
+        <button class="button button-gold">Gedenkstern speichern</button>
         <div class="notice" id="memorialStatus">Du entscheidest, ob der Gedenkstern privat bleibt oder öffentlich werden soll.</div>
       </form>
     `);
