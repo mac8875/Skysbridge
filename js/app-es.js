@@ -368,7 +368,7 @@
             <span>Al marcar la casilla, solicitas que la estrella se muestre con su nombre y recuerdo. Si la dejas sin marcar, aparecerá de forma anónima; solo tú verás sus datos.</span>
           </span>
         </label>
-        <button class="button button-gold">Añadir estrella privada</button>
+        <button class="button button-gold">Enviar recuerdo</button>
         <div class="notice" id="memorialStatus">Tú decides sobre la publicación.</div>
       </form>
     `);
