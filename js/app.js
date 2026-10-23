@@ -1331,6 +1331,10 @@
       <h3>Published stars</h3>
       <p class="muted">Manage memorials that are currently visible in A Sky Full of Stars. Sky is permanently protected.</p>
       <div id="publishedMemorials"><p class="muted">Loading…</p></div>
+      <hr>
+      <h3>Anonymous stars</h3>
+      <p class="muted">Delete private stars from the wall. Names and stories are not shown here.</p>
+      <div id="anonymousMemorials"><p class="muted">Loading…</p></div>
     `;
     grid.appendChild(card);
   }
@@ -1462,6 +1466,73 @@
     });
   }
 
+  async function loadAnonymousMemorials() {
+    const target = document.querySelector("#anonymousMemorials");
+    if (!target) return;
+
+    if (!currentProfile?.is_admin) {
+      target.innerHTML = `<p class="notice error">Administrator access is required.</p>`;
+      return;
+    }
+
+    target.innerHTML = `<p class="muted">Loading…</p>`;
+    const result = await db
+      .from("memorials")
+      .select("id,created_at,photo_path")
+      .eq("public_requested", false)
+      .eq("archived", false)
+      .is("rejection_reason", null)
+      .order("created_at", { ascending: false });
+
+    if (result.error) {
+      target.innerHTML = `<p class="notice error">Could not load anonymous stars: ${escapeHtml(result.error.message)}</p>`;
+      return;
+    }
+
+    const memorials = result.data || [];
+    if (!memorials.length) {
+      target.innerHTML = `<p class="muted">No anonymous stars.</p>`;
+      return;
+    }
+
+    target.innerHTML = memorials.map(item => `
+      <div class="review-item">
+        <strong>Anonymous star</strong>
+        <p>${escapeHtml(formatDate(item.created_at))}</p>
+        <div class="review-actions">
+          <button class="button button-danger delete-anonymous-memorial" type="button" data-id="${escapeHtml(item.id)}">Delete star</button>
+        </div>
+      </div>
+    `).join("");
+
+    target.querySelectorAll(".delete-anonymous-memorial").forEach(button => {
+      button.onclick = async () => {
+        const memorialId = button.dataset.id;
+        if (!memorialId || !window.confirm("Permanently delete this anonymous star? This cannot be undone.")) return;
+
+        button.disabled = true;
+        const originalLabel = button.textContent;
+        button.textContent = "Deleting…";
+        const result = await db.rpc("admin_delete_private_memorial", {
+          p_memorial_id: memorialId
+        });
+
+        if (result.error || result.data !== true) {
+          button.disabled = false;
+          button.textContent = originalLabel;
+          window.alert(result.error
+            ? `The star could not be deleted: ${result.error.message}`
+            : "Nothing was deleted. Confirm that your profile has is_admin = true.");
+          return;
+        }
+
+        const photoPath = memorials.find(item => item.id === memorialId)?.photo_path;
+        if (photoPath) await db.storage.from("memorial-photos").remove([photoPath]);
+        await Promise.all([loadAnonymousMemorials(), loadApprovedMemorials()]);
+      };
+    });
+  }
+
   async function loadAdminDashboard() {
     ensurePublishedMemorialAdminSection();
 
@@ -1469,7 +1540,8 @@
       loadPendingMembers(),
       loadPendingMemorials(),
       loadPendingMemories(),
-      loadPublishedMemorials()
+      loadPublishedMemorials(),
+      loadAnonymousMemorials()
     ]);
   }
 
