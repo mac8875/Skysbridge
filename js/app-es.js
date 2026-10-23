@@ -792,11 +792,11 @@
         <section class="memory-section" aria-labelledby="memoryHeading">
           <p class="eyebrow">Palabras para recordar</p>
           <h3 id="memoryHeading">Dejar un recuerdo</h3>
-          <p class="memory-intro">Comparte un recuerdo o una foto. Los recuerdos y fotos privados solo son visibles para quien creó la estrella y sus familiares aceptados.</p>
+          <p class="memory-intro">Tu recuerdo escrito se revisa antes de que pueda hacerse público. Las fotos adjuntas a los recuerdos siempre son privadas y solo las ve quien creó la estrella y sus familiares aceptados.</p>
           <form class="form-grid memory-form" id="memoryForm">
             <label>Tu nombre<input type="text" name="author_name" required maxlength="80" autocomplete="name"></label>
             <label>Tu recuerdo<textarea name="message" required maxlength="3000"></textarea></label>
-            <button class="button button-gold" type="submit">Enviar recuerdo en privado</button>
+            <button class="button button-gold" type="submit">Enviar recuerdo para revisión</button>
             <div class="notice" id="memoryStatus">Los recuerdos se revisan antes de hacerse visibles.</div>
           </form>
         </section>
