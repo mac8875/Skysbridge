@@ -44,8 +44,6 @@ using (
   )
 );
 
--- Private star owners and accepted family must be able to load the parent record
--- used to authorize its associated photos.
 drop policy if exists "Members can read public stars" on public.stars;
 create policy "Guests can read public stars"
 on public.stars for select to anon
@@ -72,7 +70,6 @@ using (
   )
 );
 
--- Family members receive the same read access to memories attached to a private star.
 create policy "Family members can read shared memories"
 on public.memories for select to authenticated
 using (
@@ -88,8 +85,6 @@ using (
   )
 );
 
--- The memorial-photo bucket also permits public downloads only for explicitly
--- public, approved, active memorials; private access stays with owner/family.
 drop policy if exists "Memorial photos readable when permitted" on storage.objects;
 create policy "Memorial photos readable when permitted"
 on storage.objects for select to anon, authenticated
