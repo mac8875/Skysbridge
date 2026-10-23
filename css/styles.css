@@ -1417,3 +1417,5 @@ html.skysbridge-native .section-heading>.eyebrow{
 .celestial-wall [data-star="sky"] .sky-symbol{
   filter:drop-shadow(0 0 11px rgba(255,247,211,.94)) drop-shadow(0 0 34px rgba(232,181,86,.82));
 }
+
+.memorial-card.anonymous-wall-star{pointer-events:none;cursor:default}
