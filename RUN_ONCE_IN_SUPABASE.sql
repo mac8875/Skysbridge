@@ -92,3 +92,43 @@ grant select (id, child_name, star_style, public_requested, approved)
 on public.memorials to anon;
 
 notify pgrst, 'reload schema';
+
+
+-- Let each signed-in parent switch their own star between private and public.
+-- Public requests always return to moderation; switching private takes effect immediately.
+create or replace function public.set_memorial_visibility(p_memorial_id uuid, p_public boolean)
+returns boolean
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  changed boolean := false;
+begin
+  if auth.uid() is null then
+    raise exception 'Sign in is required to update this star';
+  end if;
+
+  update public.memorials
+  set public_requested = p_public,
+      approved = case when p_public then false else approved end,
+      rejection_reason = case when p_public then null else rejection_reason end,
+      updated_at = now()
+  where id = p_memorial_id
+    and user_id = auth.uid()
+    and archived = false
+    and rejection_reason is null
+  returning true into changed;
+
+  if not coalesce(changed, false) then
+    raise exception 'Star not found or not available to this account';
+  end if;
+
+  return true;
+end;
+$$;
+
+revoke all on function public.set_memorial_visibility(uuid, boolean) from public;
+revoke all on function public.set_memorial_visibility(uuid, boolean) from anon;
+grant execute on function public.set_memorial_visibility(uuid, boolean) to authenticated;
+notify pgrst, 'reload schema';
