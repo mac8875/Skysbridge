@@ -21,6 +21,7 @@
   let currentProfile = null;
   let activeRoomId = null;
   let modalPhotoUrl = null;
+  let modalRequestGeneration = 0;
   const reviewPhotoUrls = new Set();
 
   function clearReviewPhotoUrls() {
@@ -94,6 +95,7 @@
 
   function openModal(html, cardClass = "") {
     if (!modal || !modalContent) return;
+    modalRequestGeneration += 1;
 
     if (modalPhotoUrl) URL.revokeObjectURL(modalPhotoUrl);
     modalPhotoUrl = null;
@@ -110,6 +112,7 @@
 
   function closeModal() {
     if (!modal || !modalContent) return;
+    modalRequestGeneration += 1;
 
     setHidden(modal, true);
     modalContent.innerHTML = "";
@@ -214,19 +217,8 @@
     document.querySelector("#starAccessSignup")?.addEventListener("click", () => showAuth(false, "signup"));
   }
 
-  async function hasSignedInWallAccess() {
-    if (!db) return false;
-
-    try {
-      const { data, error } = await db.auth.getUser();
-      if (error) throw error;
-      wallIsMember = Boolean(data?.user && !data.user.is_anonymous);
-      return wallIsMember;
-    } catch (error) {
-      wallIsMember = false;
-      console.warn("No se pudo comprobar el acceso a las estrellas:", error);
-      return false;
-    }
+  function hasSignedInWallAccess() {
+    return Boolean((currentUser && !currentUser.is_anonymous) || wallIsMember);
   }
 
   function showAuth(forMemorial = false, initialMode = "login") {
@@ -440,10 +432,10 @@
   }
 
   document.querySelectorAll("[data-star]").forEach(element => {
-    element.addEventListener("click", async (event) => {
+    element.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (!(await hasSignedInWallAccess())) {
+      if (!hasSignedInWallAccess()) {
         showStarAccessPrompt();
         return;
       }
@@ -451,23 +443,12 @@
     });
   });
 
-  async function showStar(slug) {
+  function showStar(slug) {
     let star = {
       name: "Sky",
       story:
         "Vivió solo unos meses. Pero ninguna medida del tiempo puede expresar lo que significa para nosotros. Nos enseñó que el amor no se cuenta en años, sino en la profundidad del vínculo que permanece.\n\nDespués de perderlo, descubrimos lo silencioso y solitario que puede ser el duelo. Seguimos amando y echando de menos a nuestro hijo; sigue siendo parte de la familia. Sin embargo, el mundo suele guardar silencio en torno a su nombre.\n\nAños después, el amor por Sky dio origen a Skysbridge: un lugar donde los hijos que se fueron demasiado pronto pueden tener un nombre, ser honrados y recordados con dignidad, y donde sus historias pueden permanecer.\n\nSky es la primera luz del cielo lleno de estrellas. Con su estrella comenzó este lugar y, junto a él, cada hijo puede tener su propia luz."
     };
-
-    if (db) {
-      const { data } = await db
-        .from("stars")
-        .select("name,story")
-        .eq("slug", slug)
-        .eq("is_public", true)
-        .maybeSingle();
-
-      if (data && slug !== "sky") star = data;
-    }
 
     const personalSkyOpening =
       "El momento en que supe que Sky existía fue uno de los más felices de mi vida. Tener que dejarlo ir se convirtió en el dolor más profundo que he conocido.";
@@ -557,6 +538,24 @@
       form.reset();
       setStatus(status, "Tu recuerdo se ha enviado de forma privada para revisión.", "success");
     };
+    const starModalGeneration = modalRequestGeneration;
+    if (db && slug !== "sky") {
+      db.from("stars")
+        .select("name,story")
+        .eq("slug", slug)
+        .eq("is_public", true)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (!data || starModalGeneration !== modalRequestGeneration || modal.hidden) return;
+          const storyCopy = modalContent.querySelector(".star-story-copy");
+          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(data.story || "");
+          const title = modalContent.querySelector("#modalTitle");
+          if (title) title.textContent = data.name || "Un hijo recordado";
+          const heading = modalContent.querySelector("#memoryHeading");
+          if (heading) heading.textContent = `Comparte un recuerdo de ${data.name || "Un hijo recordado"}`;
+        })
+        .catch(error => console.warn("No se pudo cargar la historia de la estrella:", error));
+    }
   }
 
 
@@ -767,8 +766,7 @@
     return URL.createObjectURL(data);
   }
 
-  async function openApprovedMemorial(item) {
-    const photoUrl = item.photo_path ? await memorialPhotoUrl(item.photo_path) : null;
+  function openApprovedMemorial(item) {
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
@@ -787,12 +785,29 @@
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Siempre amado")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${photoUrl ? `<img class="memorial-detail-photo" src="${escapeHtml(photoUrl)}" alt="${escapeHtml(item.child_name || "")}">` : ""}
+        ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
       </article>
     `, "star-modal-card");
-    modalPhotoUrl = photoUrl;
+
+    const photoGeneration = modalRequestGeneration;
+    if (item.photo_path) {
+      memorialPhotoUrl(item.photo_path).then(photoUrl => {
+        const slot = modalContent.querySelector(".memorial-detail-photo-slot");
+        if (!photoUrl) return;
+        if (photoGeneration !== modalRequestGeneration || modal.hidden || !slot) {
+          URL.revokeObjectURL(photoUrl);
+          return;
+        }
+        const photo = document.createElement("img");
+        photo.className = "memorial-detail-photo";
+        photo.src = photoUrl;
+        photo.alt = item.child_name || "";
+        slot.replaceWith(photo);
+        modalPhotoUrl = photoUrl;
+      }).catch(error => console.warn("Could not load the memorial photo:", error));
+    }
   }
 
   function showPrivateStarNotice(item) {
