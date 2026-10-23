@@ -1324,7 +1324,19 @@
 
   function ensurePublishedMemorialAdminSection() {
     const grid = document.querySelector("#adminPanel .admin-grid");
-    if (!grid || document.querySelector("#publishedMemorials")) return;
+    if (!grid) return;
+    if (document.querySelector("#publishedMemorials")) {
+      const publishedCard = document.querySelector("#publishedMemorials").closest(".admin-card");
+      if (publishedCard && !document.querySelector("#anonymousMemorials")) {
+        publishedCard.insertAdjacentHTML("beforeend", `
+          <hr>
+          <h3>Estrellas anónimas</h3>
+          <p class="muted">Elimina estrellas privadas del cielo. Aquí no se muestran nombres ni textos.</p>
+          <div id="anonymousMemorials"><p class="muted">Cargando…</p></div>
+        `);
+      }
+      return;
+    }
 
     const card = document.createElement("article");
     card.className = "admin-card";
