@@ -141,15 +141,15 @@
   const isSpanish = document.documentElement.lang.startsWith("es");
   const text = isSpanish ? {
     photoLabel: 'Foto (opcional)',
-    photoHelp: 'JPG, PNG o WebP, máximo 5 MB. La foto permanece privada hasta que se apruebe el recuerdo.',
+    photoHelp: 'JPG, PNG o WebP, máximo 5 MB. En estrellas privadas solo la ven la familia propietaria y sus familiares aceptados.',
     invalidType: 'Elige una imagen JPG, PNG o WebP.',
     tooLarge: 'La foto no puede superar los 5 MB.',
     signIn: 'Inicia sesión antes de compartir un recuerdo.',
     uploading: 'Subiendo la foto de forma segura…',
     submitting: 'Enviando el recuerdo para revisión…',
     success: 'Tu recuerdo se ha enviado de forma privada para revisión.',
-    memoriesHeading: 'Recuerdos aprobados',
-    noApprovedMemories: 'Aún no hay recuerdos aprobados.',
+    memoriesHeading: 'Recuerdos',
+    noApprovedMemories: 'Aún no hay recuerdos.',
     deleteMemory: 'Eliminar recuerdo',
     deleting: 'Eliminando…',
     confirmDelete: author => `¿Eliminar permanentemente este recuerdo de ${author || 'esta persona'}? Esta acción no se puede deshacer.`,
@@ -159,15 +159,15 @@
     reviewPhotoAlt: 'Foto enviada con este recuerdo'
   } : isGerman ? {
     photoLabel: 'Foto (optional)',
-    photoHelp: 'JPG, PNG oder WebP, maximal 5 MB. Das Foto bleibt privat, bis die Erinnerung freigegeben wurde.',
+    photoHelp: 'JPG, PNG oder WebP, maximal 5 MB. Bei privaten Sternen sehen es nur der Besitzer und akzeptierte Familienmitglieder.',
     invalidType: 'Bitte wähle ein Foto im Format JPG, PNG oder WebP.',
     tooLarge: 'Das Foto darf höchstens 5 MB groß sein.',
     signIn: 'Bitte melde dich an, bevor du eine Erinnerung einreichst.',
     uploading: 'Foto wird sicher hochgeladen …',
     submitting: 'Erinnerung wird zur Prüfung gesendet …',
     success: 'Deine Erinnerung wurde sicher und zunächst privat zur Prüfung übermittelt.',
-    memoriesHeading: 'Freigegebene Erinnerungen',
-    noApprovedMemories: 'Es gibt noch keine freigegebenen Erinnerungen.',
+    memoriesHeading: 'Erinnerungen',
+    noApprovedMemories: 'Es gibt noch keine Erinnerungen.',
     deleteMemory: 'Erinnerung löschen',
     deleting: 'Wird gelöscht …',
     confirmDelete: author => `Diese Erinnerung von ${author || 'dieser Person'} dauerhaft löschen? Das kann nicht rückgängig gemacht werden.`,
@@ -177,15 +177,15 @@
     reviewPhotoAlt: 'Foto zu dieser Erinnerung'
   } : {
     photoLabel: 'Photo (optional)',
-    photoHelp: 'JPG, PNG or WebP, maximum 5 MB. The photo stays private until the memory has been approved.',
+    photoHelp: 'JPG, PNG or WebP, maximum 5 MB. For private stars, only the owner and accepted family members can see it.',
     invalidType: 'Please choose a JPG, PNG or WebP image.',
     tooLarge: 'The photo must be 5 MB or smaller.',
     signIn: 'Please sign in before leaving a memory.',
     uploading: 'Uploading photo securely…',
     submitting: 'Submitting memory for review…',
     success: 'Your memory was submitted privately for review.',
-    memoriesHeading: 'Approved memories',
-    noApprovedMemories: 'There are no approved memories yet.',
+    memoriesHeading: 'Memories',
+    noApprovedMemories: 'There are no memories yet.',
     deleteMemory: 'Delete memory',
     deleting: 'Deleting…',
     confirmDelete: author => `Permanently delete this memory from ${author || 'this author'}? This cannot be undone.`,
@@ -341,11 +341,14 @@
     return input;
   }
 
-  function enhanceMemoryForm(form, slug) {
-    if (!form || !slug || !db) return;
+  function enhanceMemoryForm(form, target) {
+    const memorialId = typeof target === 'object' ? String(target?.memorialId || '') : '';
+    const starSlug = typeof target === 'string' ? target : String(target?.starSlug || '');
+    if (!form || (!memorialId && !starSlug) || !db) return;
 
     const input = buildPhotoField(form);
-    form.dataset.memoryPhotoSlug = slug;
+    if (starSlug) form.dataset.memoryPhotoSlug = starSlug;
+    if (memorialId) form.dataset.memoryPhotoMemorialId = memorialId;
 
     form.onsubmit = async event => {
       event.preventDefault();
@@ -391,7 +394,7 @@
         setNotice(status, text.submitting);
 
         const payload = {
-          star_slug: slug,
+          ...(memorialId ? { memorial_id: memorialId } : { star_slug: starSlug }),
           user_id: user.id,
           author_name: values.get('author_name'),
           message: values.get('message'),
@@ -435,13 +438,15 @@
     return null;
   }
 
-  async function showApprovedMemories(slug) {
-    if (!db || !slug) return;
+  async function showApprovedMemories(target) {
+    const memorialId = typeof target === 'object' ? String(target?.memorialId || '') : '';
+    const starSlug = typeof target === 'string' ? target : String(target?.starSlug || '');
+    if (!db || (!memorialId && !starSlug)) return;
 
     const form = await waitForMemoryForm();
     if (!form) return;
 
-    enhanceMemoryForm(form, slug);
+    enhanceMemoryForm(form, memorialId ? { memorialId } : starSlug);
 
     const section = form.closest('.memory-section');
     if (!section) return;
@@ -452,11 +457,12 @@
     });
     previousList?.remove();
 
+    const parentColumn = memorialId ? 'memorial_id' : 'star_slug';
+    const parentId = memorialId || starSlug;
     let result = await db
       .from('memories')
       .select('id,author_name,message,photo_path,created_at')
-      .eq('star_slug', slug)
-      .eq('approved', true)
+      .eq(parentColumn, parentId)
       .eq('archived', false)
       .order('created_at', { ascending: false });
 
@@ -464,8 +470,7 @@
       result = await db
         .from('memories')
         .select('id,author_name,message,created_at')
-        .eq('star_slug', slug)
-        .eq('approved', true)
+        .eq(parentColumn, parentId)
         .eq('archived', false)
         .order('created_at', { ascending: false });
     }
@@ -658,6 +663,11 @@
       }
     }
   }, true);
+
+  window.addEventListener('skysbridge:open-memorial', event => {
+    const memorialId = String(event.detail?.memorialId || '');
+    if (memorialId) void showApprovedMemories({ memorialId });
+  });
 
   schedulePendingPhotoEnhancement();
 })();
