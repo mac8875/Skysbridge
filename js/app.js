@@ -9,6 +9,11 @@
   const db = configured
     ? supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY)
     : null;
+  const wallDb = configured
+    ? supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+      })
+    : null;
 
   let currentUser = null;
   let currentProfile = null;
@@ -358,10 +363,10 @@
           <input class="public-request-option__checkbox" type="checkbox" name="public_requested">
           <span class="public-request-option__copy">
             <strong>Request public display (optional)</strong>
-            <span>When checked, your star is submitted for public display. It appears only after moderator approval. Leave unchecked to keep it private.</span>
+            <span>When checked, your star is submitted for public display. It appears only after moderator approval. Leave unchecked for an anonymous star; only you can see its name and remembrance.</span>
           </span>
         </label>
-        <button class="button button-gold">Submit privately for review</button>
+        <button class="button button-gold">Add private star</button>
         <div class="notice" id="memorialStatus">You remain in control of publication.</div>
       </form>
     `);
@@ -427,7 +432,8 @@
       }
 
       form.reset();
-      setStatus(status, "The memorial was submitted privately for review.", "success");
+      setStatus(status, "Your private star has been added. Only you can open its name and remembrance.", "success");
+      await loadApprovedMemorials();
     };
   }
 
@@ -633,8 +639,8 @@
     document.querySelector("#memorialGrid")?.setAttribute("aria-busy", String(loading));
   }
 
-  const publicWallCacheKey = "skysbridge-public-stars-v1";
-  const memberWallCachePrefix = "skysbridge-member-stars-v1:";
+  const publicWallCacheKey = "skysbridge-public-stars-v2";
+  const memberWallCachePrefix = "skysbridge-member-stars-v2:";
 
   function readWallCache(key) {
     try {
@@ -666,7 +672,7 @@
     } else {
       const publicCache = readWallCache(publicWallCacheKey);
       approvedMemorials = publicCache
-        ? publicCache.items.map(item => ({ star_style: item.star_style }))
+        ? publicCache.items.map(item => ({ id: item.id, star_style: item.star_style }))
         : [];
       viewerMemorialIds = new Set();
     }
@@ -678,15 +684,20 @@
 
   function rememberWallCache(user, items, viewerIds) {
     const publicItems = (items || []).map(item => ({
+      id: item.id,
       star_style: item.star_style || "radiant"
     }));
     writeWallCache(publicWallCacheKey, { items: publicItems });
 
     if (!user || user.is_anonymous) return;
+    const safeMemberItems = (items || []).map(item => item.is_public
+      ? item
+      : { id: item.id, star_style: item.star_style || "radiant" });
+    const publicViewerIds = (items || []).filter(item => item.is_public && item.is_owner).map(item => item.id);
     writeWallCache(`${memberWallCachePrefix}${user.id}`, {
       user_id: user.id,
-      items: items || [],
-      viewer_ids: [...(viewerIds || [])]
+      items: safeMemberItems,
+      viewer_ids: publicViewerIds
     });
   }
 
@@ -814,7 +825,11 @@
 
     const search = String(document.querySelector("#memorialSearch")?.value || "").trim().toLowerCase();
     const sort = document.querySelector("#memorialSort")?.value || "newest";
-    let rows = approvedMemorials.filter(item => !search || String(item.child_name || "").toLowerCase().includes(search));
+    let rows = approvedMemorials.filter(item =>
+      !item.is_public ||
+      !search ||
+      String(item.child_name || "").toLowerCase().includes(search)
+    );
 
     rows = [...rows].sort((a, b) => {
       if (sort === "az") return String(a.child_name || "").localeCompare(String(b.child_name || ""));
@@ -831,15 +846,34 @@
     }
 
     rows.forEach((item, index) => {
-      const state = memorialDayState(item);
+      if (!item.is_public && !item.is_owner) {
+        const star = document.createElement("div");
+        star.className = "memorial-card is-standard anonymous-wall-star";
+        star.dataset.publicMemorial = item.id;
+        star.setAttribute("aria-hidden", "true");
+        star.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span>`;
+        grid.appendChild(star);
+        return;
+      }
+
+      const state = item.is_public ? memorialDayState(item) : "standard";
       const card = document.createElement("button");
       card.type = "button";
-      card.className = `memorial-card is-${state}`;
+      card.className = `memorial-card is-${state}${item.is_public ? "" : " is-private-owner-star"}`;
       card.dataset.publicMemorial = item.id;
       if (item.id === viewerCenter?.id) card.classList.add("is-viewer-center");
-      card.setAttribute("aria-label", `Open memorial for ${item.child_name || "a child remembered"}`);
+      card.setAttribute("aria-label", item.is_public
+        ? `Open memorial for ${item.child_name || "a child remembered"}`
+        : "Open your private star");
 
       card.style.animationDelay = `${(index % 7) * -.65}s`;
+
+      if (!item.is_public) {
+        card.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span>`;
+        card.addEventListener("click", () => openApprovedMemorial(item));
+        grid.appendChild(card);
+        return;
+      }
 
       const dateLine = memorialDateLine(item);
       const dayLabel =
@@ -853,7 +887,7 @@
         <span class="memorial-symbol">
           ${memorialSymbolMarkup(state, false, item.star_style)}
         </span>
-        <span class="memorial-kicker">A light remembered</span>
+        <span class="memorial-kicker">${"A light remembered"}</span>
         <strong>${escapeHtml(item.child_name || "Forever loved")}</strong>
         <span class="memorial-day">${dayLabel}</span>
         <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
@@ -928,39 +962,47 @@
       wallUserId = wallIsMember ? user.id : null;
       updateSkyCardAccess(wallIsMember);
 
+      let ownDetails = [];
+      let publicDetails = [];
       if (wallIsMember) {
         const ownResult = await db
           .from("memorials")
-          .select("id")
+          .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at,public_requested,approved")
           .eq("user_id", user.id)
-          .eq("approved", true)
-          .eq("public_requested", true);
-        if (ownResult.error) console.warn("Star ownership lookup unavailable:", ownResult.error);
-        else nextViewerMemorialIds = new Set((ownResult.data || []).map(item => item.id));
-      }
+          .eq("archived", false)
+          .is("rejection_reason", null);
+        if (ownResult.error) throw ownResult.error;
+        ownDetails = ownResult.data || [];
 
-      let result = wallIsMember
-        ? await db.from("memorials")
-            .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at")
-            .eq("approved", true)
-            .eq("public_requested", true)
-            .order("created_at", { ascending: false })
-        : await db.from("memorials").select("star_style");
-
-      if (wallIsMember && result.error && /birth_date|passing_date|star_style/i.test(result.error.message || "")) {
-        result = await db
+        const publicResult = await db
           .from("memorials")
-          .select("id,child_name,remembrance,country,created_at")
+          .select("id,child_name,remembrance,country,star_style,birth_date,passing_date,photo_path,created_at,public_requested,approved")
           .eq("approved", true)
           .eq("public_requested", true)
+          .eq("archived", false)
           .order("created_at", { ascending: false });
+        if (publicResult.error) throw publicResult.error;
+        publicDetails = publicResult.data || [];
+        nextViewerMemorialIds = new Set(ownDetails.map(item => item.id));
       }
 
-      if (generation !== memorialLoadGeneration) return;
-      if (result.error) throw result.error;
+      const shapeResult = await wallDb
+        .from("memorials")
+        .select("id,star_style");
+      if (shapeResult.error) throw shapeResult.error;
 
+      const ownById = new Map(ownDetails.map(item => [item.id, item]));
+      const publicById = new Map(publicDetails.map(item => [item.id, item]));
       viewerMemorialIds = nextViewerMemorialIds;
-      approvedMemorials = result.data || [];
+      approvedMemorials = (shapeResult.data || []).map(shape => {
+        const details = ownById.get(shape.id) || publicById.get(shape.id);
+        return {
+          ...shape,
+          ...(details || {}),
+          is_owner: ownById.has(shape.id),
+          is_public: publicById.has(shape.id)
+        };
+      });
       if (offlineWallEnabled) rememberWallCache(user, approvedMemorials, viewerMemorialIds);
       renderApprovedMemorials(true);
     } catch (error) {
