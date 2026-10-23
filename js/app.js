@@ -202,7 +202,7 @@
     openModal(`
       <p class="eyebrow">A quiet invitation</p>
       <h2 id="modalTitle">Every star holds a story</h2>
-      <p>Sign in or create a free account to discover the names and memories behind the stars. You can explore in your own time.</p>
+      <p>Sign in or create a free account to read the remembrances shared on public stars.</p>
       <div class="tabs">
         <button class="button button-gold" id="starAccessLogin" type="button">Sign in</button>
         <button class="button button-outline" id="starAccessSignup" type="button">Create account</button>
@@ -323,7 +323,7 @@
   function showMemorial() {
     openModal(`
       <h2 id="modalTitle">Honor a child</h2>
-      <p>Submitted memorials remain private until you request publication and a moderator approves them.</p>
+      <p>Private stars appear on the wall with the child’s name. Stars submitted for public display appear after moderator approval. The remembrance and other details stay private until then.</p>
       <form class="form-grid" id="memorialForm">
         <label>Child's name
           <input name="child_name" required maxlength="80">
@@ -363,7 +363,7 @@
           <input class="public-request-option__checkbox" type="checkbox" name="public_requested">
           <span class="public-request-option__copy">
             <strong>Request public display (optional)</strong>
-            <span>When checked, your star is submitted for public display. It appears only after moderator approval. Leave unchecked for an anonymous star; only you can see its name and remembrance.</span>
+            <span>When checked, you request public display of the remembrance and details after moderator approval. When unchecked, the star and child’s name appear on the wall while the remembrance and other details stay private.</span>
           </span>
         </label>
         <button class="button button-gold">Submit memorial</button>
@@ -432,7 +432,7 @@
       }
 
       form.reset();
-      setStatus(status, "Your private star has been added. Only you can open its name and remembrance.", "success");
+      setStatus(status, payload.public_requested ? "Your public request was submitted. The star and name will appear after moderator approval; its remembrance stays private until then." : "Your private star is on the wall with the child’s name. Its remembrance remains private.", "success");
       await loadApprovedMemorials();
     };
   }
@@ -672,7 +672,7 @@
     } else {
       const publicCache = readWallCache(publicWallCacheKey);
       approvedMemorials = publicCache
-        ? publicCache.items.map(item => ({ id: item.id, star_style: item.star_style }))
+        ? publicCache.items.map(item => ({ id: item.id, child_name: item.child_name, star_style: item.star_style, is_public: item.is_public }))
         : [];
       viewerMemorialIds = new Set();
     }
@@ -685,14 +685,16 @@
   function rememberWallCache(user, items, viewerIds) {
     const publicItems = (items || []).map(item => ({
       id: item.id,
-      star_style: item.star_style || "radiant"
+      child_name: item.child_name,
+      star_style: item.star_style || "radiant",
+      is_public: Boolean(item.is_public)
     }));
     writeWallCache(publicWallCacheKey, { items: publicItems });
 
     if (!user || user.is_anonymous) return;
     const safeMemberItems = (items || []).map(item => item.is_public
       ? item
-      : { id: item.id, star_style: item.star_style || "radiant" });
+      : { id: item.id, child_name: item.child_name, star_style: item.star_style || "radiant", is_public: false });
     const publicViewerIds = (items || []).filter(item => item.is_public && item.is_owner).map(item => item.id);
     writeWallCache(`${memberWallCachePrefix}${user.id}`, {
       user_id: user.id,
@@ -791,6 +793,14 @@
     modalPhotoUrl = photoUrl;
   }
 
+  function showPrivateStarNotice(item) {
+    openModal(`
+      <p class="eyebrow">This star is private</p>
+      <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
+      <p>The remembrance behind this star is private and can only be viewed by the child’s family.</p>
+    `, "star-access-card");
+  }
+
   function renderApprovedMemorials(resolved = false) {
     const grid = document.querySelector("#memorialGrid");
     const status = document.querySelector("#wallStatus");
@@ -810,12 +820,16 @@
       plane.querySelectorAll(".guest-star-only").forEach(card => card.remove());
       approvedMemorials.forEach((item, index) => {
         const star = document.createElement("button");
+        const childName = item.child_name || "Forever loved";
+        const isPrivate = !item.is_public;
         star.type = "button";
-        star.className = "memorial-card is-standard guest-star-only";
+        star.className = `memorial-card is-standard guest-star-only${isPrivate ? " is-private-wall-star" : ""}`;
         star.dataset.publicMemorial = `guest-${index}`;
-        star.setAttribute("aria-label", "Sign in to discover the story behind this star.");
-        star.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span>`;
-        star.addEventListener("click", showStarAccessPrompt);
+        star.setAttribute("aria-label", isPrivate
+          ? `${childName}. This star is private.`
+          : `Sign in to read the public remembrance for ${childName}.`);
+        star.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span><strong>${escapeHtml(childName)}</strong>`;
+        star.addEventListener("click", () => isPrivate ? showPrivateStarNotice(item) : showStarAccessPrompt());
         plane.appendChild(star);
       });
       window.SkysbridgeSkyMap?.layout([...plane.querySelectorAll(".guest-star-only")], skyCard, null);
@@ -847,11 +861,15 @@
 
     rows.forEach((item, index) => {
       if (!item.is_public && !item.is_owner) {
-        const star = document.createElement("div");
-        star.className = "memorial-card is-standard anonymous-wall-star";
+        const star = document.createElement("button");
+        const childName = item.child_name || "Forever loved";
+        star.type = "button";
+        star.className = "memorial-card is-standard is-private-wall-star";
         star.dataset.publicMemorial = item.id;
-        star.setAttribute("aria-hidden", "true");
-        star.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span>`;
+        star.setAttribute("aria-label", `${childName}. This star is private.`);
+        star.style.animationDelay = `${(index % 7) * -.65}s`;
+        star.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span><strong>${escapeHtml(childName)}</strong>`;
+        star.addEventListener("click", () => showPrivateStarNotice(item));
         grid.appendChild(star);
         return;
       }
@@ -864,12 +882,12 @@
       if (item.id === viewerCenter?.id) card.classList.add("is-viewer-center");
       card.setAttribute("aria-label", item.is_public
         ? `Open memorial for ${item.child_name || "a child remembered"}`
-        : "Open your private star");
+        : `Open your private star: ${item.child_name || "Forever loved"}`);
 
       card.style.animationDelay = `${(index % 7) * -.65}s`;
 
       if (!item.is_public) {
-        card.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span>`;
+        card.innerHTML = `<span class="memorial-symbol">${memorialSymbolMarkup("standard", false, item.star_style)}</span><strong>${escapeHtml(item.child_name || "Forever loved")}</strong>`;
         card.addEventListener("click", () => openApprovedMemorial(item));
         grid.appendChild(card);
         return;
@@ -988,7 +1006,7 @@
 
       const shapeResult = await wallDb
         .from("memorials")
-        .select("id,star_style");
+        .select("id,child_name,star_style,public_requested,approved");
       if (shapeResult.error) throw shapeResult.error;
 
       const ownById = new Map(ownDetails.map(item => [item.id, item]));
@@ -1000,7 +1018,7 @@
           ...shape,
           ...(details || {}),
           is_owner: ownById.has(shape.id),
-          is_public: publicById.has(shape.id)
+          is_public: publicById.has(shape.id) || Boolean(shape.public_requested && shape.approved)
         };
       });
       if (offlineWallEnabled) rememberWallCache(user, approvedMemorials, viewerMemorialIds);
@@ -1328,8 +1346,8 @@
       if (publishedCard && !document.querySelector("#anonymousMemorials")) {
         publishedCard.insertAdjacentHTML("beforeend", `
           <hr>
-          <h3>Anonymous stars</h3>
-          <p class="muted">Delete private stars from the wall. Names and stories are not shown here.</p>
+          <h3>Private stars</h3>
+          <p class="muted">Manage stars whose remembrances are private. Names and dates are shown here; stories are not.</p>
           <div id="anonymousMemorials"><p class="muted">Loading…</p></div>
         `);
       }
@@ -1344,8 +1362,8 @@
       <p class="muted">Manage memorials that are currently visible in A Sky Full of Stars. Sky is permanently protected.</p>
       <div id="publishedMemorials"><p class="muted">Loading…</p></div>
       <hr>
-      <h3>Anonymous stars</h3>
-      <p class="muted">Delete private stars from the wall. Names and stories are not shown here.</p>
+      <h3>Private stars</h3>
+      <p class="muted">Manage stars whose remembrances are private. Names and dates are shown here; stories are not.</p>
       <div id="anonymousMemorials"><p class="muted">Loading…</p></div>
     `;
     grid.appendChild(card);
@@ -1490,26 +1508,26 @@
     target.innerHTML = `<p class="muted">Loading…</p>`;
     const result = await db
       .from("memorials")
-      .select("id,created_at,photo_path")
+      .select("id,child_name,created_at,photo_path")
       .eq("public_requested", false)
       .eq("archived", false)
       .is("rejection_reason", null)
       .order("created_at", { ascending: false });
 
     if (result.error) {
-      target.innerHTML = `<p class="notice error">Could not load anonymous stars: ${escapeHtml(result.error.message)}</p>`;
+      target.innerHTML = `<p class="notice error">Could not load private stars: ${escapeHtml(result.error.message)}</p>`;
       return;
     }
 
     const memorials = result.data || [];
     if (!memorials.length) {
-      target.innerHTML = `<p class="muted">No anonymous stars.</p>`;
+      target.innerHTML = `<p class="muted">No private stars.</p>`;
       return;
     }
 
     target.innerHTML = memorials.map(item => `
       <div class="review-item">
-        <strong>Anonymous star</strong>
+        <strong>${escapeHtml(item.child_name || "Forever loved")}</strong>
         <p>${escapeHtml(formatDate(item.created_at))}</p>
         <div class="review-actions">
           <button class="button button-danger delete-anonymous-memorial" type="button" data-id="${escapeHtml(item.id)}">Delete star</button>
@@ -1520,7 +1538,7 @@
     target.querySelectorAll(".delete-anonymous-memorial").forEach(button => {
       button.onclick = async () => {
         const memorialId = button.dataset.id;
-        if (!memorialId || !window.confirm("Permanently delete this anonymous star? This cannot be undone.")) return;
+        if (!memorialId || !window.confirm("Permanently delete this private star? This cannot be undone.")) return;
 
         button.disabled = true;
         const originalLabel = button.textContent;
