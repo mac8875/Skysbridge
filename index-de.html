@@ -226,6 +226,27 @@
         <div id="myMemorials"><p class="muted">Deine Sterne werden geladen …</p></div>
         <div class="notice" id="myMemorialsStatus" hidden></div>
       </section>
+      <section class="admin-card member-stars family-sharing" id="familySharingSection" hidden data-nosnippet>
+        <h3>Familienfreigabe</h3>
+        <p class="muted">Lade ein Familienmitglied mit der E-Mail-Adresse seines Skysbridge-Kontos ein. Nach Annahme im eigenen Konto kann die Person deine Sterne, Erinnerungen, Daten und Fotos lesen, aber nicht bearbeiten oder löschen. Du kannst den Zugriff jederzeit entfernen.</p>
+        <form class="form-grid" id="familyInviteForm">
+          <label>E-Mail-Adresse des Skysbridge-Kontos
+            <input type="email" name="family_email" required maxlength="254" autocomplete="email" placeholder="name@beispiel.de">
+          </label>
+          <button class="button button-gold" type="submit">Einladung erstellen</button>
+        </form>
+        <div class="notice" id="familySharingStatus" hidden></div>
+        <div class="family-sharing-lists">
+          <div>
+            <h4>Personen mit Zugriff</h4>
+            <div id="familyShares"><p class="muted">Loading…</p></div>
+          </div>
+          <div>
+            <h4>Einladungen an dich</h4>
+            <div id="incomingFamilyInvites"><p class="muted">Loading…</p></div>
+          </div>
+        </div>
+      </section>
       <section id="roomArea" hidden>
         <div class="subheading"><div><p class="eyebrow">Deine Gemeinschaft</p><h2>Geschützte Räume</h2></div><p>Beantrage den Zugang zu einem Raum. Jede Anfrage wird von einer Administratorin oder einem Administrator geprüft.</p></div>
         <div class="room-grid" id="roomList"></div>
@@ -331,6 +352,6 @@
   <script src="js/platform-ui.js?v=4"></script>
   <script src="js/app-intro.js?v=6"></script>
   <script src="js/sky-map.js?v=2"></script>
-  <script src="js/app-de-v41.js?v=107"></script>
+  <script src="js/app-de-v41.js?v=108"></script>
 </body>
 </html>
