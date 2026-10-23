@@ -1072,7 +1072,7 @@
     const memberEmail = document.querySelector("#memberEmail");
 
     if (!session) {
-      if (modalPhotoUrl) closeModal();
+      if (modalPhotoUrl || (modal && !modal.hidden)) closeModal();
       clearReviewPhotoUrls();
       currentUser = null;
       currentProfile = null;
