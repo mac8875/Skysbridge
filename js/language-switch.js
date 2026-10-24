@@ -314,6 +314,12 @@
     picker.style.marginTop = '0.65rem';
     picker.style.marginRight = '0.75rem';
     picker.style.cursor = 'pointer';
+    picker.style.padding = '9px 13px';
+    picker.style.fontSize = '0.9rem';
+    picker.style.lineHeight = '1.25';
+    picker.style.minHeight = '0';
+    picker.style.width = 'auto';
+    picker.style.boxShadow = 'none';
     const filename = document.createElement('span');
     filename.className = 'memory-photo-filename';
     filename.textContent = text.noFile;
