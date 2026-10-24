@@ -141,6 +141,8 @@
   const isSpanish = document.documentElement.lang.startsWith("es");
   const text = isSpanish ? {
     photoLabel: 'Foto (opcional)',
+    chooseFile: 'Seleccionar archivo',
+    noFile: 'Ningún archivo seleccionado',
     photoHelp: 'JPG, PNG o WebP, máximo 5 MB. En estrellas privadas solo la ven la familia propietaria y sus familiares aceptados.',
     invalidType: 'Elige una imagen JPG, PNG o WebP.',
     tooLarge: 'La foto no puede superar los 5 MB.',
@@ -159,6 +161,8 @@
     reviewPhotoAlt: 'Foto enviada con este recuerdo'
   } : isGerman ? {
     photoLabel: 'Foto (optional)',
+    chooseFile: 'Datei auswählen',
+    noFile: 'Keine Datei ausgewählt',
     photoHelp: 'JPG, PNG oder WebP, maximal 5 MB. Bei privaten Sternen sehen es nur der Besitzer und akzeptierte Familienmitglieder.',
     invalidType: 'Bitte wähle ein Foto im Format JPG, PNG oder WebP.',
     tooLarge: 'Das Foto darf höchstens 5 MB groß sein.',
@@ -177,6 +181,8 @@
     reviewPhotoAlt: 'Foto zu dieser Erinnerung'
   } : {
     photoLabel: 'Photo (optional)',
+    chooseFile: 'Choose file',
+    noFile: 'No file selected',
     photoHelp: 'JPG, PNG or WebP, maximum 5 MB. For private stars, only the owner and accepted family members can see it.',
     invalidType: 'Please choose a JPG, PNG or WebP image.',
     tooLarge: 'The photo must be 5 MB or smaller.',
@@ -295,6 +301,22 @@
     input.name = 'memory_photo';
     input.accept = 'image/jpeg,image/png,image/webp';
     input.className = 'memory-photo-input';
+    input.style.position = 'absolute';
+    input.style.width = '1px';
+    input.style.height = '1px';
+    input.style.opacity = '0';
+    input.style.overflow = 'hidden';
+
+    const picker = document.createElement('span');
+    picker.className = 'button button-gold memory-photo-picker';
+    picker.textContent = text.chooseFile;
+    picker.style.display = 'inline-flex';
+    picker.style.marginTop = '0.65rem';
+    picker.style.marginRight = '0.75rem';
+    picker.style.cursor = 'pointer';
+    const filename = document.createElement('span');
+    filename.className = 'memory-photo-filename';
+    filename.textContent = text.noFile;
 
     const help = document.createElement('small');
     help.className = 'memory-photo-help';
@@ -304,7 +326,7 @@
     preview.className = 'memory-photo-preview';
     preview.hidden = true;
 
-    label.append(input, help, preview);
+    label.append(input, picker, filename, help, preview);
 
     const submitButton = form.querySelector('button[type="submit"]');
     form.insertBefore(label, submitButton || form.firstChild);
@@ -320,11 +342,13 @@
       preview.hidden = true;
 
       const file = input.files?.[0];
+      filename.textContent = file?.name || text.noFile;
       if (!file) return;
 
       const error = validatePhoto(file);
       if (error) {
         input.value = '';
+        filename.textContent = text.noFile;
         const status = form.querySelector('#memoryStatus');
         setNotice(status, error, 'error');
         return;
@@ -405,6 +429,8 @@
         if (insertError) throw insertError;
 
         form.reset();
+        const filename = form.querySelector('.memory-photo-filename');
+        if (filename) filename.textContent = text.noFile;
         const preview = form.querySelector('.memory-photo-preview');
         if (preview) {
           preview.replaceChildren();
