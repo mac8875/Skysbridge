@@ -206,11 +206,15 @@
       </div>
       <div class="member-panel" id="memberPanel" hidden data-nosnippet>
         <div><p class="eyebrow">Member area</p><h2 id="memberGreeting">Welcome to Skysbridge</h2><p id="memberEmail"></p><p class="admin-badge" id="adminBadge" hidden>Administrator</p></div>
-        <form class="form-grid member-name-form" id="memberNameForm">
+<button class="button button-outline member-name-toggle" id="changeMemberName" type="button" hidden>Change name</button>
+        <form class="form-grid member-name-form" id="memberNameForm" hidden>
           <label>Your name in the member area
             <input type="text" name="display_name" required maxlength="80" autocomplete="name">
           </label>
-          <button class="button button-outline" type="submit">Save name</button>
+          <div class="member-name-form-actions">
+            <button class="button button-outline" type="submit">Save name</button>
+            <button class="button button-outline member-name-cancel" id="cancelMemberNameEdit" type="button" hidden>Cancel</button>
+          </div>
           <div class="notice" id="memberNameStatus" hidden></div>
         </form>
         <button class="button button-outline" id="signOut">Sign out</button>
