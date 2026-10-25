@@ -1422,3 +1422,45 @@ html.skysbridge-native .section-heading>.eyebrow{
 }
 
 .memorial-card.anonymous-wall-star{pointer-events:none;cursor:default}
+
+
+/* SKYSBRIDGE COMET FIELD — alternating shooting stars on the home sky */
+.stars::before,
+.stars::after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  display:block;
+  width:clamp(76px,11vw,140px);
+  height:2px;
+  border-radius:50%;
+  opacity:0;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent 0%,rgba(244,215,146,.18) 30%,rgba(255,255,255,.98) 100%);
+  filter:drop-shadow(0 0 5px rgba(244,215,146,.9)) drop-shadow(0 0 13px rgba(232,181,86,.65));
+}
+.stars::before{
+  top:8%;
+  left:-18%;
+  animation:skys-comet-forward 20s linear infinite;
+}
+.stars::after{
+  top:68%;
+  right:-18%;
+  animation:skys-comet-reverse 20s linear 10s infinite;
+}
+@keyframes skys-comet-forward{
+  0%,5%{opacity:0;transform:translate3d(0,0,0) rotate(24deg) scale(.72)}
+  6%{opacity:1}
+  15%{opacity:0;transform:translate3d(120vw,56vh,0) rotate(24deg) scale(1)}
+  100%{opacity:0;transform:translate3d(120vw,56vh,0) rotate(24deg) scale(1)}
+}
+@keyframes skys-comet-reverse{
+  0%,5%{opacity:0;transform:translate3d(0,0,0) rotate(-22deg) scale(.72)}
+  6%{opacity:1}
+  15%{opacity:0;transform:translate3d(-120vw,-45vh,0) rotate(-22deg) scale(1)}
+  100%{opacity:0;transform:translate3d(-120vw,-45vh,0) rotate(-22deg) scale(1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .stars::before,.stars::after{animation:none;display:none}
+}
