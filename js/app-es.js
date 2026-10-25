@@ -237,6 +237,7 @@
         <label>Contraseña
           <input type="password" name="password" required minlength="8" autocomplete="current-password">
         </label>
+        <button class="text-link auth-recovery-link" type="button" id="forgotPassword">¿Olvidaste tu contraseña?</button>
         <button class="button button-gold" type="submit">Iniciar sesión</button>
         <div class="notice" id="authStatus">${forMemorial ? "Después de iniciar sesión, el formulario se abrirá automáticamente." : "Tu cuenta y tu actividad en las salas son privadas por defecto."}</div>
       </form>
@@ -245,6 +246,7 @@
     let mode = initialMode === "signup" ? "signup" : "login";
     const form = document.querySelector("#authForm");
     const status = document.querySelector("#authStatus");
+    const forgotLink = document.querySelector("#forgotPassword");
 
     document.querySelector("#loginTab").onclick = () => setMode("login");
     document.querySelector("#signupTab").onclick = () => setMode("signup");
@@ -257,9 +259,38 @@
         `button ${mode === "login" ? "button-gold" : "button-outline"}`;
       document.querySelector("#signupTab").className =
         `button ${mode === "signup" ? "button-gold" : "button-outline"}`;
+      if (forgotLink) forgotLink.hidden = mode !== "login";
     }
 
     setMode(mode);
+
+    forgotLink?.addEventListener("click", async () => {
+      if (!requireDatabase(status)) return;
+      const emailInput = form.querySelector('input[name="email"]');
+      const email = String(emailInput?.value || "").trim();
+      if (!email || !emailInput?.validity.valid) {
+        setStatus(status, "Escribe arriba el correo electrónico de tu cuenta.", "error");
+        emailInput?.focus();
+        return;
+      }
+
+      forgotLink.disabled = true;
+      setStatus(status, "Enviando el enlace para restablecer la contraseña…");
+      const redirectUrl = new URL(window.location.pathname, window.location.origin);
+      redirectUrl.searchParams.set("auth", "recovery");
+      if (forMemorial) redirectUrl.searchParams.set("memorial", "1");
+      try {
+        const { error } = await db.auth.resetPasswordForEmail(email, {
+          redirectTo: redirectUrl.toString()
+        });
+        if (error) throw error;
+        setStatus(status, "Si existe una cuenta con este correo, hemos enviado un enlace para restablecer la contraseña. Revisa también la carpeta de spam.", "success");
+      } catch (_) {
+        setStatus(status, "No se pudo enviar el enlace. Inténtalo de nuevo más tarde.", "error");
+      } finally {
+        forgotLink.disabled = false;
+      }
+    });
 
     form.onsubmit = async event => {
       event.preventDefault();
@@ -297,6 +328,56 @@
           openMemberArea();
         }
       }, 700);
+    };
+  }
+
+  function showPasswordRecovery(forMemorial = false) {
+    openModal(
+      "<h2 id=\"modalTitle\">Elige una contraseña nueva</h2>" +
+      "<form class=\"form-grid\" id=\"passwordRecoveryForm\">" +
+      "<label>Contraseña nueva<input type=\"password\" name=\"password\" required minlength=\"8\" autocomplete=\"new-password\"></label>" +
+      "<label>Confirmar contraseña nueva<input type=\"password\" name=\"confirm_password\" required minlength=\"8\" autocomplete=\"new-password\"></label>" +
+      "<button class=\"button button-gold\" type=\"submit\">Guardar contraseña nueva</button>" +
+      "<div class=\"notice\" id=\"authStatus\" aria-live=\"polite\"></div>" +
+      "</form>",
+      "auth-modal-card"
+    );
+
+    const form = document.querySelector("#passwordRecoveryForm");
+    const status = document.querySelector("#authStatus");
+    form.onsubmit = async event => {
+      event.preventDefault();
+      if (!requireDatabase(status)) return;
+      const values = new FormData(form);
+      const password = String(values.get("password") || "");
+      const confirmation = String(values.get("confirm_password") || "");
+      if (password !== confirmation) {
+        setStatus(status, "Las contraseñas no coinciden.", "error");
+        return;
+      }
+
+      const submitButton = form.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      setStatus(status, "Guardando la contraseña…");
+      try {
+        const { error } = await db.auth.updateUser({ password });
+        if (error) throw error;
+        setStatus(status, "Tu contraseña se ha actualizado. Has iniciado sesión.", "success");
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete("auth");
+        cleanUrl.searchParams.delete("memorial");
+        cleanUrl.hash = "";
+        window.history.replaceState({}, document.title, cleanUrl.toString());
+        window.setTimeout(async () => {
+          closeModal();
+          await refreshSession();
+          if (forMemorial) showMemorial();
+          else openMemberArea();
+        }, 700);
+      } catch (_) {
+        submitButton.disabled = false;
+        setStatus(status, "No se pudo actualizar la contraseña. Puede que el enlace haya caducado; solicita uno nuevo.", "error");
+      }
     };
   }
 
@@ -2194,6 +2275,10 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
 
   if (db) {
     db.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") {
+        const forMemorial = new URLSearchParams(window.location.search).get("memorial") === "1";
+        window.setTimeout(() => showPasswordRecovery(forMemorial), 0);
+      }
       const nextUserId = session?.user?.id || null;
       const accountChanged = ["INITIAL_SESSION", "SIGNED_IN", "SIGNED_OUT"].includes(event) && wallUserId !== nextUserId;
       if (accountChanged) {
