@@ -1625,6 +1625,9 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
         : "Willkommen bei Skysbridge";
       const nameInput = document.querySelector("#memberNameForm input[name=\"display_name\"]");
       if (nameInput) nameInput.value = memberName;
+      setHidden(document.querySelector("#memberNameForm"), Boolean(memberName));
+      setHidden(document.querySelector("#changeMemberName"), !memberName);
+      setHidden(document.querySelector("#cancelMemberNameEdit"), !memberName);
     }
 
     if (memberEmail) {
@@ -2328,6 +2331,32 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
     const greeting = document.querySelector("#memberGreeting");
     if (greeting) greeting.textContent = `Willkommen, ${displayName}`;
     setStatus(status, "Dein Name wurde gespeichert.", "success");
+    setHidden(event.currentTarget, true);
+    setHidden(document.querySelector("#changeMemberName"), false);
+    setHidden(document.querySelector("#cancelMemberNameEdit"), true);
+    setHidden(status, true);
+  });
+
+  document.querySelector("#changeMemberName")?.addEventListener("click", () => {
+    const form = document.querySelector("#memberNameForm");
+    const input = form?.querySelector('input[name="display_name"]');
+    const status = document.querySelector("#memberNameStatus");
+    setHidden(document.querySelector("#changeMemberName"), true);
+    setHidden(form, false);
+    setHidden(document.querySelector("#cancelMemberNameEdit"), false);
+    setHidden(status, true);
+    input?.focus();
+  });
+
+  document.querySelector("#cancelMemberNameEdit")?.addEventListener("click", () => {
+    const form = document.querySelector("#memberNameForm");
+    const input = form?.querySelector('input[name="display_name"]');
+    const memberName = getProfileDisplayName(currentProfile, currentUser);
+    if (input) input.value = memberName || "";
+    setHidden(form, true);
+    setHidden(document.querySelector("#changeMemberName"), Boolean(memberName));
+    setHidden(document.querySelector("#cancelMemberNameEdit"), true);
+    setHidden(document.querySelector("#memberNameStatus"), true);
   });
 
   document.querySelector("#signOut")?.addEventListener("click", async () => {
