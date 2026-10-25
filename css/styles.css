@@ -1293,10 +1293,10 @@ html:not(.skysbridge-native) .section-heading>.eyebrow{
   margin-right:0;
 }
 
-/* V112 — an occasional, restrained comet on the website and app star wall */
+/* V112 — one variable direction comet across the memorial star wall every ten seconds */
 .celestial-wall .shooting-comet{
   position:absolute;
-  z-index:0;
+  z-index:1;
   top:var(--comet-y,24%);
   left:-108px;
   display:block;
@@ -1307,8 +1307,13 @@ html:not(.skysbridge-native) .section-heading>.eyebrow{
   pointer-events:none;
   background:linear-gradient(90deg,transparent 0%,rgba(244,215,146,.12) 26%,rgba(244,215,146,.72) 82%,#fff9dc 100%);
   filter:drop-shadow(0 0 4px rgba(244,215,146,.8)) drop-shadow(0 0 11px rgba(232,181,86,.48));
-  transform:translate3d(0,0,0) rotate(16deg) scale(.82);
-  animation:websiteCometPass var(--comet-period,58s) linear var(--comet-delay,22s) infinite;
+  transform:translate3d(0,0,0) rotate(var(--comet-angle,16deg)) scale(.82);
+  animation:websiteCometPass 2.8s linear both;
+}
+.celestial-wall .shooting-comet.shooting-comet-reverse{
+  left:auto;
+  right:-108px;
+  background:linear-gradient(270deg,transparent 0%,rgba(244,215,146,.12) 26%,rgba(244,215,146,.72) 82%,#fff9dc 100%);
 }
 .celestial-wall .shooting-comet::after{
   content:"";
@@ -1322,10 +1327,15 @@ html:not(.skysbridge-native) .section-heading>.eyebrow{
   box-shadow:0 0 7px 2px rgba(255,248,218,.78),0 0 16px 5px rgba(232,181,86,.42);
   transform:translateY(-50%);
 }
+.celestial-wall .shooting-comet.shooting-comet-reverse::after{
+  left:-2px;
+  right:auto;
+}
 @keyframes websiteCometPass{
-  0%,1%,92%,100%{opacity:0;transform:translate3d(0,0,0) rotate(16deg) scale(.82)}
-  2%{opacity:.86}
-  7%{opacity:0;transform:translate3d(var(--comet-x,1200px),var(--comet-fall,100px),0) rotate(16deg) scale(.82)}
+  0%{opacity:0;transform:translate3d(0,0,0) rotate(var(--comet-angle,16deg)) scale(.82)}
+  12%{opacity:.9}
+  84%{opacity:0;transform:translate3d(var(--comet-x,1200px),var(--comet-fall,100px),0) rotate(var(--comet-angle,16deg)) scale(.82)}
+  100%{opacity:0}
 }
 @media(prefers-reduced-motion:reduce){
   .celestial-wall .shooting-comet{display:none!important;animation:none!important}
@@ -1424,43 +1434,3 @@ html.skysbridge-native .section-heading>.eyebrow{
 .memorial-card.anonymous-wall-star{pointer-events:none;cursor:default}
 
 
-/* SKYSBRIDGE COMET FIELD — alternating shooting stars on the home sky */
-.stars::before,
-.stars::after{
-  content:"";
-  position:absolute;
-  z-index:1;
-  display:block;
-  width:clamp(76px,11vw,140px);
-  height:2px;
-  border-radius:50%;
-  opacity:0;
-  pointer-events:none;
-  background:linear-gradient(90deg,transparent 0%,rgba(244,215,146,.18) 30%,rgba(255,255,255,.98) 100%);
-  filter:drop-shadow(0 0 5px rgba(244,215,146,.9)) drop-shadow(0 0 13px rgba(232,181,86,.65));
-}
-.stars::before{
-  top:8%;
-  left:-18%;
-  animation:skys-comet-forward 20s linear infinite;
-}
-.stars::after{
-  top:68%;
-  right:-18%;
-  animation:skys-comet-reverse 20s linear 10s infinite;
-}
-@keyframes skys-comet-forward{
-  0%,5%{opacity:0;transform:translate3d(0,0,0) rotate(24deg) scale(.72)}
-  6%{opacity:1}
-  15%{opacity:0;transform:translate3d(120vw,56vh,0) rotate(24deg) scale(1)}
-  100%{opacity:0;transform:translate3d(120vw,56vh,0) rotate(24deg) scale(1)}
-}
-@keyframes skys-comet-reverse{
-  0%,5%{opacity:0;transform:translate3d(0,0,0) rotate(-22deg) scale(.72)}
-  6%{opacity:1}
-  15%{opacity:0;transform:translate3d(-120vw,-45vh,0) rotate(-22deg) scale(1)}
-  100%{opacity:0;transform:translate3d(-120vw,-45vh,0) rotate(-22deg) scale(1)}
-}
-@media (prefers-reduced-motion:reduce){
-  .stars::before,.stars::after{animation:none;display:none}
-}
