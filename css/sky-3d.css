@@ -1,0 +1,23 @@
+.celestial-wall {
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  background:
+    radial-gradient(ellipse at 48% 48%,rgba(24,72,112,.29) 0%,rgba(7,27,48,.1) 32%,transparent 57%),
+    radial-gradient(ellipse at 81% 16%,rgba(44,73,117,.18),transparent 34%),
+    radial-gradient(ellipse at 13% 83%,rgba(23,65,101,.2),transparent 38%),
+    linear-gradient(155deg,#020713 0%,#061426 45%,#01050d 100%);
+}
+.celestial-wall .sky-three-d-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.celestial-wall .ambient-star { display: none; }
+.celestial-wall .memorial-card { transform-style: preserve-3d; }
+.celestial-wall .constellation-map { transform: translateZ(18px); }
+@media (prefers-reduced-motion: reduce) {
+  .celestial-wall .sky-three-d-layer { opacity: .88; }
+}

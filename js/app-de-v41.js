@@ -709,27 +709,7 @@
       sky.appendChild(star);
     }
 
-    // Send a new shooting star through the visible memorial wall every ten seconds.
-    const launchComet = () => {
-      if (!sky.isConnected || document.hidden) return;
 
-      const comet = document.createElement("span");
-      const reverse = Math.random() < 0.5;
-      const upward = Math.random() < 0.5;
-      const drift = Math.ceil((sky.clientHeight || 520) * (0.08 + Math.random() * 0.2));
-      const distance = Math.ceil((sky.clientWidth || 720) + 220);
-      comet.className = reverse ? "shooting-comet shooting-comet-reverse" : "shooting-comet";
-      comet.setAttribute("aria-hidden", "true");
-      comet.style.setProperty("--comet-y", `${(8 + Math.random() * 78).toFixed(2)}%`);
-      comet.style.setProperty("--comet-x", `${reverse ? "-" : ""}${distance}px`);
-      comet.style.setProperty("--comet-fall", `${upward ? "-" : ""}${drift}px`);
-      comet.style.setProperty("--comet-angle", `${(upward ? -1 : 1) * (12 + Math.random() * 18)}deg`);
-      sky.appendChild(comet);
-      window.setTimeout(() => comet.remove(), 3000);
-    };
-
-    launchComet();
-    window.setInterval(launchComet, 10000);
   }
 
   buildCelestialSky();
