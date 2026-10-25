@@ -218,11 +218,15 @@
       </div>
       <div class="member-panel" id="memberPanel" hidden>
         <div><p class="eyebrow">Mitgliederbereich</p><h2 id="memberGreeting">Willkommen bei Skysbridge</h2><p id="memberEmail"></p><p class="admin-badge" id="adminBadge" hidden>Administrator</p></div>
-        <form class="form-grid member-name-form" id="memberNameForm">
+<button class="button button-outline member-name-toggle" id="changeMemberName" type="button" hidden>Namen ändern</button>
+        <form class="form-grid member-name-form" id="memberNameForm" hidden>
           <label>Dein Name im Mitgliederbereich
             <input type="text" name="display_name" required maxlength="80" autocomplete="name">
           </label>
-          <button class="button button-outline" type="submit">Namen speichern</button>
+          <div class="member-name-form-actions">
+            <button class="button button-outline" type="submit">Namen speichern</button>
+            <button class="button button-outline member-name-cancel" id="cancelMemberNameEdit" type="button" hidden>Abbrechen</button>
+          </div>
           <div class="notice" id="memberNameStatus" hidden></div>
         </form>
         <button class="button button-outline" id="signOut">Abmelden</button>
