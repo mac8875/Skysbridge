@@ -2372,6 +2372,9 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
 
   if (db) {
     db.auth.onAuthStateChange((event, session) => {
+      // A token refresh does not change the member identity. Rebuilding account panels
+      // here changes page height and can move the reader's scroll position.
+      if (event === "TOKEN_REFRESHED") return;
       if (event === "PASSWORD_RECOVERY") {
         const forMemorial = new URLSearchParams(window.location.search).get("memorial") === "1";
         window.setTimeout(() => showPasswordRecovery(forMemorial), 0);
