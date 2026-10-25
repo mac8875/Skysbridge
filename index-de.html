@@ -218,6 +218,13 @@
       </div>
       <div class="member-panel" id="memberPanel" hidden>
         <div><p class="eyebrow">Mitgliederbereich</p><h2 id="memberGreeting">Willkommen bei Skysbridge</h2><p id="memberEmail"></p><p class="admin-badge" id="adminBadge" hidden>Administrator</p></div>
+        <form class="form-grid member-name-form" id="memberNameForm">
+          <label>Dein Name im Mitgliederbereich
+            <input type="text" name="display_name" required maxlength="80" autocomplete="name">
+          </label>
+          <button class="button button-outline" type="submit">Namen speichern</button>
+          <div class="notice" id="memberNameStatus" hidden></div>
+        </form>
         <button class="button button-outline" id="signOut">Abmelden</button>
       </div>
       <section class="admin-card member-stars" id="myMemorialSection" hidden>
@@ -353,6 +360,6 @@
   <script src="js/platform-ui.js?v=4"></script>
   <script src="js/app-intro.js?v=6"></script>
   <script src="js/sky-map.js?v=2"></script>
-  <script src="js/app-de-v41.js?v=119"></script>
+  <script src="js/app-de-v41.js?v=120"></script>
 </body>
 </html>
