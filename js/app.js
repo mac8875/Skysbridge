@@ -1241,10 +1241,10 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
   }
 
   function getProfileDisplayName(profile, user) {
-    const profileName = String(profile?.display_name || "").trim();
-    if (profileName && !isPlaceholderDisplayName(profileName)) return profileName;
     const metadataName = getMetadataDisplayName(user);
-    return metadataName && !isPlaceholderDisplayName(metadataName) ? metadataName : "";
+    if (metadataName && !isPlaceholderDisplayName(metadataName)) return metadataName;
+    const profileName = String(profile?.display_name || "").trim();
+    return profileName && !isPlaceholderDisplayName(profileName) ? profileName : "";
   }
 
   async function ensureProfile(user) {
@@ -1257,13 +1257,14 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
     if (error) throw error;
     if (data) {
       const metadataName = getMetadataDisplayName(user);
-      if ((!data.display_name || isPlaceholderDisplayName(data.display_name)) &&
-          metadataName && !isPlaceholderDisplayName(metadataName)) {
-        const { error: updateError } = await db
-          .from("profiles")
-          .update({ display_name: metadataName })
-          .eq("id", user.id);
-        if (updateError) throw updateError;
+      if (metadataName && !isPlaceholderDisplayName(metadataName)) {
+        if (data.display_name !== metadataName && !data.is_admin) {
+          const { error: updateError } = await db
+            .from("profiles")
+            .update({ display_name: metadataName })
+            .eq("id", user.id);
+          if (updateError) throw updateError;
+        }
         return { ...data, display_name: metadataName };
       }
       return data;
@@ -2298,15 +2299,26 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
     const button = event.currentTarget.querySelector('button[type="submit"]');
     if (button) button.disabled = true;
     setStatus(status, "Saving your name…");
-    const { error } = await db.from("profiles")
-      .update({ display_name: displayName })
-      .eq("id", currentUser.id);
-    if (button) button.disabled = false;
-    if (error) {
-      console.error("Profile name update failed:", error);
+    const { data: authData, error: authError } = await db.auth.updateUser({
+      data: { display_name: displayName }
+    });
+    if (authError) {
+      if (button) button.disabled = false;
+      console.error("Profile name update failed:", authError);
       setStatus(status, "Your name could not be saved. Please try again.", "error");
       return;
     }
+    if (authData?.user) currentUser = authData.user;
+
+    if (!currentProfile?.is_admin) {
+      const { error: profileError } = await db.from("profiles")
+        .update({ display_name: displayName })
+        .eq("id", currentUser.id);
+      if (profileError) {
+        console.warn("Profile row name update failed:", profileError);
+      }
+    }
+    if (button) button.disabled = false;
 
     currentProfile = { ...currentProfile, display_name: displayName };
     const greeting = document.querySelector("#memberGreeting");
