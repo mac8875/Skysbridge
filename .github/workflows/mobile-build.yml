@@ -35,8 +35,8 @@ jobs:
       - run: npx cap add android
       - run: npx @capacitor/assets generate --android
       - run: npx cap sync android
-      - run: sed -i 's/versionCode 1/versionCode 79/' android/app/build.gradle
-      - run: sed -i 's/versionName "1.0"/versionName "1.0"/' android/app/build.gradle
+      - run: sed -i 's/versionCode 1/versionCode 82/' android/app/build.gradle
+      - run: sed -i 's/versionName "1.0.2"/versionName "1.0"/' android/app/build.gradle
       - run: ./gradlew --no-daemon assembleDebug
         working-directory: android
       - uses: actions/upload-artifact@v4
@@ -93,9 +93,9 @@ jobs:
         run: mv app-debug.apk skysbridge-android.apk
       - uses: softprops/action-gh-release@v3
         with:
-          tag_name: android-v79
+          tag_name: android-v82
           name: Skysbridge Android v1.0
-          body: Skysbridge Android app version 1.0, build 79. Install on Android to try it.
+          body: Skysbridge Android app version 1.0.2, build 82. Install on Android to try it.
           files: skysbridge-android.apk
           make_latest: true
           overwrite_files: true
