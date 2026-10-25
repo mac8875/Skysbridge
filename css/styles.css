@@ -1,3 +1,6 @@
+.auth-modal-card .auth-recovery-link{justify-self:start;margin:-8px 0 0;padding:0;border:0;background:none;color:var(--gold-soft);font:inherit;font-size:.9rem;text-decoration:underline;text-underline-offset:.18em;cursor:pointer}
+.auth-modal-card .auth-recovery-link:hover{color:#fff0bd}
+.auth-modal-card .auth-recovery-link:disabled{opacity:.65;cursor:wait}
 /* SKYBRIDGE V39 — bilingual English/German website */
 [hidden] {
   display: none !important;
