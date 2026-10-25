@@ -286,7 +286,12 @@
 
       forgotLink.disabled = true;
       setStatus(status, "Passwort-Reset-Link wird gesendet …");
-      const redirectUrl = new URL(window.location.pathname, window.location.origin);
+      const isNativeApp = Boolean(
+        window.Capacitor?.isNativePlatform?.() ||
+        ["android", "ios"].includes(window.Capacitor?.getPlatform?.())
+      );
+      const redirectBase = isNativeApp ? "https://skysbridge.org" : window.location.origin;
+      const redirectUrl = new URL(window.location.pathname, redirectBase);
       redirectUrl.searchParams.set("auth", "recovery");
       if (forMemorial) redirectUrl.searchParams.set("memorial", "1");
       try {
