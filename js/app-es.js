@@ -231,6 +231,9 @@
         <button class="button button-outline" id="signupTab">Crear cuenta</button>
       </div>
       <form class="form-grid" id="authForm">
+        <label id="signupNameField" hidden>Nombre completo
+          <input type="text" name="display_name" maxlength="80" autocomplete="name">
+        </label>
         <label>Correo electrónico
           <input type="email" name="email" required autocomplete="email">
         </label>
@@ -247,6 +250,8 @@
     const form = document.querySelector("#authForm");
     const status = document.querySelector("#authStatus");
     const forgotLink = document.querySelector("#forgotPassword");
+    const signupNameField = document.querySelector("#signupNameField");
+    const signupNameInput = form.querySelector('input[name="display_name"]');
 
     document.querySelector("#loginTab").onclick = () => setMode("login");
     document.querySelector("#signupTab").onclick = () => setMode("signup");
@@ -260,6 +265,8 @@
       document.querySelector("#signupTab").className =
         `button ${mode === "signup" ? "button-gold" : "button-outline"}`;
       if (forgotLink) forgotLink.hidden = mode !== "login";
+      setHidden(signupNameField, mode !== "signup");
+      if (signupNameInput) signupNameInput.required = mode === "signup";
     }
 
     setMode(mode);
@@ -305,10 +312,15 @@
       const values = new FormData(form);
       const email = values.get("email");
       const password = values.get("password");
+      const displayName = String(values.get("display_name") || "").trim();
 
       const result = mode === "login"
         ? await db.auth.signInWithPassword({ email, password })
-        : await db.auth.signUp({ email, password });
+        : await db.auth.signUp({
+            email,
+            password,
+            options: { data: { display_name: displayName } }
+          });
 
       if (result.error) {
         const emailLimitReached = result.error.code === "over_email_send_rate_limit" || /email rate limit exceeded/i.test(result.error.message || "");
@@ -1214,6 +1226,23 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
   document.querySelector("#memorialSearch")?.addEventListener("input", renderApprovedMemorials);
   document.querySelector("#memorialSort")?.addEventListener("change", renderApprovedMemorials);
 
+  function getMetadataDisplayName(user) {
+    const metadata = user?.user_metadata || {};
+    const value = metadata.display_name || metadata.full_name || metadata.name || "";
+    return String(value).trim().slice(0, 80);
+  }
+
+  function isPlaceholderDisplayName(value) {
+    return /^(member|mitglied|miembro|user|usuario|benutzer)$/i.test(String(value || "").trim());
+  }
+
+  function getProfileDisplayName(profile, user) {
+    const profileName = String(profile?.display_name || "").trim();
+    if (profileName && !isPlaceholderDisplayName(profileName)) return profileName;
+    const metadataName = getMetadataDisplayName(user);
+    return metadataName && !isPlaceholderDisplayName(metadataName) ? metadataName : "";
+  }
+
   async function ensureProfile(user) {
     const { data, error } = await db
       .from("profiles")
@@ -1222,9 +1251,21 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
       .maybeSingle();
 
     if (error) throw error;
-    if (data) return data;
+    if (data) {
+      const metadataName = getMetadataDisplayName(user);
+      if ((!data.display_name || isPlaceholderDisplayName(data.display_name)) &&
+          metadataName && !isPlaceholderDisplayName(metadataName)) {
+        const { error: updateError } = await db
+          .from("profiles")
+          .update({ display_name: metadataName })
+          .eq("id", user.id);
+        if (updateError) throw updateError;
+        return { ...data, display_name: metadataName };
+      }
+      return data;
+    }
 
-    const displayName = user.email ? user.email.split("@")[0] : "Miembro";
+    const displayName = getMetadataDisplayName(user) || null;
     const { data: inserted, error: insertError } = await db
       .from("profiles")
       .insert({ id: user.id, display_name: displayName })
@@ -1557,7 +1598,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
     } catch (error) {
       console.error("Profile error:", error);
       currentProfile = {
-        display_name: currentUser.email?.split("@")[0] || "Miembro",
+        display_name: getMetadataDisplayName(currentUser),
         is_admin: false
       };
     }
@@ -1569,8 +1610,12 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
     setHidden(roomView, true);
 
     if (memberGreeting) {
-      memberGreeting.textContent =
-        `Hola, ${currentProfile.display_name || "Miembro"}`;
+      const memberName = getProfileDisplayName(currentProfile, currentUser);
+      memberGreeting.textContent = memberName
+        ? `Hola, ${memberName}`
+        : "Te damos la bienvenida a Skysbridge";
+      const nameInput = document.querySelector("#memberNameForm input[name=\"display_name\"]");
+      if (nameInput) nameInput.value = memberName;
     }
 
     if (memberEmail) {
@@ -2233,6 +2278,37 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
   }
 
   document.querySelector("#refreshAdmin")?.addEventListener("click", loadAdminDashboard);
+
+  document.querySelector("#memberNameForm")?.addEventListener("submit", async event => {
+    event.preventDefault();
+    const status = document.querySelector("#memberNameStatus");
+    const input = event.currentTarget.querySelector('input[name="display_name"]');
+    const displayName = String(input?.value || "").trim();
+    if (!currentUser || !requireDatabase(status)) return;
+    if (!displayName || displayName.length > 80) {
+      setStatus(status, "No se pudo guardar tu nombre. Inténtalo de nuevo.", "error");
+      input?.focus();
+      return;
+    }
+
+    const button = event.currentTarget.querySelector('button[type="submit"]');
+    if (button) button.disabled = true;
+    setStatus(status, "Guardando tu nombre…");
+    const { error } = await db.from("profiles")
+      .update({ display_name: displayName })
+      .eq("id", currentUser.id);
+    if (button) button.disabled = false;
+    if (error) {
+      console.error("Profile name update failed:", error);
+      setStatus(status, "No se pudo guardar tu nombre. Inténtalo de nuevo.", "error");
+      return;
+    }
+
+    currentProfile = { ...currentProfile, display_name: displayName };
+    const greeting = document.querySelector("#memberGreeting");
+    if (greeting) greeting.textContent = `Hola, ${displayName}`;
+    setStatus(status, "Tu nombre se ha guardado.", "success");
+  });
 
   document.querySelector("#signOut")?.addEventListener("click", async () => {
     if (!db) return;
