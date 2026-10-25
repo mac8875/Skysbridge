@@ -139,6 +139,7 @@
   const isGerman = String(document.documentElement.lang || '').toLowerCase().startsWith('de');
 
   const isSpanish = document.documentElement.lang.startsWith("es");
+  const eagerNativePhotos = document.documentElement.classList.contains('skysbridge-native');
   const text = isSpanish ? {
     photoLabel: 'Foto (opcional)',
     chooseFile: 'Seleccionar archivo',
@@ -546,7 +547,7 @@
         const image = document.createElement('img');
         image.src = item.photoUrl;
         image.alt = text.photoAlt(item.author_name);
-        image.loading = 'lazy';
+        image.loading = eagerNativePhotos ? 'eager' : 'lazy';
 
         figure.appendChild(image);
         card.appendChild(figure);
@@ -655,7 +656,7 @@
       const image = document.createElement('img');
       image.src = url;
       image.alt = text.reviewPhotoAlt;
-      image.loading = 'lazy';
+      image.loading = eagerNativePhotos ? 'eager' : 'lazy';
 
       figure.appendChild(image);
       const actions = reviewItem.querySelector('.review-actions');
