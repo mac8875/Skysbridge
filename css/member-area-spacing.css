@@ -1,0 +1,46 @@
+/* Member-area card spacing approved in the mobile design preview. */
+@media (max-width: 600px) {
+  .member-panel {
+    position: relative;
+    margin-bottom: 90px;
+  }
+
+  .member-panel::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -50px;
+    width: 124px;
+    height: 1px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      90deg,
+      transparent 0,
+      rgba(232, 181, 86, 0.56) 20%,
+      rgba(232, 181, 86, 0.56) 34%,
+      transparent 34%,
+      transparent 66%,
+      rgba(232, 181, 86, 0.56) 66%,
+      rgba(232, 181, 86, 0.56) 80%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  .member-panel::after {
+    content: "✦";
+    position: absolute;
+    left: 50%;
+    bottom: -59px;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-size: 18px;
+    line-height: 18px;
+    text-shadow: 0 0 12px rgba(232, 181, 86, 0.38);
+    pointer-events: none;
+  }
+
+  .member-panel #adminBadge {
+    margin-right: 8px;
+  }
+}
