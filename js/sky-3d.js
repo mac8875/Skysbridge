@@ -6,8 +6,7 @@
 
   const LAYER_SETTINGS_KEY = "skysbridge.sky-layers.v1";
   const layerToggles = [...document.querySelectorAll("[data-sky-layer-toggle]")];
-  const layerSettings = { planets: false, comets: false, rotateStars: false };
-  const rotationToggle = document.querySelector("[data-sky-rotation-toggle]");
+  const layerSettings = { planets: false, comets: false };
   try {
     const savedSettings = JSON.parse(localStorage.getItem(LAYER_SETTINGS_KEY) || "{}");
     for (const key of Object.keys(layerSettings)) layerSettings[key] = savedSettings[key] === true;
@@ -30,7 +29,6 @@
   let comet = null;
   let nextCometAt = performance.now() + 5000;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (rotationToggle) rotationToggle.disabled = reducedMotion;
   let seed = 773;
   const random = () => {
     seed = (seed * 16807) % 2147483647;
@@ -40,12 +38,10 @@
   function applyLayerSettings() {
     wall.dataset.showPlanets = String(layerSettings.planets);
     wall.dataset.showComets = String(layerSettings.comets);
-    wall.dataset.rotateStars = String(layerSettings.rotateStars);
     layerToggles.forEach(toggle => {
       const key = toggle.dataset.skyLayerToggle;
       if (key in layerSettings) toggle.checked = layerSettings[key];
     });
-    if (rotationToggle) rotationToggle.setAttribute("aria-pressed", String(layerSettings.rotateStars));
     try { localStorage.setItem(LAYER_SETTINGS_KEY, JSON.stringify(layerSettings)); } catch {}
     if (reducedMotion) draw(0);
   }
@@ -61,10 +57,6 @@
     });
   });
 
-  rotationToggle?.addEventListener("click", () => {
-    layerSettings.rotateStars = !layerSettings.rotateStars;
-    applyLayerSettings();
-  });
 
   const stars = Array.from({ length: 176 }, () => ({
     x: random() * 2 - 1,
