@@ -38,7 +38,7 @@ jobs:
       - name: Isolate pull-request preview from the installed app
         if: github.event_name == 'pull_request'
         run: |
-          sed -i 's/applicationId "org.skysbridge.app"/applicationId "org.skysbridge.app.love-preview"/' android/app/build.gradle
+          sed -i 's/applicationId "org.skysbridge.app"/applicationId "org.skysbridge.app.lovepreview"/' android/app/build.gradle
           sed -i 's/<string name="app_name">Skysbridge<\/string>/<string name="app_name">Skysbridge Preview<\/string>/' android/app/src/main/res/values/strings.xml
       - run: sed -i 's/versionCode 1/versionCode 83/' android/app/build.gradle
       - run: sed -i 's/versionName ".*"/versionName "1.0.3"/' android/app/build.gradle
