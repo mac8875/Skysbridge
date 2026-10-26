@@ -478,7 +478,8 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Eine brennende Gedenkkerze" : ""}">`;
     }
 
-    return `<img class="memorial-star-image" src="assets/memorial-star.svg" alt="" aria-hidden="true">`;
+    const depth = [1, 2, 3, 4, 5].map((layer) => `<span class="memorial-star-depth star-signature" style="--star-depth:${layer}px"></span>`).join("");
+    return `<span class="memorial-star-volume" aria-hidden="true">${depth}<img class="memorial-star-image" src="assets/memorial-star.svg" alt=""></span>`;
   }
 
   function openApprovedMemorial(item) {
