@@ -608,15 +608,19 @@
 
     const starName = escapeHtml(slug === "sky" ? "Sky" : (star.name || "A child remembered"));
     const storyHtml = renderStoryParagraphs(star.story);
+    const canSendSkyLove = slug === "sky" && Boolean(
+      currentProfile?.is_admin || approvedMemorials.some(item => item.is_family)
+    );
 
     openModal(`
       <article class="star-remembrance ${slug === "sky" ? `is-${window.SkyRemembrance.state()}` : ""}">
         <header class="star-remembrance-header">
           <p class="eyebrow">A light remembered</p>
-          <span class="star-remembrance-symbol" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}</span>
+          <span class="star-remembrance-symbol${canSendSkyLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendSkyLove ? '<span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span>' : ""}</span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p>' : ""}
+          ${canSendSkyLove ? '<button class="memorial-love-button" id="memorialLoveButton" type="button"><span aria-hidden="true">♡</span>Send love</button><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">For you and your family</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -654,6 +658,23 @@
         </section>
       </article>
     `, "star-modal-card");
+
+    const loveButton = modalContent.querySelector("#memorialLoveButton");
+    const loveTarget = modalContent.querySelector(".memorial-love-target");
+    const loveStatus = modalContent.querySelector("#memorialLoveStatus");
+    let loveAnimationTimer = null;
+    loveButton?.addEventListener("click", () => {
+      if (!canSendSkyLove || !loveTarget) return;
+      window.clearTimeout(loveAnimationTimer);
+      loveTarget.classList.remove("is-sending-love");
+      void loveTarget.offsetWidth;
+      loveTarget.classList.add("is-sending-love");
+      loveStatus.textContent = "A golden greeting circles Sky.";
+      loveAnimationTimer = window.setTimeout(() => {
+        loveTarget.classList.remove("is-sending-love");
+        loveStatus.textContent = "For you and your family";
+      }, 3800);
+    });
 
     const form = document.querySelector("#memoryForm");
     const status = document.querySelector("#memoryStatus");

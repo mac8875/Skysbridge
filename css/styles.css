@@ -190,7 +190,9 @@ footer nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));justify-co
   margin:0 auto 8px;
   filter:drop-shadow(0 0 14px rgba(244,215,146,.52));
 }
+.star-remembrance-symbol.memorial-love-target{position:relative;overflow:visible}
 .star-remembrance-symbol img{display:block;width:100%;height:100%;object-fit:contain}
+.memorial-love-target.is-sending-love>img,.memorial-love-target.is-sending-love>.sky-symbol{animation:memorialLoveGlow 3.8s ease-out 1;filter:brightness(1.12) drop-shadow(0 0 19px rgba(244,215,146,.72)) drop-shadow(0 0 45px rgba(232,181,86,.42))}
 .star-remembrance-header h2{
   margin:0;
   color:var(--ivory);
