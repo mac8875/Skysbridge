@@ -35,8 +35,13 @@ jobs:
       - run: npx cap add android
       - run: npx @capacitor/assets generate --android
       - run: npx cap sync android
-      - run: sed -i 's/versionCode 1/versionCode 82/' android/app/build.gradle
-      - run: sed -i 's/versionName ".*"/versionName "1.0.2"/' android/app/build.gradle
+      - name: Isolate pull-request preview from the installed app
+        if: github.event_name == 'pull_request'
+        run: |
+          sed -i 's/applicationId "org.skysbridge.app"/applicationId "org.skysbridge.app.love-preview"/' android/app/build.gradle
+          sed -i 's/<string name="app_name">Skysbridge<\/string>/<string name="app_name">Skysbridge Preview<\/string>/' android/app/src/main/res/values/strings.xml
+      - run: sed -i 's/versionCode 1/versionCode 83/' android/app/build.gradle
+      - run: sed -i 's/versionName ".*"/versionName "1.0.3"/' android/app/build.gradle
       - run: ./gradlew --no-daemon assembleDebug
         working-directory: android
       - uses: actions/upload-artifact@v4
@@ -93,9 +98,9 @@ jobs:
         run: mv app-debug.apk skysbridge-android.apk
       - uses: softprops/action-gh-release@v3
         with:
-          tag_name: android-v82
+          tag_name: android-v83
           name: Skysbridge Android v1.0
-          body: Skysbridge Android app version 1.0.2, build 82. Install on Android to try it.
+          body: Skysbridge Android app version 1.0.3, build 83. Install on Android to try it.
           files: skysbridge-android.apk
           make_latest: true
           overwrite_files: true

@@ -923,16 +923,19 @@
           : "Ein Licht, das bleibt";
     const dateLine = memorialDateLine(item);
     const canWriteMemory = Boolean(item.is_star_owner);
+    const canSendLove = Boolean(item.is_owner);
 
     openModal(`
       <article class="memorial-detail-card is-${state}">
         <p class="eyebrow">${dayLabel}</p>
-        <div class="memorial-detail-symbol">
+        <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
+          ${canSendLove ? '<span class="memorial-love-orbit" aria-hidden="true"><i>♡</i><i>♡</i><i>♡</i></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Für immer geliebt")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
+        ${canSendLove ? '<button class="memorial-love-button" id="memorialLoveButton" type="button"><span aria-hidden="true">♡</span>Liebe senden</button><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Nur für dich und deine Familie</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -950,6 +953,23 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
       </article>
     `, "star-modal-card");
     window.dispatchEvent(new CustomEvent("skysbridge:open-memorial", { detail: { memorialId: item.id } }));
+
+    const loveButton = modalContent.querySelector("#memorialLoveButton");
+    const loveTarget = modalContent.querySelector(".memorial-love-target");
+    const loveStatus = modalContent.querySelector("#memorialLoveStatus");
+    let loveAnimationTimer = null;
+    loveButton?.addEventListener("click", () => {
+      if (!item.is_owner || !loveTarget) return;
+      window.clearTimeout(loveAnimationTimer);
+      loveTarget.classList.remove("is-sending-love");
+      void loveTarget.offsetWidth;
+      loveTarget.classList.add("is-sending-love");
+      loveStatus.textContent = "Ein goldener Gruß umkreist den Stern.";
+      loveAnimationTimer = window.setTimeout(() => {
+        loveTarget.classList.remove("is-sending-love");
+        loveStatus.textContent = "Nur für dich und deine Familie";
+      }, 3800);
+    });
 
     const photoGeneration = modalRequestGeneration;
     if (item.photo_path) {
