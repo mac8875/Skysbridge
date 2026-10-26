@@ -205,6 +205,11 @@ body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
   border-radius:1.25rem;
   background:rgba(2,14,24,.22);
 }
+.sky-layer-settings{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.65rem;margin:0 auto 1.35rem;padding:0;border:0;max-width:50rem}
+.sky-layer-settings legend{width:100%;margin-bottom:.35rem;color:rgba(255,248,234,.72);font-size:.75rem;letter-spacing:.08em;text-align:center}
+.sky-layer-toggle{display:inline-flex;align-items:center;gap:.55rem;min-height:2.65rem;padding:.45rem .85rem;border:1px solid rgba(244,215,146,.20);border-radius:999px;background:rgba(2,14,24,.32);color:var(--ivory);font-size:.875rem;cursor:pointer}
+.sky-layer-toggle:focus-within{outline:2px solid rgba(244,215,146,.72);outline-offset:2px}
+.sky-layer-toggle input{width:1rem;height:1rem;margin:0;accent-color:#e8b657}
 .wall-controls input,.wall-controls select{
   min-height:3rem;
   border-color:rgba(244,215,146,.22);

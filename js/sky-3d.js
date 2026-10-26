@@ -4,6 +4,14 @@
   const wall = document.querySelector(".celestial-wall");
   if (!wall) return;
 
+  const LAYER_SETTINGS_KEY = "skysbridge.sky-layers.v1";
+  const layerToggles = [...document.querySelectorAll("[data-sky-layer-toggle]")];
+  const layerSettings = { planets: false, comets: false };
+  try {
+    const savedSettings = JSON.parse(localStorage.getItem(LAYER_SETTINGS_KEY) || "{}");
+    for (const key of Object.keys(layerSettings)) layerSettings[key] = savedSettings[key] === true;
+  } catch {}
+
   const canvas = document.createElement("canvas");
   canvas.className = "sky-three-d-layer";
   canvas.setAttribute("aria-hidden", "true");
@@ -26,6 +34,28 @@
     seed = (seed * 16807) % 2147483647;
     return (seed - 1) / 2147483646;
   };
+
+  function applyLayerSettings() {
+    wall.dataset.showPlanets = String(layerSettings.planets);
+    wall.dataset.showComets = String(layerSettings.comets);
+    layerToggles.forEach(toggle => {
+      const key = toggle.dataset.skyLayerToggle;
+      if (key in layerSettings) toggle.checked = layerSettings[key];
+    });
+    try { localStorage.setItem(LAYER_SETTINGS_KEY, JSON.stringify(layerSettings)); } catch {}
+    if (reducedMotion) draw(0);
+  }
+
+  layerToggles.forEach(toggle => {
+    toggle.addEventListener("change", () => {
+      const key = toggle.dataset.skyLayerToggle;
+      if (!(key in layerSettings)) return;
+      layerSettings[key] = toggle.checked;
+      if (key === "comets" && !toggle.checked) comet = null;
+      if (key === "comets" && toggle.checked) nextCometAt = performance.now() + 10000;
+      applyLayerSettings();
+    });
+  });
 
   const stars = Array.from({ length: 176 }, () => ({
     x: random() * 2 - 1,
@@ -206,8 +236,8 @@
     context.clearRect(0, 0, width, height);
     const orderedStars = stars.slice().sort((a, b) => b.z - a.z);
     orderedStars.forEach(star => drawStar(star, time));
-    objects.forEach(object => drawObject(object, time));
-    drawComet(time);
+    if (layerSettings.planets) objects.forEach(object => drawObject(object, time));
+    if (layerSettings.comets) drawComet(time);
     context.globalAlpha = 1;
   }
 
@@ -245,5 +275,6 @@
   window.addEventListener("resize", resize, { passive: true });
   if ("ResizeObserver" in window) new ResizeObserver(resize).observe(wall);
   resize();
+  applyLayerSettings();
   start();
 })();
