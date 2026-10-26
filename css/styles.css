@@ -1385,3 +1385,13 @@ html.skysbridge-native .section-heading>.eyebrow{
 .memorial-card.anonymous-wall-star{pointer-events:none;cursor:default}
 
 
+
+.auth-modal-card .password-field{display:grid;gap:0}
+.auth-modal-card .password-field>label{color:#d5dde5;font-size:14px}
+.auth-modal-card .password-input-wrap{position:relative;display:flex;align-items:center;margin-top:5px}
+.auth-modal-card .password-input-wrap input[type="password"],.auth-modal-card .password-input-wrap input[type="text"]{width:100%;min-width:0;margin-top:0;padding-right:48px}
+.auth-modal-card .password-toggle{position:absolute;right:6px;top:50%;display:grid;width:36px;height:36px;place-items:center;transform:translateY(-50%);border:0;border-radius:9px;background:transparent;color:#f4d792;cursor:pointer}
+.auth-modal-card .password-toggle svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.auth-modal-card .password-toggle:hover{background:rgba(232,181,86,.12)}
+.auth-modal-card .password-toggle:focus-visible{outline:2px solid rgba(244,215,146,.85);outline-offset:1px}
+@media(max-width:600px){.auth-modal-card .password-field>label{font-size:13px}}
