@@ -220,6 +220,53 @@
     return Boolean((currentUser && !currentUser.is_anonymous) || wallIsMember);
   }
 
+  function addPasswordVisibilityToggles(form) {
+    const language = document.documentElement.lang || "en";
+    const words = {
+      de: { show: "Passwort anzeigen", hide: "Passwort verbergen" },
+      en: { show: "Show password", hide: "Hide password" },
+      es: { show: "Mostrar contraseña", hide: "Ocultar contraseña" }
+    }[language] || { show: "Show password", hide: "Hide password" };
+
+    form?.querySelectorAll('input[type="password"]').forEach((input, index) => {
+      const field = input.closest("label");
+      if (!field) return;
+
+      const fieldLabel = field.textContent.trim();
+      const inputId = input.id || `password-field-${index + 1}`;
+      input.id = inputId;
+
+      const fieldContainer = document.createElement("div");
+      fieldContainer.className = "password-field";
+      const label = document.createElement("label");
+      label.htmlFor = inputId;
+      label.textContent = fieldLabel;
+
+      const inputWrap = document.createElement("div");
+      inputWrap.className = "password-input-wrap";
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "password-toggle";
+      toggle.setAttribute("aria-label", words.show);
+      toggle.setAttribute("aria-pressed", "false");
+      toggle.title = words.show;
+      toggle.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+      toggle.addEventListener("mousedown", event => event.preventDefault());
+      toggle.addEventListener("click", () => {
+        const visible = input.type === "password";
+        input.type = visible ? "text" : "password";
+        toggle.setAttribute("aria-pressed", String(visible));
+        toggle.setAttribute("aria-label", visible ? words.hide : words.show);
+        toggle.title = visible ? words.hide : words.show;
+        input.focus();
+      });
+
+      inputWrap.append(input, toggle);
+      fieldContainer.append(label, inputWrap);
+      field.replaceWith(fieldContainer);
+    });
+  }
+
   function showAuth(forMemorial = false, initialMode = "login") {
     openModal(`
       <h2 id="modalTitle">${forMemorial ? "Sign in to honor a child" : "Join Skysbridge"}</h2>
@@ -246,6 +293,7 @@
 
     let mode = initialMode === "signup" ? "signup" : "login";
     const form = document.querySelector("#authForm");
+    addPasswordVisibilityToggles(form);
     const status = document.querySelector("#authStatus");
     const forgotLink = document.querySelector("#forgotPassword");
     const signupNameField = document.querySelector("#signupNameField");
@@ -359,6 +407,7 @@
     );
 
     const form = document.querySelector("#passwordRecoveryForm");
+    addPasswordVisibilityToggles(form);
     const status = document.querySelector("#authStatus");
     form.onsubmit = async event => {
       event.preventDefault();
