@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=7';
+    stylesheet.href = '/css/app-intro.css?v=8';
     document.head.appendChild(stylesheet);
   }
 
@@ -37,7 +37,25 @@
     intro.setAttribute('role', 'status');
     intro.setAttribute('aria-label', label);
     intro.innerHTML = `
-      <img class="app-intro__animation" src="/assets/app-intro-v13.gif" alt="" fetchpriority="high">
+      <div class="app-intro__scene" aria-hidden="true">
+        <img class="app-intro__backdrop" src="/assets/app-intro-background-v14.webp" alt="" fetchpriority="high">
+        <div class="app-intro__depth-stars"></div>
+        <div class="app-intro__rising-star">
+          <span class="app-intro__star-trail"></span>
+          <i class="app-intro__star-side" style="--depth:1px"></i><i class="app-intro__star-side" style="--depth:2px"></i><i class="app-intro__star-side" style="--depth:3px"></i><i class="app-intro__star-side" style="--depth:4px"></i><i class="app-intro__star-side" style="--depth:5px"></i>
+          <svg class="app-intro__star-face" viewBox="0 0 200 200" focusable="false">
+            <defs>
+              <linearGradient id="introStarGold" x1=".12" y1=".08" x2=".86" y2=".94"><stop stop-color="#fffbe6"/><stop offset=".38" stop-color="#ffe59b"/><stop offset=".72" stop-color="#e9ad48"/><stop offset="1" stop-color="#a96924"/></linearGradient>
+              <radialGradient id="introStarCore"><stop stop-color="#fffef5"/><stop offset=".52" stop-color="#ffe8a0" stop-opacity=".9"/><stop offset="1" stop-color="#f4c35f" stop-opacity="0"/></radialGradient>
+            </defs>
+            <path d="M100 4 119 80 196 100 119 120 100 196 81 120 4 100 81 80Z" fill="url(#introStarGold)"/>
+            <circle cx="100" cy="100" r="35" fill="url(#introStarCore)"/>
+            <path d="M100 68 132 100 100 132 68 100Z" fill="#fff4c6" fill-opacity=".42"/>
+            <circle cx="100" cy="100" r="4" fill="#fffef7"/>
+          </svg>
+        </div>
+        <div class="app-intro__wordmark">Sky’s Bridge</div>
+      </div>
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
