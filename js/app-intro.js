@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=8';
+    stylesheet.href = '/css/app-intro.css?v=9';
     document.head.appendChild(stylesheet);
   }
 
@@ -54,7 +54,7 @@
             <circle cx="100" cy="100" r="4" fill="#fffef7"/>
           </svg>
         </div>
-        <div class="app-intro__wordmark">Sky’s Bridge</div>
+        <div class="app-intro__wordmark"><span class="app-intro__wordmark-sky">Sky’s</span><span class="app-intro__wordmark-bridge">Bridge</span></div>
       </div>
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;

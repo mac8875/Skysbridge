@@ -52,7 +52,7 @@ if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html')
 const mobileIndexPath = path.join(output, 'index.html');
 let mobileIndex = await readFile(mobileIndexPath, 'utf8');
 const introBootstrap = `
-  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=8">
+  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=9">
   <style>
     html.skysbridge-intro-pending,html.skysbridge-intro-pending body{background:#020914!important}
     html.skysbridge-intro-pending body>:not(.app-intro){visibility:hidden!important}

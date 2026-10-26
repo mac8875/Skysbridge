@@ -11,8 +11,12 @@
 .app-intro__rising-star{position:absolute;z-index:3;left:50%;top:57%;width:54px;height:54px;transform-style:preserve-3d;animation:introStarRise 8.75s cubic-bezier(.2,.72,.18,1) both;will-change:transform}
 .app-intro__star-side{position:absolute;inset:0;clip-path:polygon(50% 0,60% 39%,100% 50%,60% 61%,50% 100%,40% 61%,0 50%,40% 39%);background:linear-gradient(145deg,#f3d17d,#a66a25 72%,#744419);transform:translateZ(calc(-1 * var(--depth)));backface-visibility:hidden;opacity:0;animation:introStarFaceAppear 8.75s ease-out both}
 .app-intro__star-face{position:absolute;inset:-5px;width:64px;height:64px;overflow:visible;transform:translateZ(1px);filter:drop-shadow(0 0 8px rgba(255,232,160,.9)) drop-shadow(0 0 24px rgba(239,180,75,.75));opacity:0;animation:introStarFaceAppear 8.75s ease-out both}
-.app-intro__star-trail{position:absolute;left:50%;top:34px;width:12px;height:136px;transform:translate3d(-50%,0,-7px);transform-origin:50% 0;background:linear-gradient(180deg,rgba(255,246,211,.74),rgba(255,222,144,.28) 34%,rgba(233,177,79,.08) 70%,transparent);filter:blur(3px);opacity:0;animation:introStarTrail 8.75s ease-out both}
-.app-intro__wordmark{position:absolute;z-index:4;left:50%;top:74%;width:100%;padding:0 18px;text-align:center;white-space:nowrap;font:600 clamp(40px,11vw,64px)/1 "Cormorant Garamond",Georgia,serif;letter-spacing:.035em;color:#ffe6a3;background:linear-gradient(180deg,#fff9df 0%,#f4d48e 54%,#c98d3e 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:1px 1px 0 #bd8535,2px 2px 0 #a46d2b,3px 3px 0 #82511f,4px 4px 0 rgba(51,33,24,.74),0 9px 17px rgba(0,0,0,.46);filter:drop-shadow(0 0 12px rgba(244,201,116,.24));transform-style:preserve-3d;opacity:0;animation:introWordmarkReveal 8.75s cubic-bezier(.18,.68,.2,1) both}
+.app-intro__star-trail{position:absolute;left:38px;top:25px;width:230px;height:30px;transform:translate3d(0,0,-7px) rotate(34deg);transform-origin:0 50%;border-radius:50%;background:linear-gradient(90deg,rgba(255,251,229,.95) 0%,rgba(255,226,151,.66) 15%,rgba(245,185,87,.34) 48%,rgba(233,177,79,.08) 82%,transparent 100%);filter:blur(4px);opacity:0;animation:introStarTrail 8.75s ease-out both}
+.app-intro__star-trail::after{content:"";position:absolute;inset:8px 0;border-radius:50%;background:linear-gradient(90deg,rgba(255,255,245,.95),rgba(255,233,178,.72) 10%,rgba(255,211,131,.28) 42%,transparent 100%);filter:blur(1px)}
+.app-intro__wordmark{position:absolute;z-index:4;left:50%;top:87%;width:100%;padding:0 18px;text-align:center;white-space:nowrap;font:400 clamp(42px,12vw,66px)/1 Georgia,"Times New Roman",serif;letter-spacing:-.035em;transform-style:preserve-3d;opacity:0;animation:introWordmarkReveal 8.75s cubic-bezier(.18,.68,.2,1) both}
+.app-intro__wordmark-sky,.app-intro__wordmark-bridge{display:inline-block;transform:translateZ(0);-webkit-text-fill-color:currentColor}
+.app-intro__wordmark-sky{color:#edb44e;text-shadow:1px 1px 0 #c99137,2px 2px 0 #a8752e,3px 3px 0 #76501f,4px 4px 0 rgba(38,30,23,.84),0 8px 16px rgba(0,0,0,.55),0 0 16px rgba(255,210,125,.36)}
+.app-intro__wordmark-bridge{margin-left:.16em;color:#f4f2ed;text-shadow:1px 1px 0 #c4c1bb,2px 2px 0 #97938d,3px 3px 0 #615e5a,4px 4px 0 rgba(30,28,26,.86),0 8px 16px rgba(0,0,0,.58)}
 .app-intro__skip{
   position:absolute;right:18px;top:max(22px,calc(env(safe-area-inset-top) + 10px));z-index:5;
   border:1px solid rgba(244,215,146,.55);border-radius:999px;padding:9px 15px;
@@ -21,14 +25,14 @@
 }
 @keyframes introBackdropDrift{0%{transform:translate3d(0,6px,-145px) scale(1.16)}100%{transform:translate3d(0,-10px,-120px) scale(1.2)}}
 @keyframes introStarfieldDrift{0%{transform:translate3d(0,8px,36px) scale(1.08);opacity:.35}24%{opacity:.82}100%{transform:translate3d(-10px,-12px,36px) scale(1.08);opacity:.82}}
-@keyframes introStarRise{0%,8%{transform:translate3d(-50%,55px,44px) rotateX(18deg) rotateY(-34deg) scale(.22)}56%{transform:translate3d(-50%,-28px,58px) rotateX(10deg) rotateY(16deg) scale(.72)}82%,100%{transform:translate3d(-50%,-138px,75px) rotateX(4deg) rotateY(-8deg) scale(1)}}
+@keyframes introStarRise{0%,8%{transform:translate3d(calc(-50% + 39vw),8px,42px) rotateX(18deg) rotateY(-24deg) scale(.28)}52%{transform:translate3d(calc(-50% + 5vw),-68px,60px) rotateX(9deg) rotateY(10deg) scale(.76)}82%,100%{transform:translate3d(calc(-50% - 35vw),-205px,76px) rotateX(4deg) rotateY(-5deg) scale(1)}}
 @keyframes introStarFaceAppear{0%,8%{opacity:0}22%,100%{opacity:1}}
-@keyframes introStarTrail{0%,18%{opacity:0;transform:translate3d(-50%,24px,-8px) scaleY(.2)}38%{opacity:.7;transform:translate3d(-50%,8px,-8px) scaleY(1)}76%{opacity:.52}100%{opacity:0;transform:translate3d(-50%,-6px,-8px) scaleY(.58)}}
+@keyframes introStarTrail{0%,18%{opacity:0;transform:translate3d(-8px,15px,-8px) rotate(34deg) scaleX(.08)}32%{opacity:.82;transform:translate3d(0,0,-8px) rotate(34deg) scaleX(1)}70%{opacity:.64}100%{opacity:0;transform:translate3d(-8px,15px,-8px) rotate(34deg) scaleX(.72)}}
 @keyframes introWordmarkReveal{0%,57%{opacity:0;transform:translate3d(-50%,24px,45px) rotateX(22deg) scale(.82)}72%{opacity:1;transform:translate3d(-50%,0,75px) rotateX(3deg) scale(1.02)}82%,100%{opacity:1;transform:translate3d(-50%,0,75px) rotateX(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){
   .app-intro{transition:none}
   .app-intro__backdrop,.app-intro__depth-stars,.app-intro__star-trail{animation:none}
-  .app-intro__rising-star{animation:none;opacity:1;transform:translate3d(-50%,-100px,75px) rotateX(4deg)}
+  .app-intro__rising-star{animation:none;opacity:1;transform:translate3d(calc(-50% - 24vw),-120px,75px) rotateX(4deg)}
   .app-intro__star-side,.app-intro__star-face{animation:none;opacity:1}
   .app-intro__wordmark{animation:none;opacity:1;transform:translate3d(-50%,0,75px)}
 }
