@@ -210,6 +210,13 @@ body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 .sky-layer-toggle{display:inline-flex;align-items:center;gap:.55rem;min-height:2.65rem;padding:.45rem .85rem;border:1px solid rgba(244,215,146,.20);border-radius:999px;background:rgba(2,14,24,.32);color:var(--ivory);font-size:.875rem;cursor:pointer}
 .sky-layer-toggle:focus-within{outline:2px solid rgba(244,215,146,.72);outline-offset:2px}
 .sky-layer-toggle input{width:1rem;height:1rem;margin:0;accent-color:#e8b657}
+.sky-rotation-toggle{display:inline-flex;align-items:center;gap:.5rem;min-height:2.65rem;padding:.45rem .9rem;border:1px solid rgba(244,215,146,.20);border-radius:999px;background:rgba(2,14,24,.32);color:var(--ivory);font:inherit;font-size:.875rem;cursor:pointer;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.sky-rotation-toggle:hover,.sky-rotation-toggle[aria-pressed="true"]{border-color:rgba(244,215,146,.62);background:rgba(232,181,86,.13);color:var(--gold-soft)}
+.sky-rotation-toggle:focus-visible{outline:2px solid rgba(244,215,146,.72);outline-offset:2px}
+.sky-rotation-toggle:disabled{opacity:.55;cursor:not-allowed}
+.celestial-wall[data-rotate-stars="true"] .memorial-symbol:has(.sky-symbol,.memorial-star-image,.memorial-star-shape){animation:skyStarRotation 30s linear infinite}
+@keyframes skyStarRotation{to{transform:rotate(1turn)}}
+@media(prefers-reduced-motion:reduce){.celestial-wall[data-rotate-stars="true"] .memorial-symbol:has(.sky-symbol,.memorial-star-image,.memorial-star-shape){animation:none}}
 .wall-controls input,.wall-controls select{
   min-height:3rem;
   border-color:rgba(244,215,146,.22);
