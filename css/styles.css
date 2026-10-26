@@ -81,6 +81,21 @@ a{color:inherit}button,input,textarea{font:inherit}
 .date-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .memorial-detail-card{width:min(600px,100%);margin:0 auto;text-align:center}
 .memorial-detail-symbol{display:grid;place-items:center;min-height:150px;margin:0 auto 12px}
+.memorial-detail-symbol.memorial-love-target{position:relative;overflow:visible}
+.memorial-love-orbit{position:absolute;z-index:3;top:50%;left:50%;width:190px;height:178px;opacity:0;pointer-events:none;transform:translate(-50%,-50%)}
+.memorial-love-orbit i{position:absolute;color:#f4d792;font:400 15px/1 Georgia,serif;font-style:normal;text-shadow:0 0 8px rgba(244,215,146,.4)}
+.memorial-love-orbit i:nth-child(1){top:0;left:50%;transform:translateX(-50%)}
+.memorial-love-orbit i:nth-child(2){top:68px;right:0;font-size:12px}
+.memorial-love-orbit i:nth-child(3){bottom:0;left:8px;font-size:11px}
+.memorial-love-target.is-sending-love .memorial-love-orbit{animation:memorialHeartOrbit 3.8s ease-in-out 1}
+.memorial-love-target.is-sending-love .memorial-star-shape,.memorial-love-target.is-sending-love .memorial-star-image{animation:memorialLoveGlow 3.8s ease-out 1;filter:brightness(1.12) drop-shadow(0 0 19px rgba(244,215,146,.72)) drop-shadow(0 0 45px rgba(232,181,86,.42))}
+.memorial-love-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:4px auto 0;padding:8px 15px;border:1px solid rgba(244,215,146,.46);border-radius:999px;background:rgba(232,181,86,.07);color:#f4d792;font:500 13px/1.2 Inter,Arial,sans-serif;cursor:pointer;transition:background .2s ease,border-color .2s ease}
+.memorial-love-button:hover{border-color:rgba(244,215,146,.68);background:rgba(232,181,86,.14)}
+.memorial-love-button:focus-visible{outline:2px solid #f4d792;outline-offset:3px}
+.memorial-love-button>span{font:400 17px/1 Georgia,serif}
+.memorial-love-status{min-height:16px;margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.4}
+@keyframes memorialHeartOrbit{0%{opacity:0;transform:translate(-50%,-50%) rotate(-12deg) scale(.82)}14%{opacity:.86}76%{opacity:.72}100%{opacity:0;transform:translate(-50%,-50%) rotate(348deg) scale(1)}}
+@keyframes memorialLoveGlow{0%,100%{filter:brightness(1) drop-shadow(0 0 8px rgba(255,244,189,.8)) drop-shadow(0 0 19px rgba(232,181,86,.5))}30%,65%{filter:brightness(1.18) drop-shadow(0 0 18px rgba(255,247,213,.9)) drop-shadow(0 0 48px rgba(232,181,86,.72))}}
 .memorial-detail-card.is-anniversary .memorial-detail-symbol{min-height:176px}
 .memorial-detail-card .memorial-candle-image{width:78px;height:170px;margin:0 auto}
 .memorial-detail-card .memorial-star-image{width:132px;height:148px;object-fit:contain}
@@ -175,7 +190,9 @@ footer nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));justify-co
   margin:0 auto 8px;
   filter:drop-shadow(0 0 14px rgba(244,215,146,.52));
 }
+.star-remembrance-symbol.memorial-love-target{position:relative;overflow:visible}
 .star-remembrance-symbol img{display:block;width:100%;height:100%;object-fit:contain}
+.memorial-love-target.is-sending-love>img,.memorial-love-target.is-sending-love>.sky-symbol{animation:memorialLoveGlow 3.8s ease-out 1;filter:brightness(1.12) drop-shadow(0 0 19px rgba(244,215,146,.72)) drop-shadow(0 0 45px rgba(232,181,86,.42))}
 .star-remembrance-header h2{
   margin:0;
   color:var(--ivory);
@@ -1395,3 +1412,8 @@ html.skysbridge-native .section-heading>.eyebrow{
 .auth-modal-card .password-toggle:hover{background:rgba(232,181,86,.12)}
 .auth-modal-card .password-toggle:focus-visible{outline:2px solid rgba(244,215,146,.85);outline-offset:1px}
 @media(max-width:600px){.auth-modal-card .password-field>label{font-size:13px}}
+
+@media(prefers-reduced-motion:reduce){
+  .memorial-love-target.is-sending-love .memorial-love-orbit{animation:none!important;opacity:.46;transform:translate(-50%,-50%)}
+  .memorial-love-target.is-sending-love .memorial-star-shape,.memorial-love-target.is-sending-love .memorial-star-image{animation:none!important;filter:brightness(1.12) drop-shadow(0 0 19px rgba(244,215,146,.72)) drop-shadow(0 0 45px rgba(232,181,86,.42))}
+}

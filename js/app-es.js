@@ -610,15 +610,19 @@
 
     const starName = escapeHtml(slug === "sky" ? "Sky" : (star.name || "Un hijo recordado"));
     const storyHtml = renderStoryParagraphs(star.story);
+    const canSendSkyLove = slug === "sky" && Boolean(
+      currentProfile?.is_admin || approvedMemorials.some(item => item.is_family)
+    );
 
     openModal(`
       <article class="star-remembrance ${slug === "sky" ? `is-${window.SkyRemembrance.state()}` : ""}">
         <header class="star-remembrance-header">
           <p class="eyebrow">Una luz que permanece</p>
-          <span class="star-remembrance-symbol" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}</span>
+          <span class="star-remembrance-symbol${canSendSkyLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendSkyLove ? '<span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span>' : ""}</span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">Su vida fue breve. Su luz permanece.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Nació el <time datetime="2019-02-09">9 de febrero de 2019</time></p>' : ""}
+          ${canSendSkyLove ? '<button class="memorial-love-button" id="memorialLoveButton" type="button"><span aria-hidden="true">♡</span>Enviar cariño</button><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Para ti y tu familia</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -656,6 +660,23 @@
         </section>
       </article>
     `, "star-modal-card");
+
+    const loveButton = modalContent.querySelector("#memorialLoveButton");
+    const loveTarget = modalContent.querySelector(".memorial-love-target");
+    const loveStatus = modalContent.querySelector("#memorialLoveStatus");
+    let loveAnimationTimer = null;
+    loveButton?.addEventListener("click", () => {
+      if (!canSendSkyLove || !loveTarget) return;
+      window.clearTimeout(loveAnimationTimer);
+      loveTarget.classList.remove("is-sending-love");
+      void loveTarget.offsetWidth;
+      loveTarget.classList.add("is-sending-love");
+      loveStatus.textContent = "Un saludo dorado rodea a Sky.";
+      loveAnimationTimer = window.setTimeout(() => {
+        loveTarget.classList.remove("is-sending-love");
+        loveStatus.textContent = "Para ti y tu familia";
+      }, 3800);
+    });
 
     const form = document.querySelector("#memoryForm");
     const status = document.querySelector("#memoryStatus");
@@ -915,16 +936,20 @@
           : "Una luz que permanece";
     const dateLine = memorialDateLine(item);
     const canWriteMemory = Boolean(item.is_star_owner);
+    const isSkyMemorial = String(item.child_name || "").trim().toLowerCase() === "sky";
+    const canSendLove = Boolean(item.is_owner || (currentProfile?.is_admin && isSkyMemorial));
 
     openModal(`
       <article class="memorial-detail-card is-${state}">
         <p class="eyebrow">${dayLabel}</p>
-        <div class="memorial-detail-symbol">
+        <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
+          ${canSendLove ? '<span class="memorial-love-orbit" aria-hidden="true"><i>♡</i><i>♡</i><i>♡</i></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Siempre amado")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
+        ${canSendLove ? '<button class="memorial-love-button" id="memorialLoveButton" type="button"><span aria-hidden="true">♡</span>Enviar cariño</button><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Solo para ti y tu familia</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -942,6 +967,23 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
       </article>
     `, "star-modal-card");
     window.dispatchEvent(new CustomEvent("skysbridge:open-memorial", { detail: { memorialId: item.id } }));
+
+    const loveButton = modalContent.querySelector("#memorialLoveButton");
+    const loveTarget = modalContent.querySelector(".memorial-love-target");
+    const loveStatus = modalContent.querySelector("#memorialLoveStatus");
+    let loveAnimationTimer = null;
+    loveButton?.addEventListener("click", () => {
+      if (!canSendLove || !loveTarget) return;
+      window.clearTimeout(loveAnimationTimer);
+      loveTarget.classList.remove("is-sending-love");
+      void loveTarget.offsetWidth;
+      loveTarget.classList.add("is-sending-love");
+      loveStatus.textContent = "Un saludo dorado rodea la estrella.";
+      loveAnimationTimer = window.setTimeout(() => {
+        loveTarget.classList.remove("is-sending-love");
+        loveStatus.textContent = "Solo para ti y tu familia";
+      }, 3800);
+    });
 
     const photoGeneration = modalRequestGeneration;
     if (item.photo_path) {

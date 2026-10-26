@@ -35,12 +35,19 @@
     if (nativeStory) {
       applyState(nativeStory, today);
       const target = nativeStory.querySelector(".star-remembrance-symbol");
-      if (target) target.innerHTML = symbol(true, today);
+      if (target) {
+        const loveOrbit = target.querySelector(".memorial-love-orbit");
+        target.innerHTML = symbol(true, today);
+        if (loveOrbit) target.appendChild(loveOrbit);
+      }
     }
     const openStory = document.querySelector("#modalContent .star-remembrance");
     if (openStory && openStory.querySelector("#modalTitle")?.textContent === "Sky") {
       applyState(openStory, today);
-      openStory.querySelector(".star-remembrance-symbol").innerHTML = symbol(true, today);
+      const target = openStory.querySelector(".star-remembrance-symbol");
+      const loveOrbit = target.querySelector(".memorial-love-orbit");
+      target.innerHTML = symbol(true, today);
+      if (loveOrbit) target.appendChild(loveOrbit);
     }
   }
   window.SkyRemembrance = { state, symbol };
