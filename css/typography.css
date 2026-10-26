@@ -217,6 +217,25 @@ body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 .celestial-wall[data-rotate-stars="true"] .memorial-symbol:has(.sky-symbol,.memorial-star-image,.memorial-star-shape){transform-style:preserve-3d;animation:skyStarRotation3d 30s linear infinite}
 @keyframes skyStarRotation3d{0%,100%{transform:perspective(460px) rotateY(0deg);filter:brightness(1)}25%{transform:perspective(460px) rotateY(90deg);filter:brightness(.68)}50%{transform:perspective(460px) rotateY(180deg);filter:brightness(.9)}75%{transform:perspective(460px) rotateY(270deg);filter:brightness(.68)}}
 @media(prefers-reduced-motion:reduce){.celestial-wall[data-rotate-stars="true"] .memorial-symbol:has(.sky-symbol,.memorial-star-image,.memorial-star-shape){animation:none}}
+
+/* Give rotating memorial stars a narrow, shaded edge that remains visible side-on. */
+.memorial-star-volume{position:relative;display:block;width:58px;height:58px;transform-style:preserve-3d}
+.memorial-star-volume .memorial-star-shape{position:absolute;inset:0;width:100%;height:100%}
+.memorial-symbol .memorial-star-volume{width:110px;height:122px}
+.memorial-star-volume .memorial-star-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.memorial-star-depth{position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,#b97c2a,#774713);transform:translateZ(calc(-1 * var(--star-depth)));backface-visibility:hidden}
+.memorial-star-depth::before,.memorial-star-depth::after{content:none!important}
+.memorial-star-depth.star-radiant{clip-path:polygon(50% 0,58% 36%,85% 15%,64% 42%,100% 50%,64% 58%,85% 85%,58% 64%,50% 100%,42% 64%,15% 85%,36% 58%,0 50%,36% 42%,15% 15%,42% 36%)}
+.memorial-star-depth.star-classic{clip-path:polygon(50% 3%,61% 36%,96% 36%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,4% 36%,39% 36%)}
+.memorial-star-depth.star-guiding{clip-path:polygon(50% 0,58% 40%,100% 50%,58% 60%,50% 100%,42% 60%,0 50%,42% 40%)}
+.memorial-star-depth.star-comet{clip-path:polygon(50% 0,60% 34%,96% 4%,68% 42%,100% 50%,66% 58%,95% 96%,58% 66%,50% 100%,42% 66%,4% 96%,34% 58%,0 50%,34% 42%,4% 4%,42% 34%)}
+.memorial-star-depth.star-petal{clip-path:polygon(50% 0,61% 28%,88% 12%,72% 39%,100% 50%,72% 61%,88% 88%,61% 72%,50% 100%,39% 72%,12% 88%,28% 61%,0 50%,28% 39%,12% 12%,39% 28%)}
+.memorial-star-depth.star-north{clip-path:polygon(50% 0,58% 39%,84% 16%,61% 42%,100% 50%,61% 58%,84% 84%,58% 61%,50% 100%,42% 61%,16% 84%,39% 58%,0 50%,39% 42%,16% 16%,42% 39%)}
+.memorial-star-depth.star-signature{background:url("../assets/memorial-star.svg?v=55") center/contain no-repeat;filter:brightness(.48) saturate(.8)}
+.celestial-wall .memorial-star-volume{width:54px;height:61px}
+.celestial-wall .memorial-card.is-viewer-center .memorial-star-volume{width:76px;height:86px}
+.memorial-detail-symbol .memorial-star-volume{width:132px;height:148px}
+@media(prefers-reduced-motion:reduce){.memorial-star-depth{display:none}}
 .wall-controls input,.wall-controls select{
   min-height:3rem;
   border-color:rgba(244,215,146,.22);

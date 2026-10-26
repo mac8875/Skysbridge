@@ -909,7 +909,8 @@
 
     const allowedStyles = ["radiant", "classic", "guiding", "halo", "signature", "comet", "petal", "north"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
-    return `<span class="memorial-star-shape star-${style}" aria-hidden="true"></span>`;
+    const depth = style === "halo" ? "" : [1, 2, 3, 4, 5].map((layer) => `<span class="memorial-star-depth star-${style}" style="--star-depth:${layer}px"></span>`).join("");
+    return `<span class="memorial-star-volume" aria-hidden="true">${depth}<span class="memorial-star-shape star-${style}"></span></span>`;
   }
 
   async function memorialPhotoUrl(path) {
