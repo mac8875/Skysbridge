@@ -923,7 +923,8 @@
           : "Ein Licht, das bleibt";
     const dateLine = memorialDateLine(item);
     const canWriteMemory = Boolean(item.is_star_owner);
-    const canSendLove = Boolean(item.is_owner);
+    const isSkyMemorial = String(item.child_name || "").trim().toLowerCase() === "sky";
+    const canSendLove = Boolean(item.is_owner || (currentProfile?.is_admin && isSkyMemorial));
 
     openModal(`
       <article class="memorial-detail-card is-${state}">
@@ -959,7 +960,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
     let loveAnimationTimer = null;
     loveButton?.addEventListener("click", () => {
-      if (!item.is_owner || !loveTarget) return;
+      if (!canSendLove || !loveTarget) return;
       window.clearTimeout(loveAnimationTimer);
       loveTarget.classList.remove("is-sending-love");
       void loveTarget.offsetWidth;
