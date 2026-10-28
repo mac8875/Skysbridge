@@ -43,11 +43,16 @@
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
+    try { window.SkysbridgeNative?.setFullscreen(true); } catch {}
 
     const close = () => {
       if (!intro.isConnected || intro.classList.contains('is-leaving')) return;
       intro.classList.add('is-leaving');
-      window.setTimeout(() => { intro.remove(); document.documentElement.classList.remove('skysbridge-intro-pending'); }, 650);
+      window.setTimeout(() => {
+        intro.remove();
+        document.documentElement.classList.remove('skysbridge-intro-pending');
+        try { window.SkysbridgeNative?.setFullscreen(false); } catch {}
+      }, 650);
     };
     intro.querySelector('.app-intro__skip')?.addEventListener('click', close, { once: true });
     window.setTimeout(close, 8750);
