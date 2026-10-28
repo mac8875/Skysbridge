@@ -164,7 +164,7 @@
   }
 
   function renderStoryParagraphs(value) {
-    const story = String(value || "Siempre amado. Siempre recordado.").trim();
+    const story = String(value || "Siempre en nuestros corazones.").replace(/\\r?\\n/g, "\n").trim();
     const explicitParagraphs = story
       .split(/\n\s*\n/)
       .map(paragraph => paragraph.trim())
@@ -599,13 +599,14 @@
     };
 
     const personalSkyOpening =
-      "El momento en que supe que Sky existía fue uno de los más felices de mi vida. Tener que dejarlo ir se convirtió en el dolor más profundo que he conocido.";
+      "El momento en que supe que Sky existía fue uno de los más felices de mi vida. Tener que despedirme de él se convirtió en el dolor más profundo que he conocido.";
+    const legacySkyOpening = "El momento en que supe que Sky existía fue uno de los más felices de mi vida. Tener que dejarlo ir se convirtió en el dolor más profundo que he conocido.";
 
-    if (
-      slug === "sky" &&
-      !String(star.story || "").includes(personalSkyOpening)
-    ) {
-      star.story = `${personalSkyOpening}\n\n${star.story || ""}`.trim();
+    if (slug === "sky") {
+      star.story = String(star.story || "").replace(legacySkyOpening, personalSkyOpening);
+      if (!star.story.includes(personalSkyOpening)) {
+        star.story = `${personalSkyOpening}\n\n${star.story}`.trim();
+      }
     }
 
     const starName = escapeHtml(slug === "sky" ? "Sky" : (star.name || "Un hijo recordado"));
@@ -717,7 +718,12 @@
         .then(({ data }) => {
           if (!data || starModalGeneration !== modalRequestGeneration || modal.hidden) return;
           const storyCopy = modalContent.querySelector(".star-story-copy");
-          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(data.story || "");
+          let story = data.story || "";
+          if (slug === "sky") {
+            story = story.replace(legacySkyOpening, personalSkyOpening);
+            if (!story.includes(personalSkyOpening)) story = `${personalSkyOpening}\n\n${story}`.trim();
+          }
+          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(story);
           const title = modalContent.querySelector("#modalTitle");
           if (title) title.textContent = data.name || "Un hijo recordado";
           const heading = modalContent.querySelector("#memoryHeading");
@@ -1023,7 +1029,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
         memorial_id: item.id,
         requester_user_id: currentUser.id,
         requester_email: String(currentUser.email || "").trim().toLowerCase(),
-        requester_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80)
+        requester_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Miembro de Skysbridge").trim().slice(0, 80)
       });
       if (error) {
         button.disabled = false;
@@ -1121,7 +1127,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
       card.dataset.publicMemorial = item.id;
       if (item.id === viewerCenter?.id) card.classList.add("is-viewer-center");
       card.setAttribute("aria-label", item.is_public
-        ? `Open memorial for ${item.child_name || "a child remembered"}`
+        ? `Abrir el recuerdo de ${item.child_name || "un hijo"}`
         : `Abrir tu estrella privada: ${item.child_name || "Siempre amado"}`);
 
       card.style.animationDelay = `${(index % 7) * -.65}s`;
@@ -1146,10 +1152,10 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
           ${memorialSymbolMarkup(state, false, item.star_style)}
         </span>
         <span class="memorial-kicker">${"Una luz que recordamos"}</span>
-        <strong>${escapeHtml(item.child_name || "Forever loved")}</strong>
+        <strong>${escapeHtml(item.child_name || "Siempre en nuestros corazones")}</strong>
         <span class="memorial-day">${dayLabel}</span>
         <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
-        <small>${dateLine ? `<span class="memorial-dates">${escapeHtml(dateLine)}</span>` : "Forever loved. Forever remembered."}${item.country ? `<span class="memorial-dates">${escapeHtml(item.country)}</span>` : ""}</small>
+        <small>${dateLine ? `<span class="memorial-dates">${escapeHtml(dateLine)}</span>` : "Siempre en nuestros corazones."}${item.country ? `<span class="memorial-dates">${escapeHtml(item.country)}</span>` : ""}</small>
       `;
 
       card.addEventListener("click", () => openApprovedMemorial(item));
@@ -1536,7 +1542,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
         button.disabled = true;
         const { error } = await db.from("memorial_family_invites").insert({
           owner_user_id: currentUser.id,
-          owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80),
+          owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Miembro de Skysbridge").trim().slice(0, 80),
           invited_email: request.requester_email
         });
         if (error) {
@@ -1617,7 +1623,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
 
     const { error } = await db.from("memorial_family_invites").insert({
       owner_user_id: currentUser.id,
-      owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80),
+      owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Miembro de Skysbridge").trim().slice(0, 80),
       invited_email: email
     });
     if (error) {
@@ -2292,7 +2298,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
           .from("memorials")
           .update({
             approved,
-            rejection_reason: approved ? null : "Not approved at this time."
+            rejection_reason: approved ? null : "No se ha aprobado por ahora."
           })
           .eq("id", button.dataset.id);
 
@@ -2350,7 +2356,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
           .from("memories")
           .update({
             approved,
-            rejection_reason: approved ? null : "Not approved at this time."
+            rejection_reason: approved ? null : "No se ha aprobado por ahora."
           })
           .eq("id", button.dataset.id);
 

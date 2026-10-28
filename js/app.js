@@ -162,7 +162,7 @@
   }
 
   function renderStoryParagraphs(value) {
-    const story = String(value || "Forever loved. Forever remembered.").trim();
+    const story = String(value || "Forever loved. Forever remembered.").replace(/\\r?\\n/g, "\n").trim();
     const explicitParagraphs = story
       .split(/\n\s*\n/)
       .map(paragraph => paragraph.trim())
@@ -597,13 +597,15 @@
     };
 
     const personalSkyOpening =
+      "The moment I learned that Sky existed was one of the happiest moments of my life. Having to let him go became the deepest pain I have ever known.";
+    const legacySkyOpening =
       "The moment I first learned of Sky was the greatest happiness of my life. Having to let him go became my deepest pain.";
 
-    if (
-      slug === "sky" &&
-      !String(star.story || "").includes(personalSkyOpening)
-    ) {
-      star.story = `${personalSkyOpening}\n\n${star.story || ""}`.trim();
+    if (slug === "sky") {
+      star.story = String(star.story || "").replace(legacySkyOpening, personalSkyOpening);
+      if (!star.story.includes(personalSkyOpening)) {
+        star.story = `${personalSkyOpening}\n\n${star.story}`.trim();
+      }
     }
 
     const starName = escapeHtml(slug === "sky" ? "Sky" : (star.name || "A child remembered"));
@@ -715,8 +717,11 @@
         .then(({ data }) => {
           if (!data || starModalGeneration !== modalRequestGeneration || modal.hidden) return;
           let updatedStory = data.story || "";
-          if (slug === "sky" && !updatedStory.includes(personalSkyOpening)) {
-            updatedStory = `${personalSkyOpening}\\n\\n${updatedStory}`.trim();
+          if (slug === "sky") {
+            updatedStory = updatedStory.replace(legacySkyOpening, personalSkyOpening);
+            if (!updatedStory.includes(personalSkyOpening)) {
+              updatedStory = `${personalSkyOpening}\n\n${updatedStory}`.trim();
+            }
           }
           const storyCopy = modalContent.querySelector(".star-story-copy");
           if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(updatedStory);
