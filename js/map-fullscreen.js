@@ -65,10 +65,13 @@
       }
     }
 
-    toggle.addEventListener("click", () => setExpanded(!wall.classList.contains("is-fullscreen")));
+    toggle.addEventListener("click", event => {
+      event.stopPropagation();
+      setExpanded(!wall.classList.contains("is-fullscreen"));
+    });
     wall.addEventListener("click", event => {
-      if (wall.classList.contains("is-fullscreen")) return;
-      if (event.target === wall) setExpanded(true);
+      if (event.target.closest(".memorial-card, [data-wall-fullscreen-toggle]")) return;
+      setExpanded(!wall.classList.contains("is-fullscreen"));
     });
     document.addEventListener("keydown", event => {
       if (event.key === "Escape" && wall.classList.contains("is-fullscreen")) {
