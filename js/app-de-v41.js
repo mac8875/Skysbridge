@@ -723,7 +723,10 @@
         .then(({ data }) => {
           if (!data || starModalGeneration !== modalRequestGeneration || modal.hidden) return;
           const storyCopy = modalContent.querySelector(".star-story-copy");
-          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(data.story || "");
+          const legacyGermanOpening = "Als ich von Sky erfuhr, war das der glücklichste Moment meines Lebens. Ihn wieder gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.";
+          const currentGermanOpening = "Als ich erfuhr, dass es Sky gibt, war das einer der glücklichsten Momente meines Lebens. Ihn wieder loslassen zu müssen, wurde zu meinem tiefsten Schmerz.";
+          const story = String(data.story || "").replace(legacyGermanOpening, currentGermanOpening);
+          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(story);
           const title = modalContent.querySelector("#modalTitle");
           if (title) title.textContent = data.name || "Ein geliebtes Kind";
           const heading = modalContent.querySelector("#memoryHeading");
