@@ -15,6 +15,8 @@
         : "Close full-screen map";
     let previousFocus = null;
     let previousScrollY = 0;
+    let originalParent = null;
+    let originalNextSibling = null;
 
     function refreshLayout() {
       const stars = [...wall.querySelectorAll(".memorial-card")];
@@ -29,6 +31,9 @@
       if (expanded) {
         previousFocus = document.activeElement;
         previousScrollY = window.scrollY;
+        originalParent = wall.parentNode;
+        originalNextSibling = wall.nextSibling;
+        document.body.appendChild(wall);
         wall.classList.add("is-fullscreen");
         document.documentElement.classList.add("wall-fullscreen-open");
         toggle.setAttribute("aria-expanded", "true");
@@ -43,6 +48,12 @@
       } else {
         wall.classList.remove("is-fullscreen");
         document.documentElement.classList.remove("wall-fullscreen-open");
+        if (originalParent?.isConnected) {
+          const insertionPoint = originalNextSibling?.parentNode === originalParent ? originalNextSibling : null;
+          originalParent.insertBefore(wall, insertionPoint);
+        }
+        originalParent = null;
+        originalNextSibling = null;
         toggle.setAttribute("aria-expanded", "false");
         toggle.setAttribute("aria-label", expandLabel);
         toggle.setAttribute("title", expandLabel);
@@ -65,6 +76,7 @@
         setExpanded(false);
       }
     });
+    window.addEventListener("resize", () => requestAnimationFrame(refreshLayout), { passive: true });
   }
 
   if (document.readyState === "loading") {
