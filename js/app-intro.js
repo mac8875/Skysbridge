@@ -32,6 +32,7 @@
     const lang = (document.documentElement.lang || 'en').slice(0, 2);
     const skipLabel = lang === 'de' ? 'Überspringen' : lang === 'es' ? 'Saltar' : 'Skip';
     const label = lang === 'de' ? 'Skysbridge wird geladen' : lang === 'es' ? 'Cargando Skysbridge' : 'Loading Skysbridge';
+    const tagline = lang === 'de' ? 'BRÜCKEN DURCH DIE TRAUER' : lang === 'es' ? 'PUENTES PARA ATRAVESAR EL DUELO' : 'BUILDING BRIDGES THROUGH GRIEF';
     const intro = document.createElement('div');
     intro.className = 'app-intro';
     intro.setAttribute('role', 'status');
@@ -76,7 +77,7 @@
             <path d="M0 18 C17 53 33 28 50 61 C67 28 83 53 100 18"/>
             <path d="M4 2 C20 35 34 12 50 49 C66 12 80 35 96 2"/>
           </svg>
-          <span class="app-intro__tagline">BUILDING BRIDGES THROUGH GRIEF</span>
+          <span class="app-intro__tagline">${tagline}</span>
         </div>
       </div>
       <button class="app-intro__skip" type="button">${skipLabel}</button>

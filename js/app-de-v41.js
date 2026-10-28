@@ -174,7 +174,7 @@
   }
 
   function renderStoryParagraphs(value) {
-    const story = String(value || "Für immer geliebt. Für immer unvergessen.").trim();
+    const story = String(value || "Für immer geliebt. Für immer unvergessen.").replace(/\\r?\\n/g, "\n").trim();
     const explicitParagraphs = story
       .split(/\n\s*\n/)
       .map(paragraph => paragraph.trim())
@@ -603,7 +603,7 @@
 
   function showStar(slug) {
     const germanSkyStory =
-      "Als ich von Sky erfuhr, war das der glücklichste Moment meines Lebens. Ihn wieder gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.\n\nSky war nur kurze Zeit bei uns, und doch hat er unser Leben für immer verändert. Durch ihn haben wir verstanden, dass Liebe nicht in Jahren gemessen wird, sondern in der Tiefe der Verbindung, die bleibt.\n\nNach seinem Tod haben wir erlebt, wie still und einsam Trauer werden kann. Viele Eltern tragen ihren Schmerz allein, weil sie glauben, niemand könne wirklich verstehen, was sie verloren haben.\n\nAus der Liebe zu Sky entstand Skysbridge: ein würdevoller Ort, an dem Kinder, die viel zu früh gehen mussten, einen Namen, einen Stern und einen sichtbaren Platz in unserer Erinnerung behalten.\n\nSky ist der erste Stern im Himmel voller Sterne. Sein Licht steht am Anfang eines Ortes, an dem die Geschichten vieler Kinder weiterleuchten dürfen.";
+      "Als ich erfuhr, dass es Sky gibt, war das einer der glücklichsten Momente meines Lebens. Ihn wieder loslassen zu müssen, wurde zu meinem tiefsten Schmerz.\n\nSky war nur kurze Zeit bei uns, und doch hat er unser Leben für immer verändert. Durch ihn haben wir verstanden, dass Liebe nicht in Jahren gemessen wird, sondern in der Tiefe der Verbindung, die bleibt.\n\nNach seinem Tod haben wir erlebt, wie still und einsam Trauer werden kann. Viele Eltern tragen ihren Schmerz allein, weil sie glauben, niemand könne wirklich verstehen, was sie verloren haben.\n\nAus der Liebe zu Sky entstand Skysbridge: ein würdevoller Ort, an dem Kinder, die viel zu früh gehen mussten, einen Namen, einen Stern und einen sichtbaren Platz in unserer Erinnerung behalten.\n\nSky ist der erste Stern im Himmel voller Sterne. Sein Licht steht am Anfang eines Ortes, an dem die Geschichten vieler Kinder weiterleuchten dürfen.";
 
     let star = {
       name: "Sky",
@@ -723,7 +723,10 @@
         .then(({ data }) => {
           if (!data || starModalGeneration !== modalRequestGeneration || modal.hidden) return;
           const storyCopy = modalContent.querySelector(".star-story-copy");
-          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(data.story || "");
+          const legacyGermanOpening = "Als ich von Sky erfuhr, war das der glücklichste Moment meines Lebens. Ihn wieder gehen lassen zu müssen, wurde zu meinem tiefsten Schmerz.";
+          const currentGermanOpening = "Als ich erfuhr, dass es Sky gibt, war das einer der glücklichsten Momente meines Lebens. Ihn wieder loslassen zu müssen, wurde zu meinem tiefsten Schmerz.";
+          const story = String(data.story || "").replace(legacyGermanOpening, currentGermanOpening);
+          if (storyCopy) storyCopy.innerHTML = renderStoryParagraphs(story);
           const title = modalContent.querySelector("#modalTitle");
           if (title) title.textContent = data.name || "Ein geliebtes Kind";
           const heading = modalContent.querySelector("#memoryHeading");
@@ -1031,7 +1034,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
         memorial_id: item.id,
         requester_user_id: currentUser.id,
         requester_email: String(currentUser.email || "").trim().toLowerCase(),
-        requester_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80)
+        requester_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Mitglied bei Skysbridge").trim().slice(0, 80)
       });
       if (error) {
         button.disabled = false;
@@ -1129,7 +1132,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
       card.dataset.publicMemorial = item.id;
       if (item.id === viewerCenter?.id) card.classList.add("is-viewer-center");
       card.setAttribute("aria-label", item.is_public
-        ? `Open memorial for ${item.child_name || "a child remembered"}`
+        ? `Gedenkseite für ${item.child_name || "ein Kind"} öffnen`
         : `Öffne deinen privaten Stern: ${item.child_name || "Für immer geliebt"}`);
 
       card.style.animationDelay = `${(index % 7) * -.65}s`;
@@ -1154,10 +1157,10 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
           ${memorialSymbolMarkup(state, false, item.star_style)}
         </span>
         <span class="memorial-kicker">${"Ein Licht in Erinnerung"}</span>
-        <strong>${escapeHtml(item.child_name || "Forever loved")}</strong>
+        <strong>${escapeHtml(item.child_name || "Für immer geliebt")}</strong>
         <span class="memorial-day">${dayLabel}</span>
         <span class="memorial-rule" aria-hidden="true"><i></i><b>✦</b><i></i></span>
-        <small>${dateLine ? `<span class="memorial-dates">${escapeHtml(dateLine)}</span>` : "Forever loved. Forever remembered."}${item.country ? `<span class="memorial-dates">${escapeHtml(item.country)}</span>` : ""}</small>
+        <small>${dateLine ? `<span class="memorial-dates">${escapeHtml(dateLine)}</span>` : "Für immer geliebt. Für immer unvergessen."}${item.country ? `<span class="memorial-dates">${escapeHtml(item.country)}</span>` : ""}</small>
       `;
 
       card.addEventListener("click", () => openApprovedMemorial(item));
@@ -1544,7 +1547,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
         button.disabled = true;
         const { error } = await db.from("memorial_family_invites").insert({
           owner_user_id: currentUser.id,
-          owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80),
+          owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Mitglied bei Skysbridge").trim().slice(0, 80),
           invited_email: request.requester_email
         });
         if (error) {
@@ -1625,7 +1628,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
 
     const { error } = await db.from("memorial_family_invites").insert({
       owner_user_id: currentUser.id,
-      owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Skysbridge member").trim().slice(0, 80),
+      owner_name: String(currentProfile?.display_name || currentUser.email?.split("@")[0] || "Mitglied bei Skysbridge").trim().slice(0, 80),
       invited_email: email
     });
     if (error) {
