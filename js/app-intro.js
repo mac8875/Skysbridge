@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=11';
+    stylesheet.href = '/css/app-intro.css?v=12';
     document.head.appendChild(stylesheet);
   }
 
@@ -40,6 +40,7 @@
       <div class="app-intro__scene" aria-hidden="true">
         <img class="app-intro__animation" src="/assets/skysbridge-intro-bridge-stronger.gif" alt="" fetchpriority="high">
       </div>
+      <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
 
@@ -48,7 +49,7 @@
       intro.classList.add('is-leaving');
       window.setTimeout(() => { intro.remove(); document.documentElement.classList.remove('skysbridge-intro-pending'); }, 650);
     };
-    intro.querySelector('.app-intro__skip').addEventListener('click', close, { once: true });
+    intro.querySelector('.app-intro__skip')?.addEventListener('click', close, { once: true });
     window.setTimeout(close, 8750);
   };
 
