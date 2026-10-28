@@ -1467,3 +1467,23 @@ html.wall-fullscreen-open{overflow:hidden;overscroll-behavior:none}
   .wall-fullscreen-toggle{top:10px;right:10px;width:44px;height:44px}
   .celestial-wall.is-fullscreen{min-height:100dvh}
 }
+
+
+/* Full-screen map portal: escape the clipped story section and use the whole viewport. */
+html.wall-fullscreen-open,
+html.wall-fullscreen-open body{
+  height:100%;
+  overflow:hidden!important;
+  overscroll-behavior:none;
+}
+.celestial-wall.is-fullscreen{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  max-width:none!important;
+  height:100vh!important;
+  height:100dvh!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+}

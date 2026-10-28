@@ -28,9 +28,13 @@
     ];
     const viewportWidth = window.innerWidth || container.clientWidth;
     const planeWidth = container.clientWidth || viewportWidth;
-    const baseHeight = viewportWidth <= 760
-      ? 630
-      : Math.max(620, Math.min(770, viewportWidth * .66));
+    const fullscreen = container.classList.contains("is-fullscreen");
+    const availableHeight = container.clientHeight || window.innerHeight;
+    const baseHeight = fullscreen
+      ? Math.max(630, availableHeight * 1.15)
+      : viewportWidth <= 760
+        ? 630
+        : Math.max(620, Math.min(770, viewportWidth * .66));
     const labelWidth = Math.min(230, viewportWidth * .5 - 18);
     const edgePadding = 12;
     const minX = Math.min(50, (labelWidth / 2 + edgePadding) / planeWidth * 100);
