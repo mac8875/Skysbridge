@@ -46,13 +46,18 @@ await cp(
   path.join(output, 'assets/app-intro-background-v14.webp')
 );
 
+await cp(
+  path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v13.gif'),
+  path.join(output, 'assets/skysbridge-intro-bridge-stronger.gif')
+);
+
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
 if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html');
 
 const mobileIndexPath = path.join(output, 'index.html');
 let mobileIndex = await readFile(mobileIndexPath, 'utf8');
 const introBootstrap = `
-  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=10">
+  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=11">
   <style>
     html.skysbridge-intro-pending,html.skysbridge-intro-pending body{background:#020914!important}
     html.skysbridge-intro-pending body>:not(.app-intro){visibility:hidden!important}
