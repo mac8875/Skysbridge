@@ -43,6 +43,15 @@
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
+    const animation = intro.querySelector('.app-intro__animation');
+    animation?.addEventListener('error', () => {
+      animation.remove();
+      intro.classList.add('app-intro--fallback');
+      const fallback = document.createElement('span');
+      fallback.className = 'app-intro__fallback-label';
+      fallback.textContent = 'Sky’s Bridge';
+      intro.querySelector('.app-intro__scene')?.appendChild(fallback);
+    }, { once: true });
     try { window.SkysbridgeNative?.setFullscreen(true); } catch {}
 
     const close = () => {

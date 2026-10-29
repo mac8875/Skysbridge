@@ -43,8 +43,10 @@ await copyPublicFiles(root, output);
 await mkdir(path.join(output, 'assets'), { recursive: true });
 await cp(
   path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v13.gif'),
-  path.join(output, 'assets/app-intro-v13.gif')
+  path.join(output, 'assets/skysbridge-intro-bridge-stronger.gif')
 );
+const introAnimation = path.join(output, 'assets/skysbridge-intro-bridge-stronger.gif');
+if ((await stat(introAnimation)).size === 0) throw new Error('Mobile intro animation was copied as an empty file');
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
 if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html');
@@ -76,17 +78,29 @@ await writeFile(mobileIndexPath, mobileIndex);
 
 // Keep the APK's typography independent from the public website layout.
 async function addNativeTypography(source) {
+  const nativeMarker = `<script>
+    (() => {
+      const c = window.Capacitor;
+      const native = Boolean(c?.isNativePlatform?.() || ['android','ios'].includes(c?.getPlatform?.()) ||
+        ['localhost','127.0.0.1'].includes(location.hostname.toLowerCase()) ||
+        ['capacitor:','ionic:'].includes(location.protocol) || /\\bCapacitor\\b/i.test(navigator.userAgent));
+      if (native) document.documentElement.classList.add('skysbridge-native');
+    })();
+  </script>`;
   for (const entry of await readdir(source, { withFileTypes: true })) {
     const file = path.join(source, entry.name);
     if (entry.isDirectory()) {
       await addNativeTypography(file);
     } else if (entry.isFile() && path.extname(entry.name).toLowerCase() === '.html') {
       let html = await readFile(file, 'utf8');
-      const link = '<link rel="stylesheet" href="/css/native-app-typography.css?v=1">';
+      const link = '<link rel="stylesheet" href="/css/native-app-typography.css?v=2">';
       if (!html.includes('native-app-typography.css') && /<\/head>/i.test(html)) {
         html = html.replace(/<\/head>/i, `${link}\n</head>`);
-        await writeFile(file, html);
       }
+      if (!html.includes("classList.add('skysbridge-native')") && /<head[^>]*>/i.test(html)) {
+        html = html.replace(/<head[^>]*>/i, match => `${match}\n${nativeMarker}`);
+      }
+      await writeFile(file, html);
     }
   }
 }

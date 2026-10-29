@@ -65,6 +65,19 @@ html:is(.skysbridge-native, .native-app) main .muted {
   widows: 2;
 }
 
+html:is(.skysbridge-native, .native-app) :is(
+  .hero-copy .hero-intro,
+  .hero-copy > p:last-of-type,
+  .section-heading > p,
+  .wall-first-intro > p:last-child,
+  .help-region-heading > p:last-child
+) {
+  max-width: min(100%, 34ch);
+  margin-inline: auto;
+  text-align: center;
+  text-wrap: balance;
+}
+
 html:is(.skysbridge-native, .native-app) main p + p {
   margin-top: .85rem;
 }
