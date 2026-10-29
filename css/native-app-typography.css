@@ -137,3 +137,6 @@ html:is(.skysbridge-native, .native-app) :is(.subheading, .admin-heading) .eyebr
     text-align: center;
   }
 }
+
+/* Header sign-in control is a website-only convenience. */
+html.skysbridge-native .header-auth-button{display:none}
