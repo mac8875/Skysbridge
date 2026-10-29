@@ -1220,6 +1220,14 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .modal-card #modalContent>article>h2,
 .modal-card #modalContent>section>h2,
 .modal-card>h2{padding-right:52px;overflow-wrap:break-word}
+.modal-card #modalContent>article.memorial-detail-card>h2{
+  box-sizing:border-box;
+  width:100%;
+  max-width:100%;
+  margin-inline:auto;
+  padding-right:0;
+  text-align:center;
+}
 .modal-card #modalContent,.modal-card .form-grid,.modal-card .tabs{min-width:0}
 .modal-card .tabs{flex-wrap:wrap}
 .modal-card .tabs .button{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
