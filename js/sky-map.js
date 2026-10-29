@@ -30,8 +30,10 @@
     const planeWidth = container.clientWidth || viewportWidth;
     const fullscreen = container.classList.contains("is-fullscreen");
     const availableHeight = container.clientHeight || window.innerHeight;
+    const nativeApp = Boolean(window.Capacitor?.isNativePlatform?.());
+    const websiteFullscreen = fullscreen && !nativeApp;
     const baseHeight = fullscreen
-      ? Math.max(630, availableHeight * 1.15)
+      ? Math.max(630, availableHeight)
       : viewportWidth <= 760
         ? 630
         : Math.max(620, Math.min(770, viewportWidth * .66));
@@ -47,16 +49,32 @@
         : card.dataset.star === "sky"
           ? 0
           : index + 1;
+      const label = card.querySelector("strong");
+
+      if (websiteFullscreen) {
+        // Spread memorial stars evenly through the viewport instead of stacking
+        // additional rows below the visible portion of the expanded map.
+        const radius = Math.sqrt((index + 0.5) / satellites.length) * 0.9;
+        const angle = index * 2.399963229728653 + Math.PI / 4;
+        const x = 50 + Math.cos(angle) * 44 * radius;
+        const y = 50 + Math.sin(angle) * 43 * radius;
+        const placedX = label ? Math.max(minX, Math.min(maxX, x)) : x;
+        card.style.setProperty("--star-x", `${placedX}%`);
+        card.style.setProperty("--star-y", `${y}%`);
+        return;
+      }
+
       const cycle = Math.floor(positionIndex / positions.length);
       const [x, baseY] = positions[positionIndex % positions.length];
       const y = (23 + (baseY - 19) * .78) / 100 * baseHeight + cycle * 400;
-      const label = card.querySelector("strong");
       const placedX = label ? Math.max(minX, Math.min(maxX, x)) : x;
       card.style.setProperty("--star-x", `${placedX}%`);
       card.style.setProperty("--star-y", `${y}px`);
     });
 
-    const extraHeight = Math.max(0, Math.ceil(satellites.length / positions.length) - 1) * 560;
+    const extraHeight = websiteFullscreen
+      ? 0
+      : Math.max(0, Math.ceil(satellites.length / positions.length) - 1) * 560;
     container.style.setProperty("--wall-extra-height", `${extraHeight}px`);
   }
 

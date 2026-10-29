@@ -27,6 +27,21 @@
   let motionX = 0;
   let motionY = 0;
   let comet = null;
+  const capacitor = window.Capacitor;
+  const isAndroidApk = Boolean(
+    capacitor?.isNativePlatform?.() && capacitor?.getPlatform?.() === "android"
+  );
+  const isNativeApp = Boolean(capacitor?.isNativePlatform?.());
+  let orientationBaseline = null;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+  function handleDeviceOrientation(event) {
+    if (!isAndroidApk || !Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
+    if (!orientationBaseline) orientationBaseline = { beta: event.beta, gamma: event.gamma };
+    motionX = clamp((event.gamma - orientationBaseline.gamma) / 22, -1, 1);
+    motionY = clamp((event.beta - orientationBaseline.beta) / 22, -1, 1);
+    if (reducedMotion) draw(0);
+  }
   let nextCometAt = performance.now() + 5000;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let seed = 773;
@@ -112,8 +127,12 @@
   }
 
   function drawObject(object, time) {
-    const point = project(object.x, object.y, object.z, time);
-    const radius = object.radius * Math.max(.78, Math.min(1.3, point.scale / (Math.min(width, height) * .72)));
+    const expandedWebsite = wall.classList.contains("is-fullscreen") && !isNativeApp;
+    const spacing = expandedWebsite ? 1.14 : 1;
+    const point = project(object.x * spacing, object.y * spacing, object.z, time);
+    const radius = object.radius
+      * Math.max(.78, Math.min(1.3, point.scale / (Math.min(width, height) * .72)))
+      * (expandedWebsite ? 1.28 : 1);
     const ringRx = radius * 1.92;
     const ringRy = radius * .66;
     if (object.ringed) {
@@ -348,6 +367,9 @@
     animationFrame = 0;
   }
 
+  if (isAndroidApk && "DeviceOrientationEvent" in window) {
+    window.addEventListener("deviceorientation", handleDeviceOrientation, { passive: true });
+  }
   wall.addEventListener("pointermove", event => {
     const bounds = wall.getBoundingClientRect();
     motionX = ((event.clientX - bounds.left) / bounds.width - .5) * 2;

@@ -46,7 +46,7 @@ await cp(
   path.join(output, 'assets/app-intro-background-v14.webp')
 );
 
-function slowGifPlayback(input, factor) {
+function tuneIntroStarPlayback(input, factor) {
   const gif = Buffer.from(input);
   const signature = gif.subarray(0, 6).toString('ascii');
   if (signature !== 'GIF87a' && signature !== 'GIF89a') throw new Error('App intro asset is not a GIF');
@@ -66,7 +66,9 @@ function slowGifPlayback(input, factor) {
         if (blockSize !== 4) throw new Error('Unexpected GIF graphic-control block');
         offset += 1;
         const delay = gif.readUInt16LE(offset);
-        if (delay > 0) gif.writeUInt16LE(Math.min(65535, Math.round(delay * factor)), offset);
+        if (delay > 0 && frames >= 16 && frames <= 55) {
+          gif.writeUInt16LE(Math.min(65535, Math.round(delay * factor)), offset);
+        }
         offset += 4;
       } else {
         while (offset < gif.length) {
@@ -100,7 +102,7 @@ function slowGifPlayback(input, factor) {
 const introGif = await readFile(path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v13.gif'));
 await writeFile(
   path.join(output, 'assets/skysbridge-intro-bridge-stronger.gif'),
-  slowGifPlayback(introGif, 1.18)
+  tuneIntroStarPlayback(introGif, 1.45)
 );
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
@@ -109,7 +111,7 @@ if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html')
 const mobileIndexPath = path.join(output, 'index.html');
 let mobileIndex = await readFile(mobileIndexPath, 'utf8');
 const introBootstrap = `
-  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=13">
+  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=15">
   <style>
     html.skysbridge-intro-pending,html.skysbridge-intro-pending body{background:#020914!important}
     html.skysbridge-intro-pending body>:not(.app-intro){visibility:hidden!important}
