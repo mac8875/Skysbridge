@@ -37,6 +37,7 @@
   const menuButton = document.querySelector(".menu-button");
   const nav = document.querySelector(".main-nav");
   const authButtons = Array.from(document.querySelectorAll("[data-open-auth]"));
+  const headerAuthButton = document.querySelector("[data-header-auth]");
 
   function setHidden(element, hidden) {
     if (!element) return;
@@ -66,6 +67,15 @@
         ? "Abrir el área de miembros"
         : button.dataset.guestLabel;
     });
+
+    if (headerAuthButton) {
+      const headerSignedIn = Boolean(isSignedIn && currentUser && !currentUser.is_anonymous);
+      headerAuthButton.textContent = headerSignedIn
+        ? headerAuthButton.dataset.memberLabel
+        : headerAuthButton.dataset.guestLabel;
+      headerAuthButton.dataset.signedIn = String(headerSignedIn);
+      headerAuthButton.setAttribute("aria-label", headerAuthButton.textContent);
+    }
   }
 
   function openMemberArea() {
@@ -87,6 +97,23 @@
   menuButton?.addEventListener("click", () => {
     nav?.classList.toggle("open");
     menuButton.setAttribute("aria-expanded", nav?.classList.contains("open"));
+  });
+
+  headerAuthButton?.addEventListener("click", async () => {
+    if (headerAuthButton.dataset.signedIn !== "true") {
+      showAuth(false, "login");
+      return;
+    }
+    if (!db) return;
+
+    headerAuthButton.disabled = true;
+    const { error } = await db.auth.signOut();
+    if (error) {
+      console.error("Header sign-out error:", error);
+    } else {
+      await refreshSession();
+    }
+    headerAuthButton.disabled = false;
   });
 
   document.querySelector(".modal-close")?.addEventListener("click", closeModal);
