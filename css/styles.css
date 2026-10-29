@@ -1636,3 +1636,23 @@ html:not(.native-app) .room-card{
   .main-nav{gap:clamp(6px,.8vw,12px)}
   .main-nav a{font-size:12px}
 }
+
+
+/* Center the Sky story block like the neighboring homepage sections. */
+.story-section .story-layout{
+  grid-template-columns:minmax(0,1fr);
+  gap:28px;
+  max-width:920px;
+  margin-inline:auto;
+  text-align:center;
+}
+.story-section .story-layout>div:first-child{max-width:900px;margin-inline:auto}
+.story-section .story-text{
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
+.story-section .story-text .text-link{display:inline-block;margin-top:4px}
+@media(max-width:700px){
+  .story-section .story-layout{gap:20px}
+}
