@@ -1401,7 +1401,14 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
     }
 
     if (!data?.length) {
-      target.innerHTML = `<p class="muted">Todavía no has creado ninguna estrella.</p>`;
+      target.innerHTML = `
+        <div class="review-item">
+          <strong>Sky</strong>
+          <p>Sky es la primera estrella de Skysbridge y permanecerá siempre visible en el cielo.</p>
+          <a class="button button-outline" href="#stars">Ver a Sky en el cielo</a>
+        </div>
+        <p class="muted">Las estrellas conmemorativas personales que crees con «Honrar a un niño» aparecerán aquí para que puedas gestionarlas.</p>
+      `;
       return;
     }
 

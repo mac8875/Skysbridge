@@ -1492,6 +1492,8 @@ html.wall-fullscreen-open{overflow:hidden;overscroll-behavior:none}
 
 
 /* Full-screen map portal: escape the clipped story section and use the whole viewport. */
+html.wall-fullscreen-open .modal{z-index:10020!important}
+
 html.wall-fullscreen-open,
 html.wall-fullscreen-open body{
   height:100%;

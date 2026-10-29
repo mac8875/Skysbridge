@@ -1409,7 +1409,14 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
     }
 
     if (!data?.length) {
-      target.innerHTML = `<p class="muted">Du hast noch keine Sterne angelegt.</p>`;
+      target.innerHTML = `
+        <div class="review-item">
+          <strong>Sky</strong>
+          <p>Sky ist der erste Stern von Skysbridge und bleibt dauerhaft am Sternenhimmel sichtbar.</p>
+          <a class="button button-outline" href="#stars">Sky am Sternenhimmel ansehen</a>
+        </div>
+        <p class="muted">Persönliche Gedenksterne, die du über „Ein Kind ehren“ anlegst, erscheinen hier zur Verwaltung.</p>
+      `;
       return;
     }
 
