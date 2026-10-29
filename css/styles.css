@@ -692,6 +692,10 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
   transform:translate(-50%,-50%);
   animation:starFloat 6s ease-in-out infinite;
 }
+.celestial-wall .memorial-card:focus{
+  outline:none!important;
+  -webkit-tap-highlight-color:transparent;
+}
 .celestial-wall .memorial-card:hover,
 .celestial-wall .memorial-card:focus-visible{
   z-index:4;
