@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=126">
+  <link rel="stylesheet" href="css/styles.css?v=127">
   <link rel="stylesheet" href="css/typography.css?v=93">
   <link rel="stylesheet" href="css/member-area-spacing.css?v=1">
   <link rel="stylesheet" href="css/sky-footprints.css?v=1">
@@ -113,7 +113,10 @@
       </fieldset>
       <p class="wall-status" id="wallStatus" aria-live="polite">Cargando recuerdos…</p>
       <div class="memorial-grid celestial-wall" id="memorialGrid" aria-busy="true">
-        <button class="wall-fullscreen-toggle" type="button" data-wall-fullscreen-toggle aria-expanded="false" aria-label="Ampliar mapa" title="Ampliar mapa"><span aria-hidden="true">⤢</span><span class="wall-fullscreen-sr-only" data-wall-fullscreen-label>Ampliar mapa</span></button>
+        <button class="wall-fullscreen-toggle" type="button" data-wall-fullscreen-toggle aria-expanded="false" aria-label="Ampliar mapa" title="Ampliar mapa"><span class="wall-fullscreen-icons" aria-hidden="true">
+          <svg class="wall-fullscreen-expand-icon" viewBox="0 0 24 24" focusable="false"><path d="M9 4H4v5M15 4h5v5M4 15v5h5M20 15v5h-5"/></svg>
+          <svg class="wall-fullscreen-close-icon" viewBox="0 0 24 24" focusable="false"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </span><span class="wall-fullscreen-sr-only" data-wall-fullscreen-label>Ampliar mapa</span></button>
         <svg class="constellation-map constellation-map--cancer" viewBox="0 0 100 100" aria-hidden="true">
           <polyline points="18,28 34,38 50,31 65,43 81,34"></polyline>
           <circle cx="18" cy="28" r=".8"></circle><circle cx="34" cy="38" r=".65"></circle>
@@ -308,7 +311,7 @@
   <script src="js/platform-ui.js?v=4"></script>
   <script src="js/app-intro.js?v=13"></script>
   <script src="js/sky-map.js?v=2"></script>
-  <script src="js/map-fullscreen.js?v=3"></script>
+  <script src="js/map-fullscreen.js?v=4"></script>
   <script src="js/app-es.js?v=129"></script>
   <script src="js/sky-3d.js?v=6" defer></script>
 </body>
