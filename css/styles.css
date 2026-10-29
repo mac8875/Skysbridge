@@ -1771,3 +1771,37 @@ html:not(.skysbridge-native) .member-stars>p.muted{
   margin-inline:auto;
   text-align:center;
 }
+
+
+/* V135 — align every section heading, eyebrow and introduction on one shared centerline. */
+html:not(.skysbridge-native) .section-heading{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  max-width:860px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .section-heading>.eyebrow{
+  align-self:center;
+  width:100%;
+  max-width:860px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .section-heading>h1,
+html:not(.skysbridge-native) .section-heading>h2{
+  align-self:center;
+  width:100%;
+  max-width:860px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .section-heading>p:last-child{
+  align-self:center;
+  width:100%;
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
