@@ -14,6 +14,40 @@
     constellation.setAttribute("transform", `translate(${x} ${y}) scale(${scale}) translate(-50 -50)`);
   }
 
+  function positionAquariusConstellation(container) {
+    const constellation = container.querySelector("[data-aquarius-constellation]");
+    if (!constellation) return;
+    const wallRect = container.getBoundingClientRect();
+    if (!wallRect.width || !wallRect.height) return;
+
+    const stars = [...container.querySelectorAll(".memorial-card")].map(star => {
+      const rect = star.getBoundingClientRect();
+      return {
+        x: ((rect.left + rect.width / 2 - wallRect.left) / wallRect.width) * 100,
+        y: ((rect.top + rect.height / 2 - wallRect.top) / wallRect.height) * 100
+      };
+    });
+    const candidates = [
+      { x: 14, y: 14 }, { x: 86, y: 14 }, { x: 14, y: 86 }, { x: 86, y: 86 },
+      { x: 50, y: 14 }, { x: 50, y: 86 }, { x: 14, y: 50 }, { x: 86, y: 50 }
+    ];
+    const position = candidates
+      .map(candidate => ({
+        ...candidate,
+        clearance: stars.length
+          ? Math.min(...stars.map(star => Math.hypot(
+              (candidate.x - star.x) * wallRect.width,
+              (candidate.y - star.y) * wallRect.height
+            )))
+          : Infinity
+      }))
+      .sort((a, b) => b.clearance - a.clearance)[0];
+
+    const { x, y } = position;
+    const scale = Math.max(.24, Math.min(.52, x / 27, (100 - x) / 34, y / 24, (100 - y) / 28));
+    constellation.setAttribute("transform", `translate(${x} ${y}) scale(${scale}) translate(-50 -50)`);
+  }
+
   function layout(cards, preferredCenter, plane) {
     const container = plane || preferredCenter?.closest(".celestial-wall") || document.querySelector(".celestial-wall");
     if (!container) return;
@@ -31,11 +65,13 @@
     center.style.setProperty("--star-x", `${centerX}%`);
     center.style.setProperty("--star-y", `${centerY}%`);
     positionLeoConstellation(container);
+    positionAquariusConstellation(container);
     container.style.setProperty("--wall-extra-height", "0px");
 
     const satellites = stars.filter(card => card !== center);
     if (!satellites.length) {
       positionLeoConstellation(container);
+      positionAquariusConstellation(container);
       return;
     }
 
@@ -94,6 +130,7 @@
       : Math.max(0, Math.ceil(satellites.length / positions.length) - 1) * 560;
     container.style.setProperty("--wall-extra-height", `${extraHeight}px`);
     positionLeoConstellation(container);
+    positionAquariusConstellation(container);
   }
 
   window.SkysbridgeSkyMap = { layout };
