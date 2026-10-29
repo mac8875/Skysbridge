@@ -1488,7 +1488,7 @@ html.wall-fullscreen-open{overflow:hidden;overscroll-behavior:none}
   touch-action:pan-y;
 }
 .celestial-wall.is-fullscreen .wall-fullscreen-toggle{top:calc(env(safe-area-inset-top,0px) + 14px);right:calc(env(safe-area-inset-right,0px) + 14px)}
-.celestial-wall.is-fullscreen .memorial-card{touch-action:manipulation}
+.celestial-wall.is-fullscreen .memorial-card{touch-action:manipulation;pointer-events:auto}
 @media(max-width:700px){
   .wall-fullscreen-toggle{top:10px;right:10px;width:44px;height:44px}
   .celestial-wall.is-fullscreen{min-height:100dvh}

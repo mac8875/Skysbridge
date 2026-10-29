@@ -83,8 +83,7 @@
     const planeWidth = container.clientWidth || viewportWidth;
     const fullscreen = container.classList.contains("is-fullscreen");
     const availableHeight = container.clientHeight || window.innerHeight;
-    const nativeApp = Boolean(window.Capacitor?.isNativePlatform?.());
-    const websiteFullscreen = fullscreen && !nativeApp;
+    const fullscreenViewport = fullscreen;
     const baseHeight = fullscreen
       ? Math.max(630, availableHeight)
       : viewportWidth <= 760
@@ -104,7 +103,7 @@
           : index + 1;
       const label = card.querySelector("strong");
 
-      if (websiteFullscreen) {
+      if (fullscreenViewport) {
         // Spread memorial stars evenly through the viewport instead of stacking
         // additional rows below the visible portion of the expanded map.
         const radius = Math.sqrt((index + 0.5) / satellites.length) * 0.9;
@@ -125,7 +124,7 @@
       card.style.setProperty("--star-y", `${y}px`);
     });
 
-    const extraHeight = websiteFullscreen
+    const extraHeight = fullscreenViewport
       ? 0
       : Math.max(0, Math.ceil(satellites.length / positions.length) - 1) * 560;
     container.style.setProperty("--wall-extra-height", `${extraHeight}px`);

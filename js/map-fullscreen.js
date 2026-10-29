@@ -67,6 +67,19 @@
       event.stopPropagation();
       setExpanded(!wall.classList.contains("is-fullscreen"));
     });
+    wall.addEventListener("pointerup", event => {
+      const isNativeApp = Boolean(window.Capacitor?.isNativePlatform?.());
+      if (!isNativeApp || !wall.classList.contains("is-fullscreen")) return;
+      const card = event.target instanceof Element ? event.target.closest(".memorial-card") : null;
+      if (!card || card.disabled) return;
+
+      // Android WebView can omit the synthesized click after fullscreen touch gestures.
+      // Let the normal button click run first; only provide a fallback if no detail modal opened.
+      window.setTimeout(() => {
+        const detailModal = document.querySelector("#modal");
+        if (card.isConnected && detailModal?.hidden) card.click();
+      }, 0);
+    }, { capture: true, passive: true });
     wall.addEventListener("click", event => {
       if (event.target.closest(".memorial-card, [data-wall-fullscreen-toggle]")) return;
       setExpanded(!wall.classList.contains("is-fullscreen"));
