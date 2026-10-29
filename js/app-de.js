@@ -153,7 +153,12 @@
   }
 
   function renderStoryParagraphs(value) {
-    const story = String(value || "Für immer geliebt. Für immer unvergessen.").trim();
+    const story = String(value || "Für immer geliebt. Für immer unvergessen.")
+      .replaceAll("\\\\n", "\n")
+      .replaceAll("\\n", "\n")
+      .replaceAll("\\\\r", "\r")
+      .replaceAll("\\r", "\r")
+      .trim();
     const explicitParagraphs = story
       .split(/\n\s*\n/)
       .map(paragraph => paragraph.trim())
