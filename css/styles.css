@@ -1876,3 +1876,23 @@ html:not(.skysbridge-native) .help-card>p{
   margin-inline:auto;
   text-align:center;
 }
+
+/* V137 — keep community introductions and Sky's remembrance centered on every client. */
+.community-section>.section-heading,
+.community-section>.section-heading>.eyebrow,
+.community-section>.section-heading>h2,
+.community-section>.section-heading>p{
+  text-align:center;
+}
+.community-section>.section-heading{margin-inline:auto}
+.community-section>.section-heading>*{margin-inline:auto}
+.star-story-copy{
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
+.star-story-copy p{
+  margin:0 auto 1.25rem;
+  text-align:center;
+}
+.star-story-copy p:last-child{margin-bottom:0}
