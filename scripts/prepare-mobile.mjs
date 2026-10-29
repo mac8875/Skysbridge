@@ -40,38 +40,19 @@ async function copyPublicFiles(source, destination) {
 }
 
 await copyPublicFiles(root, output);
-const mobileStylesPath = path.join(output, 'css', 'mobile-homepage-centering.css');
-await mkdir(path.dirname(mobileStylesPath), { recursive: true });
-await cp(path.join(root, 'mobile-assets/homepage-centering.css'), mobileStylesPath);
 await mkdir(path.join(output, 'assets'), { recursive: true });
 await cp(
-  path.join(root, 'mobile-assets/app-intro-background-v14.webp'),
-  path.join(output, 'assets/app-intro-background-v14.webp')
+  path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v13.gif'),
+  path.join(output, 'assets/app-intro-v13.gif')
 );
-
-const introGif = path.join(root, 'mobile-assets/skysbridge-app-intro-preview-v13.gif');
-await cp(introGif, path.join(output, 'assets/skysbridge-intro-bridge-stronger.gif'));
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
 if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html');
 
-for (const pageName of ['index.html', 'index-de.html', 'index-es.html']) {
-  const pagePath = path.join(output, pageName);
-  const pageExists = await stat(pagePath).catch(() => null);
-  if (!pageExists?.isFile()) continue;
-  let page = await readFile(pagePath, 'utf8');
-  const centeringLink = '<link rel="stylesheet" href="css/mobile-homepage-centering.css?v=2">';
-  if (!page.includes(centeringLink)) {
-    if (!/<\/head>/i.test(page)) throw new Error(`Mobile page is missing its closing head element: ${pageName}`);
-    page = page.replace(/<\/head>/i, `  ${centeringLink}\n</head>`);
-    await writeFile(pagePath, page);
-  }
-}
-
 const mobileIndexPath = path.join(output, 'index.html');
 let mobileIndex = await readFile(mobileIndexPath, 'utf8');
 const introBootstrap = `
-  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=15">
+  <link id="app-intro-stylesheet" rel="stylesheet" href="/css/app-intro.css?v=7">
   <style>
     html.skysbridge-intro-pending,html.skysbridge-intro-pending body{background:#020914!important}
     html.skysbridge-intro-pending body>:not(.app-intro){visibility:hidden!important}
@@ -92,4 +73,22 @@ const introBootstrap = `
 if (!/<head[^>]*>/i.test(mobileIndex)) throw new Error('Mobile index is missing its head element');
 mobileIndex = mobileIndex.replace(/<head[^>]*>/i, match => match + introBootstrap);
 await writeFile(mobileIndexPath, mobileIndex);
+
+// Keep the APK's typography independent from the public website layout.
+async function addNativeTypography(source) {
+  for (const entry of await readdir(source, { withFileTypes: true })) {
+    const file = path.join(source, entry.name);
+    if (entry.isDirectory()) {
+      await addNativeTypography(file);
+    } else if (entry.isFile() && path.extname(entry.name).toLowerCase() === '.html') {
+      let html = await readFile(file, 'utf8');
+      const link = '<link rel="stylesheet" href="/css/native-app-typography.css?v=1">';
+      if (!html.includes('native-app-typography.css') && /<\/head>/i.test(html)) {
+        html = html.replace(/<\/head>/i, `${link}\n</head>`);
+        await writeFile(file, html);
+      }
+    }
+  }
+}
+await addNativeTypography(output);
 console.log(`Prepared ${output} with early native intro cover`);

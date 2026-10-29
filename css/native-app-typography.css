@@ -1,0 +1,98 @@
+/* APK-only text alignment and wrapping. The public website does not load this file. */
+html:is(.skysbridge-native, .native-app) {
+  --native-copy-width: 36rem;
+  --native-heading-width: 39rem;
+}
+
+html:is(.skysbridge-native, .native-app) :is(
+  .hero-grid,
+  .hero-copy,
+  .section-heading,
+  .section-heading h2,
+  .section-heading > p,
+  .story-layout,
+  .story-layout h2,
+  .story-text,
+  .sky-story-article,
+  .sky-story-copy,
+  .support-card,
+  .help-card,
+  .room-card,
+  .community-section > .section-heading,
+  .member-panel,
+  .dashboard-card,
+  .admin-card,
+  .post-card,
+  .subheading,
+  .admin-heading,
+  .room-view-header,
+  .guideline-card,
+  .how-note,
+  .contact-section,
+  .wall-first-intro,
+  .help-region-heading,
+  .memorial-detail-card,
+  .memorial-detail-story,
+  .star-remembrance-header,
+  .memory-section
+) {
+  text-align: center;
+}
+
+html:is(.skysbridge-native, .native-app) :is(h1, h2, h3, h4) {
+  max-width: min(100%, var(--native-heading-width));
+  margin-inline: auto;
+  text-align: center;
+  text-wrap: balance;
+  hyphens: auto;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+html:is(.skysbridge-native, .native-app) main p,
+html:is(.skysbridge-native, .native-app) main .story-text,
+html:is(.skysbridge-native, .native-app) main .sky-story-copy,
+html:is(.skysbridge-native, .native-app) main .memorial-detail-story,
+html:is(.skysbridge-native, .native-app) main .star-story-copy,
+html:is(.skysbridge-native, .native-app) main .memory-intro,
+html:is(.skysbridge-native, .native-app) main .notice,
+html:is(.skysbridge-native, .native-app) main .muted {
+  max-width: min(100%, var(--native-copy-width));
+  margin-inline: auto;
+  text-align: center;
+  text-wrap: pretty;
+  orphans: 2;
+  widows: 2;
+}
+
+html:is(.skysbridge-native, .native-app) main p + p {
+  margin-top: .85rem;
+}
+
+html:is(.skysbridge-native, .native-app) .support-card > .eyebrow,
+html:is(.skysbridge-native, .native-app) .room-card > span,
+html:is(.skysbridge-native, .native-app) .admin-badge,
+html:is(.skysbridge-native, .native-app) .star-remembrance-subtitle,
+html:is(.skysbridge-native, .native-app) .sky-story-subtitle {
+  margin-inline: auto;
+  text-align: center;
+  text-wrap: balance;
+}
+
+html:is(.skysbridge-native, .native-app) .support-card .button,
+html:is(.skysbridge-native, .native-app) .help-card .text-link {
+  align-self: center;
+}
+
+@media (max-width: 600px) {
+  html:is(.skysbridge-native, .native-app) {
+    --native-copy-width: 32rem;
+    --native-heading-width: 34rem;
+  }
+
+  html:is(.skysbridge-native, .native-app) :is(.section-heading, .section-heading h2, .section-heading > p:last-child) {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+}
