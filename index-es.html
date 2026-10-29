@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=133">
+  <link rel="stylesheet" href="css/styles.css?v=134">
   <link rel="stylesheet" href="css/typography.css?v=93">
   <link rel="stylesheet" href="css/member-area-spacing.css?v=1">
   <link rel="stylesheet" href="css/sky-footprints.css?v=1">
@@ -215,7 +215,7 @@
         <div class="center community-login"><button class="button button-gold" data-open-auth>Iniciar sesión para solicitar acceso</button></div>
       </div>
       <div class="member-panel" id="memberPanel" hidden>
-        <div><p class="eyebrow">Área de miembros</p><h2 id="memberGreeting">Te damos la bienvenida a Skysbridge</h2><p id="memberEmail"></p><p class="admin-badge" id="adminBadge" hidden>Administrador</p><button class="button button-outline member-name-toggle" id="changeMemberName" type="button" hidden>Cambiar nombre</button></div>
+        <div><p class="eyebrow">Área de miembros</p><div class="member-welcome-row"><h2 id="memberGreeting">Te damos la bienvenida a Skysbridge</h2><button class="button button-outline" id="signOut">Cerrar sesión</button></div><p id="memberEmail"></p><p class="admin-badge" id="adminBadge" hidden>Administrador</p><button class="button button-outline member-name-toggle" id="changeMemberName" type="button" hidden>Cambiar nombre</button></div>
         <form class="form-grid member-name-form" id="memberNameForm" hidden>
           <label>Tu nombre en el área de miembros
             <input type="text" name="display_name" required maxlength="80" autocomplete="name">
@@ -226,7 +226,7 @@
           </div>
           <div class="notice" id="memberNameStatus" hidden></div>
         </form>
-        <button class="button button-outline" id="signOut">Cerrar sesión</button>
+        
       </div>
       <section class="admin-card member-stars" id="myMemorialSection" hidden>
         <h3>Tus estrellas</h3>
