@@ -145,8 +145,7 @@ async function prepareIntroStar(input, factor, outputPath) {
     await execFileAsync('ffmpeg', [
       '-hide_banner', '-loglevel', 'error', '-y',
       '-f', 'concat', '-safe', '0', '-i', concatPath,
-      '-filter_complex', '[0:v]split[base][paletteSource];[paletteSource]palettegen=stats_mode=full[palette];[base][palette]paletteuse=dither=sierra2_4a',
-      '-fps_mode', 'vfr',
+      '-filter_complex', '[0:v]minterpolate=fps=30:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1,split[base][paletteSource];[paletteSource]palettegen=stats_mode=full[palette];[base][palette]paletteuse=dither=sierra2_4a',
       '-loop', String(metadata.loop ?? 0),
       outputPath,
     ], { maxBuffer: 10 * 1024 * 1024 });
