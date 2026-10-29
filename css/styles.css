@@ -1049,8 +1049,8 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 @media(max-width:600px){.sky-story-page{padding-top:62px}.sky-story-copy{font-size:16px;line-height:1.82}.sky-story-emblem{width:88px;height:100px}}
 @media(prefers-reduced-motion:reduce){.sky-story-emblem,.logo-star-glow{animation:none}}
 
-/* Collapse navigation before the bilingual links overflow desktop headers. */
-@media(max-width:1400px){
+/* Collapse navigation before translated links crowd the available header width. */
+@media(max-width:1600px){
  .menu-button{display:block}
  .main-nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;margin-left:0;padding:20px;background:#04111e;border-bottom:1px solid var(--line);z-index:30}
  .main-nav.open{display:flex}
@@ -1630,14 +1630,6 @@ html:not(.native-app) .room-card{
 }
 
 
-/* Keep the desktop navigation within the available width before it collapses. */
-@media (min-width:1401px) and (max-width:1600px){
-  .site-header{gap:10px}
-  .main-nav{gap:clamp(6px,.8vw,12px)}
-  .main-nav a{font-size:12px}
-}
-
-
 /* Center the Sky story block like the neighboring homepage sections. */
 .story-section .story-layout{
   grid-template-columns:minmax(0,1fr);
@@ -1655,4 +1647,74 @@ html:not(.native-app) .room-card{
 .story-section .story-text .text-link{display:inline-block;margin-top:4px}
 @media(max-width:700px){
   .story-section .story-layout{gap:20px}
+}
+
+
+/* V133 — center page introductions consistently and tidy the member area. */
+html:not(.skysbridge-native) .section-heading{
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .section-heading>p:last-child{
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .story-section .story-layout,
+html:not(.skysbridge-native) .privacy-section .story-layout{
+  grid-template-columns:minmax(0,1fr);
+  gap:28px;
+  max-width:920px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .story-section .story-layout>div:first-child,
+html:not(.skysbridge-native) .privacy-section .story-layout>div:first-child{
+  max-width:900px;
+  margin-inline:auto;
+}
+html:not(.skysbridge-native) .story-section .story-text,
+html:not(.skysbridge-native) .privacy-section .story-text{
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .subheading,
+html:not(.skysbridge-native) .admin-heading{
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  text-align:center;
+}
+html:not(.skysbridge-native) .subheading>p,
+html:not(.skysbridge-native) .admin-heading>p{
+  max-width:760px;
+  margin:0 auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .room-view-header{
+  justify-content:center;
+  flex-wrap:wrap;
+  text-align:center;
+}
+html:not(.skysbridge-native) .room-view-header>div{text-align:center}
+html:not(.skysbridge-native) .help-page .help-hero{
+  max-width:1100px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .help-page .help-hero>p:not(.eyebrow){
+  max-width:820px;
+  margin-inline:auto;
+}
+html:not(.skysbridge-native) .member-panel{
+  justify-content:flex-start;
+  align-items:flex-start;
+  gap:20px;
+}
+html:not(.skysbridge-native) .member-panel .member-name-toggle{margin-top:14px}
+html:not(.skysbridge-native) .member-panel #adminBadge{margin-bottom:5px}
+html:not(.skysbridge-native):has(#familySharingSection:not([hidden]))::after{
+  display:none;
 }
