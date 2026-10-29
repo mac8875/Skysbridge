@@ -649,7 +649,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 }
 .constellation-map polyline{fill:none;stroke:rgba(195,218,237,.32);stroke-width:.34;vector-effect:non-scaling-stroke}
 .constellation-map circle{fill:#e9f3fb;filter:drop-shadow(0 0 2px rgba(216,235,250,.64))}
-.leo-map{inset:11% 13% 12%;width:74%;height:72%;opacity:.3;filter:drop-shadow(0 0 5px rgba(244,215,146,.2))}
+.leo-map{inset:0;width:100%;height:100%;opacity:.2;filter:drop-shadow(0 0 5px rgba(244,215,146,.2))}
 .leo-map polyline{stroke:rgba(244,215,146,.34);stroke-width:.38}
 .leo-map circle{fill:#f8efd3;filter:drop-shadow(0 0 3px rgba(244,215,146,.75))}
 .constellation-map--cancer{left:2%;top:5%;width:25%;height:24%;transform:rotate(-8deg)}
