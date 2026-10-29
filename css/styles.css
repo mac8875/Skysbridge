@@ -1805,3 +1805,64 @@ html:not(.skysbridge-native) .section-heading>p:last-child{
   margin-inline:auto;
   text-align:center;
 }
+
+
+/* V136 — center the remaining localized page introductions and content blocks. */
+html:not(.skysbridge-native) .hero-copy{
+  text-align:center;
+}
+html:not(.skysbridge-native) .hero-copy>.eyebrow,
+html:not(.skysbridge-native) .hero-copy>h1,
+html:not(.skysbridge-native) .hero-copy>p{
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .hero-copy .actions{
+  justify-content:center;
+}
+html:not(.skysbridge-native) .seo-content{
+  max-width:980px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .seo-content>.eyebrow,
+html:not(.skysbridge-native) .seo-content>h2,
+html:not(.skysbridge-native) .seo-content>p{
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .seo-content>ul{
+  max-width:760px;
+  margin-inline:auto;
+  padding-inline:0;
+  list-style-position:inside;
+  text-align:center;
+}
+html:not(.skysbridge-native) .seo-content>ul>li{
+  text-align:center;
+}
+html:not(.skysbridge-native) .seo-callout{
+  text-align:center;
+}
+html:not(.skysbridge-native) .seo-callout>.eyebrow,
+html:not(.skysbridge-native) .seo-callout>h2,
+html:not(.skysbridge-native) .seo-callout>p{
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .sky-story-copy{
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .help-card{
+  align-items:center;
+  text-align:center;
+}
+html:not(.skysbridge-native) .help-card>p{
+  max-width:38rem;
+  margin-inline:auto;
+  text-align:center;
+}
