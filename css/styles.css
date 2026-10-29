@@ -1565,3 +1565,66 @@ html.wall-fullscreen-open body{
       linear-gradient(180deg,transparent 0,#000 5%,#000 95%,transparent 100%);
   }
 }
+
+
+/* V130 — subtle Sky star watermark and softer section transitions across the website. */
+html:not(.native-app)::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:19;
+  pointer-events:none;
+  background-image:url("../assets/memorial-star.svg?v=55");
+  background-repeat:no-repeat;
+  background-position:right clamp(1.25rem,7vw,7rem) 55%;
+  background-size:clamp(15rem,38vw,34rem);
+  opacity:.026;
+  mix-blend-mode:screen;
+}
+html:not(.native-app) main>section:not(.hero){
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);
+}
+html:not(.native-app) main>.hero{
+  -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 34px),transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 calc(100% - 34px),transparent 100%);
+}
+html:not(.native-app) .hero-copy .hero-note{margin-top:1rem}
+html:not(.native-app) .hero .actions{margin-top:1.4rem}
+html:not(.native-app) .room-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));
+}
+html:not(.native-app) .admin-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));
+}
+html:not(.native-app) .family-sharing,
+html:not(.native-app) .member-stars,
+html:not(.native-app) .admin-panel,
+html:not(.native-app) .room-view,
+html:not(.native-app) #roomArea{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+}
+html:not(.native-app) .family-sharing-lists>div,
+html:not(.native-app) .family-sharing-lists [id],
+html:not(.native-app) .admin-card [id],
+html:not(.native-app) .room-card{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+@media(max-width:700px){
+  html:not(.native-app)::after{
+    background-position:right -3.5rem 52%;
+    background-size:min(76vw,20rem);
+    opacity:.02;
+  }
+  html:not(.native-app) main>section:not(.hero){
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 22px,#000 calc(100% - 22px),transparent 100%);
+    mask-image:linear-gradient(to bottom,transparent 0,#000 22px,#000 calc(100% - 22px),transparent 100%);
+  }
+  html:not(.native-app) main>.hero{
+    -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 24px),transparent 100%);
+    mask-image:linear-gradient(to bottom,#000 calc(100% - 24px),transparent 100%);
+  }
+}
