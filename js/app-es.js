@@ -15,7 +15,7 @@
       })
     : null;
 
-  const roomCopy = {"Newly Bereaved": "Duelo reciente", "A gentle place for the days when everything still feels unreal.": "Un lugar acogedor para los días en que todo parece todavía irreal.", "Fathers' Space": "Espacio para padres", "A protected place for fathers whose grief is too often left unspoken.": "Un lugar protegido para los padres cuyo duelo tantas veces queda en silencio.", "Remembering Together": "Recordar juntos", "A place for names, anniversaries, memories and the rituals that keep love close.": "Un lugar para nombres, aniversarios, recuerdos y rituales que mantienen cerca el amor."};
+  const roomCopy = {"Newly Bereaved": "Duelo reciente", "A gentle place for the days when everything still feels unreal.": "Un lugar acogedor para los días en que todo parece todavía irreal.", "A gentle room for the first days and months after loss.": "Un lugar acogedor para los primeros días y meses después de la pérdida.", "Fathers' Space": "Espacio para padres", "A protected place for fathers whose grief is too often left unspoken.": "Un lugar protegido para los padres cuyo duelo tantas veces queda en silencio.", "A protected room for fathers to speak openly without judgment.": "Un espacio protegido para que los padres hablen abiertamente y sin ser juzgados.", "Remembering Together": "Recordar juntos", "A place for names, anniversaries, memories and the rituals that keep love close.": "Un lugar para nombres, aniversarios, recuerdos y rituales que mantienen cerca el amor.", "A place for anniversaries, memories and rituals of remembrance.": "Un lugar para aniversarios, recuerdos y rituales de homenaje."};
   const roomText = value => roomCopy[value] || value;
   let currentUser = null;
   let currentProfile = null;

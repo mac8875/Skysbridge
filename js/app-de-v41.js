@@ -165,9 +165,12 @@
     const translations = {
       "Newly Bereaved": "Neu Trauernde",
       "A gentle room for the first days and months.": "Ein behutsamer Raum für die ersten Tage und Monate.",
+      "A gentle room for the first days and months after loss.": "Ein behutsamer Raum für die ersten Tage und Monate nach dem Verlust.",
       "Fathers' Space": "Raum für Väter",
       "A protected room for fathers to speak without judgment.": "Ein geschützter Raum, in dem Väter ohne Bewertung sprechen können.",
+      "A protected room for fathers to speak openly without judgment.": "Ein geschützter Raum, in dem Väter offen und ohne Bewertung sprechen können.",
       "Remembering Together": "Gemeinsam erinnern",
+      "A place for anniversaries, memories and rituals of remembrance.": "Ein Ort für Jahrestage, Erinnerungen und Rituale des Gedenkens.",
       "Share anniversaries, memories and rituals of remembrance.": "Teile Jahrestage, Erinnerungen und Rituale des Gedenkens."
     };
     return translations[String(value || "")] || value;
