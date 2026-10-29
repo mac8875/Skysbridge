@@ -62,8 +62,8 @@ jobs:
         run: |
           sed -i 's/applicationId "org.skysbridge.app"/applicationId "org.skysbridge.app.lovepreview"/' android/app/build.gradle
           sed -i 's/<string name="app_name">Skysbridge<\/string>/<string name="app_name">Skysbridge Preview<\/string>/' android/app/src/main/res/values/strings.xml
-      - run: sed -i 's/versionCode 1/versionCode 104/' android/app/build.gradle
-      - run: sed -i 's/versionName ".*"/versionName "1.0.24"/' android/app/build.gradle
+      - run: sed -i 's/versionCode 1/versionCode 105/' android/app/build.gradle
+      - run: sed -i 's/versionName ".*"/versionName "1.0.25"/' android/app/build.gradle
       - run: ./gradlew --no-daemon assembleDebug
         working-directory: android
       - uses: actions/upload-artifact@v4
@@ -130,9 +130,9 @@ jobs:
         run: mv app-debug.apk skysbridge-android.apk
       - uses: softprops/action-gh-release@v3
         with:
-          tag_name: android-v104
-          name: Skysbridge Android v1.0.24
-          body: Skysbridge Android app v1.0.24, build 104. Install on Android to try it.
+          tag_name: android-v105
+          name: Skysbridge Android v1.0.25
+          body: Skysbridge Android app v1.0.25, build 105. Install on Android to try it.
           files: skysbridge-android.apk
           make_latest: true
           overwrite_files: true
