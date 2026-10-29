@@ -55,7 +55,7 @@
       }, 650);
     };
     intro.querySelector('.app-intro__skip')?.addEventListener('click', close, { once: true });
-    window.setTimeout(close, 10300);
+    window.setTimeout(close, 10850);
   };
 
   if (document.readyState === 'loading') {

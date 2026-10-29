@@ -30,6 +30,16 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - name: Install FFmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            if [ "$RUNNER_OS" = "macOS" ]; then
+              brew install ffmpeg
+            else
+              sudo apt-get update
+              sudo apt-get install -y ffmpeg
+            fi
+          fi
       - run: npm ci
       - run: npm run build:mobile
       - run: npx cap add android
@@ -60,6 +70,16 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Install FFmpeg
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            if [ "$RUNNER_OS" = "macOS" ]; then
+              brew install ffmpeg
+            else
+              sudo apt-get update
+              sudo apt-get install -y ffmpeg
+            fi
+          fi
       - run: npm ci
       - run: npm run build:mobile
       - run: npx cap add ios
