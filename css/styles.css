@@ -12,9 +12,19 @@
   --success:#b8efca;--danger:#ffbcbc
 }
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ivory);background:linear-gradient(180deg,#071b2d 0%,var(--night) 58%,#020a12 100%);font-family:Inter,Arial,sans-serif}
-/* Keep long names and German compounds within their available space. */
-h1,h2,h3,p,a,button,label{overflow-wrap:anywhere}
+/* Let text wrap at natural word boundaries; avoid breaking CTA labels mid-word. */
+h1,h2,h3,p,label{overflow-wrap:break-word}
 html[lang="de"] h1,html[lang="de"] h2,html[lang="de"] h3{hyphens:auto}
+.button,button{
+  max-width:100%;
+  min-width:0;
+  overflow-wrap:normal;
+  word-break:normal;
+  text-align:center;
+  text-wrap:balance;
+}
+.text-link{overflow-wrap:break-word}
+main,section,article,form,.admin-card,.member-panel{min-width:0}
 .hero-copy,.section-heading,.story-layout>*,.room-card,.help-card,.support-card{min-width:0}
 a{color:inherit}button,input,textarea{font:inherit}
 .site-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px max(20px,calc((100vw - 1400px)/2));border-bottom:1px solid rgba(232,181,86,.14);background:rgba(5,22,36,.91);backdrop-filter:blur(16px)}
@@ -557,8 +567,14 @@ body{background-color:#020b13;background-image:radial-gradient(circle at 50% -10
   opacity:.045;
   filter:none;
   mix-blend-mode:multiply;
-  -webkit-mask:none;
-  mask:none;
+  -webkit-mask-image:
+    linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%),
+    linear-gradient(180deg,transparent 0,#000 8%,#000 92%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:
+    linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%),
+    linear-gradient(180deg,transparent 0,#000 8%,#000 92%,transparent 100%);
+  mask-composite:intersect;
 }
 
 @media(max-width:700px){
@@ -1492,4 +1508,60 @@ html.wall-fullscreen-open body{
   min-height:0!important;
   margin:0!important;
   overflow:hidden!important;
+}
+
+
+/* Responsive member controls: keep inputs and actions comfortably sized. */
+.family-sharing #familyInviteForm{
+  width:min(100%,34rem);
+  max-width:34rem;
+  justify-items:stretch;
+  align-items:start;
+}
+.family-sharing #familyInviteForm label{width:100%;min-width:0}
+.family-sharing #familyInviteForm input[type="email"]{display:block;width:100%;max-width:100%}
+.family-sharing #familyInviteForm>.button{
+  justify-self:start;
+  width:auto;
+  min-width:12rem;
+  white-space:normal;
+}
+.family-sharing-lists{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));
+  gap:1rem;
+  width:100%;
+  margin-top:1.25rem;
+}
+.family-sharing-lists>div,.family-access-requests{min-width:0;max-width:100%}
+.family-sharing .review-item{min-width:0;overflow-wrap:break-word}
+.family-sharing .review-item p{overflow-wrap:anywhere}
+.main-nav>.button{flex:0 0 auto;white-space:nowrap}
+@media(max-width:900px){
+  .main-nav.open>.button{align-self:flex-start;width:auto;max-width:100%}
+}
+@media(max-width:600px){
+  .family-sharing{padding:22px 18px}
+  .family-sharing #familyInviteForm{width:100%}
+  .family-sharing #familyInviteForm>.button{min-width:0;padding-inline:18px}
+  .family-sharing-lists{grid-template-columns:minmax(0,1fr)}
+  .family-sharing .review-item .button{max-width:100%;white-space:normal}
+}
+@media(max-width:360px){
+  .button,.actions .button{padding-inline:14px}
+}
+
+/* Feather the watermark where each content section begins and ends. */
+@media(max-width:700px){
+  .story-section::before,
+  .support-paths::before,
+  .help-page::before,
+  .privacy-section::before{
+    -webkit-mask-image:
+      linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%),
+      linear-gradient(180deg,transparent 0,#000 5%,#000 95%,transparent 100%);
+    mask-image:
+      linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%),
+      linear-gradient(180deg,transparent 0,#000 5%,#000 95%,transparent 100%);
+  }
 }
