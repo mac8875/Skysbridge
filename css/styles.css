@@ -1059,6 +1059,7 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
  .main-nav.open{display:flex}
  .main-nav a{white-space:normal;font-size:15px;line-height:1.5}
  .main-nav>a::after{display:none!important}
+ .main-nav>.android-app-link{align-self:flex-start;justify-content:flex-start}
  .brand{min-width:0}
  .brand img{max-width:100%}
  .header-tools{margin-left:auto}
