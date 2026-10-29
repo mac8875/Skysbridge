@@ -1628,3 +1628,11 @@ html:not(.native-app) .room-card{
     mask-image:linear-gradient(to bottom,#000 calc(100% - 24px),transparent 100%);
   }
 }
+
+
+/* Keep the desktop navigation within the available width before it collapses. */
+@media (min-width:1401px) and (max-width:1600px){
+  .site-header{gap:10px}
+  .main-nav{gap:clamp(6px,.8vw,12px)}
+  .main-nav a{font-size:12px}
+}
