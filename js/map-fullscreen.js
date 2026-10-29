@@ -39,6 +39,7 @@
         toggle.setAttribute("aria-expanded", "true");
         toggle.setAttribute("aria-label", closeLabel);
         toggle.setAttribute("title", closeLabel);
+        toggle.querySelector("[aria-hidden='true']").textContent = "×";
         if (label) label.textContent = closeLabel;
         requestAnimationFrame(() => {
           refreshLayout();
@@ -56,6 +57,7 @@
         toggle.setAttribute("aria-expanded", "false");
         toggle.setAttribute("aria-label", expandLabel);
         toggle.setAttribute("title", expandLabel);
+        toggle.querySelector("[aria-hidden='true']").textContent = "⤢";
         if (label) label.textContent = expandLabel;
         window.scrollTo(0, previousScrollY);
         requestAnimationFrame(refreshLayout);

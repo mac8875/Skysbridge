@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=12';
+    stylesheet.href = '/css/app-intro.css?v=13';
     document.head.appendChild(stylesheet);
   }
 
@@ -45,9 +45,45 @@
     document.body.appendChild(intro);
     try { window.SkysbridgeNative?.setFullscreen(true); } catch {}
 
+    let baselineBeta = null;
+    let baselineGamma = null;
+    let motionEnabled = false;
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+    const handleOrientation = event => {
+      if (!intro.isConnected || !Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
+      if (baselineBeta === null || baselineGamma === null) {
+        baselineBeta = event.beta;
+        baselineGamma = event.gamma;
+      }
+      const x = clamp(event.gamma - baselineGamma, -18, 18) / 18 * 5;
+      const y = clamp(event.beta - baselineBeta, -18, 18) / 18 * 5;
+      intro.style.setProperty('--intro-motion-x', `${x.toFixed(1)}px`);
+      intro.style.setProperty('--intro-motion-y', `${y.toFixed(1)}px`);
+    };
+    const enableMotion = async () => {
+      if (motionEnabled || !window.DeviceOrientationEvent) return;
+      const requestPermission = window.DeviceOrientationEvent.requestPermission;
+      if (typeof requestPermission === 'function') {
+        try {
+          if (await requestPermission.call(window.DeviceOrientationEvent) !== 'granted') return;
+        } catch {
+          return;
+        }
+      }
+      motionEnabled = true;
+      window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+    };
+    if (typeof window.DeviceOrientationEvent?.requestPermission === 'function') {
+      intro.addEventListener('pointerdown', enableMotion, { once: true });
+    } else {
+      void enableMotion();
+    }
+
     const close = () => {
       if (!intro.isConnected || intro.classList.contains('is-leaving')) return;
       intro.classList.add('is-leaving');
+      window.removeEventListener('deviceorientation', handleOrientation);
+      intro.removeEventListener('pointerdown', enableMotion);
       window.setTimeout(() => {
         intro.remove();
         document.documentElement.classList.remove('skysbridge-intro-pending');
@@ -55,7 +91,7 @@
       }, 650);
     };
     intro.querySelector('.app-intro__skip')?.addEventListener('click', close, { once: true });
-    window.setTimeout(close, 8750);
+    window.setTimeout(close, 10300);
   };
 
   if (document.readyState === 'loading') {
