@@ -62,7 +62,7 @@
 
     authButtons.forEach(button => {
       button.textContent = isSignedIn
-        ? button.dataset.memberLabel || button.textContent
+        ? "Open member area"
         : button.dataset.guestLabel;
     });
 
