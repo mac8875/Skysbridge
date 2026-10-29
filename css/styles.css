@@ -1718,3 +1718,56 @@ html:not(.skysbridge-native) .member-panel #adminBadge{margin-bottom:5px}
 html:not(.skysbridge-native):has(#familySharingSection:not([hidden]))::after{
   display:none;
 }
+
+
+/* V134 — keep the member actions together and center the homepage card copy. */
+html:not(.skysbridge-native) .member-panel{
+  justify-content:flex-start;
+  align-items:flex-start;
+  gap:20px;
+}
+html:not(.skysbridge-native) .member-welcome-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px 16px;
+}
+html:not(.skysbridge-native) .member-welcome-row h2{margin:.1em 0}
+html:not(.skysbridge-native) .member-welcome-row #signOut{
+  flex:0 0 auto;
+  align-self:center;
+  margin:0;
+  padding:10px 18px;
+}
+html:not(.skysbridge-native) .member-panel #adminBadge{
+  display:table;
+  width:max-content;
+  max-width:100%;
+  margin:12px 0 0;
+}
+html:not(.skysbridge-native) .member-panel .member-name-toggle{
+  display:flex;
+  width:max-content;
+  max-width:100%;
+  margin:12px 0 0;
+}
+html:not(.skysbridge-native) .support-card{
+  align-items:center;
+  text-align:center;
+}
+html:not(.skysbridge-native) .support-card h3{
+  max-width:25ch;
+  text-align:center;
+}
+html:not(.skysbridge-native) .support-card p:not(.eyebrow){
+  max-width:38rem;
+  margin-inline:auto;
+  text-align:center;
+}
+html:not(.skysbridge-native) .room-card{text-align:center}
+html:not(.skysbridge-native) .member-stars>h3,
+html:not(.skysbridge-native) .member-stars>p.muted{
+  max-width:760px;
+  margin-inline:auto;
+  text-align:center;
+}
