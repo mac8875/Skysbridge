@@ -60,7 +60,7 @@ for (const pageName of ['index.html', 'index-de.html', 'index-es.html']) {
   const pageExists = await stat(pagePath).catch(() => null);
   if (!pageExists?.isFile()) continue;
   let page = await readFile(pagePath, 'utf8');
-  const centeringLink = '<link rel="stylesheet" href="css/mobile-homepage-centering.css?v=1">';
+  const centeringLink = '<link rel="stylesheet" href="css/mobile-homepage-centering.css?v=2">';
   if (!page.includes(centeringLink)) {
     if (!/<\/head>/i.test(page)) throw new Error(`Mobile page is missing its closing head element: ${pageName}`);
     page = page.replace(/<\/head>/i, `  ${centeringLink}\n</head>`);

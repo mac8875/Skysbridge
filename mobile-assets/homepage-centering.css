@@ -1,47 +1,48 @@
-/* APK-only alignment for the translated homepages. */
-body main .hero-copy,
-body main .wall-first-intro,
-body main .section-heading,
-body main .support-card,
-body main .room-card {
+/* This file is injected into the APK bundle only. The extra specificity
+   overrides older native-app rules that left some translated headings left aligned. */
+html[lang] body main .hero-copy,
+html[lang] body main .wall-first-intro,
+html[lang] body main .section-heading,
+html[lang] body main .story-layout,
+html[lang] body main .story-layout > div,
+html[lang] body main .story-text,
+html[lang] body main .support-card,
+html[lang] body main .room-card,
+html[lang] body main .member-panel,
+html[lang] body main .member-panel > div {
   text-align: center;
 }
 
-body main .hero-copy > *,
-body main .wall-first-intro > *,
-body main .section-heading > *,
-body main .support-card > *,
-body main .room-card > * {
+html[lang] body main .hero-copy > *,
+html[lang] body main .wall-first-intro > *,
+html[lang] body main .section-heading > *,
+html[lang] body main .story-layout > div > *,
+html[lang] body main .support-card > *,
+html[lang] body main .room-card > * {
   margin-inline: auto;
-}
-
-body main .hero-copy h1,
-body main .hero-copy p,
-body main .wall-first-intro p,
-body main .section-heading p,
-body main .support-card p,
-body main .room-card p {
   text-align: center;
 }
 
-body main .member-panel,
-body main .member-panel > div,
-body main .member-panel p,
-body main .member-panel h2,
-body main .member-stars > h3,
-body main .member-stars > p {
+html[lang] body main .section-heading > p:last-child {
+  max-width: 760px;
+}
+
+html[lang] body main .member-panel p,
+html[lang] body main .member-panel h2,
+html[lang] body main .member-stars > h3,
+html[lang] body main .member-stars > p {
   text-align: center;
 }
 
-body main .member-welcome-row {
+html[lang] body main .member-welcome-row {
   justify-content: center;
 }
 
-body main .member-panel #adminBadge,
-body main .member-panel .member-name-toggle {
+html[lang] body main .member-panel #adminBadge,
+html[lang] body main .member-panel .member-name-toggle {
   margin-inline: auto;
 }
 
-body main .member-panel #memberEmail {
+html[lang] body main .member-panel #memberEmail {
   overflow-wrap: anywhere;
 }
