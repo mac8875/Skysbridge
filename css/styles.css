@@ -652,6 +652,9 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .leo-map{inset:0;width:100%;height:100%;opacity:.2;filter:drop-shadow(0 0 5px rgba(244,215,146,.2))}
 .leo-map polyline{stroke:rgba(244,215,146,.34);stroke-width:.38}
 .leo-map circle{fill:#f8efd3;filter:drop-shadow(0 0 3px rgba(244,215,146,.75))}
+.aquarius-map{inset:0;width:100%;height:100%;opacity:.14;filter:drop-shadow(0 0 4px rgba(185,216,237,.18))}
+.aquarius-map polyline{stroke:rgba(190,220,239,.38);stroke-width:.32}
+.aquarius-map circle{fill:#d9ebf6;filter:drop-shadow(0 0 2px rgba(190,220,239,.56))}
 .constellation-map--cancer{left:2%;top:5%;width:25%;height:24%;transform:rotate(-8deg)}
 .constellation-map--virgo{right:1%;top:5%;width:29%;height:28%;transform:rotate(7deg)}
 .constellation-map--libra{left:2%;bottom:3%;width:27%;height:27%;transform:rotate(5deg)}
