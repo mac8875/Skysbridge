@@ -1427,20 +1427,26 @@ html.skysbridge-native .section-heading>.eyebrow{
   z-index:10;
   display:grid;
   place-items:center;
-  width:46px;
-  height:46px;
+  width:44px;
+  height:44px;
   padding:0;
-  border:1px solid rgba(244,215,146,.44);
-  border-radius:50%;
-  background:rgba(3,16,31,.82);
-  color:#f7dda0;
-  font:600 27px/1 sans-serif;
+  border:1px solid rgba(74,111,139,.72);
+  border-radius:12px;
+  background:rgba(3,16,31,.84);
+  color:#f3cf7b;
   cursor:pointer;
-  box-shadow:0 4px 18px rgba(0,0,0,.32);
+  box-shadow:0 3px 12px rgba(0,0,0,.25);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
   -webkit-tap-highlight-color:transparent;
 }
+.wall-fullscreen-icons{display:grid;place-items:center;width:22px;height:22px}
+.wall-fullscreen-icons svg{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wall-fullscreen-close-icon{display:none!important}
+.wall-fullscreen-toggle[aria-expanded="true"] .wall-fullscreen-expand-icon{display:none}
+.wall-fullscreen-toggle[aria-expanded="true"] .wall-fullscreen-close-icon{display:block!important}
 .wall-fullscreen-toggle:hover,
-.wall-fullscreen-toggle:focus-visible{background:rgba(22,48,70,.96);outline:2px solid #f4d792;outline-offset:3px}
+.wall-fullscreen-toggle:focus-visible{border-color:rgba(244,215,146,.84);background:rgba(15,37,57,.96);outline:2px solid rgba(244,215,146,.74);outline-offset:2px}
 .wall-fullscreen-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 html.wall-fullscreen-open{overflow:hidden;overscroll-behavior:none}
 .celestial-wall.is-fullscreen{
