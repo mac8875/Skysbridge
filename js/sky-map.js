@@ -1,6 +1,19 @@
 (() => {
   "use strict";
 
+  function positionLeoConstellation(container) {
+    const sky = container.querySelector('[data-star="sky"]');
+    const constellation = container.querySelector("[data-leo-constellation]");
+    if (!sky || !constellation) return;
+    const wallRect = container.getBoundingClientRect();
+    const skyRect = sky.getBoundingClientRect();
+    if (!wallRect.width || !wallRect.height || !skyRect.width || !skyRect.height) return;
+    const x = ((skyRect.left + skyRect.width / 2 - wallRect.left) / wallRect.width) * 100;
+    const y = ((skyRect.top + skyRect.height / 2 - wallRect.top) / wallRect.height) * 100;
+    const scale = Math.max(.25, Math.min(1.05, x / 13, (100 - x) / 40, y / 27, (100 - y) / 14));
+    constellation.setAttribute("transform", `translate(${x} ${y}) scale(${scale}) translate(-50 -50)`);
+  }
+
   function layout(cards, preferredCenter, plane) {
     const container = plane || preferredCenter?.closest(".celestial-wall") || document.querySelector(".celestial-wall");
     if (!container) return;
@@ -17,10 +30,14 @@
     const centerY = 50;
     center.style.setProperty("--star-x", `${centerX}%`);
     center.style.setProperty("--star-y", `${centerY}%`);
+    positionLeoConstellation(container);
     container.style.setProperty("--wall-extra-height", "0px");
 
     const satellites = stars.filter(card => card !== center);
-    if (!satellites.length) return;
+    if (!satellites.length) {
+      positionLeoConstellation(container);
+      return;
+    }
 
     const positions = [
       [72, 34], [76, 62], [25, 66], [19, 35], [87, 43], [61, 76],
@@ -76,6 +93,7 @@
       ? 0
       : Math.max(0, Math.ceil(satellites.length / positions.length) - 1) * 560;
     container.style.setProperty("--wall-extra-height", `${extraHeight}px`);
+    positionLeoConstellation(container);
   }
 
   window.SkysbridgeSkyMap = { layout };
