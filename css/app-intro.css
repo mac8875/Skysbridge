@@ -49,6 +49,7 @@
 @keyframes introTaglineReveal{0%,82%{opacity:0;transform:translateY(5px) translateZ(28px)}89%,100%{opacity:1;transform:translateY(0) translateZ(28px)}}
 @media(prefers-reduced-motion:reduce){
   .app-intro{transition:none}
+  .app-intro__animation{transition:none;filter:brightness(1.1) saturate(1.06)}
   .app-intro__backdrop,.app-intro__depth-stars,.app-intro__rising-star,.app-intro__star-side,.app-intro__star-face,.app-intro__star-trail,.app-intro__tail-glow,.app-intro__tail-core,.app-intro__tail-spark,.app-intro__tail-star,.app-intro__wordmark-sky,.app-intro__wordmark-bridge,.app-intro__wings,.app-intro__tagline{animation:none;opacity:1}
   .app-intro__rising-star{transform:translate3d(calc(-50% - 24vw),-132px,76px)}
   .app-intro__tail-glow,.app-intro__tail-core,.app-intro__tail-spark{stroke-dashoffset:0}

@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=12';
+    stylesheet.href = '/css/app-intro.css?v=15';
     document.head.appendChild(stylesheet);
   }
 
@@ -55,7 +55,7 @@
       }, 650);
     };
     intro.querySelector('.app-intro__skip')?.addEventListener('click', close, { once: true });
-    window.setTimeout(close, 8750);
+    window.setTimeout(close, 10850);
   };
 
   if (document.readyState === 'loading') {
