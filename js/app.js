@@ -1408,7 +1408,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
         <div class="review-item">
           <strong>Sky</strong>
           <p>Sky is Skysbridge’s first star and remains permanently visible in the sky.</p>
-          <a class="button button-outline" href="#stars">See Sky in the sky</a>
+          ${currentProfile?.is_admin ? "" : '<a class="button button-outline" href="#stars">See Sky in the sky</a>'}
         </div>
         <p class="muted">Personal memorial stars you create with “Honor a child” will appear here for management.</p>
       `;
