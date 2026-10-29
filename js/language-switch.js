@@ -58,11 +58,6 @@
       nav.appendChild(link);
     });
 
-    const honor = document.createElement('a');
-    honor.href = `${home}#stars`;
-    honor.className = 'button button-gold';
-    honor.textContent = isSpanish ? 'Honrar a un hijo' : isGerman ? 'Ein Kind ehren' : 'Honor a child';
-    nav.appendChild(honor);
     if (!existingNav) header.appendChild(nav);
 
     menuButton.addEventListener('click', () => {
