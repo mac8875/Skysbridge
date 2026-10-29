@@ -170,7 +170,11 @@
       .replaceAll("\\\\r", "\r")
       .replaceAll("\\r", "\r")
       .trim();
-    const explicitParagraphs = story
+    const paragraphRestoredStory = story.replace(
+      /\s+(Después de perderlo,|Años después,|Sky es la primera luz)/g,
+      "\n\n$1"
+    );
+    const explicitParagraphs = paragraphRestoredStory
       .split(/\n\s*\n/)
       .map(paragraph => paragraph.trim())
       .filter(Boolean);

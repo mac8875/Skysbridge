@@ -168,7 +168,11 @@
       .replaceAll("\\\\r", "\r")
       .replaceAll("\\r", "\r")
       .trim();
-    const explicitParagraphs = story
+    const paragraphRestoredStory = story.replace(
+      /\s+(After losing him,|Skysbridge was created|Sky(?:'|’)?s Bridge was created|Sky is the first star)/g,
+      "\n\n$1"
+    );
+    const explicitParagraphs = paragraphRestoredStory
       .split(/\n\s*\n/)
       .map(paragraph => paragraph.trim())
       .filter(Boolean);
