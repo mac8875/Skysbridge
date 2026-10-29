@@ -369,8 +369,8 @@ footer nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));justify-co
 
 /* V39 — bilingual language switch */
 .header-tools{display:flex;align-items:center;gap:14px;flex:0 0 auto}
-.header-auth-button{box-sizing:border-box;width:118px;flex:0 0 118px;min-height:36px;padding:8px;justify-content:center;font-size:11px;line-height:1;white-space:nowrap}
-.header-auth-button:disabled{cursor:wait;opacity:.65}
+.header-tools .header-auth-button{box-sizing:border-box;width:125px;flex:0 0 125px;height:42px;min-height:42px;padding:0;justify-content:center;color:#cbd4dc;font:700 12px/1.2 Inter,Arial,sans-serif;letter-spacing:.08em;white-space:nowrap}
+.header-tools .header-auth-button:disabled{cursor:wait;opacity:.65}
 .language-switch{display:inline-flex;align-items:center;padding:3px;border:1px solid rgba(232,181,86,.34);border-radius:999px;background:rgba(2,14,24,.62);box-shadow:inset 0 1px rgba(255,255,255,.025)}
 .language-switch a{display:grid;place-items:center;min-width:39px;height:34px;padding:0 10px;border-radius:999px;color:#cbd4dc;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.08em;transition:.2s ease}
 .language-switch a:hover{color:var(--gold-soft)}
@@ -1907,19 +1907,23 @@ html:not(.skysbridge-native) .help-card>p{
 }
 .star-story-copy p:last-child{margin-bottom:0}
 
-/* Reserve the same account-button width in every locale. */
+/* Match the account action to the language switch in each compact header. */
+@media(max-width:900px){
+ .header-tools{gap:10px}
+ .header-tools .header-auth-button{width:116px;flex-basis:116px;height:40px;min-height:40px}
+}
 @media(max-width:600px){
  .site-header{gap:8px;padding-inline:12px}
  .header-tools{gap:9px}
  .language-switch a{min-width:27px;height:30px;padding:0 4px;font-size:10px}
- .header-auth-button{width:112px;flex-basis:112px;min-height:32px;padding:6px 4px;font-size:10px}
+ .header-tools .header-auth-button{width:89px;flex-basis:89px;height:38px;min-height:38px;font-size:10px}
 }
 @media(max-width:420px){
  .site-header{gap:3px;padding-inline:8px}
  .brand img{width:min(110px,31vw)!important;height:44px}
- .header-tools{gap:5px}
+ .header-tools{gap:6px}
  .language-switch{padding:2px}
  .language-switch a{min-width:22px;height:26px;padding:0 2px;font-size:9px}
- .header-auth-button{width:104px;flex-basis:104px;min-height:29px;padding:5px 3px;font-size:9px}
+ .header-tools .header-auth-button{width:72px;flex-basis:72px;height:32px;min-height:32px;font-size:9px;letter-spacing:.02em}
  .menu-button{padding:2px;font-size:23px}
 }
