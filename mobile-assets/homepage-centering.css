@@ -1,0 +1,47 @@
+/* APK-only alignment for the translated homepages. */
+body main .hero-copy,
+body main .wall-first-intro,
+body main .section-heading,
+body main .support-card,
+body main .room-card {
+  text-align: center;
+}
+
+body main .hero-copy > *,
+body main .wall-first-intro > *,
+body main .section-heading > *,
+body main .support-card > *,
+body main .room-card > * {
+  margin-inline: auto;
+}
+
+body main .hero-copy h1,
+body main .hero-copy p,
+body main .wall-first-intro p,
+body main .section-heading p,
+body main .support-card p,
+body main .room-card p {
+  text-align: center;
+}
+
+body main .member-panel,
+body main .member-panel > div,
+body main .member-panel p,
+body main .member-panel h2,
+body main .member-stars > h3,
+body main .member-stars > p {
+  text-align: center;
+}
+
+body main .member-welcome-row {
+  justify-content: center;
+}
+
+body main .member-panel #adminBadge,
+body main .member-panel .member-name-toggle {
+  margin-inline: auto;
+}
+
+body main .member-panel #memberEmail {
+  overflow-wrap: anywhere;
+}

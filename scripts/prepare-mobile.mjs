@@ -40,6 +40,9 @@ async function copyPublicFiles(source, destination) {
 }
 
 await copyPublicFiles(root, output);
+const mobileStylesPath = path.join(output, 'css', 'mobile-homepage-centering.css');
+await mkdir(path.dirname(mobileStylesPath), { recursive: true });
+await cp(path.join(root, 'mobile-assets/homepage-centering.css'), mobileStylesPath);
 await mkdir(path.join(output, 'assets'), { recursive: true });
 await cp(
   path.join(root, 'mobile-assets/app-intro-background-v14.webp'),
@@ -51,6 +54,19 @@ await cp(introGif, path.join(output, 'assets/skysbridge-intro-bridge-stronger.gi
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
 if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html');
+
+for (const pageName of ['index.html', 'index-de.html', 'index-es.html']) {
+  const pagePath = path.join(output, pageName);
+  const pageExists = await stat(pagePath).catch(() => null);
+  if (!pageExists?.isFile()) continue;
+  let page = await readFile(pagePath, 'utf8');
+  const centeringLink = '<link rel="stylesheet" href="css/mobile-homepage-centering.css?v=1">';
+  if (!page.includes(centeringLink)) {
+    if (!/<\/head>/i.test(page)) throw new Error(`Mobile page is missing its closing head element: ${pageName}`);
+    page = page.replace(/<\/head>/i, `  ${centeringLink}\n</head>`);
+    await writeFile(pagePath, page);
+  }
+}
 
 const mobileIndexPath = path.join(output, 'index.html');
 let mobileIndex = await readFile(mobileIndexPath, 'utf8');
