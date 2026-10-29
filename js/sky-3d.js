@@ -33,14 +33,42 @@
   );
   const isNativeApp = Boolean(capacitor?.isNativePlatform?.());
   let orientationBaseline = null;
+  let orientationScreenAngle = window.screen?.orientation?.angle ?? window.orientation ?? 0;
+  let targetMotionX = 0;
+  let targetMotionY = 0;
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const angleDelta = (value, baseline) => ((value - baseline + 540) % 360) - 180;
+
+  function resetOrientationBaseline() {
+    orientationBaseline = null;
+    targetMotionX = 0;
+    targetMotionY = 0;
+  }
 
   function handleDeviceOrientation(event) {
     if (!isAndroidApk || !Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
-    if (!orientationBaseline) orientationBaseline = { beta: event.beta, gamma: event.gamma };
-    motionX = clamp((event.gamma - orientationBaseline.gamma) / 22, -1, 1);
-    motionY = clamp((event.beta - orientationBaseline.beta) / 22, -1, 1);
-    if (reducedMotion) draw(0);
+
+    const screenAngle = window.screen?.orientation?.angle ?? window.orientation ?? 0;
+    if (screenAngle !== orientationScreenAngle) {
+      orientationScreenAngle = screenAngle;
+      resetOrientationBaseline();
+    }
+
+    if (!orientationBaseline) {
+      orientationBaseline = { beta: event.beta, gamma: event.gamma };
+      return;
+    }
+
+    const gammaDelta = event.gamma - orientationBaseline.gamma;
+    const betaDelta = angleDelta(event.beta, orientationBaseline.beta);
+    targetMotionX = clamp(gammaDelta / 34, -1, 1);
+    targetMotionY = clamp(betaDelta / 34, -1, 1);
+
+    if (reducedMotion) {
+      motionX += (targetMotionX - motionX) * 0.2;
+      motionY += (targetMotionY - motionY) * 0.2;
+      draw(0);
+    }
   }
   let nextCometAt = performance.now() + 5000;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -349,6 +377,14 @@
       animationFrame = 0;
       return;
     }
+
+    const elapsed = previousTime ? Math.min(80, time - previousTime) : 32;
+    const smoothing = 1 - Math.exp(-elapsed / 155);
+    motionX += (targetMotionX - motionX) * smoothing;
+    motionY += (targetMotionY - motionY) * smoothing;
+    if (Math.abs(targetMotionX - motionX) < 0.002) motionX = targetMotionX;
+    if (Math.abs(targetMotionY - motionY) < 0.002) motionY = targetMotionY;
+
     if (time - previousTime > 32) {
       draw(time);
       previousTime = time;
@@ -369,14 +405,23 @@
 
   if (isAndroidApk && "DeviceOrientationEvent" in window) {
     window.addEventListener("deviceorientation", handleDeviceOrientation, { passive: true });
+    window.screen?.orientation?.addEventListener?.("change", resetOrientationBaseline);
   }
   wall.addEventListener("pointermove", event => {
+    if (isAndroidApk) return;
     const bounds = wall.getBoundingClientRect();
-    motionX = ((event.clientX - bounds.left) / bounds.width - .5) * 2;
-    motionY = ((event.clientY - bounds.top) / bounds.height - .5) * 2;
-    if (reducedMotion) draw(0);
+    targetMotionX = ((event.clientX - bounds.left) / bounds.width - .5) * 2;
+    targetMotionY = ((event.clientY - bounds.top) / bounds.height - .5) * 2;
+    if (reducedMotion) {
+      motionX = targetMotionX;
+      motionY = targetMotionY;
+      draw(0);
+    }
   }, { passive: true });
-  wall.addEventListener("pointerleave", () => { motionX = motionY = 0; }, { passive: true });
+  wall.addEventListener("pointerleave", () => {
+    if (isAndroidApk) return;
+    targetMotionX = targetMotionY = 0;
+  }, { passive: true });
   document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
   window.addEventListener("resize", resize, { passive: true });
   if ("ResizeObserver" in window) new ResizeObserver(resize).observe(wall);
