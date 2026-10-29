@@ -97,6 +97,34 @@ html:is(.skysbridge-native, .native-app) .help-card .text-link {
   align-self: center;
 }
 
+/* These headings pair a small gold label with a title and supporting copy. */
+html:is(.skysbridge-native, .native-app) :is(.subheading, .admin-heading, .room-view-header) {
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+html:is(.skysbridge-native, .native-app) :is(.subheading, .admin-heading) > div {
+  width: 100%;
+  text-align: center;
+}
+
+html:is(.skysbridge-native, .native-app) :is(.subheading, .admin-heading) > p {
+  width: min(100%, 34ch);
+  max-width: 34ch;
+  margin-inline: auto;
+  text-align: center;
+  text-wrap: balance;
+}
+
+html:is(.skysbridge-native, .native-app) :is(.subheading, .admin-heading) .eyebrow {
+  margin-inline: auto;
+  text-align: center;
+  text-wrap: balance;
+}
+
 @media (max-width: 600px) {
   html:is(.skysbridge-native, .native-app) {
     --native-copy-width: 32rem;

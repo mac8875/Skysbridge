@@ -183,7 +183,11 @@
       .replaceAll("\\\\r", "\r")
       .replaceAll("\\r", "\r")
       .trim();
-    const explicitParagraphs = story
+    const paragraphRestoredStory = story.replace(
+      /\s+(Nach seinem Tod|Aus der Liebe zu Sky|Sky ist der erste Stern)/g,
+      "\n\n$1"
+    );
+    const explicitParagraphs = paragraphRestoredStory
       .split(/\n\s*\n/)
       .map(paragraph => paragraph.trim())
       .filter(Boolean);
