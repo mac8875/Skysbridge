@@ -93,7 +93,7 @@ async function addNativeTypography(source) {
       await addNativeTypography(file);
     } else if (entry.isFile() && path.extname(entry.name).toLowerCase() === '.html') {
       let html = await readFile(file, 'utf8');
-      const link = '<link rel="stylesheet" href="/css/native-app-typography.css?v=4">';
+      const link = '<link rel="stylesheet" href="/css/native-app-typography.css?v=5">';
       if (!html.includes('native-app-typography.css') && /<\/head>/i.test(html)) {
         html = html.replace(/<\/head>/i, `${link}\n</head>`);
       }
