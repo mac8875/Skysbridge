@@ -1013,6 +1013,12 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 }
 .support-card .eyebrow,
 .help-card .eyebrow{color:var(--gold-soft)}
+.help-card .flamingo-title{hyphens:none}
+@media(max-width:800px){
+  .help-card .flamingo-card-eyebrow{font-size:.8rem;letter-spacing:.06em}
+  .help-card .flamingo-title-line{display:block}
+}
+
 .support-card h3,
 .help-card h2,
 .help-disclaimer strong{color:var(--gold-soft)}
