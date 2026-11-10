@@ -32,6 +32,11 @@
     capacitor?.isNativePlatform?.() && capacitor?.getPlatform?.() === "android"
   );
   const isNativeApp = Boolean(capacitor?.isNativePlatform?.());
+  const hasCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+  const usesMotionSensors = Boolean(
+    "DeviceOrientationEvent" in window && (isNativeApp || hasCoarsePointer)
+  );
+  let orientationTrackingStarted = false;
   let orientationBaseline = null;
   let orientationScreenAngle = window.screen?.orientation?.angle ?? window.orientation ?? 0;
   let targetMotionX = 0;
@@ -61,8 +66,9 @@
 
     const gammaDelta = event.gamma - orientationBaseline.gamma;
     const betaDelta = angleDelta(event.beta, orientationBaseline.beta);
-    targetMotionX = clamp(gammaDelta / 34, -1, 1);
-    targetMotionY = clamp(betaDelta / 34, -1, 1);
+    const quiet = value => Math.abs(value) < .45 ? 0 : value - Math.sign(value) * .45;
+    targetMotionX = clamp(quiet(gammaDelta) / 30, -1, 1);
+    targetMotionY = clamp(quiet(betaDelta) / 30, -1, 1);
 
     if (reducedMotion) {
       motionX += (targetMotionX - motionX) * 0.2;
@@ -379,13 +385,13 @@
     }
 
     const elapsed = previousTime ? Math.min(80, time - previousTime) : 32;
-    const smoothing = 1 - Math.exp(-elapsed / 155);
+    const smoothing = 1 - Math.exp(-elapsed / 235);
     motionX += (targetMotionX - motionX) * smoothing;
     motionY += (targetMotionY - motionY) * smoothing;
     if (Math.abs(targetMotionX - motionX) < 0.002) motionX = targetMotionX;
     if (Math.abs(targetMotionY - motionY) < 0.002) motionY = targetMotionY;
 
-    if (time - previousTime > 32) {
+    if (time - previousTime >= 16) {
       draw(time);
       previousTime = time;
     }
@@ -403,12 +409,37 @@
     animationFrame = 0;
   }
 
-  if (isAndroidApk && "DeviceOrientationEvent" in window) {
+  function startOrientationTracking() {
+    if (!usesMotionSensors || orientationTrackingStarted) return;
+    orientationTrackingStarted = true;
     window.addEventListener("deviceorientation", handleDeviceOrientation, { passive: true });
     window.screen?.orientation?.addEventListener?.("change", resetOrientationBaseline);
   }
+
+  function requestOrientationTracking() {
+    const OrientationEvent = window.DeviceOrientationEvent;
+    if (!usesMotionSensors || orientationTrackingStarted) return;
+    if (typeof OrientationEvent?.requestPermission === "function") {
+      OrientationEvent.requestPermission()
+        .then(permission => {
+          if (permission === "granted") startOrientationTracking();
+        })
+        .catch(() => {});
+      return;
+    }
+    startOrientationTracking();
+  }
+
+  if (usesMotionSensors) {
+    if (typeof window.DeviceOrientationEvent?.requestPermission === "function") {
+      wall.addEventListener("pointerdown", requestOrientationTracking, { once: true, passive: true });
+    } else {
+      startOrientationTracking();
+    }
+  }
+
   wall.addEventListener("pointermove", event => {
-    if (isAndroidApk) return;
+    if (usesMotionSensors) return;
     const bounds = wall.getBoundingClientRect();
     targetMotionX = ((event.clientX - bounds.left) / bounds.width - .5) * 2;
     targetMotionY = ((event.clientY - bounds.top) / bounds.height - .5) * 2;
@@ -419,7 +450,7 @@
     }
   }, { passive: true });
   wall.addEventListener("pointerleave", () => {
-    if (isAndroidApk) return;
+    if (usesMotionSensors) return;
     targetMotionX = targetMotionY = 0;
   }, { passive: true });
   document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
