@@ -51,7 +51,7 @@
   }
 
   function handleDeviceOrientation(event) {
-    if (!isAndroidApk || !Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
+    if (!usesMotionSensors || !Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
 
     const screenAngle = window.screen?.orientation?.angle ?? window.orientation ?? 0;
     if (screenAngle !== orientationScreenAngle) {
