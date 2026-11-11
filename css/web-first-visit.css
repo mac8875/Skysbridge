@@ -1,0 +1,84 @@
+html.web-first-visit-pending{overflow:hidden}
+html.web-first-visit-pending body>header,
+html.web-first-visit-pending body>main,
+html.web-first-visit-pending body>footer{
+  opacity:0;
+  transform:translateY(12px);
+}
+body>header,body>main,body>footer{
+  transition:opacity .7s ease,transform .7s ease;
+}
+html.web-first-visit-done body>header,
+html.web-first-visit-done body>main,
+html.web-first-visit-done body>footer{
+  opacity:1;
+  transform:translateY(0);
+}
+.web-first-visit{
+  position:fixed;
+  z-index:10000;
+  inset:0;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:#04121f;
+  opacity:1;
+  transition:opacity .7s ease;
+}
+.web-first-visit.is-leaving{opacity:0;pointer-events:none}
+.web-first-visit__backdrop{
+  position:absolute;
+  inset:-28px;
+  background-image:
+    linear-gradient(180deg,rgba(4,18,31,.22),rgba(4,18,31,.38)),
+    url("../assets/skysbridge-first-visit-poster.jpg");
+  background-size:cover;
+  background-position:center;
+  filter:blur(22px);
+  transform:scale(1.06);
+  opacity:.82;
+}
+.web-first-visit__video{
+  position:relative;
+  z-index:1;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  background:#04121f;
+}
+.web-first-visit__skip{
+  position:absolute;
+  z-index:2;
+  right:max(20px,env(safe-area-inset-right));
+  bottom:max(20px,env(safe-area-inset-bottom));
+  min-width:88px;
+  padding:11px 18px;
+  border:1px solid rgba(244,215,146,.6);
+  border-radius:999px;
+  color:#f8f3e9;
+  background:rgba(4,18,31,.72);
+  font:500 14px/1.2 Inter,Arial,sans-serif;
+  cursor:pointer;
+}
+.web-first-visit__skip:hover,
+.web-first-visit__skip:focus-visible{
+  background:rgba(4,18,31,.94);
+  outline:2px solid #f4d792;
+  outline-offset:3px;
+}
+@media (max-width:700px){
+  .web-first-visit__backdrop{opacity:.9;filter:blur(26px)}
+  .web-first-visit__video{
+    width:min(100vw,calc(100dvh * 1.74));
+    height:auto;
+    max-height:72dvh;
+    aspect-ratio:864 / 496;
+    object-fit:contain;
+    border-radius:12px;
+    box-shadow:0 12px 56px rgba(0,0,0,.38);
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  body>header,body>main,body>footer,.web-first-visit{transition:none}
+}
