@@ -21,7 +21,7 @@ begin
   where slug = 'sky'
     and created_by is null;
 
-  if not found and not exists (
+  if not exists (
     select 1 from public.stars where slug = 'sky' and created_by = family_owner_id
   ) then
     raise exception 'Could not associate the Sky wall star with its family owner';
