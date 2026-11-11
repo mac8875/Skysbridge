@@ -5,7 +5,7 @@
     ['android', 'ios'].includes(window.Capacitor?.getPlatform?.()) ||
     ['localhost', '127.0.0.1'].includes(host) ||
     ['capacitor:', 'ionic:'].includes(window.location.protocol) ||
-    /\\bCapacitor\\b/i.test(window.navigator.userAgent)
+    window.navigator.userAgent.toLowerCase().includes('capacitor')
   );
   if (isNative) return;
 
@@ -26,18 +26,24 @@
     const lang = (document.documentElement.lang || 'en').slice(0, 2);
     const skipLabel = lang === 'de' ? 'Überspringen' : lang === 'es' ? 'Saltar' : 'Skip';
     const introLabel = lang === 'de' ? 'Skysbridge wird geöffnet' : lang === 'es' ? 'Abriendo Skysbridge' : 'Opening Skysbridge';
+    const isMobile = window.matchMedia('(max-width: 700px)').matches;
     const intro = document.createElement('div');
     intro.className = 'web-first-visit';
     intro.setAttribute('role', 'region');
     intro.setAttribute('aria-label', introLabel);
     intro.innerHTML = '<div class="web-first-visit__backdrop" aria-hidden="true"></div>' +
-      '<video class="web-first-visit__video" muted autoplay playsinline preload="auto" poster="assets/skysbridge-first-visit-poster.jpg" aria-hidden="true">' +
-      '<source src="assets/skysbridge-first-visit.mp4" type="video/mp4">' +
-      '</video><button class="web-first-visit__skip" type="button"></button>';
+      '<video class="web-first-visit__video" muted autoplay playsinline preload="auto" aria-hidden="true"></video>' +
+      '<button class="web-first-visit__skip" type="button"></button>';
     document.body.appendChild(intro);
     const video = intro.querySelector('video');
     const skip = intro.querySelector('button');
     skip.textContent = skipLabel;
+    video.poster = isMobile
+      ? 'assets/skysbridge-first-visit-mobile-poster.jpg'
+      : 'assets/skysbridge-first-visit-poster.jpg';
+    video.src = isMobile
+      ? 'assets/skysbridge-first-visit-mobile.mp4'
+      : 'assets/skysbridge-first-visit.mp4';
 
     let closing = false;
     const close = () => {

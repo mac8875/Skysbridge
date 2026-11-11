@@ -69,15 +69,7 @@ html.web-first-visit-done body>footer{
 }
 @media (max-width:700px){
   .web-first-visit__backdrop{opacity:.9;filter:blur(26px)}
-  .web-first-visit__video{
-    width:min(100vw,calc(100dvh * 1.74));
-    height:auto;
-    max-height:72dvh;
-    aspect-ratio:864 / 496;
-    object-fit:contain;
-    border-radius:12px;
-    box-shadow:0 12px 56px rgba(0,0,0,.38);
-  }
+  .web-first-visit__video{width:100%;height:100%;max-height:none;aspect-ratio:9 / 16;object-fit:cover;border-radius:0;box-shadow:none}
 }
 @media (prefers-reduced-motion:reduce){
   body>header,body>main,body>footer,.web-first-visit{transition:none}
