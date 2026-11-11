@@ -640,7 +640,35 @@
     });
   });
 
-  function showStar(slug) {
+  async function canCurrentUserSendLoveToStar(slug) {
+    if (currentProfile?.is_admin) return true;
+    if (!db || !currentUser || currentUser.is_anonymous || slug !== "sky") return false;
+
+    try {
+      const { data: star, error: starError } = await db
+        .from("stars")
+        .select("created_by")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (starError || !star?.created_by) return false;
+      if (star.created_by === currentUser.id) return true;
+
+      const { data: membership, error: membershipError } = await db
+        .from("memorial_family_members")
+        .select("invite_id")
+        .eq("owner_user_id", star.created_by)
+        .eq("member_user_id", currentUser.id)
+        .not("accepted_at", "is", null)
+        .maybeSingle();
+
+      return !membershipError && Boolean(membership);
+    } catch (error) {
+      console.warn("Could not verify family access for Sky's star:", error);
+      return false;
+    }
+  }
+
+  async function showStar(slug) {
     const germanSkyStory =
       "Als ich erfuhr, dass es Sky gibt, war das einer der glücklichsten Momente meines Lebens. Ihn wieder loslassen zu müssen, wurde zu meinem tiefsten Schmerz.\n\nSky war nur kurze Zeit bei uns, und doch hat er unser Leben für immer verändert. Durch ihn haben wir verstanden, dass Liebe nicht in Jahren gemessen wird, sondern in der Tiefe der Verbindung, die bleibt.\n\nNach seinem Tod haben wir erlebt, wie still und einsam Trauer werden kann. Viele Eltern tragen ihren Schmerz allein, weil sie glauben, niemand könne wirklich verstehen, was sie verloren haben.\n\nAus der Liebe zu Sky entstand Skysbridge: ein würdevoller Ort, an dem Kinder, die viel zu früh gehen mussten, einen Namen, einen Stern und einen sichtbaren Platz in unserer Erinnerung behalten.\n\nSky ist der erste Stern im Himmel voller Sterne. Sein Licht steht am Anfang eines Ortes, an dem die Geschichten vieler Kinder weiterleuchten dürfen.";
 
@@ -655,9 +683,7 @@
       ? `Eine Erinnerung an ${starName} teilen`
       : "Eine persönliche Erinnerung teilen";
     const storyHtml = renderStoryParagraphs(star.story);
-    const canSendSkyLove = slug === "sky" && Boolean(
-      currentProfile?.is_admin || approvedMemorials.some(item => item.is_family)
-    );
+    const canSendSkyLove = slug === "sky" && await canCurrentUserSendLoveToStar(slug);
 
     openModal(`
       <article class="star-remembrance ${slug === "sky" ? `is-${window.SkyRemembrance.state()}` : ""}">

@@ -625,7 +625,35 @@
     });
   });
 
-  function showStar(slug) {
+  async function canCurrentUserSendLoveToStar(slug) {
+    if (currentProfile?.is_admin) return true;
+    if (!db || !currentUser || currentUser.is_anonymous || slug !== "sky") return false;
+
+    try {
+      const { data: star, error: starError } = await db
+        .from("stars")
+        .select("created_by")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (starError || !star?.created_by) return false;
+      if (star.created_by === currentUser.id) return true;
+
+      const { data: membership, error: membershipError } = await db
+        .from("memorial_family_members")
+        .select("invite_id")
+        .eq("owner_user_id", star.created_by)
+        .eq("member_user_id", currentUser.id)
+        .not("accepted_at", "is", null)
+        .maybeSingle();
+
+      return !membershipError && Boolean(membership);
+    } catch (error) {
+      console.warn("Could not verify family access for Sky's star:", error);
+      return false;
+    }
+  }
+
+  async function showStar(slug) {
     let star = {
       name: "Sky",
       story:
@@ -646,9 +674,7 @@
 
     const starName = escapeHtml(slug === "sky" ? "Sky" : (star.name || "A child remembered"));
     const storyHtml = renderStoryParagraphs(star.story);
-    const canSendSkyLove = slug === "sky" && Boolean(
-      currentProfile?.is_admin || approvedMemorials.some(item => item.is_family)
-    );
+    const canSendSkyLove = slug === "sky" && await canCurrentUserSendLoveToStar(slug);
 
     openModal(`
       <article class="star-remembrance ${slug === "sky" ? `is-${window.SkyRemembrance.state()}` : ""}">
