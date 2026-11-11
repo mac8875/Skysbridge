@@ -642,7 +642,7 @@
 
   async function canCurrentUserSendLoveToStar(slug) {
     if (currentProfile?.is_admin) return true;
-    if (!db || !currentUser || currentUser.is_anonymous || slug !== "sky") return false;
+    if (!db || !currentUser || currentUser.is_anonymous) return false;
 
     try {
       const { data: star, error: starError } = await db
@@ -683,17 +683,17 @@
       ? `Eine Erinnerung an ${starName} teilen`
       : "Eine persönliche Erinnerung teilen";
     const storyHtml = renderStoryParagraphs(star.story);
-    const canSendSkyLove = slug === "sky" && await canCurrentUserSendLoveToStar(slug);
+    const canSendLove = await canCurrentUserSendLoveToStar(slug);
 
     openModal(`
       <article class="star-remembrance ${slug === "sky" ? `is-${window.SkyRemembrance.state()}` : ""}">
         <header class="star-remembrance-header">
           <p class="eyebrow">Ein Licht, das bleibt</p>
-          <span class="star-remembrance-symbol${canSendSkyLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendSkyLove ? '<span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span>' : ""}</span>
+          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span>' : ""}</span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">Sein Leben war kurz. Sein Licht bleibt.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Geboren am <time datetime="2019-02-09">9. Februar 2019</time></p>' : ""}
-          ${canSendSkyLove ? '<button class="memorial-love-button" id="memorialLoveButton" type="button"><span aria-hidden="true">♡</span>Liebe senden</button><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Für dich und deine Familie</p>' : ""}
+          ${canSendLove ? '<button class="memorial-love-button" id="memorialLoveButton" type="button"><span aria-hidden="true">♡</span>Liebe senden</button><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Für dich und deine Familie</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -737,7 +737,7 @@
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
     let loveAnimationTimer = null;
     loveButton?.addEventListener("click", () => {
-      if (!canSendSkyLove || !loveTarget) return;
+      if (!canSendLove || !loveTarget) return;
       window.clearTimeout(loveAnimationTimer);
       loveTarget.classList.remove("is-sending-love");
       void loveTarget.offsetWidth;
@@ -1013,8 +1013,7 @@
           : "Ein Licht, das bleibt";
     const dateLine = memorialDateLine(item);
     const canWriteMemory = Boolean(item.is_star_owner);
-    const isSkyMemorial = String(item.child_name || "").trim().toLowerCase() === "sky";
-    const canSendLove = Boolean(item.is_owner || (currentProfile?.is_admin && isSkyMemorial));
+    const canSendLove = Boolean(item.is_owner || currentProfile?.is_admin);
 
     openModal(`
       <article class="memorial-detail-card is-${state}">
