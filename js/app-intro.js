@@ -38,7 +38,7 @@
     intro.setAttribute('aria-label', label);
     intro.innerHTML = `
       <div class="app-intro__scene" aria-hidden="true">
-        <video class="app-intro__animation" autoplay muted playsinline webkit-playsinline preload="auto" aria-hidden="true">
+        <video class="app-intro__animation" muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true">
           <source src="/assets/skysbridge-app-intro.mp4" type="video/mp4">
         </video>
       </div>
@@ -58,6 +58,19 @@
       }
     };
     video?.addEventListener('error', showFallback, { once: true });
+    // Android WebView may briefly paint its native play overlay before decoding.
+    // Keep the video hidden until a real frame is available.
+    let revealed = false;
+    const reveal = () => {
+      if (revealed || !video || video.paused || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+      revealed = true;
+      intro.classList.add('app-intro--playing');
+    };
+    video?.addEventListener('playing', reveal);
+    if (typeof video?.requestVideoFrameCallback === 'function') {
+      video.requestVideoFrameCallback(() => reveal());
+    }
+    video?.play()?.catch(showFallback);
     try { window.SkysbridgeNative?.setFullscreen(true); } catch {}
 
     const close = () => {
