@@ -9,41 +9,50 @@
   );
   if (isNative) return;
 
-  const seenKey = 'skysbridge-web-first-visit-seen';
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  let storage;
-  try {
-    storage = window.localStorage;
-    if (storage.getItem(seenKey) === '1' || reducedMotion) return;
-    storage.setItem(seenKey, '1');
-  } catch {
-    return;
+  if (reducedMotion) return;
+
+  function hasSignedInSession() {
+    try {
+      for (let index = 0; index < window.localStorage.length; index += 1) {
+        const key = window.localStorage.key(index);
+        if (!key || !/^sb-.+-auth-token$/.test(key)) continue;
+        const stored = JSON.parse(window.localStorage.getItem(key) || 'null');
+        const session = stored?.currentSession || stored;
+        const user = session?.user;
+        if (user?.id && !user.is_anonymous) return true;
+      }
+    } catch (_) {
+      // If browser storage is unavailable, show the guest intro and let the visitor skip it.
+    }
+    return false;
   }
 
+  if (hasSignedInSession()) return;
   document.documentElement.classList.add('web-first-visit-pending');
+
   const start = () => {
     if (!document.body || document.querySelector('.web-first-visit')) return;
     const lang = (document.documentElement.lang || 'en').slice(0, 2);
     const skipLabel = lang === 'de' ? 'Überspringen' : lang === 'es' ? 'Saltar' : 'Skip';
-    const introLabel = lang === 'de' ? 'Skysbridge wird geöffnet' : lang === 'es' ? 'Abriendo Skysbridge' : 'Opening Skysbridge';
-    const isMobile = window.matchMedia('(max-width: 700px)').matches;
+    const introLabel = lang === 'de'
+      ? 'Skysbridge wird geöffnet'
+      : lang === 'es' ? 'Abriendo Skysbridge' : 'Opening Skysbridge';
     const intro = document.createElement('div');
     intro.className = 'web-first-visit';
     intro.setAttribute('role', 'region');
     intro.setAttribute('aria-label', introLabel);
-    intro.innerHTML = '<div class="web-first-visit__backdrop" aria-hidden="true"></div>' +
+    intro.innerHTML =
+      '<div class="web-first-visit__backdrop" aria-hidden="true"></div>' +
       '<video class="web-first-visit__video" muted autoplay playsinline preload="auto" aria-hidden="true"></video>' +
       '<button class="web-first-visit__skip" type="button"></button>';
     document.body.appendChild(intro);
+
     const video = intro.querySelector('video');
     const skip = intro.querySelector('button');
     skip.textContent = skipLabel;
-    video.poster = isMobile
-      ? 'assets/skysbridge-first-visit-mobile-poster.jpg'
-      : 'assets/skysbridge-first-visit-poster.jpg';
-    video.src = isMobile
-      ? 'assets/skysbridge-first-visit-mobile.mp4'
-      : 'assets/skysbridge-first-visit.mp4';
+    video.poster = 'assets/skysbridge-first-visit-poster.jpg';
+    video.src = 'assets/skysbridge-first-visit-guest.mp4';
 
     let closing = false;
     const close = () => {
@@ -65,7 +74,7 @@
     }, { once: true });
     window.setTimeout(close, 10000);
     const playback = video.play();
-    if (playback && typeof playback.catch === 'function') playback.catch(close);
+    if (playback && typeof playback.catch === 'function') playback.catch(() => {});
   };
 
   if (document.readyState === 'loading') {
