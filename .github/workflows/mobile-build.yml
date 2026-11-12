@@ -48,8 +48,8 @@ jobs:
       - run: npx cap sync android
       - name: Verify localized typography and intro assets are bundled
         run: |
-          test -s www/assets/skysbridge-intro-bridge-stronger.gif
-          test -s android/app/src/main/assets/public/assets/skysbridge-intro-bridge-stronger.gif
+          test -s www/assets/skysbridge-app-intro.mp4
+          test -s android/app/src/main/assets/public/assets/skysbridge-app-intro.mp4
           test -s android/app/src/main/assets/public/css/native-app-typography.css
           while IFS= read -r -d '' page; do
             bundled="android/app/src/main/assets/public/${page#www/}"
