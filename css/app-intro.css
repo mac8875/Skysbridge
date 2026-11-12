@@ -60,3 +60,6 @@
 
 /* Reveal only after playback has started; preserve the source portrait frame. */
 .app-intro--playing .app-intro__animation{opacity:1;visibility:visible}
+
+.app-intro__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;z-index:2;display:block;opacity:1;transition:opacity .3s ease}
+.app-intro--playing .app-intro__poster{opacity:0}
