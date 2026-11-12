@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=15';
+    stylesheet.href = '/css/app-intro.css?v=16';
     document.head.appendChild(stylesheet);
   }
 
@@ -38,33 +38,41 @@
     intro.setAttribute('aria-label', label);
     intro.innerHTML = `
       <div class="app-intro__scene" aria-hidden="true">
-        <img class="app-intro__animation" src="/assets/skysbridge-intro-bridge-stronger.gif" alt="" fetchpriority="high">
+        <video class="app-intro__animation" autoplay muted playsinline webkit-playsinline preload="auto" aria-hidden="true">
+          <source src="/assets/skysbridge-app-intro.mp4" type="video/mp4">
+        </video>
       </div>
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
-    const animation = intro.querySelector('.app-intro__animation');
-    animation?.addEventListener('error', () => {
-      animation.remove();
+    const video = intro.querySelector('video');
+    const scene = intro.querySelector('.app-intro__scene');
+    const showFallback = () => {
+      video?.remove();
       intro.classList.add('app-intro--fallback');
-      const fallback = document.createElement('span');
-      fallback.className = 'app-intro__fallback-label';
-      fallback.textContent = 'Sky’s Bridge';
-      intro.querySelector('.app-intro__scene')?.appendChild(fallback);
-    }, { once: true });
+      if (!scene?.querySelector('.app-intro__fallback-label')) {
+        const fallback = document.createElement('span');
+        fallback.className = 'app-intro__fallback-label';
+        fallback.textContent = 'Sky’s Bridge';
+        scene?.appendChild(fallback);
+      }
+    };
+    video?.addEventListener('error', showFallback, { once: true });
     try { window.SkysbridgeNative?.setFullscreen(true); } catch {}
 
     const close = () => {
       if (!intro.isConnected || intro.classList.contains('is-leaving')) return;
       intro.classList.add('is-leaving');
+      video?.pause();
       window.setTimeout(() => {
         intro.remove();
         document.documentElement.classList.remove('skysbridge-intro-pending');
         try { window.SkysbridgeNative?.setFullscreen(false); } catch {}
       }, 650);
     };
+    video?.addEventListener('ended', () => window.setTimeout(close, 500), { once: true });
     intro.querySelector('.app-intro__skip')?.addEventListener('click', close, { once: true });
-    window.setTimeout(close, 10850);
+    window.setTimeout(close, 7500);
   };
 
   if (document.readyState === 'loading') {
