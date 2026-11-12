@@ -2,6 +2,7 @@ import { cp, mkdir, readdir, rm, stat, readFile, writeFile } from 'node:fs/promi
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import sharp from 'sharp';
+import { spawnSync } from 'node:child_process';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'www');
@@ -47,6 +48,15 @@ await cp(
   introVideo
 );
 if ((await stat(introVideo)).size === 0) throw new Error('Mobile intro video is missing or empty');
+// Extract a matching first-frame poster from the exact MP4 bundled into the APK.
+const poster = path.join(output, 'assets/skysbridge-intro-poster.jpg');
+const posterResult = spawnSync('ffmpeg', [
+  '-hide_banner', '-loglevel', 'error', '-y', '-i', introVideo,
+  '-frames:v', '1', '-q:v', '2', poster
+], { encoding: 'utf8' });
+if (posterResult.status !== 0 || !(await stat(poster).catch(() => null))?.size) {
+  throw new Error('Unable to generate intro poster from bundled video: ' + (posterResult.stderr || 'ffmpeg unavailable'));
+}
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
 if (!entry?.isFile()) throw new Error('Mobile web bundle is missing index.html');
