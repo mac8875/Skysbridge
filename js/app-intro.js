@@ -38,7 +38,7 @@
     intro.setAttribute('aria-label', label);
     intro.innerHTML = `
       <div class="app-intro__scene" aria-hidden="true">
-        <video class="app-intro__animation" muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true">
+        <img class="app-intro__poster" src="/assets/skysbridge-intro-poster.jpg" alt="" aria-hidden="true">\n        <video class="app-intro__animation" muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true">
           <source src="/assets/skysbridge-app-intro.mp4" type="video/mp4">
         </video>
       </div>
