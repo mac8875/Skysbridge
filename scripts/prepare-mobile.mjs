@@ -42,6 +42,10 @@ async function copyPublicFiles(source, destination) {
 await copyPublicFiles(root, output);
 await mkdir(path.join(output, 'assets'), { recursive: true });
 const introVideo = path.join(output, 'assets/skysbridge-app-intro.mp4');
+await cp(
+  path.join(root, 'mobile-assets/skysbridge-app-intro.mp4'),
+  introVideo
+);
 if ((await stat(introVideo)).size === 0) throw new Error('Mobile intro video is missing or empty');
 
 const entry = await stat(path.join(output, 'index.html')).catch(() => null);
