@@ -5,7 +5,7 @@
 }
 .app-intro.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
 .app-intro__scene{position:absolute;inset:0;overflow:hidden;transform-style:preserve-3d;background:linear-gradient(180deg,#031026,#071426 55%,#020914)}
-.app-intro__animation{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 48%;z-index:2;display:block}
+.app-intro__animation{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;z-index:2;display:block;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s ease}
 .app-intro--fallback .app-intro__scene{display:grid;place-items:center;background:radial-gradient(ellipse at 50% 45%,#12324b 0,#071426 48%,#020914 100%)}
 .app-intro__fallback-label{color:#f3d17d;font:500 clamp(42px,12vw,66px)/1 "Cormorant Garamond",Georgia,serif;letter-spacing:-.025em;text-shadow:0 8px 24px rgba(0,0,0,.45)}
 .app-intro__backdrop{position:absolute;inset:-5%;width:110%;height:110%;object-fit:cover;object-position:50% 52%;transform:translate3d(0,0,-125px) scale(1.2);filter:saturate(1.08) brightness(.83);animation:introBackdropDrift 8.75s cubic-bezier(.22,.68,.18,1) both;will-change:transform}
@@ -57,3 +57,6 @@
   .app-intro__tail-glow,.app-intro__tail-core,.app-intro__tail-spark{stroke-dashoffset:0}
   .app-intro__wordmark-sky,.app-intro__wordmark-bridge{transform:translate3d(0,0,55px)}
 }
+
+/* Reveal only after playback has started; preserve the source portrait frame. */
+.app-intro--playing .app-intro__animation{opacity:1;visibility:visible}
