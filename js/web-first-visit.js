@@ -51,7 +51,7 @@
     const video = intro.querySelector('video');
     const skip = intro.querySelector('button');
     skip.textContent = skipLabel;
-    video.poster = 'assets/skysbridge-first-visit-poster.jpg';
+    video.poster = 'assets/skysbridge-first-visit-guest-poster.jpg';
     video.src = 'assets/skysbridge-first-visit-guest.mp4';
 
     let closing = false;
