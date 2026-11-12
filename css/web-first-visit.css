@@ -31,7 +31,7 @@ html.web-first-visit-done body>footer{
   inset:-28px;
   background-image:
     linear-gradient(180deg,rgba(4,18,31,.22),rgba(4,18,31,.38)),
-    url("../assets/skysbridge-first-visit-poster.jpg");
+    url("../assets/skysbridge-first-visit-guest-poster.jpg");
   background-size:cover;
   background-position:center;
   filter:blur(22px);
