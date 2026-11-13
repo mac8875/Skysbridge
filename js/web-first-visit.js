@@ -44,8 +44,10 @@
     intro.setAttribute('aria-label', introLabel);
     intro.innerHTML =
       '<div class="web-first-visit__backdrop" aria-hidden="true"></div>' +
+      '<div class="web-first-visit__frame">' +
       '<video class="web-first-visit__video" muted autoplay playsinline preload="auto" aria-hidden="true"></video>' +
-      '<button class="web-first-visit__skip" type="button"></button>';
+      '<button class="web-first-visit__skip" type="button"></button>' +
+      '</div>';
     document.body.appendChild(intro);
 
     const video = intro.querySelector('video');
