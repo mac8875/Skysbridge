@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=16';
+    stylesheet.href = '/css/app-intro.css?v=17';
     document.head.appendChild(stylesheet);
   }
 
@@ -31,6 +31,7 @@
     if (!document.body || document.querySelector('.app-intro')) return;
     const lang = (document.documentElement.lang || 'en').slice(0, 2);
     const skipLabel = lang === 'de' ? 'Überspringen' : lang === 'es' ? 'Saltar' : 'Skip';
+    const soundLabel = lang === 'de' ? 'Ton einschalten' : lang === 'es' ? 'Activar sonido' : 'Enable sound';
     const label = lang === 'de' ? 'Skysbridge wird geladen' : lang === 'es' ? 'Cargando Skysbridge' : 'Loading Skysbridge';
     const intro = document.createElement('div');
     intro.className = 'app-intro';
@@ -42,11 +43,13 @@
           <source src="/assets/skysbridge-app-intro.mp4" type="video/mp4">
         </video>
       </div>
+      <button class="app-intro__sound" type="button">${soundLabel}</button>
       <button class="app-intro__skip" type="button">${skipLabel}</button>
     `;
     document.body.appendChild(intro);
     const video = intro.querySelector('video');
     const scene = intro.querySelector('.app-intro__scene');
+    const sound = intro.querySelector('.app-intro__sound');
     const showFallback = () => {
       video?.remove();
       intro.classList.add('app-intro--fallback');
@@ -84,6 +87,19 @@
       }, 650);
     };
     video?.addEventListener('ended', () => window.setTimeout(close, 500), { once: true });
+    sound?.addEventListener('click', async () => {
+      if (!video) return;
+      try {
+        video.muted = !video.muted;
+        if (!video.muted) await video.play();
+        sound.textContent = video.muted ? soundLabel : (lang === 'de' ? 'Ton ausschalten' : lang === 'es' ? 'Desactivar sonido' : 'Mute sound');
+        sound.setAttribute('aria-pressed', String(!video.muted));
+      } catch (_) {
+        video.muted = true;
+        sound.textContent = soundLabel;
+        sound.setAttribute('aria-pressed', 'false');
+      }
+    });
     intro.querySelector('.app-intro__skip')?.addEventListener('click', close, { once: true });
     window.setTimeout(close, 7500);
   };
