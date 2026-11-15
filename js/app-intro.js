@@ -23,7 +23,7 @@
     const stylesheet = document.createElement('link');
     stylesheet.id = 'app-intro-stylesheet';
     stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/app-intro.css?v=17';
+    stylesheet.href = '/css/app-intro.css?v=18';
     document.head.appendChild(stylesheet);
   }
 
@@ -32,6 +32,7 @@
     const lang = (document.documentElement.lang || 'en').slice(0, 2);
     const skipLabel = lang === 'de' ? 'Überspringen' : lang === 'es' ? 'Saltar' : 'Skip';
     const soundLabel = lang === 'de' ? 'Ton einschalten' : lang === 'es' ? 'Activar sonido' : 'Enable sound';
+    const muteLabel = lang === 'de' ? 'Ton ausschalten' : lang === 'es' ? 'Desactivar sonido' : 'Mute sound';
     const label = lang === 'de' ? 'Skysbridge wird geladen' : lang === 'es' ? 'Cargando Skysbridge' : 'Loading Skysbridge';
     const intro = document.createElement('div');
     intro.className = 'app-intro';
@@ -39,17 +40,27 @@
     intro.setAttribute('aria-label', label);
     intro.innerHTML = `
       <div class="app-intro__scene" aria-hidden="true">
-        <img class="app-intro__poster" src="/assets/skysbridge-intro-poster.jpg" alt="" aria-hidden="true">\n        <video class="app-intro__animation" muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true">
+        <img class="app-intro__poster" src="/assets/skysbridge-intro-poster.jpg" alt="" aria-hidden="true">\n        <video class="app-intro__animation" playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback aria-hidden="true">
           <source src="/assets/skysbridge-app-intro.mp4" type="video/mp4">
         </video>
       </div>
-      <button class="app-intro__sound" type="button">${soundLabel}</button>
-      <button class="app-intro__skip" type="button">${skipLabel}</button>
+      <div class="app-intro__controls">
+        <button class="app-intro__sound" type="button"></button>
+        <button class="app-intro__skip" type="button">${skipLabel}</button>
+      </div>
     `;
     document.body.appendChild(intro);
     const video = intro.querySelector('video');
     const scene = intro.querySelector('.app-intro__scene');
     const sound = intro.querySelector('.app-intro__sound');
+    const setSoundIcon = muted => {
+      sound.innerHTML = muted
+        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5 3 5 5m0-5-5 5"/></svg>'
+        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-1a6 6 0 0 1 0 8m2.5-11a10 10 0 0 1 0 14"/></svg>';
+      sound.setAttribute('aria-label', muted ? soundLabel : muteLabel);
+      sound.setAttribute('title', muted ? soundLabel : muteLabel);
+      sound.setAttribute('aria-pressed', String(!muted));
+    };
     const showFallback = () => {
       video?.remove();
       intro.classList.add('app-intro--fallback');
@@ -73,7 +84,13 @@
     if (typeof video?.requestVideoFrameCallback === 'function') {
       video.requestVideoFrameCallback(() => reveal());
     }
-    video?.play()?.catch(showFallback);
+    video?.play()?.catch(() => {
+      if (!video) return;
+      video.muted = true;
+      setSoundIcon(true);
+      video.play().catch(showFallback);
+    });
+    if (video) setSoundIcon(video.muted);
     try { window.SkysbridgeNative?.setFullscreen(true); } catch {}
 
     const close = () => {
@@ -92,12 +109,10 @@
       try {
         video.muted = !video.muted;
         if (!video.muted) await video.play();
-        sound.textContent = video.muted ? soundLabel : (lang === 'de' ? 'Ton ausschalten' : lang === 'es' ? 'Desactivar sonido' : 'Mute sound');
-        sound.setAttribute('aria-pressed', String(!video.muted));
+        setSoundIcon(video.muted);
       } catch (_) {
         video.muted = true;
-        sound.textContent = soundLabel;
-        sound.setAttribute('aria-pressed', 'false');
+        setSoundIcon(true);
       }
     });
     intro.querySelector('.app-intro__skip')?.addEventListener('click', close, { once: true });
