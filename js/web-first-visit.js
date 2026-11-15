@@ -36,6 +36,7 @@
     const lang = (document.documentElement.lang || 'en').slice(0, 2);
     const skipLabel = lang === 'de' ? 'Überspringen' : lang === 'es' ? 'Saltar' : 'Skip';
     const soundLabel = lang === 'de' ? 'Ton einschalten' : lang === 'es' ? 'Activar sonido' : 'Enable sound';
+    const muteLabel = lang === 'de' ? 'Ton ausschalten' : lang === 'es' ? 'Desactivar sonido' : 'Mute sound';
     const introLabel = lang === 'de'
       ? 'Skysbridge wird geöffnet'
       : lang === 'es' ? 'Abriendo Skysbridge' : 'Opening Skysbridge';
@@ -45,10 +46,14 @@
     intro.setAttribute('aria-label', introLabel);
     intro.innerHTML =
       '<div class="web-first-visit__backdrop" aria-hidden="true"></div>' +
+      '<div class="web-first-visit__content">' +
       '<div class="web-first-visit__frame">' +
-      '<video class="web-first-visit__video" muted autoplay playsinline preload="auto" aria-hidden="true"></video>' +
+      '<video class="web-first-visit__video" autoplay playsinline preload="auto" aria-hidden="true"></video>' +
+      '</div>' +
+      '<div class="web-first-visit__controls">' +
       '<button class="web-first-visit__sound" type="button"></button>' +
       '<button class="web-first-visit__skip" type="button"></button>' +
+      '</div>' +
       '</div>';
     document.body.appendChild(intro);
 
@@ -56,8 +61,14 @@
     const skip = intro.querySelector('.web-first-visit__skip');
     const sound = intro.querySelector('.web-first-visit__sound');
     skip.textContent = skipLabel;
-    sound.textContent = soundLabel;
-    sound.setAttribute('aria-pressed', 'false');
+    const setSoundIcon = muted => {
+      sound.innerHTML = muted
+        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5 3 5 5m0-5-5 5"/></svg>'
+        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-1a6 6 0 0 1 0 8m2.5-11a10 10 0 0 1 0 14"/></svg>';
+      sound.setAttribute('aria-label', muted ? soundLabel : muteLabel);
+      sound.setAttribute('title', muted ? soundLabel : muteLabel);
+      sound.setAttribute('aria-pressed', String(!muted));
+    };
     video.poster = 'assets/skysbridge-first-visit-guest-poster.jpg';
     video.src = 'assets/skysbridge-first-visit-guest.mp4';
 
@@ -78,12 +89,10 @@
       try {
         video.muted = !video.muted;
         if (!video.muted) await video.play();
-        sound.textContent = video.muted ? soundLabel : (lang === 'de' ? 'Ton ausschalten' : lang === 'es' ? 'Desactivar sonido' : 'Mute sound');
-        sound.setAttribute('aria-pressed', String(!video.muted));
+        setSoundIcon(video.muted);
       } catch (_) {
         video.muted = true;
-        sound.textContent = soundLabel;
-        sound.setAttribute('aria-pressed', 'false');
+        setSoundIcon(true);
       }
     });
     video.addEventListener('ended', close, { once: true });
@@ -93,7 +102,12 @@
     }, { once: true });
     window.setTimeout(close, 10000);
     const playback = video.play();
-    if (playback && typeof playback.catch === 'function') playback.catch(() => {});
+    if (playback && typeof playback.catch === 'function') playback.catch(() => {
+      video.muted = true;
+      setSoundIcon(true);
+      video.play().catch(() => {});
+    });
+    setSoundIcon(video.muted);
   };
 
   if (document.readyState === 'loading') {
