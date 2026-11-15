@@ -76,13 +76,26 @@
     video.playbackRate = 0.85;
     if ('preservesPitch' in video) video.preservesPitch = true;
     if ('webkitPreservesPitch' in video) video.webkitPreservesPitch = true;
-    const fadeOutSeconds = 1.1;
-    video.addEventListener('timeupdate', () => {
-      if (!Number.isFinite(video.duration) || !video.duration) return;
-      const mediaFadeDuration = fadeOutSeconds * video.playbackRate;
-      const remaining = video.duration - video.currentTime;
-      if (remaining <= mediaFadeDuration) {
-        video.volume = Math.max(0, remaining / mediaFadeDuration);
+    const fadeOutSeconds = 1.8;
+    let fadeAnimationFrame = null;
+    const fadeAudioSmoothly = () => {
+      if (video.paused || video.ended) {
+        fadeAnimationFrame = null;
+        return;
+      }
+      if (Number.isFinite(video.duration) && video.duration > 0) {
+        const mediaFadeDuration = fadeOutSeconds * video.playbackRate;
+        const remaining = video.duration - video.currentTime;
+        if (remaining <= mediaFadeDuration) {
+          const progress = Math.max(0, remaining / mediaFadeDuration);
+          video.volume = Math.sin(progress * Math.PI / 2);
+        }
+      }
+      fadeAnimationFrame = window.requestAnimationFrame(fadeAudioSmoothly);
+    };
+    video.addEventListener('playing', () => {
+      if (fadeAnimationFrame === null) {
+        fadeAnimationFrame = window.requestAnimationFrame(fadeAudioSmoothly);
       }
     });
 
@@ -121,7 +134,7 @@
         setSoundIcon(true);
       }
     });
-    video.addEventListener('ended', () => window.setTimeout(close, 700), { once: true });
+    video.addEventListener('ended', () => window.setTimeout(close, 1000), { once: true });
     video.addEventListener('error', close, { once: true });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') close();
