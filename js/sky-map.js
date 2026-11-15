@@ -69,6 +69,7 @@
       style.id = "featured-celestial-stars-style";
       style.textContent = `
         .celestial-wall { position: relative; }
+        .featured-celestial-stars { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
         .featured-celestial-star {
           position: absolute;
           z-index: 1;
