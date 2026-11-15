@@ -4,7 +4,7 @@
   transition:opacity .65s ease,visibility .65s ease
 }
 .app-intro.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
-.app-intro__scene{position:absolute;inset:0;overflow:hidden;transform-style:preserve-3d;background:linear-gradient(180deg,#031026,#071426 55%,#020914)}
+.app-intro__scene{position:absolute;inset:0 0 48px;overflow:hidden;transform-style:preserve-3d;background:linear-gradient(180deg,#031026,#071426 55%,#020914)}
 .app-intro__animation{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;z-index:2;display:block;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s ease}
 .app-intro--fallback .app-intro__scene{display:grid;place-items:center;background:radial-gradient(ellipse at 50% 45%,#12324b 0,#071426 48%,#020914 100%)}
 .app-intro__fallback-label{color:#f3d17d;font:500 clamp(42px,12vw,66px)/1 "Cormorant Garamond",Georgia,serif;letter-spacing:-.025em;text-shadow:0 8px 24px rgba(0,0,0,.45)}
@@ -37,7 +37,10 @@
 .app-intro__wings path:nth-child(2){stroke:#ffe2a0;stroke-width:.5;opacity:.76}
 .app-intro__wings path:nth-child(3){stroke:#9d6929;stroke-width:.55;opacity:.9}
 .app-intro__tagline{margin-top:6px;padding:0 8px;color:#e9d5a5;font:400 clamp(8px,2.6vw,11px)/1.4 Inter,Arial,sans-serif;letter-spacing:.23em;white-space:nowrap;opacity:0;transform:translateZ(28px);animation:introTaglineReveal 8.75s ease-out both}
-.app-intro__skip{position:absolute;right:18px;top:max(22px,calc(env(safe-area-inset-top) + 10px));z-index:5;border:1px solid rgba(244,215,146,.55);border-radius:999px;padding:9px 15px;color:#f2dcaa;background:rgba(2,9,20,.5);font:500 13px/1.2 Inter,Arial,sans-serif;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.app-intro__controls{position:absolute;left:0;right:0;bottom:env(safe-area-inset-bottom);z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 14px 8px;background:rgba(2,9,20,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.app-intro__skip{min-width:72px;border:1px solid rgba(244,215,146,.55);border-radius:999px;padding:7px 12px;color:#f2dcaa;background:rgba(2,9,20,.5);font:500 12px/1.2 Inter,Arial,sans-serif}
+.app-intro__sound{display:grid;place-items:center;width:36px;height:32px;border:1px solid rgba(244,215,146,.7);border-radius:999px;padding:0;color:#f2dcaa;background:rgba(2,9,20,.5)}
+.app-intro__sound svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 @keyframes introBackdropDrift{0%{transform:translate3d(0,6px,-145px) scale(1.16)}100%{transform:translate3d(0,-10px,-120px) scale(1.2)}}
 @keyframes introStarfieldDrift{0%{transform:translate3d(0,8px,36px) scale(1.08);opacity:.35}24%{opacity:.82}100%{transform:translate3d(-10px,-12px,36px) scale(1.08);opacity:.82}}
 @keyframes introStarRise{0%,8%{transform:translate3d(calc(-50% + 39vw),8px,42px) rotateX(18deg) rotateY(-24deg) scale(.28)}52%{transform:translate3d(calc(-50% + 5vw),-55px,60px) rotateX(9deg) rotateY(10deg) scale(.76)}82%,100%{transform:translate3d(calc(-50% - 24vw),-132px,76px) rotateX(4deg) rotateY(-5deg) scale(1)}}
