@@ -128,10 +128,17 @@
     }, { once: true });
     window.setTimeout(close, 10000);
     const playback = video.play();
-    if (playback && typeof playback.catch === 'function') playback.catch(() => {
-      playbackBlocked = true;
-      video.muted = false;
-      setSoundIcon(false, true);
+    if (playback && typeof playback.catch === 'function') playback.catch(async () => {
+      // Browsers commonly block autoplay with sound; muted playback can still start immediately.
+      video.muted = true;
+      playbackBlocked = false;
+      setSoundIcon(true);
+      try {
+        await video.play();
+      } catch (_) {
+        playbackBlocked = true;
+        setSoundIcon(false, true);
+      }
     });
     setSoundIcon(video.muted);
   };
