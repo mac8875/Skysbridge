@@ -35,6 +35,7 @@
     if (!document.body || document.querySelector('.web-first-visit')) return;
     const lang = (document.documentElement.lang || 'en').slice(0, 2);
     const skipLabel = lang === 'de' ? 'Überspringen' : lang === 'es' ? 'Saltar' : 'Skip';
+    const soundLabel = lang === 'de' ? 'Ton einschalten' : lang === 'es' ? 'Activar sonido' : 'Enable sound';
     const introLabel = lang === 'de'
       ? 'Skysbridge wird geöffnet'
       : lang === 'es' ? 'Abriendo Skysbridge' : 'Opening Skysbridge';
@@ -46,13 +47,17 @@
       '<div class="web-first-visit__backdrop" aria-hidden="true"></div>' +
       '<div class="web-first-visit__frame">' +
       '<video class="web-first-visit__video" muted autoplay playsinline preload="auto" aria-hidden="true"></video>' +
+      '<button class="web-first-visit__sound" type="button"></button>' +
       '<button class="web-first-visit__skip" type="button"></button>' +
       '</div>';
     document.body.appendChild(intro);
 
     const video = intro.querySelector('video');
-    const skip = intro.querySelector('button');
+    const skip = intro.querySelector('.web-first-visit__skip');
+    const sound = intro.querySelector('.web-first-visit__sound');
     skip.textContent = skipLabel;
+    sound.textContent = soundLabel;
+    sound.setAttribute('aria-pressed', 'false');
     video.poster = 'assets/skysbridge-first-visit-guest-poster.jpg';
     video.src = 'assets/skysbridge-first-visit-guest.mp4';
 
@@ -69,6 +74,18 @@
     };
 
     skip.addEventListener('click', close, { once: true });
+    sound.addEventListener('click', async () => {
+      try {
+        video.muted = !video.muted;
+        if (!video.muted) await video.play();
+        sound.textContent = video.muted ? soundLabel : (lang === 'de' ? 'Ton ausschalten' : lang === 'es' ? 'Desactivar sonido' : 'Mute sound');
+        sound.setAttribute('aria-pressed', String(!video.muted));
+      } catch (_) {
+        video.muted = true;
+        sound.textContent = soundLabel;
+        sound.setAttribute('aria-pressed', 'false');
+      }
+    });
     video.addEventListener('ended', close, { once: true });
     video.addEventListener('error', close, { once: true });
     document.addEventListener('keydown', event => {
