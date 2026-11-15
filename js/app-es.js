@@ -530,6 +530,10 @@
             <label class="star-choice"><input type="radio" name="star_style" value="radiant" checked><span class="star-choice-preview star-radiant" aria-hidden="true"></span><span>Radiante</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="classic"><span class="star-choice-preview star-classic" aria-hidden="true"></span><span>Clásica</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="guiding"><span class="star-choice-preview star-guiding" aria-hidden="true"></span><span>Luz guía</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="morning"><span class="star-choice-preview star-morning" aria-hidden="true"></span><span>Estrella de la mañana</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="evening"><span class="star-choice-preview star-evening" aria-hidden="true"></span><span>Estrella vespertina</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="heart"><span class="star-choice-preview star-heart" aria-hidden="true"></span><span>Estrella del corazón</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="spark"><span class="star-choice-preview star-spark" aria-hidden="true"></span><span>Estrella chispeante</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="signature"><span class="star-choice-preview star-signature" aria-hidden="true"></span><span>La estrella de Sky</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="comet"><span class="star-choice-preview star-comet" aria-hidden="true"></span><span>Cometa</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="petal"><span class="star-choice-preview star-petal" aria-hidden="true"></span><span>Pétalo</span></label>
@@ -974,7 +978,7 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Una vela encendida en su memoria" : ""}">`;
     }
 
-    const allowedStyles = ["radiant", "classic", "guiding", "halo", "signature", "comet", "petal", "north"];
+    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "spark", "halo", "signature", "comet", "petal", "north"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
     const depth = style === "halo" ? "" : [1, 2, 3, 4, 5].map((layer) => `<span class="memorial-star-depth star-${style}" style="--star-depth:${layer}px"></span>`).join("");
     return `<span class="memorial-star-volume" aria-hidden="true">${depth}<span class="memorial-star-shape star-${style}"></span></span>`;
