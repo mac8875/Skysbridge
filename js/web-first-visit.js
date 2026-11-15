@@ -60,17 +60,31 @@
     const video = intro.querySelector('video');
     const skip = intro.querySelector('.web-first-visit__skip');
     const sound = intro.querySelector('.web-first-visit__sound');
+    let playbackBlocked = false;
     skip.textContent = skipLabel;
-    const setSoundIcon = muted => {
+    const setSoundIcon = (muted, blocked = false) => {
       sound.innerHTML = muted
         ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5 3 5 5m0-5-5 5"/></svg>'
         : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-1a6 6 0 0 1 0 8m2.5-11a10 10 0 0 1 0 14"/></svg>';
-      sound.setAttribute('aria-label', muted ? soundLabel : muteLabel);
-      sound.setAttribute('title', muted ? soundLabel : muteLabel);
+      const label = muted || blocked ? soundLabel : muteLabel;
+      sound.setAttribute('aria-label', label);
+      sound.setAttribute('title', label);
       sound.setAttribute('aria-pressed', String(!muted));
     };
     video.poster = 'assets/skysbridge-first-visit-guest-poster.jpg';
-    video.src = 'assets/skysbridge-first-visit-guest.mp4';
+    video.src = 'assets/skysbridge-first-visit-guest.mp4?v=2';
+    video.playbackRate = 0.85;
+    if ('preservesPitch' in video) video.preservesPitch = true;
+    if ('webkitPreservesPitch' in video) video.webkitPreservesPitch = true;
+    const fadeOutSeconds = 1.1;
+    video.addEventListener('timeupdate', () => {
+      if (!Number.isFinite(video.duration) || !video.duration) return;
+      const mediaFadeDuration = fadeOutSeconds * video.playbackRate;
+      const remaining = video.duration - video.currentTime;
+      if (remaining <= mediaFadeDuration) {
+        video.volume = Math.max(0, remaining / mediaFadeDuration);
+      }
+    });
 
     let closing = false;
     const close = () => {
@@ -86,6 +100,18 @@
 
     skip.addEventListener('click', close, { once: true });
     sound.addEventListener('click', async () => {
+      if (playbackBlocked) {
+        try {
+          video.muted = false;
+          await video.play();
+          playbackBlocked = false;
+          setSoundIcon(false);
+        } catch (_) {
+          video.muted = false;
+          setSoundIcon(false, true);
+        }
+        return;
+      }
       try {
         video.muted = !video.muted;
         if (!video.muted) await video.play();
@@ -95,7 +121,7 @@
         setSoundIcon(true);
       }
     });
-    video.addEventListener('ended', close, { once: true });
+    video.addEventListener('ended', () => window.setTimeout(close, 700), { once: true });
     video.addEventListener('error', close, { once: true });
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') close();
@@ -103,9 +129,9 @@
     window.setTimeout(close, 10000);
     const playback = video.play();
     if (playback && typeof playback.catch === 'function') playback.catch(() => {
-      video.muted = true;
-      setSoundIcon(true);
-      video.play().catch(() => {});
+      playbackBlocked = true;
+      video.muted = false;
+      setSoundIcon(false, true);
     });
     setSoundIcon(video.muted);
   };
