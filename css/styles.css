@@ -1107,6 +1107,18 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .star-comet::before{clip-path:polygon(50% 0,60% 34%,96% 4%,68% 42%,100% 50%,66% 58%,95% 96%,58% 66%,50% 100%,42% 66%,4% 96%,34% 58%,0 50%,34% 42%,4% 4%,42% 34%)}
 .star-petal::before{clip-path:polygon(50% 0,61% 28%,88% 12%,72% 39%,100% 50%,72% 61%,88% 88%,61% 72%,50% 100%,39% 72%,12% 88%,28% 61%,0 50%,28% 39%,12% 12%,39% 28%);border-radius:50%}
 .star-north::before{clip-path:polygon(50% 0,58% 39%,84% 16%,61% 42%,100% 50%,61% 58%,84% 84%,58% 61%,50% 100%,42% 61%,16% 84%,39% 58%,0 50%,39% 42%,16% 16%,42% 39%)}
+
+/* Memorial star options: morning, evening, heart and spark */
+.star-morning::before{clip-path:polygon(50% 0,59% 42%,100% 50%,59% 58%,50% 82%,41% 58%,0 50%,41% 42%)}
+.star-evening::before{clip-path:polygon(50% 2%,61% 34%,96% 36%,70% 55%,79% 91%,50% 72%,21% 91%,30% 55%,4% 36%,39% 34%);background:linear-gradient(145deg,#fffdf1 5%,#eee2c4 54%,#c9b58c 100%)}
+.star-heart::before{clip-path:polygon(50% 3%,61% 36%,96% 36%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,4% 36%,39% 36%)}
+.star-heart::after{content:"";position:absolute;left:50%;top:49%;width:27%;height:25%;transform:translate(-50%,-45%);background:#fff8dc;filter:drop-shadow(0 0 3px rgba(255,248,220,.72));clip-path:polygon(50% 100%,7% 56%,0 38%,8% 16%,27% 5%,50% 27%,73% 5%,92% 16%,100% 38%,93% 56%)}
+.star-spark::before{clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)}
+.star-spark::after{content:"";position:absolute;top:10%;right:4%;width:22%;height:22%;background:#fff8d8;filter:drop-shadow(0 0 3px rgba(255,248,216,.8));clip-path:polygon(50% 0,59% 41%,100% 50%,59% 59%,50% 100%,41% 59%,0 50%,41% 41%);box-shadow:-33px 29px 0 -3px #fff0bd}
+.memorial-star-depth.star-morning{clip-path:polygon(50% 0,59% 42%,100% 50%,59% 58%,50% 82%,41% 58%,0 50%,41% 42%)}
+.memorial-star-depth.star-evening{clip-path:polygon(50% 2%,61% 34%,96% 36%,70% 55%,79% 91%,50% 72%,21% 91%,30% 55%,4% 36%,39% 34%)}
+.memorial-star-depth.star-heart{clip-path:polygon(50% 3%,61% 36%,96% 36%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,4% 36%,39% 36%)}
+.memorial-star-depth.star-spark{clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)}
 .memorial-card.is-anniversary .memorial-candle-image{width:52px;height:112px;object-fit:contain}
 .celestial-wall .memorial-card.is-anniversary .memorial-symbol{height:78px;margin:0}
 .celestial-wall .memorial-card.is-anniversary .memorial-candle-image{width:34px;height:62px}
