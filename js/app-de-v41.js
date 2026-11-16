@@ -749,7 +749,7 @@
       };
       const statusByGreeting = {
         heart: "Ein Herzgruß umkreist den Stern.",
-        spark: "Drei goldene Funken fliegen nacheinander zum Stern.",
+        spark: "Die Funken nähern sich dem Stern; bei ihrer Ankunft leuchtet er kurz heller.",
         wings: "Schützende Engelsflügel entfalten sich hinter dem Stern."
       };
       const nextClass = classByGreeting[greeting];
@@ -1079,7 +1079,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Dein Erinnerungstext wird 
       };
       const statusByGreeting = {
         heart: "Ein Herzgruß umkreist den Stern.",
-        spark: "Drei goldene Funken fliegen nacheinander zum Stern.",
+        spark: "Die Funken nähern sich dem Stern; bei ihrer Ankunft leuchtet er kurz heller.",
         wings: "Schützende Engelsflügel entfalten sich hinter dem Stern."
       };
       const nextClass = classByGreeting[greeting];
