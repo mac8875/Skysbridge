@@ -683,11 +683,11 @@
       <article class="star-remembrance ${slug === "sky" ? `is-${window.SkyRemembrance.state()}` : ""}">
         <header class="star-remembrance-header">
           <p class="eyebrow">A light remembered</p>
-          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span>' : ""}</span>
+          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-spark-orbit"><i>✧</i><i>✦</i><i>✧</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}</span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p>' : ""}
-          ${canSendLove ? '<button class="memorial-love-button" id="memorialLoveButton" type="button"><span aria-hidden="true">♡</span>Send love</button><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">For you and your family</p>' : ""}
+          ${canSendLove ? '<div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Sparks</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -726,23 +726,41 @@
       </article>
     `, "star-modal-card");
 
-    const loveButton = modalContent.querySelector("#memorialLoveButton");
+    const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
     let loveAnimationTimer = null;
-    loveButton?.addEventListener("click", () => {
+    loveButtons.forEach(button => button.addEventListener("click", () => {
       if (!canSendLove || !loveTarget) return;
+      const greeting = button.dataset.greeting;
+      const classByGreeting = {
+        heart: "is-sending-love",
+        spark: "is-sending-spark",
+        wings: "is-sending-wings"
+      };
+      const statusByGreeting = {
+        heart: "A golden heart circles the star.",
+        spark: "Soft golden sparks drift toward the star.",
+        wings: "Gentle angel wings unfold behind the star."
+      };
+      const nextClass = classByGreeting[greeting];
+      if (!nextClass) return;
       window.clearTimeout(loveAnimationTimer);
-      loveTarget.classList.remove("is-sending-love");
+      ["is-sending-love", "is-sending-spark", "is-sending-wings"].forEach(className => {
+        loveTarget.classList.remove(className);
+      });
       void loveTarget.offsetWidth;
-      loveTarget.classList.add("is-sending-love");
-      loveStatus.textContent = "A golden greeting circles Sky.";
+      loveTarget.classList.add(nextClass);
+      loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
+      if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
-        loveTarget.classList.remove("is-sending-love");
-        loveStatus.textContent = "For you and your family";
+        ["is-sending-love", "is-sending-spark", "is-sending-wings"].forEach(className => {
+          loveTarget.classList.remove(className);
+        });
+        loveButtons.forEach(choice => choice.classList.remove("is-active"));
+        if (loveStatus) loveStatus.textContent = "For you and your family";
       }, 3800);
-    });
-
+    }));
     const form = document.querySelector("#memoryForm");
     const status = document.querySelector("#memoryStatus");
 
@@ -1018,12 +1036,12 @@
         <p class="eyebrow">${dayLabel}</p>
         <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
-          ${canSendLove ? '<span class="memorial-love-orbit" aria-hidden="true"><i>♡</i><i>♡</i><i>♡</i></span>' : ""}
+          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-spark-orbit"><i>✧</i><i>✦</i><i>✧</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${canSendLove ? '<button class="memorial-love-button" id="memorialLoveButton" type="button"><span aria-hidden="true">♡</span>Send love</button><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Only for you and your family</p>' : ""}
+        ${canSendLove ? '<div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Sparks</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -1042,23 +1060,41 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
     `, "star-modal-card");
     window.dispatchEvent(new CustomEvent("skysbridge:open-memorial", { detail: { memorialId: item.id } }));
 
-    const loveButton = modalContent.querySelector("#memorialLoveButton");
+    const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
     let loveAnimationTimer = null;
-    loveButton?.addEventListener("click", () => {
+    loveButtons.forEach(button => button.addEventListener("click", () => {
       if (!canSendLove || !loveTarget) return;
+      const greeting = button.dataset.greeting;
+      const classByGreeting = {
+        heart: "is-sending-love",
+        spark: "is-sending-spark",
+        wings: "is-sending-wings"
+      };
+      const statusByGreeting = {
+        heart: "A golden heart circles the star.",
+        spark: "Soft golden sparks drift toward the star.",
+        wings: "Gentle angel wings unfold behind the star."
+      };
+      const nextClass = classByGreeting[greeting];
+      if (!nextClass) return;
       window.clearTimeout(loveAnimationTimer);
-      loveTarget.classList.remove("is-sending-love");
+      ["is-sending-love", "is-sending-spark", "is-sending-wings"].forEach(className => {
+        loveTarget.classList.remove(className);
+      });
       void loveTarget.offsetWidth;
-      loveTarget.classList.add("is-sending-love");
-      loveStatus.textContent = "A golden greeting circles the star.";
+      loveTarget.classList.add(nextClass);
+      loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
+      if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
-        loveTarget.classList.remove("is-sending-love");
-        loveStatus.textContent = "Only for you and your family";
+        ["is-sending-love", "is-sending-spark", "is-sending-wings"].forEach(className => {
+          loveTarget.classList.remove(className);
+        });
+        loveButtons.forEach(choice => choice.classList.remove("is-active"));
+        if (loveStatus) loveStatus.textContent = "For you and your family";
       }, 3800);
-    });
-
+    }));
     const photoGeneration = modalRequestGeneration;
     if (item.photo_path) {
       memorialPhotoUrl(item.photo_path).then(photoUrl => {
