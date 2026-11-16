@@ -1949,7 +1949,7 @@ html:not(.skysbridge-native) .help-card>p{
 .memorial-greeting-choices{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:8px auto 0}
 .memorial-greeting-choices .memorial-love-button{margin:0;padding:8px 11px;min-height:40px;font-size:12px}
 .memorial-greeting-choices .memorial-love-button.is-active{background:rgba(232,181,86,.18);border-color:rgba(244,215,146,.88);box-shadow:0 0 16px rgba(232,181,86,.16)}
-.memorial-greeting-effects{position:absolute;inset:0;z-index:3;pointer-events:none}
+.memorial-greeting-effects{position:absolute;inset:0;z-index:auto;pointer-events:none}
 .memorial-love-target>:first-child{position:relative;z-index:2}
 .memorial-spark-orbit{position:absolute;top:50%;left:50%;width:150px;height:150px;opacity:0;transform:translate(-50%,-50%);pointer-events:none}
 .memorial-spark-orbit i{position:absolute;color:#f8e7bd;font:400 15px/1 Georgia,serif;font-style:normal;text-shadow:0 0 10px rgba(255,237,184,.85),0 0 22px rgba(232,181,86,.58);opacity:0}
@@ -1965,7 +1965,7 @@ html:not(.skysbridge-native) .help-card>p{
 .memorial-love-target.is-sending-spark .memorial-spark-orbit i:nth-child(2){animation:memorialSparkTwinkle 3.1s ease-in-out .35s 1}
 .memorial-love-target.is-sending-spark .memorial-spark-orbit i:nth-child(3){animation:memorialSparkTwinkle 2.8s ease-in-out .55s 1}
 .memorial-love-target.is-sending-wings .memorial-wing-orbit{animation:memorialWingsOpen 3.6s cubic-bezier(.2,.8,.2,1) 1}
-.memorial-love-target.is-sending-spark .memorial-star-shape,.memorial-love-target.is-sending-spark .memorial-star-image,.memorial-love-target.is-sending-wings .memorial-star-shape,.memorial-love-target.is-sending-wings .memorial-star-image{animation:memorialLoveGlow 3.6s ease-out 1;filter:brightness(1.12) drop-shadow(0 0 19px rgba(244,215,146,.72)) drop-shadow(0 0 45px rgba(232,181,86,.42))}
+.memorial-love-target.is-sending-spark .memorial-star-shape,.memorial-love-target.is-sending-spark .memorial-star-image,.memorial-love-target.is-sending-spark .sky-symbol{animation:memorialSparkArrival .95s ease-out 1.65s 1 both}
 @keyframes memorialSparkDrift{0%{opacity:0;transform:translate(-50%,-50%) scale(.82)}18%{opacity:1}75%{opacity:.82;transform:translate(-50%,-53%) scale(1)}100%{opacity:0;transform:translate(-50%,-57%) scale(.94)}}
 @keyframes memorialSparkTwinkle{0%,100%{opacity:0;transform:translateY(9px) scale(.65)}30%,72%{opacity:.92;transform:translateY(-3px) scale(1)}}
 @keyframes memorialWingsOpen{0%{opacity:0;transform:translate(-50%,-50%) scale(.38,.66)}42%{opacity:.78}78%{opacity:.94;transform:translate(-50%,-50%) scale(1.04)}100%{opacity:.86;transform:translate(-50%,-50%) scale(1)}}
@@ -1981,3 +1981,9 @@ html:not(.skysbridge-native) .help-card>p{
 .memorial-love-target.is-sending-spark .memorial-spark-orbit i{animation:memorialSparkTravel 1.48s cubic-bezier(.28,.65,.25,1) both}
 @keyframes memorialSparkTravel{0%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(.28) rotate(-24deg)}15%{opacity:.96;transform:translate(var(--sx),var(--sy)) scale(1.12) rotate(10deg)}60%{opacity:.9;transform:translate(var(--mx),var(--my)) scale(.92) rotate(92deg)}84%{opacity:1;transform:translate(0,0) scale(1.08) rotate(160deg)}100%{opacity:0;transform:translate(0,0) scale(.25) rotate(220deg)}}
 @media(prefers-reduced-motion:reduce){.memorial-love-target.is-sending-spark .memorial-spark-orbit i{animation-duration:2.6s}}
+
+/* Keep wings behind the unchanged star; reserve the status area to prevent layout shift. */
+.memorial-wing-orbit{z-index:1}
+.memorial-spark-orbit{z-index:3}
+.memorial-love-status{height:2.8em;min-height:2.8em;display:flex;align-items:center;justify-content:center;text-align:center;padding-inline:6px}
+@keyframes memorialSparkArrival{0%,100%{filter:brightness(1) drop-shadow(0 0 8px rgba(255,244,189,.8)) drop-shadow(0 0 19px rgba(232,181,86,.5))}38%,72%{filter:brightness(1.34) drop-shadow(0 0 17px rgba(255,247,213,.98)) drop-shadow(0 0 40px rgba(232,181,86,.8))}}
