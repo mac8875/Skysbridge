@@ -1993,8 +1993,8 @@ html:not(.skysbridge-native) .help-card>p{
 @keyframes memorialSparkTravel{0%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(.28) rotate(-24deg)}15%{opacity:.96;transform:translate(var(--sx),var(--sy)) scale(1.12) rotate(10deg)}60%{opacity:.9;transform:translate(var(--mx),var(--my)) scale(.92) rotate(92deg)}84%{opacity:1;transform:translate(0,0) scale(1.08) rotate(160deg)}100%{opacity:0;transform:translate(0,0) scale(.25) rotate(220deg)}}
 @media(prefers-reduced-motion:reduce){.memorial-love-target.is-sending-spark .memorial-spark-orbit i{animation-duration:2.6s}}
 
-/* Keep wings behind the unchanged star; reserve the status area to prevent layout shift. */
+/* Keep greeting effects behind the star; reserve the status area to prevent layout shift. */
 .memorial-wing-orbit{z-index:1}
-.memorial-spark-orbit{z-index:3}
+.memorial-spark-orbit{z-index:1}
 .memorial-love-status{height:2.8em;min-height:2.8em;display:flex;align-items:center;justify-content:center;text-align:center;padding-inline:6px}
-@keyframes memorialSparkArrival{0%,100%{filter:brightness(1) drop-shadow(0 0 8px rgba(255,244,189,.8)) drop-shadow(0 0 19px rgba(232,181,86,.5))}38%,72%{filter:brightness(1.34) drop-shadow(0 0 17px rgba(255,247,213,.98)) drop-shadow(0 0 40px rgba(232,181,86,.8))}}
+@keyframes memorialSparkArrival{0%,100%{filter:brightness(1) drop-shadow(0 0 8px rgba(255,244,189,.8)) drop-shadow(0 0 19px rgba(232,181,86,.5))}32%,68%{filter:brightness(1.52) saturate(1.16) drop-shadow(0 0 23px rgba(255,251,226,1)) drop-shadow(0 0 58px rgba(232,181,86,.96))}}
