@@ -12,7 +12,7 @@
       return '<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="">';
     }
     return detailed
-      ? '<img class="memorial-star-image" src="assets/memorial-star.svg?v=55" alt="">''
+      ? '<img class="memorial-star-image" src="assets/memorial-star.svg?v=55" alt="">'
       : '<span class="sky-symbol" aria-hidden="true"></span>';
   }
   function applyState(element, today) {
