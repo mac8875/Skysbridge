@@ -1945,3 +1945,28 @@ html:not(.skysbridge-native) .help-card>p{
  .header-tools .header-auth-button{width:72px;flex-basis:72px;height:32px;min-height:32px;font-size:9px;letter-spacing:.02em}
  .menu-button{padding:2px;font-size:23px}
 }
+/* Selectable visual greetings for family-approved star pages. */
+.memorial-greeting-choices{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:8px auto 0}
+.memorial-greeting-choices .memorial-love-button{margin:0;padding:8px 11px;min-height:40px;font-size:12px}
+.memorial-greeting-choices .memorial-love-button.is-active{background:rgba(232,181,86,.18);border-color:rgba(244,215,146,.88);box-shadow:0 0 16px rgba(232,181,86,.16)}
+.memorial-greeting-effects{position:absolute;inset:0;z-index:3;pointer-events:none}
+.memorial-love-target>:first-child{position:relative;z-index:2}
+.memorial-spark-orbit{position:absolute;top:50%;left:50%;width:150px;height:150px;opacity:0;transform:translate(-50%,-50%);pointer-events:none}
+.memorial-spark-orbit i{position:absolute;color:#f8e7bd;font:400 15px/1 Georgia,serif;font-style:normal;text-shadow:0 0 10px rgba(255,237,184,.85),0 0 22px rgba(232,181,86,.58);opacity:0}
+.memorial-spark-orbit i:nth-child(1){top:12px;left:48%;font-size:18px}
+.memorial-spark-orbit i:nth-child(2){right:8px;top:62px;font-size:13px}
+.memorial-spark-orbit i:nth-child(3){left:16px;bottom:18px;font-size:12px}
+.memorial-wing-orbit{position:absolute;top:50%;left:50%;width:230px;height:145px;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.42,.68);transform-origin:center}
+.memorial-wing-orbit svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.memorial-wing-base{fill:#ead9b7;stroke:#fff0d1;stroke-width:1.4;stroke-linejoin:round;opacity:.9}
+.memorial-wing-feather{fill:#fff2dc;stroke:#e9d5ad;stroke-width:1.05;stroke-linejoin:round}
+.memorial-love-target.is-sending-spark .memorial-spark-orbit{animation:memorialSparkDrift 3.5s ease-out 1}
+.memorial-love-target.is-sending-spark .memorial-spark-orbit i:nth-child(1){animation:memorialSparkTwinkle 2.9s ease-in-out .1s 1}
+.memorial-love-target.is-sending-spark .memorial-spark-orbit i:nth-child(2){animation:memorialSparkTwinkle 3.1s ease-in-out .35s 1}
+.memorial-love-target.is-sending-spark .memorial-spark-orbit i:nth-child(3){animation:memorialSparkTwinkle 2.8s ease-in-out .55s 1}
+.memorial-love-target.is-sending-wings .memorial-wing-orbit{animation:memorialWingsOpen 3.6s cubic-bezier(.2,.8,.2,1) 1}
+.memorial-love-target.is-sending-spark .memorial-star-shape,.memorial-love-target.is-sending-spark .memorial-star-image,.memorial-love-target.is-sending-wings .memorial-star-shape,.memorial-love-target.is-sending-wings .memorial-star-image{animation:memorialLoveGlow 3.6s ease-out 1;filter:brightness(1.12) drop-shadow(0 0 19px rgba(244,215,146,.72)) drop-shadow(0 0 45px rgba(232,181,86,.42))}
+@keyframes memorialSparkDrift{0%{opacity:0;transform:translate(-50%,-50%) scale(.82)}18%{opacity:1}75%{opacity:.82;transform:translate(-50%,-53%) scale(1)}100%{opacity:0;transform:translate(-50%,-57%) scale(.94)}}
+@keyframes memorialSparkTwinkle{0%,100%{opacity:0;transform:translateY(9px) scale(.65)}30%,72%{opacity:.92;transform:translateY(-3px) scale(1)}}
+@keyframes memorialWingsOpen{0%{opacity:0;transform:translate(-50%,-50%) scale(.38,.66)}42%{opacity:.78}78%{opacity:.94;transform:translate(-50%,-50%) scale(1.04)}100%{opacity:.86;transform:translate(-50%,-50%) scale(1)}}
+@media(prefers-reduced-motion:reduce){.memorial-love-target.is-sending-spark .memorial-spark-orbit,.memorial-love-target.is-sending-wings .memorial-wing-orbit{animation-duration:5s}}
