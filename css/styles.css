@@ -1949,6 +1949,17 @@ html:not(.skysbridge-native) .help-card>p{
 .memorial-greeting-choices{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:8px auto 0}
 .memorial-greeting-choices .memorial-love-button{margin:0;padding:8px 11px;min-height:40px;font-size:12px}
 .memorial-greeting-choices .memorial-love-button.is-active{background:rgba(232,181,86,.18);border-color:rgba(244,215,146,.88);box-shadow:0 0 16px rgba(232,181,86,.16)}
+.memorial-greeting-controls{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:8px auto 0;max-width:100%}
+.memorial-greeting-controls .memorial-greeting-choices{margin:0}
+.memorial-greeting-sound-toggle{display:grid;place-items:center;flex:none;width:30px;height:30px;min-width:30px;min-height:30px;margin:0;padding:0;border:1px solid rgba(244,215,146,.42);border-radius:50%;background:rgba(232,181,86,.06);color:#f4d792;cursor:pointer;transition:background .2s ease,border-color .2s ease,box-shadow .2s ease}
+.memorial-greeting-sound-toggle:hover,.memorial-greeting-sound-toggle.is-enabled{border-color:rgba(244,215,146,.8);background:rgba(232,181,86,.16);box-shadow:0 0 12px rgba(232,181,86,.14)}
+.memorial-greeting-sound-toggle:focus-visible{outline:2px solid #f4d792;outline-offset:3px}
+.memorial-greeting-sound-toggle svg{display:block;width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.memorial-greeting-sound-toggle .memorial-sound-waves{display:none}
+.memorial-greeting-sound-toggle .memorial-sound-muted{display:block}
+.memorial-greeting-sound-toggle.is-enabled .memorial-sound-waves{display:block}
+.memorial-greeting-sound-toggle.is-enabled .memorial-sound-muted{display:none}
+@media(max-width:520px){.memorial-greeting-controls{gap:6px}.memorial-greeting-sound-toggle{width:30px;height:30px;min-width:30px;min-height:30px}}
 .memorial-greeting-effects{position:absolute;inset:0;z-index:auto;pointer-events:none}
 .memorial-love-target>:first-child{position:relative;z-index:2}
 .memorial-spark-orbit{position:absolute;top:50%;left:50%;width:150px;height:150px;opacity:0;transform:translate(-50%,-50%);pointer-events:none}
