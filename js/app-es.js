@@ -741,7 +741,7 @@
       };
       const statusByGreeting = {
         heart: "Un corazón dorado rodea la estrella.",
-        spark: "Tres destellos dorados vuelan uno tras otro hacia la estrella.",
+        spark: "Al llegar cada destello, la estrella brilla un instante.",
         wings: "Unas alas suaves se abren detrás de la estrella."
       };
       const nextClass = classByGreeting[greeting];
@@ -1071,7 +1071,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
       };
       const statusByGreeting = {
         heart: "Un corazón dorado rodea la estrella.",
-        spark: "Tres destellos dorados vuelan uno tras otro hacia la estrella.",
+        spark: "Al llegar cada destello, la estrella brilla un instante.",
         wings: "Unas alas suaves se abren detrás de la estrella."
       };
       const nextClass = classByGreeting[greeting];
