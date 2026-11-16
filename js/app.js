@@ -740,7 +740,7 @@
       };
       const statusByGreeting = {
         heart: "A golden heart circles the star.",
-        spark: "Three golden sparks travel one by one into the star.",
+        spark: "As each spark reaches the star, it briefly shines brighter.",
         wings: "Gentle angel wings unfold behind the star."
       };
       const nextClass = classByGreeting[greeting];
@@ -1074,7 +1074,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
       };
       const statusByGreeting = {
         heart: "A golden heart circles the star.",
-        spark: "Three golden sparks travel one by one into the star.",
+        spark: "As each spark reaches the star, it briefly shines brighter.",
         wings: "Gentle angel wings unfold behind the star."
       };
       const nextClass = classByGreeting[greeting];
