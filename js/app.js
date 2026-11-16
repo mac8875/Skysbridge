@@ -683,7 +683,7 @@
       <article class="star-remembrance ${slug === "sky" ? `is-${window.SkyRemembrance.state()}` : ""}">
         <header class="star-remembrance-header">
           <p class="eyebrow">A light remembered</p>
-          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-spark-orbit"><i>✧</i><i>✦</i><i>✧</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}</span>
+          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-spark-orbit"><i>✦</i><i>✦</i><i>✦</i><i>✦</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}</span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p>' : ""}
@@ -740,7 +740,7 @@
       };
       const statusByGreeting = {
         heart: "A golden heart circles the star.",
-        spark: "Soft golden sparks drift toward the star.",
+        spark: "Three golden sparks travel one by one into the star.",
         wings: "Gentle angel wings unfold behind the star."
       };
       const nextClass = classByGreeting[greeting];
@@ -1036,7 +1036,7 @@
         <p class="eyebrow">${dayLabel}</p>
         <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
-          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-spark-orbit"><i>✧</i><i>✦</i><i>✧</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}
+          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-spark-orbit"><i>✦</i><i>✦</i><i>✦</i><i>✦</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
@@ -1074,7 +1074,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
       };
       const statusByGreeting = {
         heart: "A golden heart circles the star.",
-        spark: "Soft golden sparks drift toward the star.",
+        spark: "Three golden sparks travel one by one into the star.",
         wings: "Gentle angel wings unfold behind the star."
       };
       const nextClass = classByGreeting[greeting];
