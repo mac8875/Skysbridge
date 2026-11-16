@@ -36,6 +36,32 @@
   const nav = document.querySelector(".main-nav");
   const authButtons = Array.from(document.querySelectorAll("[data-open-auth]"));
   const headerAuthButton = document.querySelector("[data-header-auth]");
+  let activeGreetingAudio = null;
+
+  function stopGreetingAudio() {
+    if (!activeGreetingAudio) return;
+    try {
+      activeGreetingAudio.pause();
+      activeGreetingAudio.currentTime = 0;
+    } catch {}
+    activeGreetingAudio = null;
+  }
+
+  function playGreetingSound(greeting) {
+    const source = window.SkysbridgeGreetingSounds?.[greeting];
+    if (!source) return;
+    stopGreetingAudio();
+    const player = new Audio(source);
+    player.volume = 0.45;
+    activeGreetingAudio = player;
+    player.addEventListener("ended", () => {
+      if (activeGreetingAudio === player) activeGreetingAudio = null;
+    }, { once: true });
+    const playback = player.play();
+    if (playback?.catch) playback.catch(() => {
+      if (activeGreetingAudio === player) activeGreetingAudio = null;
+    });
+  }
 
   function setHidden(element, hidden) {
     if (!element) return;
@@ -121,6 +147,7 @@
 
   function openModal(html, cardClass = "") {
     if (!modal || !modalContent) return;
+    stopGreetingAudio();
     modalRequestGeneration += 1;
 
     if (modalPhotoUrl) URL.revokeObjectURL(modalPhotoUrl);
@@ -138,6 +165,7 @@
 
   function closeModal() {
     if (!modal || !modalContent) return;
+    stopGreetingAudio();
     modalRequestGeneration += 1;
 
     setHidden(modal, true);
@@ -687,7 +715,7 @@
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p>' : ""}
-          ${canSendLove ? '<div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Sparks</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
+          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Sparks</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button></div><button type="button" class="memorial-greeting-sound-toggle" data-greeting-sound-toggle aria-pressed="false" aria-label="Turn sound on" title="Turn sound on" data-sound-on-label="Turn sound off" data-sound-off-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -729,6 +757,19 @@
     const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
+    const soundToggle = modalContent.querySelector("[data-greeting-sound-toggle]");
+    let greetingSoundsEnabled = false;
+    soundToggle?.addEventListener("click", () => {
+      greetingSoundsEnabled = !greetingSoundsEnabled;
+      soundToggle.setAttribute("aria-pressed", String(greetingSoundsEnabled));
+      soundToggle.classList.toggle("is-enabled", greetingSoundsEnabled);
+      const label = greetingSoundsEnabled
+        ? soundToggle.dataset.soundOnLabel
+        : soundToggle.dataset.soundOffLabel;
+      soundToggle.setAttribute("aria-label", label);
+      soundToggle.title = label;
+      if (!greetingSoundsEnabled) stopGreetingAudio();
+    });
     let loveAnimationTimer = null;
     loveButtons.forEach(button => button.addEventListener("click", () => {
       if (!canSendLove || !loveTarget) return;
@@ -751,6 +792,7 @@
       });
       void loveTarget.offsetWidth;
       loveTarget.classList.add(nextClass);
+      if (greetingSoundsEnabled) playGreetingSound(greeting);
       loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
       if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
@@ -1041,7 +1083,7 @@
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${canSendLove ? '<div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Sparks</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
+        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Sparks</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button></div><button type="button" class="memorial-greeting-sound-toggle" data-greeting-sound-toggle aria-pressed="false" aria-label="Turn sound on" title="Turn sound on" data-sound-on-label="Turn sound off" data-sound-off-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -1063,6 +1105,19 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
     const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
+    const soundToggle = modalContent.querySelector("[data-greeting-sound-toggle]");
+    let greetingSoundsEnabled = false;
+    soundToggle?.addEventListener("click", () => {
+      greetingSoundsEnabled = !greetingSoundsEnabled;
+      soundToggle.setAttribute("aria-pressed", String(greetingSoundsEnabled));
+      soundToggle.classList.toggle("is-enabled", greetingSoundsEnabled);
+      const label = greetingSoundsEnabled
+        ? soundToggle.dataset.soundOnLabel
+        : soundToggle.dataset.soundOffLabel;
+      soundToggle.setAttribute("aria-label", label);
+      soundToggle.title = label;
+      if (!greetingSoundsEnabled) stopGreetingAudio();
+    });
     let loveAnimationTimer = null;
     loveButtons.forEach(button => button.addEventListener("click", () => {
       if (!canSendLove || !loveTarget) return;
@@ -1085,6 +1140,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
       });
       void loveTarget.offsetWidth;
       loveTarget.classList.add(nextClass);
+      if (greetingSoundsEnabled) playGreetingSound(greeting);
       loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
       if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
