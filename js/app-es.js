@@ -716,7 +716,7 @@
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">Su vida fue breve. Su luz permanece.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Nació el <time datetime="2019-02-09">9 de febrero de 2019</time></p>' : ""}
-          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Chispas</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle" data-greeting-sound-toggle aria-pressed="false" aria-label="Activar sonido" title="Activar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
+          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Chispas</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -759,7 +759,7 @@
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
     const soundToggle = modalContent.querySelector("[data-greeting-sound-toggle]");
-    let greetingSoundsEnabled = false;
+    let greetingSoundsEnabled = true;
     soundToggle?.addEventListener("click", () => {
       greetingSoundsEnabled = !greetingSoundsEnabled;
       soundToggle.setAttribute("aria-pressed", String(greetingSoundsEnabled));
@@ -1080,7 +1080,7 @@
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Siempre amado")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Chispas</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle" data-greeting-sound-toggle aria-pressed="false" aria-label="Activar sonido" title="Activar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
+        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Chispas</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -1103,7 +1103,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
     const soundToggle = modalContent.querySelector("[data-greeting-sound-toggle]");
-    let greetingSoundsEnabled = false;
+    let greetingSoundsEnabled = true;
     soundToggle?.addEventListener("click", () => {
       greetingSoundsEnabled = !greetingSoundsEnabled;
       soundToggle.setAttribute("aria-pressed", String(greetingSoundsEnabled));
