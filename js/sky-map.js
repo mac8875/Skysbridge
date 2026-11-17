@@ -49,6 +49,128 @@
   }
 
 
+  function overlaps(a, b, gap = 0) {
+    return a.left < b.right + gap &&
+      a.right + gap > b.left &&
+      a.top < b.bottom + gap &&
+      a.bottom + gap > b.top;
+  }
+
+  function layoutWithoutLabelOverlaps(stars, center, container, baseHeight, initialExtra, fullscreen) {
+    const wall = container.getBoundingClientRect();
+    if (!wall.width || !wall.height) return 0;
+
+    const items = stars.map((card, index) => {
+      const cardRect = card.getBoundingClientRect();
+      const cx = cardRect.left + cardRect.width / 2 - wall.left;
+      const cy = cardRect.top + cardRect.height / 2 - wall.top;
+      const label = card.querySelector("strong");
+      const labelRect = label?.getBoundingClientRect() || cardRect;
+      const symbol = card.querySelector(".memorial-symbol") || card.querySelector(".sky-symbol") || card;
+      const symbolRect = symbol.getBoundingClientRect();
+      return {
+        card,
+        index,
+        x: cx,
+        y: cy,
+        isCenter: card === center,
+        label: {
+          left: labelRect.left - (cardRect.left + cardRect.width / 2),
+          right: labelRect.right - (cardRect.left + cardRect.width / 2),
+          top: labelRect.top - (cardRect.top + cardRect.height / 2),
+          bottom: labelRect.bottom - (cardRect.top + cardRect.height / 2)
+        },
+        symbol: {
+          left: symbolRect.left - (cardRect.left + cardRect.width / 2),
+          right: symbolRect.right - (cardRect.left + cardRect.width / 2),
+          top: symbolRect.top - (cardRect.top + cardRect.height / 2),
+          bottom: symbolRect.bottom - (cardRect.top + cardRect.height / 2)
+        }
+      };
+    });
+
+    const centerItem = items.find(item => item.isCenter);
+    if (!centerItem) return 0;
+
+    const occupied = [centerItem];
+    const satellites = items
+      .filter(item => !item.isCenter)
+      .sort((a, b) => {
+        const areaA = (a.label.right - a.label.left) * (a.label.bottom - a.label.top);
+        const areaB = (b.label.right - b.label.left) * (b.label.bottom - b.label.top);
+        return areaB - areaA || a.index - b.index;
+      });
+
+    const maxHeight = fullscreen
+      ? container.clientHeight
+      : baseHeight + initialExtra + Math.max(420, satellites.length * 190);
+    const makeRect = (item, kind, x, y) => ({
+      left: x + item[kind].left,
+      right: x + item[kind].right,
+      top: y + item[kind].top,
+      bottom: y + item[kind].bottom
+    });
+
+    const conflicts = (item, x, y) => {
+      const labelRect = makeRect(item, "label", x, y);
+      const symbolRect = makeRect(item, "symbol", x, y);
+      return occupied.some(other => {
+        const otherLabel = makeRect(other, "label", other.x, other.y);
+        const otherSymbol = makeRect(other, "symbol", other.x, other.y);
+        return overlaps(labelRect, otherLabel, 16) ||
+          overlaps(labelRect, otherSymbol, 12) ||
+          overlaps(symbolRect, otherLabel, 12) ||
+          overlaps(symbolRect, otherSymbol, 18);
+      });
+    };
+
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+    const step = 58;
+    satellites.forEach((item, order) => {
+      const minX = Math.max(12, 12 - item.label.left);
+      const maxX = Math.min(wall.width - 12, wall.width - 12 - item.label.right);
+      const minY = Math.max(12, 12 - item.label.top);
+      const maxY = Math.min(maxHeight - 12, maxHeight - 12 - item.label.bottom);
+      const anchorX = clamp(item.x, minX, maxX);
+      const anchorY = clamp(item.y, minY, maxY);
+      const candidates = [{ x: anchorX, y: anchorY }];
+
+      for (let ring = 1; ring <= Math.ceil((wall.width + maxHeight) / step); ring += 1) {
+        const radius = ring * step;
+        for (let point = 0; point < 20; point += 1) {
+          const angle = (point / 20) * Math.PI * 2 + order * 2.399963229728653;
+          candidates.push({
+            x: clamp(anchorX + Math.cos(angle) * radius, minX, maxX),
+            y: clamp(anchorY + Math.sin(angle) * radius, minY, maxY)
+          });
+        }
+      }
+
+      let chosen = candidates.find(candidate => !conflicts(item, candidate.x, candidate.y));
+      if (!chosen) {
+        const columns = Math.max(1, Math.floor((wall.width - 24) / 150));
+        for (let row = 0; row < satellites.length + 2 && !chosen; row += 1) {
+          for (let column = 0; column < columns && !chosen; column += 1) {
+            const candidate = {
+              x: clamp(minX + column * 150, minX, maxX),
+              y: clamp(baseHeight + initialExtra + row * 150, minY, maxY)
+            };
+            if (!conflicts(item, candidate.x, candidate.y)) chosen = candidate;
+          }
+        }
+      }
+
+      if (!chosen) chosen = { x: anchorX, y: anchorY };
+      item.x = chosen.x;
+      item.y = chosen.y;
+      item.card.style.setProperty("--star-x", `${chosen.x}px`);
+      item.card.style.setProperty("--star-y", `${chosen.y}px`);
+      occupied.push(item);
+    });
+
+    return Math.max(...occupied.map(item => item.y + item.label.bottom), 0);
+  }
+
   function layout(cards, preferredCenter, plane) {
     const container = plane || preferredCenter?.closest(".celestial-wall") || document.querySelector(".celestial-wall");
     if (!container) return;
@@ -125,10 +247,22 @@
       card.style.setProperty("--star-y", `${y}px`);
     });
 
-    const extraHeight = fullscreenViewport
+    const initialExtra = fullscreenViewport
       ? 0
       : Math.max(0, Math.ceil(satellites.length / positions.length) - 1) * 560;
-    container.style.setProperty("--wall-extra-height", `${extraHeight}px`);
+    container.style.setProperty("--wall-extra-height", `${initialExtra}px`);
+    const lowestLabel = layoutWithoutLabelOverlaps(
+      stars,
+      center,
+      container,
+      baseHeight,
+      initialExtra,
+      fullscreenViewport
+    );
+    const collisionExtra = fullscreenViewport
+      ? 0
+      : Math.max(0, Math.ceil((lowestLabel + 32 - (baseHeight + initialExtra)) / 120)) * 120;
+    container.style.setProperty("--wall-extra-height", `${initialExtra + collisionExtra}px`);
     positionLeoConstellation(container);
     positionAquariusConstellation(container);
   }
