@@ -561,6 +561,7 @@
             <label class="star-choice"><input type="radio" name="star_style" value="morning"><span class="star-choice-preview star-morning" aria-hidden="true"></span><span>Estrella de la mañana</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="evening"><span class="star-choice-preview star-evening" aria-hidden="true"></span><span>Estrella vespertina</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="heart"><span class="star-choice-preview star-heart" aria-hidden="true"></span><span>Estrella del corazón</span></label>
+            <label class="star-choice"><input type="radio" name="star_style" value="spark"><span class="star-choice-preview star-spark" aria-hidden="true"></span><span>Estrella chispeante</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="signature"><span class="star-choice-preview star-signature" aria-hidden="true"></span><span>La estrella de Sky</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="comet"><span class="star-choice-preview star-comet" aria-hidden="true"></span><span>Cometa</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="petal"><span class="star-choice-preview star-petal" aria-hidden="true"></span><span>Pétalo</span></label>
@@ -711,11 +712,11 @@
       <article class="star-remembrance ${slug === "sky" ? `is-sky is-${window.SkyRemembrance.state()}` : ""}">
         <header class="star-remembrance-header">
           <p class="eyebrow">Una luz que permanece</p>
-          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-spark-orbit"><i>✦</i><i>✦</i><i>✦</i><i>✦</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}</span>
+          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}</span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">Su vida fue breve. Su luz permanece.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Nació el <time datetime="2019-02-09">9 de febrero de 2019</time></p>' : ""}
-          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Chispas</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
+          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -776,18 +777,16 @@
       const greeting = button.dataset.greeting;
       const classByGreeting = {
         heart: "is-sending-love",
-        spark: "is-sending-spark",
         wings: "is-sending-wings"
       };
       const statusByGreeting = {
         heart: "Un corazón dorado rodea la estrella.",
-        spark: "Al llegar cada destello, la estrella brilla un instante.",
         wings: "Unas alas suaves se abren detrás de la estrella."
       };
       const nextClass = classByGreeting[greeting];
       if (!nextClass) return;
       window.clearTimeout(loveAnimationTimer);
-      ["is-sending-love", "is-sending-spark", "is-sending-wings"].forEach(className => {
+      ["is-sending-love", "is-sending-wings"].forEach(className => {
         loveTarget.classList.remove(className);
       });
       void loveTarget.offsetWidth;
@@ -796,7 +795,7 @@
       loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
       if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
-        ["is-sending-love", "is-sending-spark", "is-sending-wings"].forEach(className => {
+        ["is-sending-love", "is-sending-wings"].forEach(className => {
           loveTarget.classList.remove(className);
         });
         loveButtons.forEach(choice => choice.classList.remove("is-active"));
@@ -1037,7 +1036,7 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Una vela encendida en su memoria" : ""}">`;
     }
 
-    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "halo", "signature", "comet", "petal", "north"];
+    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "spark", "halo", "signature", "comet", "petal", "north"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
     const depth = style === "halo" ? "" : [1, 2, 3, 4, 5].map((layer) => `<span class="memorial-star-depth star-${style}" style="--star-depth:${layer}px"></span>`).join("");
     return `<span class="memorial-star-volume" aria-hidden="true">${depth}<span class="memorial-star-shape star-${style}"></span></span>`;
@@ -1074,12 +1073,12 @@
         <p class="eyebrow">${dayLabel}</p>
         <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
-          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-spark-orbit"><i>✦</i><i>✦</i><i>✦</i><i>✦</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}
+          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Siempre amado")}</h2>
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="spark"><span aria-hidden="true">✧</span>Chispas</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
+        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -1120,18 +1119,16 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
       const greeting = button.dataset.greeting;
       const classByGreeting = {
         heart: "is-sending-love",
-        spark: "is-sending-spark",
         wings: "is-sending-wings"
       };
       const statusByGreeting = {
         heart: "Un corazón dorado rodea la estrella.",
-        spark: "Al llegar cada destello, la estrella brilla un instante.",
         wings: "Unas alas suaves se abren detrás de la estrella."
       };
       const nextClass = classByGreeting[greeting];
       if (!nextClass) return;
       window.clearTimeout(loveAnimationTimer);
-      ["is-sending-love", "is-sending-spark", "is-sending-wings"].forEach(className => {
+      ["is-sending-love", "is-sending-wings"].forEach(className => {
         loveTarget.classList.remove(className);
       });
       void loveTarget.offsetWidth;
@@ -1140,7 +1137,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
       loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
       if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
-        ["is-sending-love", "is-sending-spark", "is-sending-wings"].forEach(className => {
+        ["is-sending-love", "is-sending-wings"].forEach(className => {
           loveTarget.classList.remove(className);
         });
         loveButtons.forEach(choice => choice.classList.remove("is-active"));
