@@ -574,7 +574,6 @@
             <label class="star-choice"><input type="radio" name="star_style" value="morning"><span class="star-choice-preview star-morning" aria-hidden="true"></span><span>Morgenstern</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="evening"><span class="star-choice-preview star-evening" aria-hidden="true"></span><span>Abendstern</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="heart"><span class="star-choice-preview star-heart" aria-hidden="true"></span><span>Herzensstern</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="spark"><span class="star-choice-preview star-spark" aria-hidden="true"></span><span>Funkenstern</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="signature"><span class="star-choice-preview star-signature" aria-hidden="true"></span><span>Skys Stern</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="comet"><span class="star-choice-preview star-comet" aria-hidden="true"></span><span>Komet</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="petal"><span class="star-choice-preview star-petal" aria-hidden="true"></span><span>Blütenstern</span></label>
@@ -1046,7 +1045,7 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Eine brennende Gedenkkerze" : ""}">`;
     }
 
-    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "spark", "halo", "signature", "comet", "petal", "north"];
+    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "halo", "signature", "comet", "petal", "north"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
     const depth = style === "halo" ? "" : [1, 2, 3, 4, 5].map((layer) => `<span class="memorial-star-depth star-${style}" style="--star-depth:${layer}px"></span>`).join("");
     return `<span class="memorial-star-volume" aria-hidden="true">${depth}<span class="memorial-star-shape star-${style}"></span></span>`;
