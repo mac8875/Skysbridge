@@ -146,5 +146,26 @@
   </url>
   <url>
     <loc>https://skysbridge.org/privacy-es.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://skysbridge.org/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://skysbridge.org/privacy-de.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://skysbridge.org/privacy-es.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://skysbridge.org/privacy.html" />
+  </url>
+  <url>
+    <loc>https://skysbridge.org/privacy.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://skysbridge.org/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://skysbridge.org/privacy-de.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://skysbridge.org/privacy-es.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://skysbridge.org/privacy.html" />
+  </url>
+  <url>
+    <loc>https://skysbridge.org/privacy-de.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://skysbridge.org/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://skysbridge.org/privacy-de.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://skysbridge.org/privacy-es.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://skysbridge.org/privacy.html" />
   </url>
 </urlset>
