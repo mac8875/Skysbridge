@@ -1109,7 +1109,7 @@
         <p class="eyebrow">${dayLabel}</p>
         <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
-          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><img src="assets/memorial-angel-wings.svg" alt=""></span><span class="memorial-snowfall"><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i></span><span class="memorial-santa-hat" aria-hidden="true"></span></span>' : ""}
+          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><img src="assets/memorial-angel-wings.svg" alt=""></span><span class="memorial-snowfall"><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i></span></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Siempre amado")}</h2>
         ${item.is_star_owner ? `
@@ -1126,7 +1126,7 @@
         </details>` : ""}
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="snow" aria-label="Nieve"><span aria-hidden="true">❄</span>Nieve</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="hat" aria-pressed="false"><span aria-hidden="true">🎅</span>Gorro navideño</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
+        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="snow" aria-label="Nieve"><span aria-hidden="true">❄</span>Nieve</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -1174,15 +1174,9 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
         if (loveStatus) loveStatus.textContent = "La nieve cae alrededor de la estrella.";
         seasonalAnimationTimer = window.setTimeout(() => {
           loveTarget.classList.remove("is-snowing");
-          const hatButton = modalContent.querySelector('[data-seasonal="hat"]');
-          if (loveStatus) loveStatus.textContent = hatButton?.getAttribute("aria-pressed") === "true" ? "La estrella está decorada para Navidad." : "Elige un saludo para esta estrella";
+          if (loveStatus) loveStatus.textContent = "Elige un saludo para esta estrella";
         }, 4600);
         return;
-      }
-      if (effect === "hat") {
-        const isHatted = loveTarget.classList.toggle("is-wearing-santa-hat");
-        button.setAttribute("aria-pressed", String(isHatted));
-        if (loveStatus) loveStatus.textContent = isHatted ? "La estrella está decorada para Navidad." : loveTarget.classList.contains("is-snowing") ? "La nieve cae alrededor de la estrella." : "Elige un saludo para esta estrella";
       }
     }));
     let loveAnimationTimer = null;
