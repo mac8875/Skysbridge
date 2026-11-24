@@ -776,7 +776,7 @@
 
 
     const seasonalTarget = slug === "sky" ? modalContent.querySelector(".star-remembrance-symbol") : null;
-    const seasonalCopy = { snow: "Snowfall", hat: "Santa hat", snowing: "Snow is falling around the star.", hatted: "The star is dressed for Christmas.", rest: canSendLove ? "Choose a greeting for this star" : "Choose snowfall or a hat for Sky." };
+    const seasonalCopy = { snow: "Snowfall", snowing: "Snow is falling around the star.", rest: canSendLove ? "Choose a greeting for this star" : "Choose snowfall for Sky." };
     let seasonalButtons = [];
     if (seasonalTarget) {
       seasonalTarget.classList.add("memorial-love-target");
@@ -792,12 +792,6 @@
         snowfall.className = "memorial-snowfall";
         snowfall.innerHTML = "<i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i>";
         effects.appendChild(snowfall);
-      }
-      if (!effects.querySelector(".memorial-santa-hat")) {
-        const hat = document.createElement("span");
-        hat.className = "memorial-santa-hat";
-        hat.setAttribute("aria-hidden", "true");
-        effects.appendChild(hat);
       }
       let choices = modalContent.querySelector(".memorial-greeting-choices");
       if (!choices) {
@@ -816,8 +810,7 @@
         button.type = "button";
         button.className = "memorial-love-button memorial-seasonal-choice";
         button.dataset.seasonal = effect;
-        if (effect === "hat") button.setAttribute("aria-pressed", "false");
-        else button.setAttribute("aria-label", label);
+        button.setAttribute("aria-label", label);
         const glyph = document.createElement("span");
         glyph.setAttribute("aria-hidden", "true");
         glyph.textContent = icon;
@@ -825,7 +818,6 @@
         choices.appendChild(button);
       };
       addSeasonalButton("snow", seasonalCopy.snow, "❄");
-      addSeasonalButton("hat", seasonalCopy.hat, "🎅");
       seasonalButtons = [...choices.querySelectorAll(".memorial-seasonal-choice")];
       if (!modalContent.querySelector("#memorialLoveStatus")) {
         const status = document.createElement("p");
@@ -866,15 +858,9 @@
         seasonalAnimationTimer = window.setTimeout(() => {
           stopGreetingAudio(420);
           seasonalTarget.classList.remove("is-snowing");
-          const hatButton = modalContent.querySelector('[data-seasonal="hat"]');
-          if (loveStatus) loveStatus.textContent = hatButton?.getAttribute("aria-pressed") === "true" ? seasonalCopy.hatted : seasonalCopy.rest;
+          if (loveStatus) loveStatus.textContent = seasonalCopy.rest;
         }, 4600);
         return;
-      }
-      if (button.dataset.seasonal === "hat") {
-        const isHatted = seasonalTarget.classList.toggle("is-wearing-santa-hat");
-        button.setAttribute("aria-pressed", String(isHatted));
-        if (loveStatus) loveStatus.textContent = isHatted ? seasonalCopy.hatted : seasonalTarget.classList.contains("is-snowing") ? seasonalCopy.snowing : seasonalCopy.rest;
       }
     }));
     let loveAnimationTimer = null;
@@ -1199,7 +1185,7 @@
         <p class="eyebrow">${dayLabel}</p>
         <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
-          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><img src="assets/memorial-angel-wings.svg" alt=""></span><span class="memorial-snowfall"><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i></span><span class="memorial-santa-hat" aria-hidden="true"></span></span>' : ""}
+          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><img src="assets/memorial-angel-wings.svg" alt=""></span><span class="memorial-snowfall"><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i></span></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
         ${item.is_star_owner ? `
@@ -1216,7 +1202,7 @@
         </details>` : ""}
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="snow" aria-label="Snowfall"><span aria-hidden="true">❄</span>Snowfall</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="hat" aria-pressed="false"><span aria-hidden="true">🎅</span>Santa hat</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Turn sound off" title="Turn sound off" data-sound-on-label="Turn sound off" data-sound-off-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
+        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="snow" aria-label="Snowfall"><span aria-hidden="true">❄</span>Snowfall</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Turn sound off" title="Turn sound off" data-sound-on-label="Turn sound off" data-sound-off-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -1266,15 +1252,9 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
         seasonalAnimationTimer = window.setTimeout(() => {
           stopGreetingAudio(420);
           loveTarget.classList.remove("is-snowing");
-          const hatButton = modalContent.querySelector('[data-seasonal="hat"]');
-          if (loveStatus) loveStatus.textContent = hatButton?.getAttribute("aria-pressed") === "true" ? "The star is dressed for Christmas." : "Choose a greeting for this star";
+          if (loveStatus) loveStatus.textContent = "Choose a greeting for this star";
         }, 4600);
         return;
-      }
-      if (effect === "hat") {
-        const isHatted = loveTarget.classList.toggle("is-wearing-santa-hat");
-        button.setAttribute("aria-pressed", String(isHatted));
-        if (loveStatus) loveStatus.textContent = isHatted ? "The star is dressed for Christmas." : loveTarget.classList.contains("is-snowing") ? "Snow is falling around the star." : "Choose a greeting for this star";
       }
     }));
     let loveAnimationTimer = null;

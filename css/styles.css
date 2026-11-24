@@ -1997,12 +1997,7 @@ html:not(.skysbridge-native) .help-card>p{
 .memorial-snowfall i:nth-child(7){--flake-x:88%;--flake-duration:3.3s;--flake-delay:.5s;font-size:12px}
 .memorial-snowfall i:nth-child(8){--flake-x:97%;--flake-duration:4s;--flake-delay:.25s;font-size:10px}
 @keyframes memorialSnowFall{0%{opacity:0;transform:translate3d(0,-8px,0) rotate(0)}14%{opacity:.92}76%{opacity:.8}100%{opacity:0;transform:translate3d(14px,165px,0) rotate(240deg)}}
-.memorial-santa-hat{position:absolute;z-index:5;top:calc(50% - 68px);left:calc(50% - 18px);display:none;width:36px;height:28px;transform:rotate(-7deg);pointer-events:none;background:radial-gradient(circle at 84% 8%,#fff 0 4px,transparent 4.8px);filter:drop-shadow(0 2px 4px rgba(0,0,0,.32))}
-.memorial-santa-hat::before{content:"";position:absolute;left:7px;top:1px;width:25px;height:20px;background:linear-gradient(145deg,#f14d47 0%,#c91f34 72%,#9d192c 100%);clip-path:polygon(0 100%,16% 44%,78% 0,91% 8%,74% 100%);border-radius:60% 40% 0 0}
-.memorial-santa-hat::after{content:"";position:absolute;left:0;bottom:2px;width:35px;height:7px;border-radius:999px;background:linear-gradient(180deg,#fff 0%,#e8edf0 100%);box-shadow:0 1px 2px rgba(0,0,0,.2)}
-.star-remembrance-symbol .memorial-santa-hat{top:calc(50% - 68px)}
-.memorial-detail-symbol .memorial-santa-hat{top:calc(50% - 97px)}
-.memorial-love-target.is-wearing-santa-hat .memorial-santa-hat{display:block}
+
 @media(prefers-reduced-motion:reduce){.memorial-snowfall i{animation:none!important;opacity:.45;transform:translateY(35px)}}
 
 /* Keep greeting effects behind the star; reserve the status area to prevent layout shift. */
