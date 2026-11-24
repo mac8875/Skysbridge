@@ -38,6 +38,7 @@
   const headerAuthButton = document.querySelector("[data-header-auth]");
   let activeGreetingAudio = null;
   let greetingFadeFrame = 0;
+  let seasonalAnimationTimer = null;
 
   function stopGreetingAudio(fadeMs = 0) {
     if (greetingFadeFrame) window.cancelAnimationFrame(greetingFadeFrame);
@@ -179,6 +180,9 @@
 
   function openModal(html, cardClass = "") {
     if (!modal || !modalContent) return;
+    window.clearTimeout(seasonalAnimationTimer);
+    seasonalAnimationTimer = null;
+    modalCard?.querySelector(".memorial-card-snowfall")?.remove();
     stopGreetingAudio();
     modalRequestGeneration += 1;
 
@@ -197,6 +201,10 @@
 
   function closeModal() {
     if (!modal || !modalContent) return;
+    window.clearTimeout(seasonalAnimationTimer);
+    seasonalAnimationTimer = null;
+    modalCard?.querySelector(".memorial-card-snowfall")?.remove();
+    modalCard?.classList.remove("is-snowing");
     stopGreetingAudio();
     modalRequestGeneration += 1;
 
@@ -1129,7 +1137,7 @@
         </details>` : ""}
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="snow" aria-label="Snowfall"><span aria-hidden="true">❄</span>Snowfall</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Turn sound off" title="Turn sound off" data-sound-on-label="Turn sound off" data-sound-off-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
+        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="snow" aria-label="Snowfall" aria-pressed="false"><span aria-hidden="true">❄</span>Snowfall</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Turn sound off" title="Turn sound off" data-sound-on-label="Turn sound off" data-sound-off-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -1165,20 +1173,41 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
       if (!greetingSoundsEnabled) stopGreetingAudio();
     });
     const seasonalButtons = modalContent.querySelectorAll(".memorial-seasonal-choice");
-    let seasonalAnimationTimer = null;
     seasonalButtons.forEach(button => button.addEventListener("click", () => {
       if (!canSendLove || !loveTarget) return;
       const effect = button.dataset.seasonal;
       if (effect === "snow") {
         window.clearTimeout(seasonalAnimationTimer);
-        loveTarget.classList.remove("is-snowing");
-        void loveTarget.offsetWidth;
-        loveTarget.classList.add("is-snowing");
-        if (loveStatus) loveStatus.textContent = "Snow is falling around the star.";
+        modalCard?.querySelector(".memorial-card-snowfall")?.remove();
+        modalCard?.classList.remove("is-snowing");
+        const snowfall = document.createElement("span");
+        snowfall.className = "memorial-card-snowfall";
+        snowfall.setAttribute("aria-hidden", "true");
+        const distance = Math.max(280, (modalCard?.clientHeight || window.innerHeight) + 24);
+        snowfall.style.setProperty("--snowfall-distance", distance + "px");
+        for (let index = 0; index < 18; index += 1) {
+          const flake = document.createElement("i");
+          flake.textContent = "❄";
+          flake.style.setProperty("--flake-x", (Math.random() * 100).toFixed(2) + "%");
+          flake.style.setProperty("--flake-size", (9 + Math.random() * 9).toFixed(1) + "px");
+          flake.style.setProperty("--flake-duration", (3.1 + Math.random() * 1.5).toFixed(2) + "s");
+          flake.style.setProperty("--flake-delay", (Math.random() * 1.05).toFixed(2) + "s");
+          flake.style.setProperty("--flake-drift", (Math.random() * 44 - 22).toFixed(1) + "px");
+          snowfall.append(flake);
+        }
+        if (modalCard) {
+          modalCard.append(snowfall);
+          modalCard.classList.add("is-snowing");
+        }
+        button.setAttribute("aria-pressed", "true");
+        if (loveStatus) loveStatus.textContent = "Snow is falling across Sky’s card.";
         seasonalAnimationTimer = window.setTimeout(() => {
-          loveTarget.classList.remove("is-snowing");
+          snowfall.remove();
+          modalCard?.classList.remove("is-snowing");
+          button.setAttribute("aria-pressed", "false");
           if (loveStatus) loveStatus.textContent = "Choose a greeting for this star";
-        }, 4600);
+          seasonalAnimationTimer = null;
+        }, 5200);
         return;
       }
     }));
