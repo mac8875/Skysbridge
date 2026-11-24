@@ -90,8 +90,8 @@
       if (hover) flight.pause();
       flight.onfinish = () => { clear(); idle(); schedule(random(4500,12000)); };
     }
-    el.addEventListener("focus",() => { focused=true; clear(); if(enabled()) parked(); });
-    el.addEventListener("blur",() => { focused=false; run(); });
+    el.addEventListener("focus",() => { if(!el.matches(":focus-visible")) return; focused=true; clear(); if(enabled()) parked(); });
+    el.addEventListener("blur",() => { if(!focused) return; focused=false; run(); });
     el.addEventListener("pointerenter",event => { if(event.pointerType==="mouse"){hover=true;flight?.pause();} });
     el.addEventListener("pointerleave",event => { if(event.pointerType==="mouse"){hover=false;flight?.play();} });
     motion.addEventListener?.("change",run);
