@@ -744,7 +744,7 @@
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">Sein Leben war kurz. Sein Licht bleibt.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Geboren am <time datetime="2019-02-09">9. Februar 2019</time></p>' : ""}
-          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Gruß und saisonale Effekte auswählen"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Herz</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Flügel</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Ton ausschalten" title="Ton ausschalten" data-sound-on-label="Ton ausschalten" data-sound-off-label="Ton einschalten"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Wähle einen Gruß – nur für dich und deine Familie</p>' : ""}
+          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Gruß und saisonale Effekte auswählen"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Herz</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Flügel</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="snow" aria-label="Schneefall" aria-pressed="false"><span aria-hidden="true">❄</span>Schneefall</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Ton ausschalten" title="Ton ausschalten" data-sound-on-label="Ton ausschalten" data-sound-off-label="Ton einschalten"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Wähle einen Gruß – nur für dich und deine Familie</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -786,6 +786,7 @@
     const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
+    const snowButton = modalContent.querySelector("[data-seasonal=\"snow\"]");
     const soundToggle = modalContent.querySelector("[data-greeting-sound-toggle]");
     let greetingSoundsEnabled = true;
     soundToggle?.addEventListener("click", () => {
@@ -798,6 +799,38 @@
       soundToggle.setAttribute("aria-label", label);
       soundToggle.title = label;
       if (!greetingSoundsEnabled) stopGreetingAudio();
+    });
+    let skySnowTimer = null;
+    snowButton?.addEventListener("click", () => {
+      if (!canSendLove || !modalCard) return;
+      window.clearTimeout(skySnowTimer);
+      modalCard.querySelector(".memorial-card-snowfall")?.remove();
+      modalCard.classList.remove("is-snowing");
+      const snowfall = document.createElement("span");
+      snowfall.className = "memorial-card-snowfall";
+      snowfall.setAttribute("aria-hidden", "true");
+      snowfall.style.setProperty("--snowfall-distance", Math.max(280, modalCard.clientHeight + 24) + "px");
+      for (let index = 0; index < 18; index += 1) {
+        const flake = document.createElement("i");
+        flake.textContent = "❄";
+        flake.style.setProperty("--flake-x", (Math.random() * 100).toFixed(2) + "%");
+        flake.style.setProperty("--flake-size", (9 + Math.random() * 9).toFixed(1) + "px");
+        flake.style.setProperty("--flake-duration", (3.1 + Math.random() * 1.5).toFixed(2) + "s");
+        flake.style.setProperty("--flake-delay", (Math.random() * 1.05).toFixed(2) + "s");
+        flake.style.setProperty("--flake-drift", (Math.random() * 44 - 22).toFixed(1) + "px");
+        snowfall.append(flake);
+      }
+      modalCard.append(snowfall);
+      modalCard.classList.add("is-snowing");
+      snowButton.setAttribute("aria-pressed", "true");
+      if (loveStatus) loveStatus.textContent = "Schnee fällt über Skys Karte.";
+      skySnowTimer = window.setTimeout(() => {
+        snowfall.remove();
+        modalCard.classList.remove("is-snowing");
+        snowButton.setAttribute("aria-pressed", "false");
+        if (loveStatus) loveStatus.textContent = "Wähle einen Gruß – nur für dich und deine Familie";
+        skySnowTimer = null;
+      }, 5200);
     });
     let loveAnimationTimer = null;
     loveButtons.forEach(button => button.addEventListener("click", () => {
