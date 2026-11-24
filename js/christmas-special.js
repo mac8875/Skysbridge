@@ -43,14 +43,10 @@
 </g></svg>`;
   const random = (min,max) => min + Math.random() * (max-min);
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  // Recorded sleigh bells: Joseph Sardin, BigSoundBank #0585, CC0.
-  // https://bigsoundbank.com/bells-of-santa-claus-s0585.html
-  // The Netlify build bundles the sample locally, so visitors never contact the audio provider.
-  const soundKey = "skysbridge.christmas-bells.v1";
-  let soundEnabled = true;
-  try { soundEnabled = localStorage.getItem(soundKey) !== "off"; } catch {}
+  // Recorded sleigh bells: soundstack, "Sleigh bells 90 bpm loop", CC0.
+  // https://freesound.org/people/soundstack/sounds/255104/
+  const soundEnabled = true;
   let audioContext = null, currentBells = null, bellBuffer = null, loadingBells = null;
-  const soundControls = [];
   const audioCtor = window.AudioContext || window.webkitAudioContext;
   function unlockAudio() {
     if (!soundEnabled || !audioCtor) return;
@@ -59,7 +55,7 @@
       if (audioContext.state !== "running") audioContext.resume().catch(()=>{});
       if (!bellBuffer && !loadingBells) {
         const ctx = audioContext;
-        loadingBells=fetch("assets/christmas-sleigh-bells.mp3",{credentials:"same-origin"})
+        loadingBells=fetch("assets/christmas-sleigh-bells-rhythm.mp3",{credentials:"same-origin"})
           .then(response=>{if(!response.ok)throw Error("Bells unavailable");return response.arrayBuffer();})
           .then(bytes=>ctx.decodeAudioData(bytes))
           .then(buffer=>{bellBuffer=buffer;})
@@ -85,7 +81,7 @@
       const ctx=audioContext,t=ctx.currentTime+.025;
       const source=ctx.createBufferSource(), bus=ctx.createGain();
       source.buffer=bellBuffer;
-      const duration=Math.min(5.5,bellBuffer.duration);
+      const duration=Math.min(6.5,bellBuffer.duration);
       const peak=.32;
       bus.gain.setValueAtTime(0,t);
       bus.gain.linearRampToValueAtTime(peak,t+.38);
@@ -106,34 +102,16 @@
       return true;
     }catch{stopBells();return false;}
   }
-  function updateSoundControls() {
-    const lang=document.documentElement.lang.toLowerCase().slice(0,2);
-    const names=({de:["Rentierglöckchen einschalten","Rentierglöckchen ausschalten"],en:["Turn sleigh bells on","Turn sleigh bells off"],es:["Activar cascabeles","Desactivar cascabeles"]})[lang]||["Turn sleigh bells on","Turn sleigh bells off"];
-    for(const button of soundControls){
-      button.setAttribute("aria-pressed",String(soundEnabled));
-      button.setAttribute("aria-label",names[soundEnabled?1:0]);
-      button.title=names[soundEnabled?1:0];
-      button.querySelector(".sb-bell-mute").style.display=soundEnabled?"none":"";
-    }
-  }
-  function makeSoundControl(parent) {
-    if(!parent || !audioCtor) return;
-    const button=document.createElement("button");
-    button.type="button"; button.className="sb-christmas-sound";
-    button.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/><path class="sb-bell-mute" d="M3 3l18 18" stroke="#e6c78d" stroke-width="2.2"/></svg>';
-    button.addEventListener("click",()=>{
-      soundEnabled=!soundEnabled;
-      try{localStorage.setItem(soundKey,soundEnabled?"on":"off");}catch{}
-      if(soundEnabled)unlockAudio();else stopBells();
-      updateSoundControls();
-    });
-    soundControls.push(button);parent.append(button);updateSoundControls();
-    new MutationObserver(updateSoundControls).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+  function enableAutomaticBells() {
+    if(!audioCtor)return;
     document.addEventListener("pointerdown",unlockAudio,{passive:true});
+    document.addEventListener("pointerup",unlockAudio,{passive:true});
+    document.addEventListener("click",unlockAudio,{passive:true});
     document.addEventListener("keydown",unlockAudio);
     document.addEventListener("visibilitychange",()=>{if(document.hidden)stopBells();});
     window.addEventListener("pagehide",stopBells);
-    window.addEventListener("storage",event=>{if(event.key===soundKey){soundEnabled=event.newValue!=="off";if(!soundEnabled)stopBells();updateSoundControls();}});
+    // Try autoplay only when the browser already grants it.
+    if(navigator.userActivation?.hasBeenActive)unlockAudio();
   }
   function attachFlight(el, area, enabled = () => true) {
     let flight = null, timer = null, focused = false, bellCheck = null;
@@ -217,14 +195,14 @@
     #christmas-special-sleigh svg,.sky-objects #sleigh svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px #e6c78d55);pointer-events:none}
     #christmas-special-sleigh:hover,.sky-objects #sleigh:hover{filter:brightness(1.12)}
     #christmas-special-link:focus-visible,#christmas-special-sleigh:focus-visible,.sky-objects #sleigh:focus-visible{outline:2px solid #f6d79b;outline-offset:3px;border-radius:5px}
-    .sb-christmas-sound,.language .sb-christmas-sound{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;min-width:32px;padding:0;border:1px solid #e6c78d45;border-radius:50%;background:transparent;color:#d8bd89;cursor:pointer;vertical-align:middle}
-    .sb-christmas-sound[aria-pressed="false"]{opacity:.65}
-    .sb-christmas-sound:focus-visible{outline:2px solid #e6c78d;outline-offset:2px}
+
+
+
     @media(max-width:600px){#christmas-special-sleigh,.sky-objects #sleigh{width:142px;height:56px}}
   `;
   document.head.append(style);
   const pageSleigh = document.querySelector(".sky-objects #sleigh");
-  if (pageSleigh) { makeSoundControl(document.querySelector(".language")); attachFlight(pageSleigh,pageSleigh.parentElement); return; }
+  if (pageSleigh) { enableAutomaticBells(); attachFlight(pageSleigh,pageSleigh.parentElement); return; }
   const now = new Date();
   if (now.getMonth() !== 11 && !(now.getMonth() === 10 && now.getDate() >= 24)) return;
   if (now.getMonth() === 11 && now.getDate() > 26) return;
@@ -246,7 +224,7 @@
   const toggle = document.createElement("input");
   toggle.type = "checkbox"; toggle.checked = true; toggle.setAttribute("aria-controls","christmas-special-sleigh");
   const labelText = document.createElement("span"); labelText.textContent = words.sleigh;
-  label.append(toggle,labelText); settings.append(label); makeSoundControl(settings);
+  label.append(toggle,labelText); settings.append(label); enableAutomaticBells();
   const sleigh = document.createElement("a");
   sleigh.id = "christmas-special-sleigh"; sleigh.href = url;
   sleigh.setAttribute("aria-label",words.sleigh + " – " + words.title);
