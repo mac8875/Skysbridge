@@ -45,7 +45,7 @@
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   // Recorded sleigh bells: soundstack, "Sleigh bells 90 bpm loop", CC0.
   // https://freesound.org/people/soundstack/sounds/255104/
-  const soundEnabled = true;
+  let soundEnabled = false;
   let audioContext = null, currentBells = null, bellBuffer = null, loadingBells = null;
   const audioCtor = window.AudioContext || window.webkitAudioContext;
   function unlockAudio() {
@@ -113,6 +113,48 @@
     // Try autoplay only when the browser already grants it.
     if(navigator.userActivation?.hasBeenActive)unlockAudio();
   }
+  function initSoundControl(settings = null) {
+    let button = document.getElementById("christmas-sound-control");
+    if (!button) {
+      button = document.createElement("button");
+      button.id = "christmas-sound-control";
+      button.type = "button";
+      button.className = "christmas-sound-control";
+      button.setAttribute("aria-pressed", "false");
+      if (settings) settings.append(button);
+      else {
+        const header = document.querySelector(".top");
+        const language = header?.querySelector(".language");
+        if (header && language) header.insertBefore(button, language);
+      }
+    }
+    const labels = {
+      de: {enable:"Ton einschalten", active:"Ton an", disable:"Ton ausschalten"},
+      en: {enable:"Enable sound", active:"Sound on", disable:"Mute sound"},
+      es: {enable:"Activar sonido", active:"Sonido activo", disable:"Silenciar"}
+    };
+    const render = () => {
+      const lang = (document.documentElement.lang || "en").slice(0,2);
+      const words = labels[lang] || labels.en;
+      const action = soundEnabled ? words.disable : words.enable;
+      const icon = soundEnabled
+        ? '<path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-1a6 6 0 0 1 0 8m2.5-11a10 10 0 0 1 0 14"/>'
+        : '<path d="M4 9v6h4l5 4V5L8 9H4Zm12 0 5 6m0-6-5 6"/>';
+      button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + icon + '</svg><span>' + (soundEnabled ? words.active : words.enable) + '</span>';
+      button.setAttribute("aria-label", action);
+      button.setAttribute("title", action);
+      button.setAttribute("aria-pressed", String(soundEnabled));
+    };
+    button.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      if (soundEnabled) unlockAudio();
+      else stopBells();
+      render();
+    });
+    document.querySelectorAll("[data-lang]").forEach(item => item.addEventListener("click", render));
+    render();
+    return button;
+  }
   function attachFlight(el, area, enabled = () => true) {
     let flight = null, timer = null, focused = false, bellCheck = null;
     el.innerHTML = artwork;
@@ -162,7 +204,7 @@
       ],{duration,easing:"linear",fill:"both"});
       let rang=false;
       bellCheck=setInterval(()=>{
-        if (!flight || flight.playState!=="running" || !enabled() || !soundEnabled || document.hidden) { stopBells(); return; }
+        if (!flight || flight.playState!=="running" || !enabled() || !soundEnabled || document.hidden) { stopBells(); rang=false; return; }
         const r=el.getBoundingClientRect(), a=area.getBoundingClientRect();
         const visibleX=Math.min(r.right,a.right,window.innerWidth)-Math.max(r.left,a.left,0);
         const visibleY=Math.min(r.bottom,a.bottom,window.innerHeight)-Math.max(r.top,a.top,0);
@@ -188,6 +230,10 @@
   const style = document.createElement("style");
   style.textContent = `
     #christmas-special-link{display:flex;width:fit-content;max-width:100%;align-items:center;justify-content:center;align-self:center;text-align:center;gap:.5rem;color:#f1d7a2;text-decoration:none;font-size:14px;margin:0 auto 12px;padding:8px 16px;border:1px solid #e6c78d66;border-radius:30px;line-height:1.4;background:#11243a}
+    .christmas-sound-control{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 10px;border:1px solid #e6c78d66;border-radius:24px;background:#11243a;color:#f1d7a2;font:600 11px system-ui,sans-serif;white-space:nowrap;cursor:pointer;touch-action:manipulation}
+    .christmas-sound-control svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .christmas-sound-control[aria-pressed="true"]{background:#e6c78d;color:#1e2534}
+    .christmas-sound-control:focus-visible{outline:2px solid #f6d79b;outline-offset:3px}
     #christmas-special-link:hover{color:#fff2d1}
     #christmas-special-sleigh,.sky-objects #sleigh{position:absolute;top:0;left:0;display:flex;align-items:center;justify-content:center;width:174px;height:70px;padding:0;border:0;background:transparent;color:#f7dfab;touch-action:manipulation;opacity:0;will-change:transform}
     #christmas-special-sleigh{z-index:4;text-decoration:none}
@@ -202,7 +248,7 @@
   `;
   document.head.append(style);
   const pageSleigh = document.querySelector(".sky-objects #sleigh");
-  if (pageSleigh) { enableAutomaticBells(); attachFlight(pageSleigh,pageSleigh.parentElement); return; }
+  if (pageSleigh) { initSoundControl(); enableAutomaticBells(); attachFlight(pageSleigh,pageSleigh.parentElement); return; }
   const now = new Date();
   if (now.getMonth() !== 11 && !(now.getMonth() === 10 && now.getDate() >= 24)) return;
   if (now.getMonth() === 11 && now.getDate() > 26) return;
@@ -224,7 +270,7 @@
   const toggle = document.createElement("input");
   toggle.type = "checkbox"; toggle.checked = true; toggle.setAttribute("aria-controls","christmas-special-sleigh");
   const labelText = document.createElement("span"); labelText.textContent = words.sleigh;
-  label.append(toggle,labelText); settings.append(label); enableAutomaticBells();
+  label.append(toggle,labelText); settings.append(label); initSoundControl(settings); enableAutomaticBells();
   const sleigh = document.createElement("a");
   sleigh.id = "christmas-special-sleigh"; sleigh.href = url;
   sleigh.setAttribute("aria-label",words.sleigh + " – " + words.title);
