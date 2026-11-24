@@ -172,7 +172,7 @@
       const icon = soundEnabled
         ? '<path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-1a6 6 0 0 1 0 8m2.5-11a10 10 0 0 1 0 14"/>'
         : '<path d="M4 9v6h4l5 4V5L8 9H4Zm12 0 5 6m0-6-5 6"/>';
-      button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + icon + '</svg><span>' + (soundEnabled ? words.active : words.enable) + '</span>';
+      button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + icon + '</svg>';
       button.setAttribute("aria-label", action);
       button.setAttribute("title", action);
       button.setAttribute("aria-pressed", String(soundEnabled));
@@ -262,7 +262,7 @@
   const style = document.createElement("style");
   style.textContent = `
     #christmas-special-link{display:flex;width:fit-content;max-width:100%;align-items:center;justify-content:center;align-self:center;text-align:center;gap:.5rem;color:#f1d7a2;text-decoration:none;font-size:14px;margin:0 auto 12px;padding:8px 16px;border:1px solid #e6c78d66;border-radius:30px;line-height:1.4;background:#11243a}
-    .christmas-sound-control{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:0 0 144px;width:144px;min-width:144px;max-width:144px;height:40px;min-height:40px;padding:0 8px;border:1px solid #e6c78d66;border-radius:24px;background:#11243a;color:#f1d7a2;font:600 11px system-ui,sans-serif;white-space:nowrap;cursor:pointer;touch-action:manipulation}
+    .christmas-sound-control{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:0;flex:0 0 42px;width:42px;min-width:42px;max-width:42px;height:42px;min-height:42px;padding:0;border:1px solid #e6c78d66;border-radius:50%;background:#11243a;color:#f1d7a2;cursor:pointer;touch-action:manipulation}
     .sky-layer-settings #christmas-sound-control{box-sizing:border-box;flex:0 0 40px;width:40px;min-width:40px;max-width:40px;height:38px;padding:0;gap:0}
     .sky-layer-settings #christmas-sound-control span{display:none}
     .christmas-sound-control svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
