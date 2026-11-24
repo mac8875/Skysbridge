@@ -43,11 +43,13 @@
 </g></svg>`;
   const random = (min,max) => min + Math.random() * (max-min);
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  // Original, gently fading sleigh-bell sound; no music, downloads or external audio.
+  // Recorded sleigh bells: Joseph Sardin, BigSoundBank #0585, CC0.
+  // https://bigsoundbank.com/bells-of-santa-claus-s0585.html
+  // The Netlify build bundles the sample locally, so visitors never contact the audio provider.
   const soundKey = "skysbridge.christmas-bells.v1";
   let soundEnabled = true;
   try { soundEnabled = localStorage.getItem(soundKey) !== "off"; } catch {}
-  let audioContext = null, currentBells = null;
+  let audioContext = null, currentBells = null, bellBuffer = null, loadingBells = null;
   const soundControls = [];
   const audioCtor = window.AudioContext || window.webkitAudioContext;
   function unlockAudio() {
@@ -55,57 +57,54 @@
     try {
       if (!audioContext || audioContext.state === "closed") audioContext = new audioCtor();
       if (audioContext.state !== "running") audioContext.resume().catch(()=>{});
+      if (!bellBuffer && !loadingBells) {
+        const ctx = audioContext;
+        loadingBells=fetch("assets/christmas-sleigh-bells.mp3",{credentials:"same-origin"})
+          .then(response=>{if(!response.ok)throw Error("Bells unavailable");return response.arrayBuffer();})
+          .then(bytes=>ctx.decodeAudioData(bytes))
+          .then(buffer=>{bellBuffer=buffer;})
+          .catch(()=>{})
+          .finally(()=>{loadingBells=null;});
+      }
     } catch {}
   }
   function stopBells() {
     if (!currentBells) return;
-    const cue = currentBells; currentBells = null;
+    const cue=currentBells; currentBells=null;
     try {
-      const t = audioContext.currentTime;
+      const t=audioContext.currentTime;
       cue.bus.gain.cancelScheduledValues(t);
-      cue.bus.gain.setTargetAtTime(0,t,.025);
-      cue.voices.forEach(voice=>{try{voice.stop(t+.15);}catch{}});
+      cue.bus.gain.setTargetAtTime(0,t,.045);
+      cue.source.stop(t+.22);
     } catch {}
   }
   function ringBells(reverse) {
-    if (!soundEnabled || document.hidden || audioContext?.state !== "running") return false;
+    if (!soundEnabled || document.hidden || audioContext?.state!=="running" || !bellBuffer) return false;
     stopBells();
     try {
-      const ctx = audioContext, t = ctx.currentTime + .035;
-      const bus = ctx.createGain(), voices = [];
-      bus.gain.value = 0;
+      const ctx=audioContext,t=ctx.currentTime+.025;
+      const source=ctx.createBufferSource(), bus=ctx.createGain();
+      source.buffer=bellBuffer;
+      const duration=Math.min(5.5,bellBuffer.duration);
+      const peak=.32;
       bus.gain.setValueAtTime(0,t);
-      bus.gain.linearRampToValueAtTime(.12,t+.35);
-      bus.gain.setValueAtTime(.12,t+1.35);
-      bus.gain.linearRampToValueAtTime(0,t+2.85);
-      let output = bus;
-      if (ctx.createStereoPanner) {
-        const pan = ctx.createStereoPanner();
-        pan.pan.setValueAtTime(reverse ? .52 : -.52,t);
-        pan.pan.linearRampToValueAtTime(reverse ? -.52 : .52,t+2.85);
-        bus.connect(pan); output = pan;
+      bus.gain.linearRampToValueAtTime(peak,t+.38);
+      bus.gain.setValueAtTime(peak,t+Math.max(.4,duration-1));
+      bus.gain.linearRampToValueAtTime(0,t+duration);
+      source.connect(bus);
+      let output=bus;
+      if(ctx.createStereoPanner){
+        const pan=ctx.createStereoPanner();
+        pan.pan.setValueAtTime(reverse ? .42 : -.42,t);
+        pan.pan.linearRampToValueAtTime(reverse ? -.42 : .42,t+duration);
+        bus.connect(pan);output=pan;
       }
       output.connect(ctx.destination);
-      // Several overlapping, inharmonic metal resonances create a real jingle-like timbre.
-      const strikes = [0,.13,.32,.48,.74,.91,1.14,1.31,1.57,1.78,2.03,2.19];
-      const pitches = [760,910,1040,1210,1400];
-      strikes.forEach((offset,i)=>{
-        const start = t+offset+random(0,.035), base=pitches[i%pitches.length]*random(.96,1.04);
-        const strength = random(.55,1);
-        [[1,.22,.19],[1.47,.17,.14],[2.09,.13,.105],[2.83,.085,.075],[3.67,.04,.055]].forEach(([ratio,amp,decay])=>{
-          const osc=ctx.createOscillator(), envelope=ctx.createGain();
-          osc.type="sine"; osc.frequency.value=base*ratio;
-          envelope.gain.setValueAtTime(.0001,start);
-          envelope.gain.exponentialRampToValueAtTime(amp*strength,start+.005);
-          envelope.gain.exponentialRampToValueAtTime(.0001,start+decay+.10);
-          osc.connect(envelope); envelope.connect(bus); voices.push(osc);
-          osc.start(start); osc.stop(start+decay+.12);
-        });
-      });
-      const cue={bus,voices}; currentBells=cue;
-      setTimeout(()=>{if(currentBells===cue)currentBells=null;try{bus.disconnect();if(output!==bus)output.disconnect();}catch{}},3400);
+      const cue={source,bus}; currentBells=cue;
+      source.onended=()=>{if(currentBells===cue)currentBells=null;try{source.disconnect();bus.disconnect();if(output!==bus)output.disconnect();}catch{}};
+      source.start(t,0,duration);
       return true;
-    } catch { stopBells(); return false; }
+    }catch{stopBells();return false;}
   }
   function updateSoundControls() {
     const lang=document.documentElement.lang.toLowerCase().slice(0,2);
