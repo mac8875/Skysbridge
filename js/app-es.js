@@ -558,7 +558,6 @@
             <label class="star-choice"><input type="radio" name="star_style" value="radiant" checked><span class="star-choice-preview star-radiant" aria-hidden="true"></span><span>Radiante</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="classic"><span class="star-choice-preview star-classic" aria-hidden="true"></span><span>Clásica</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="guiding"><span class="star-choice-preview star-guiding" aria-hidden="true"></span><span>Luz guía</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="morning"><span class="star-choice-preview star-morning" aria-hidden="true"></span><span>Estrella de la mañana</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="evening"><span class="star-choice-preview star-evening" aria-hidden="true"></span><span>Estrella vespertina</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="heart"><span class="star-choice-preview star-heart" aria-hidden="true"></span><span>Estrella del corazón</span></label>
             <label class="star-choice"><input type="radio" name="star_style" value="spark"><span class="star-choice-preview star-spark" aria-hidden="true"></span><span>Estrella chispeante</span></label>
@@ -783,6 +782,7 @@
         heart: "Un corazón dorado rodea la estrella.",
         wings: "Unas alas suaves se abren detrás de la estrella."
       };
+      const greetingDuration = greeting === "wings" ? 3600 : 3800;
       const nextClass = classByGreeting[greeting];
       if (!nextClass) return;
       window.clearTimeout(loveAnimationTimer);
@@ -791,16 +791,17 @@
       });
       void loveTarget.offsetWidth;
       loveTarget.classList.add(nextClass);
-      if (greetingSoundsEnabled) playGreetingSound(greeting);
+      if (greetingSoundsEnabled) playGreetingSound(greeting, greetingDuration);
       loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
       if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
+        stopGreetingAudio();
         ["is-sending-love", "is-sending-wings"].forEach(className => {
           loveTarget.classList.remove(className);
         });
         loveButtons.forEach(choice => choice.classList.remove("is-active"));
         if (loveStatus) loveStatus.textContent = "Solo para ti y tu familia";
-      }, 3800);
+      }, greetingDuration);
     }));
     const form = document.querySelector("#memoryForm");
     const status = document.querySelector("#memoryStatus");
