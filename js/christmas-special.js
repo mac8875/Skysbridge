@@ -137,7 +137,7 @@
     window.addEventListener("storage",event=>{if(event.key===soundKey){soundEnabled=event.newValue!=="off";if(!soundEnabled)stopBells();updateSoundControls();}});
   }
   function attachFlight(el, area, enabled = () => true) {
-    let flight = null, timer = null, focused = false, hover = false, bellCheck = null;
+    let flight = null, timer = null, focused = false, bellCheck = null;
     el.innerHTML = artwork;
     const graphic = el.querySelector("svg");
     const clear = () => {
@@ -145,16 +145,18 @@
       clearInterval(bellCheck); bellCheck = null; stopBells();
       if (flight) { flight.onfinish = null; flight.cancel(); flight = null; }
     };
-    const position = (x,y) => "translate3d(" + x + "px," + y + "px,0)";
+    // Both endpoints include the entire graphic and its glow, not just the leading reindeer.
+    const leftOutside = "-250px", rightOutside = "calc(100% + 64px)";
+    const topAt = fraction => "calc(" + (fraction*100) + "% - " + (fraction*el.offsetHeight) + "px)";
     const parked = () => {
-      const x = Math.max(4, (area.clientWidth - el.offsetWidth) * .5);
-      const y = Math.max(3, Math.min(area.clientHeight - el.offsetHeight - 3, area.clientHeight * .12));
-      el.style.transform = position(x,y);
+      el.style.left = "50%"; el.style.top = topAt(.12);
+      el.style.transform = "translateX(-50%)";
       el.style.opacity = "1"; el.style.pointerEvents = "auto";
       graphic.style.transform = "";
     };
     const idle = () => {
-      el.style.transform = position(-el.offsetWidth - 20,0);
+      el.style.left = leftOutside; el.style.top = "0";
+      el.style.transform = "none";
       el.style.opacity = "0"; el.style.pointerEvents = "none";
     };
     function schedule(delay) {
@@ -166,21 +168,21 @@
       if (!enabled()) { idle(); return; }
       if (focused || motion.matches || typeof el.animate !== "function") { parked(); return; }
       if (document.hidden || !area.clientWidth || !area.clientHeight) { idle(); schedule(1200); return; }
-      const w = area.clientWidth, h = area.clientHeight, ew = el.offsetWidth, eh = el.offsetHeight;
-      const pad = Math.min(28, Math.max(4,(h-eh)*.12));
-      const low = pad, high = Math.max(low,h-eh-pad);
-      const startY = random(low,high), endY = random(low,high);
-      const middleY = Math.max(low,Math.min(high,(startY+endY)/2 + random(-1,1)*Math.min(85,(high-low)*.35)));
-      const reverse = Math.random() < .5, from = reverse ? w+ew*.15 : -ew-12, to = reverse ? -ew-12 : w+ew*.15;
+      const startY=random(.06,.94),endY=random(.06,.94);
+      const middleY=Math.max(.04,Math.min(.96,(startY+endY)/2+random(-.22,.22)));
+      const reverse=Math.random()<.5, from=reverse?rightOutside:leftOutside, to=reverse?leftOutside:rightOutside;
       graphic.style.transform = reverse ? "scaleX(-1)" : "";
-      el.style.opacity = "1"; el.style.pointerEvents = "auto";
-      flight = el.animate([
-        {transform:position(from,startY),opacity:0,offset:0},
-        {transform:position(from+(to-from)*.09,startY+(middleY-startY)*.18),opacity:1,offset:.09},
-        {transform:position((from+to)/2,middleY),opacity:1,offset:.5},
-        {transform:position(from+(to-from)*.91,endY+(middleY-endY)*.18),opacity:1,offset:.91},
-        {transform:position(to,endY),opacity:0,offset:1}
-      ],{duration:random(8500,14000),easing:"linear",fill:"both"});
+      el.style.transform="none";
+      el.style.left=from;el.style.top=topAt(startY);
+      el.style.opacity="1";el.style.pointerEvents="auto";
+      // Percent-based horizontal endpoints adapt to the map or screen width even during a flight.
+      // Keep full opacity until the entire sleigh has crossed outside the clipped sky.
+      const duration = Math.max(8500, Math.min(20000, (area.clientWidth+314)/random(.065,.10)));
+      flight=el.animate([
+        {left:from,top:topAt(startY),opacity:1,offset:0},
+        {left:"calc(50% - "+(el.offsetWidth/2)+"px)",top:topAt(middleY),opacity:1,offset:.5},
+        {left:to,top:topAt(endY),opacity:1,offset:1}
+      ],{duration,easing:"linear",fill:"both"});
       let rang=false;
       bellCheck=setInterval(()=>{
         if (!flight || flight.playState!=="running" || !enabled() || !soundEnabled || document.hidden) { stopBells(); return; }
@@ -191,23 +193,24 @@
         if(visibleX<r.width*.35 || visibleY<r.height*.5 || modal){stopBells();return;}
         if(!rang)rang=ringBells(reverse);
       },220);
-      if (hover) flight.pause();
-      flight.onfinish = () => { clear(); idle(); schedule(random(4500,12000)); };
+      flight.onfinish=()=>{clear();idle();schedule(random(4500,12000));};
     }
-    el.addEventListener("focus",() => { if(!el.matches(":focus-visible")) return; focused=true; clear(); if(enabled()) parked(); });
-    el.addEventListener("blur",() => { if(!focused) return; focused=false; run(); });
-    el.addEventListener("pointerenter",event => { if(event.pointerType==="mouse"){hover=true;flight?.pause();} });
-    el.addEventListener("pointerleave",event => { if(event.pointerType==="mouse"){hover=false;flight?.play();} });
+    el.addEventListener("focus",()=>{if(!el.matches(":focus-visible"))return;focused=true;clear();if(enabled())parked();});
+    el.addEventListener("blur",()=>{if(!focused)return;focused=false;run();});
     motion.addEventListener?.("change",run);
-    let resizeTimer;
-    window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(run,180);},{passive:true});
-    document.addEventListener("visibilitychange",()=>{if(document.hidden){clear();idle();}else run();});
-    idle(); schedule(350);
+    // Mobile browser toolbar changes and fullscreen resize must not interrupt a visible crossing.
+    window.addEventListener("resize",()=>{if(!flight && (focused||motion.matches) && enabled())parked();},{passive:true});
+    document.addEventListener("visibilitychange",()=>{
+      if(document.hidden){stopBells();flight?.pause();clearTimeout(timer);timer=null;}
+      else if(flight && enabled()){flight.play();}
+      else if(enabled())run();
+    });
+    idle();schedule(350);
     return run;
   }
   const style = document.createElement("style");
   style.textContent = `
-    #christmas-special-link{display:inline-flex;align-items:center;gap:.5rem;color:#f1d7a2;text-decoration:none;font-size:14px;margin:0 0 12px;padding:8px 16px;border:1px solid #e6c78d66;border-radius:30px;line-height:1.4;max-width:100%;background:#11243a}
+    #christmas-special-link{display:flex;width:fit-content;max-width:100%;align-items:center;justify-content:center;align-self:center;text-align:center;gap:.5rem;color:#f1d7a2;text-decoration:none;font-size:14px;margin:0 auto 12px;padding:8px 16px;border:1px solid #e6c78d66;border-radius:30px;line-height:1.4;background:#11243a}
     #christmas-special-link:hover{color:#fff2d1}
     #christmas-special-sleigh,.sky-objects #sleigh{position:absolute;top:0;left:0;display:flex;align-items:center;justify-content:center;width:174px;height:70px;padding:0;border:0;background:transparent;color:#f7dfab;touch-action:manipulation;opacity:0;will-change:transform}
     #christmas-special-sleigh{z-index:4;text-decoration:none}
