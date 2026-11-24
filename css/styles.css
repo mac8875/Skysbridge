@@ -1111,6 +1111,27 @@ footer::before{content:"✦";display:block;margin:0 auto 12px;color:#f4d792;font
 .star-petal::before{clip-path:polygon(50% 0,61% 28%,88% 12%,72% 39%,100% 50%,72% 61%,88% 88%,61% 72%,50% 100%,39% 72%,12% 88%,28% 61%,0 50%,28% 39%,12% 12%,39% 28%);border-radius:50%}
 .star-north::before{clip-path:polygon(50% 0,58% 39%,84% 16%,61% 42%,100% 50%,61% 58%,84% 84%,58% 61%,50% 100%,42% 61%,16% 84%,39% 58%,0 50%,39% 42%,16% 16%,42% 39%)}
 
+.star-christmas::before{clip-path:polygon(50% 0,58% 36%,85% 15%,64% 42%,100% 50%,64% 58%,85% 85%,58% 64%,50% 100%,42% 64%,15% 85%,36% 58%,0 50%,36% 42%,15% 15%,42% 36%);background:linear-gradient(145deg,#fff5d7 4%,#e8b94f 58%,#bd7d2a 100%)}
+.star-snow::before{clip-path:polygon(50% 0,58% 36%,85% 15%,64% 42%,100% 50%,64% 58%,85% 85%,58% 64%,50% 100%,42% 64%,15% 85%,36% 58%,0 50%,36% 42%,15% 15%,42% 36%);background:linear-gradient(145deg,#fffdf8 0%,#f4e9cc 45%,#d2b77f 100%)}
+.star-decoration{position:absolute;z-index:2;display:block;pointer-events:none}
+.star-decoration-hat{top:1%;left:54%;width:43%;height:35%;transform:rotate(18deg)}
+.star-decoration-hat::before{content:"";position:absolute;left:15%;top:3%;width:72%;height:75%;background:linear-gradient(145deg,#d94d55,#8f1c2e);clip-path:polygon(10% 100%,100% 100%,73% 0);filter:drop-shadow(0 1px 2px rgba(38,8,17,.5))}
+.star-decoration-hat::after{content:"";position:absolute;left:2%;bottom:12%;width:94%;height:20%;border-radius:999px;background:linear-gradient(#fffdf4,#e1d2b4);box-shadow:0 0 4px rgba(255,250,232,.9)}
+.star-decoration-hat b{position:absolute;z-index:2;right:12%;top:1%;width:19%;height:19%;border-radius:50%;background:#fffdf3;box-shadow:0 0 4px rgba(255,255,255,.9)}
+.star-decoration-snow{left:31%;top:0;width:40%;height:40%;background:linear-gradient(#fff 0%,#e4f1fa 72%,#c7d7dc 100%);clip-path:polygon(50% 0,62% 17%,78% 12%,83% 34%,100% 48%,87% 60%,72% 56%,60% 74%,43% 66%,32% 56%,17% 61%,5% 49%,20% 31%,38% 27%);filter:drop-shadow(0 0 3px rgba(255,255,255,.88))}
+.memorial-star-style-settings{margin:16px auto 20px;padding:12px 0 4px;border-top:1px solid rgba(244,215,146,.18);text-align:left}
+.memorial-star-style-settings>summary{width:max-content;max-width:100%;margin:0 auto 10px;color:#f4d792;font-size:14px;font-weight:600;cursor:pointer;text-align:center}
+.memorial-star-style-settings form{display:grid;gap:12px}
+.memorial-star-style-settings .star-picker{margin:0;padding:12px;border:1px solid rgba(244,215,146,.22);border-radius:14px}
+.memorial-star-style-settings .star-choice{min-height:82px;padding:8px 4px}
+.memorial-star-style-settings .star-choice-preview{width:46px;height:46px}
+.memorial-star-style-settings .button{justify-self:center}
+.memorial-star-style-settings .notice{text-align:center}
+.memorial-wing-base{fill:url(#wing-base);stroke:#fff8e9;stroke-width:2;stroke-linejoin:round;opacity:.9}
+.memorial-wing-feather{fill:url(#wing-feather);stroke:#e2d0ac;stroke-width:1.2;stroke-linejoin:round}
+.memorial-wing-detail{fill:none;stroke:#c6aa78;stroke-width:1;stroke-linecap:round;opacity:.72}
+
+
 /* Memorial star options: morning, evening, heart and spark */
 .star-morning::before{clip-path:polygon(50% 0,59% 42%,100% 50%,59% 58%,50% 82%,41% 58%,0 50%,41% 42%)}
 .star-evening::before{clip-path:polygon(50% 2%,61% 34%,96% 36%,70% 55%,79% 91%,50% 72%,21% 91%,30% 55%,4% 36%,39% 34%);background:linear-gradient(145deg,#fffdf1 5%,#eee2c4 54%,#c9b58c 100%)}
@@ -1963,7 +1984,7 @@ html:not(.skysbridge-native) .help-card>p{
 .memorial-greeting-effects{position:absolute;inset:0;z-index:auto;pointer-events:none}
 .memorial-love-target>:first-child{position:relative;z-index:2}
 .memorial-wing-orbit{position:absolute;top:50%;left:50%;width:230px;height:145px;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.42,.68);transform-origin:center}
-.memorial-wing-orbit svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.memorial-wing-orbit img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;overflow:visible;filter:drop-shadow(0 0 10px rgba(255,246,222,.72)) drop-shadow(0 0 24px rgba(218,183,120,.35))}
 .memorial-wing-base{fill:#ead9b7;stroke:#fff0d1;stroke-width:1.4;stroke-linejoin:round;opacity:.9}
 .memorial-wing-feather{fill:#fff2dc;stroke:#e9d5ad;stroke-width:1.05;stroke-linejoin:round}
 .memorial-love-target.is-sending-wings .memorial-wing-orbit{animation:memorialWingsOpen 3.6s cubic-bezier(.2,.8,.2,1) 1}

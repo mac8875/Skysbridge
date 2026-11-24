@@ -37,12 +37,42 @@
   const authButtons = Array.from(document.querySelectorAll("[data-open-auth]"));
   const headerAuthButton = document.querySelector("[data-header-auth]");
   let activeGreetingAudio = null;
+  let greetingFadeFrame = 0;
 
-  function stopGreetingAudio() {
-    if (!activeGreetingAudio) return;
+  function stopGreetingAudio(fadeMs = 0) {
+    if (greetingFadeFrame) window.cancelAnimationFrame(greetingFadeFrame);
+    greetingFadeFrame = 0;
+    const player = activeGreetingAudio;
+    if (!player) return;
+    if (fadeMs > 0 && !player.paused) {
+      const startingVolume = player.volume;
+      const startedAt = window.performance.now();
+      const fadeFrame = now => {
+        if (activeGreetingAudio !== player) {
+          greetingFadeFrame = 0;
+          return;
+        }
+        const progress = Math.min(1, (now - startedAt) / fadeMs);
+        player.volume = Math.max(0, startingVolume * (1 - progress));
+        if (progress < 1) {
+          greetingFadeFrame = window.requestAnimationFrame(fadeFrame);
+          return;
+        }
+        greetingFadeFrame = 0;
+        try {
+          player.pause();
+          player.currentTime = 0;
+          player.volume = startingVolume;
+        } catch {}
+        activeGreetingAudio = null;
+      };
+      greetingFadeFrame = window.requestAnimationFrame(fadeFrame);
+      return;
+    }
     try {
-      activeGreetingAudio.pause();
-      activeGreetingAudio.currentTime = 0;
+      player.pause();
+      player.currentTime = 0;
+      player.volume = .45;
     } catch {}
     activeGreetingAudio = null;
   }
@@ -56,6 +86,8 @@
     activeGreetingAudio = player;
     player.addEventListener("ended", () => {
       if (activeGreetingAudio === player) activeGreetingAudio = null;
+      if (greetingFadeFrame) window.cancelAnimationFrame(greetingFadeFrame);
+      greetingFadeFrame = 0;
     }, { once: true });
     const playback = player.play();
     if (playback?.catch) playback.catch(() => {
@@ -552,18 +584,7 @@
         <p class="muted">Only signed-in members can see the photo after you request a public star and the memorial is approved.</p>
         <fieldset class="star-picker">
           <legend>Choose a star</legend>
-          <div class="star-picker-grid">
-            <label class="star-choice"><input type="radio" name="star_style" value="radiant" checked><span class="star-choice-preview star-radiant" aria-hidden="true"></span><span>Radiant</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="classic"><span class="star-choice-preview star-classic" aria-hidden="true"></span><span>Classic</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="guiding"><span class="star-choice-preview star-guiding" aria-hidden="true"></span><span>Guiding light</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="evening"><span class="star-choice-preview star-evening" aria-hidden="true"></span><span>Evening star</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="heart"><span class="star-choice-preview star-heart" aria-hidden="true"></span><span>Heart star</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="spark"><span class="star-choice-preview star-spark" aria-hidden="true"></span><span>Spark star</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="signature"><span class="star-choice-preview star-signature" aria-hidden="true"></span><span>Sky's star</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="comet"><span class="star-choice-preview star-comet" aria-hidden="true"></span><span>Comet</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="petal"><span class="star-choice-preview star-petal" aria-hidden="true"></span><span>Petal</span></label>
-            <label class="star-choice"><input type="radio" name="star_style" value="north"><span class="star-choice-preview star-north" aria-hidden="true"></span><span>North star</span></label>
-          </div>
+          <div class="star-picker-grid">${starStyleOptionsMarkup("radiant")}</div>
         </fieldset>
         <label class="public-request-option">
           <input class="public-request-option__checkbox" type="checkbox" name="public_requested">
@@ -710,7 +731,7 @@
       <article class="star-remembrance ${slug === "sky" ? `is-sky is-${window.SkyRemembrance.state()}` : ""}">
         <header class="star-remembrance-header">
           <p class="eyebrow">A light remembered</p>
-          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}</span>
+          <span class="star-remembrance-symbol${canSendLove ? " memorial-love-target" : ""}" aria-hidden="true">${slug === "sky" ? window.SkyRemembrance.symbol(true) : '<img src="assets/memorial-star.svg?v=55" alt="">'}${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><img src="assets/memorial-angel-wings.svg" alt=""></span></span>' : ""}</span>
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">His life was short. His light remains.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Born on <time datetime="2019-02-09">9 February 2019</time></p>' : ""}
@@ -790,11 +811,11 @@
       });
       void loveTarget.offsetWidth;
       loveTarget.classList.add(nextClass);
-      if (greetingSoundsEnabled) playGreetingSound(greeting, greetingDuration);
+      if (greetingSoundsEnabled) playGreetingSound(greeting);
       loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
       if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
-        stopGreetingAudio();
+        stopGreetingAudio(420);
         ["is-sending-love", "is-sending-wings"].forEach(className => {
           loveTarget.classList.remove(className);
         });
@@ -1040,10 +1061,28 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "A lit memorial candle" : ""}">`;
     }
 
-    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "spark", "halo", "signature", "comet", "petal", "north"];
+    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "spark", "halo", "signature", "comet", "petal", "north", "christmas", "snow"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
     const depth = style === "halo" ? "" : [1, 2, 3, 4, 5].map((layer) => `<span class="memorial-star-depth star-${style}" style="--star-depth:${layer}px"></span>`).join("");
-    return `<span class="memorial-star-volume" aria-hidden="true">${depth}<span class="memorial-star-shape star-${style}"></span></span>`;
+    const decoration = style === "christmas" ? '<i class="star-decoration star-decoration-hat"><b></b></i>' : style === "snow" ? '<i class="star-decoration star-decoration-snow"></i>' : "";
+    return `<span class="memorial-star-volume" aria-hidden="true">${depth}<span class="memorial-star-shape star-${style}">${decoration}</span></span>`;
+  }
+
+  function starStyleOptionsMarkup(requestedStyle = "radiant") {
+    const optionsByLanguage = {
+      de: [["radiant","Strahlend"],["classic","Klassisch"],["guiding","Wegweiser"],["evening","Abendstern"],["heart","Herzensstern"],["spark","Funkenstern"],["signature","Skys Stern"],["comet","Komet"],["petal","Blütenstern"],["north","Polarstern"],["christmas","Weihnachtsmütze"],["snow","Verschneit"]],
+      en: [["radiant","Radiant"],["classic","Classic"],["guiding","Guiding light"],["evening","Evening star"],["heart","Heart star"],["spark","Spark star"],["signature","Sky’s star"],["comet","Comet"],["petal","Blossom star"],["north","North star"],["christmas","Santa hat"],["snow","Snow-covered"]],
+      es: [["radiant","Brillante"],["classic","Clásica"],["guiding","Luz guía"],["evening","Estrella vespertina"],["heart","Estrella corazón"],["spark","Estrella chispeante"],["signature","Estrella de Sky"],["comet","Cometa"],["petal","Estrella flor"],["north","Estrella polar"],["christmas","Gorro navideño"],["snow","Cubierta de nieve"]]
+    };
+    const lang = (document.documentElement.lang || "en").slice(0, 2);
+    const options = optionsByLanguage[lang] || optionsByLanguage.en;
+    const selectedStyle = options.some(([value]) => value === requestedStyle) ? requestedStyle : "radiant";
+    return options.map(([value, label]) => {
+      const decoration = value === "christmas"
+        ? '<i class="star-decoration star-decoration-hat"><b></b></i>'
+        : value === "snow" ? '<i class="star-decoration star-decoration-snow"></i>' : "";
+      return `<label class="star-choice"><input type="radio" name="star_style" value="${value}"${value === selectedStyle ? " checked" : ""}><span class="star-choice-preview star-${value}" aria-hidden="true">${decoration}</span><span>${label}</span></label>`;
+    }).join("");
   }
 
   async function memorialPhotoUrl(path) {
@@ -1077,9 +1116,21 @@
         <p class="eyebrow">${dayLabel}</p>
         <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
-          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><svg viewBox="0 0 240 150"><g><path class="memorial-wing-base" d="M120 76 C98 46 69 24 31 25 C39 54 63 72 103 82 C75 78 49 85 31 102 C58 114 88 104 120 90Z"/><path class="memorial-wing-feather" d="M117 79 C91 54 65 37 43 34 C52 57 81 73 117 83Z"/><path class="memorial-wing-feather" d="M116 85 C88 69 59 57 38 59 C54 78 84 88 116 90Z"/><path class="memorial-wing-feather" d="M115 90 C88 86 63 80 45 84 C63 99 90 100 115 96Z"/></g><g><path class="memorial-wing-base" d="M120 76 C142 46 171 24 209 25 C201 54 177 72 137 82 C165 78 191 85 209 102 C182 114 152 104 120 90Z"/><path class="memorial-wing-feather" d="M123 79 C149 54 175 37 197 34 C188 57 159 73 123 83Z"/><path class="memorial-wing-feather" d="M124 85 C152 69 181 57 202 59 C186 78 156 88 124 90Z"/><path class="memorial-wing-feather" d="M125 90 C152 86 177 80 195 84 C177 99 150 100 125 96Z"/></g></svg></span></span>' : ""}
+          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><img src="assets/memorial-angel-wings.svg" alt=""></span></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Forever loved")}</h2>
+        ${item.is_star_owner ? `
+        <details class="memorial-star-style-settings">
+          <summary>Change star style</summary>
+          <form id="memorialStarStyleForm">
+            <fieldset class="star-picker">
+              <legend>Choose another star style</legend>
+              <div class="star-picker-grid">${starStyleOptionsMarkup(item.star_style || "radiant")}</div>
+            </fieldset>
+            <button class="button button-gold" type="submit">Save star style</button>
+            <div class="notice" id="memorialStarStyleStatus" role="status"></div>
+          </form>
+        </details>` : ""}
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
         ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Choose a greeting"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Heart</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Wings</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Turn sound off" title="Turn sound off" data-sound-on-label="Turn sound off" data-sound-off-label="Turn sound on"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Choose a greeting for this star</p>' : ""}
@@ -1129,6 +1180,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
         heart: "A golden heart circles the star.",
         wings: "Gentle angel wings unfold behind the star."
       };
+      const greetingDuration = greeting === "wings" ? 3600 : 3800;
       const nextClass = classByGreeting[greeting];
       if (!nextClass) return;
       window.clearTimeout(loveAnimationTimer);
@@ -1141,12 +1193,13 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
       loveButtons.forEach(choice => choice.classList.toggle("is-active", choice === button));
       if (loveStatus) loveStatus.textContent = statusByGreeting[greeting];
       loveAnimationTimer = window.setTimeout(() => {
+        stopGreetingAudio(420);
         ["is-sending-love", "is-sending-wings"].forEach(className => {
           loveTarget.classList.remove(className);
         });
         loveButtons.forEach(choice => choice.classList.remove("is-active"));
         if (loveStatus) loveStatus.textContent = "For you and your family";
-      }, 3800);
+      }, greetingDuration);
     }));
     const photoGeneration = modalRequestGeneration;
     if (item.photo_path) {
