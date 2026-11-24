@@ -1,12 +1,5 @@
 // SKYBRIDGE V36 — administrators can manage and delete published memorial stars
 (() => {
-  const CHRISTMAS_SEASON_END_AT = Date.parse("2026-12-25T20:00:00Z"); // 00:00 on 26 December in Dubai.
-  const isChristmasSeasonActive = () => Date.now() < CHRISTMAS_SEASON_END_AT;
-  window.SkysbridgeChristmasSeason = { endsAt: CHRISTMAS_SEASON_END_AT, isActive: isChristmasSeasonActive };
-  window.setTimeout(() => {
-    document.querySelectorAll('[data-seasonal="snow"]').forEach(button => button.remove());
-    document.querySelector(".celestial-wall")?.classList.remove("is-seasonal-snowing");
-  }, Math.max(0, CHRISTMAS_SEASON_END_AT - Date.now()));
   const cfg = window.SKYSBRIDGE_CONFIG || {};
   const configured =
     cfg.SUPABASE_URL &&
@@ -743,7 +736,7 @@
           <h2 id="modalTitle">${starName}</h2>
           <p class="star-remembrance-subtitle">Su vida fue breve. Su luz permanece.</p>
           ${slug === "sky" ? '<p class="memorial-detail-meta">Nació el <time datetime="2019-02-09">9 de febrero de 2019</time></p>' : ""}
-          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo o efecto de temporada"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
+          ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
         </header>
 
         ${slug === "sky" ? `<figure class="sky-footprints">
@@ -782,61 +775,6 @@
       </article>
     `, "star-modal-card");
 
-
-    const seasonalTarget = slug === "sky" ? modalContent.querySelector(".star-remembrance-symbol") : null;
-    const seasonalCopy = { snow: "Nieve", snowing: "La nieve cae alrededor de la estrella.", rest: canSendLove ? "Elige un saludo para esta estrella" : "Elige nieve para Sky." };
-    let seasonalButtons = [];
-    if (seasonalTarget) {
-      seasonalTarget.classList.add("memorial-love-target");
-      let effects = seasonalTarget.querySelector(".memorial-greeting-effects");
-      if (!effects) {
-        effects = document.createElement("span");
-        effects.className = "memorial-greeting-effects";
-        effects.setAttribute("aria-hidden", "true");
-        seasonalTarget.appendChild(effects);
-      }
-      if (!effects.querySelector(".memorial-snowfall")) {
-        const snowfall = document.createElement("span");
-        snowfall.className = "memorial-snowfall";
-        snowfall.innerHTML = "<i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i>";
-        effects.appendChild(snowfall);
-      }
-      let choices = modalContent.querySelector(".memorial-greeting-choices");
-      if (!choices) {
-        const controls = document.createElement("div");
-        controls.className = "memorial-greeting-controls";
-        choices = document.createElement("div");
-        choices.className = "memorial-greeting-choices";
-        choices.setAttribute("role", "group");
-        choices.setAttribute("aria-label", "Elige un saludo o efecto de temporada");
-        controls.appendChild(choices);
-        modalContent.querySelector(".star-remembrance-header")?.appendChild(controls);
-      }
-      const addSeasonalButton = (effect, label, icon) => {
-        if (choices.querySelector('[data-seasonal="' + effect + '"]')) return;
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "memorial-love-button memorial-seasonal-choice";
-        button.dataset.seasonal = effect;
-        button.setAttribute("aria-label", label);
-        const glyph = document.createElement("span");
-        glyph.setAttribute("aria-hidden", "true");
-        glyph.textContent = icon;
-        button.append(glyph, document.createTextNode(label));
-        choices.appendChild(button);
-      };
-      if (isChristmasSeasonActive()) addSeasonalButton("snow", seasonalCopy.snow, "❄");
-      seasonalButtons = [...choices.querySelectorAll(".memorial-seasonal-choice")];
-      if (!modalContent.querySelector("#memorialLoveStatus")) {
-        const status = document.createElement("p");
-        status.className = "memorial-love-status";
-        status.id = "memorialLoveStatus";
-        status.setAttribute("aria-live", "polite");
-        status.textContent = seasonalCopy.rest;
-        choices.parentElement.appendChild(status);
-      }
-    }
-
     const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
@@ -853,23 +791,6 @@
       soundToggle.title = label;
       if (!greetingSoundsEnabled) stopGreetingAudio();
     });
-    let seasonalAnimationTimer = null;
-    seasonalButtons.forEach(button => button.addEventListener("click", () => {
-      if (!seasonalTarget || !isChristmasSeasonActive()) return;
-      if (button.dataset.seasonal === "snow") {
-        window.clearTimeout(seasonalAnimationTimer);
-        const snowfallWall = ensureMemorialMapSnowfall();
-        if (!snowfallWall) return;
-        if (loveStatus) loveStatus.textContent = seasonalCopy.snowing;
-        if (greetingSoundsEnabled) playGreetingSound("snow");
-        seasonalAnimationTimer = window.setTimeout(() => {
-          stopGreetingAudio(420);
-          snowfallWall.classList.remove("is-seasonal-snowing");
-          if (loveStatus) loveStatus.textContent = seasonalCopy.rest;
-        }, 4600);
-        return;
-      }
-    }));
     let loveAnimationTimer = null;
     loveButtons.forEach(button => button.addEventListener("click", () => {
       if (!canSendLove || !loveTarget) return;
@@ -1137,23 +1058,27 @@
       return `<img class="memorial-candle-image" src="assets/memorial-candle.svg" alt="${detailed ? "Una vela encendida en su memoria" : ""}">`;
     }
 
-    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "spark", "halo", "signature", "comet", "petal", "north"];
+    const allowedStyles = ["radiant", "classic", "guiding", "morning", "evening", "heart", "spark", "halo", "signature", "comet", "petal", "north", "christmas", "snow"];
     const style = allowedStyles.includes(requestedStyle) ? requestedStyle : "radiant";
     const depth = style === "halo" ? "" : [1, 2, 3, 4, 5].map((layer) => `<span class="memorial-star-depth star-${style}" style="--star-depth:${layer}px"></span>`).join("");
-    return `<span class="memorial-star-volume" aria-hidden="true">${depth}<span class="memorial-star-shape star-${style}"></span></span>`;
+    const decoration = style === "christmas" ? '<i class="star-decoration star-decoration-hat"><b></b></i>' : style === "snow" ? '<i class="star-decoration star-decoration-snow"></i>' : "";
+    return `<span class="memorial-star-volume" aria-hidden="true">${depth}<span class="memorial-star-shape star-${style}">${decoration}</span></span>`;
   }
 
   function starStyleOptionsMarkup(requestedStyle = "radiant") {
     const optionsByLanguage = {
-      de: [["radiant","Strahlend"],["classic","Klassisch"],["guiding","Wegweiser"],["evening","Abendstern"],["heart","Herzensstern"],["spark","Funkenstern"],["signature","Skys Stern"],["comet","Komet"],["petal","Blütenstern"],["north","Polarstern"],],
-      en: [["radiant","Radiant"],["classic","Classic"],["guiding","Guiding light"],["evening","Evening star"],["heart","Heart star"],["spark","Spark star"],["signature","Sky’s star"],["comet","Comet"],["petal","Blossom star"],["north","North star"],],
-      es: [["radiant","Brillante"],["classic","Clásica"],["guiding","Luz guía"],["evening","Estrella vespertina"],["heart","Estrella corazón"],["spark","Estrella chispeante"],["signature","Estrella de Sky"],["comet","Cometa"],["petal","Estrella flor"],["north","Estrella polar"],]
+      de: [["radiant","Strahlend"],["classic","Klassisch"],["guiding","Wegweiser"],["evening","Abendstern"],["heart","Herzensstern"],["spark","Funkenstern"],["signature","Skys Stern"],["comet","Komet"],["petal","Blütenstern"],["north","Polarstern"],["christmas","Weihnachtsmütze"],["snow","Verschneit"]],
+      en: [["radiant","Radiant"],["classic","Classic"],["guiding","Guiding light"],["evening","Evening star"],["heart","Heart star"],["spark","Spark star"],["signature","Sky’s star"],["comet","Comet"],["petal","Blossom star"],["north","North star"],["christmas","Santa hat"],["snow","Snow-covered"]],
+      es: [["radiant","Brillante"],["classic","Clásica"],["guiding","Luz guía"],["evening","Estrella vespertina"],["heart","Estrella corazón"],["spark","Estrella chispeante"],["signature","Estrella de Sky"],["comet","Cometa"],["petal","Estrella flor"],["north","Estrella polar"],["christmas","Gorro navideño"],["snow","Cubierta de nieve"]]
     };
     const lang = (document.documentElement.lang || "en").slice(0, 2);
     const options = optionsByLanguage[lang] || optionsByLanguage.en;
     const selectedStyle = requestedStyle;
     return options.map(([value, label]) => {
-      return `<label class="star-choice"><input type="radio" name="star_style" value="${value}"${value === selectedStyle ? " checked" : ""} required><span class="star-choice-preview star-${value}" aria-hidden="true"></span><span>${label}</span></label>`;
+      const decoration = value === "christmas"
+        ? '<i class="star-decoration star-decoration-hat"><b></b></i>'
+        : value === "snow" ? '<i class="star-decoration star-decoration-snow"></i>' : "";
+      return `<label class="star-choice"><input type="radio" name="star_style" value="${value}"${value === selectedStyle ? " checked" : ""} required><span class="star-choice-preview star-${value}" aria-hidden="true">${decoration}</span><span>${label}</span></label>`;
     }).join("");
   }
 
@@ -1171,35 +1096,7 @@
     return URL.createObjectURL(data);
   }
 
-  function ensureMemorialMapSnowfall() {
-    if (!isChristmasSeasonActive()) return null;
-    const wall = document.querySelector(".celestial-wall");
-    if (!wall) return null;
-    let layer = wall.querySelector(".memorial-map-snowfall");
-    if (!layer) {
-      layer = document.createElement("span");
-      layer.className = "memorial-map-snowfall";
-      layer.setAttribute("aria-hidden", "true");
-      for (let index = 0; index < 36; index += 1) {
-        const flake = document.createElement("i");
-        flake.textContent = index % 3 === 0 ? "❅" : "❄";
-        flake.style.setProperty("--flake-x", (Math.random() * 100) + "%");
-        flake.style.setProperty("--flake-delay", (Math.random() * .65) + "s");
-        flake.style.setProperty("--flake-duration", (3.4 + Math.random() * 1.7) + "s");
-        flake.style.setProperty("--flake-fall", (Math.max(wall.clientHeight, 560) + 40) + "px");
-        layer.appendChild(flake);
-      }
-      wall.appendChild(layer);
-    }
-    wall.classList.remove("is-seasonal-snowing");
-    void wall.offsetWidth;
-    wall.classList.add("is-seasonal-snowing");
-    return wall;
-  }
-
-
   function openApprovedMemorial(item) {
-
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
@@ -1216,7 +1113,7 @@
         <p class="eyebrow">${dayLabel}</p>
         <div class="memorial-detail-symbol${canSendLove ? " memorial-love-target" : ""}">
           ${memorialSymbolMarkup(state, true, item.star_style)}
-          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><img src="assets/memorial-angel-wings.svg" alt=""></span><span class="memorial-snowfall"><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i></span></span>' : ""}
+          ${canSendLove ? '<span class="memorial-greeting-effects" aria-hidden="true"><span class="memorial-love-orbit"><i>♡</i><i>♡</i><i>♡</i></span><span class="memorial-wing-orbit"><img src="assets/memorial-angel-wings.svg" alt=""></span></span>' : ""}
         </div>
         <h2 id="modalTitle">${escapeHtml(item.child_name || "Siempre amado")}</h2>
         ${item.is_star_owner ? `
@@ -1233,7 +1130,7 @@
         </details>` : ""}
         ${dateLine ? `<p class="memorial-detail-meta">${escapeHtml(dateLine)}</p>` : ""}
         ${item.country ? `<p class="memorial-detail-meta">${escapeHtml(item.country)}</p>` : ""}
-        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button><button type="button" class="memorial-love-button memorial-seasonal-choice" data-seasonal="snow" aria-label="Nieve"><span aria-hidden="true">❄</span>Nieve</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
+        ${canSendLove ? '<div class="memorial-greeting-controls"><div class="memorial-greeting-choices" role="group" aria-label="Elige un saludo"><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="heart"><span aria-hidden="true">♡</span>Corazón</button><button type="button" class="memorial-love-button memorial-love-choice" data-greeting="wings"><span aria-hidden="true">✦</span>Alas</button></div><button type="button" class="memorial-greeting-sound-toggle is-enabled" data-greeting-sound-toggle aria-pressed="true" aria-label="Desactivar sonido" title="Desactivar sonido" data-sound-on-label="Desactivar sonido" data-sound-off-label="Activar sonido"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h3l5 4V6l-5 4H4Z"></path><path class="memorial-sound-waves" d="M16 9a5 5 0 0 1 0 6M18.5 6.5a8.5 8.5 0 0 1 0 11"></path><path class="memorial-sound-muted" d="m16 9 5 6m0-6-5 6"></path></svg></button></div><p class="memorial-love-status" id="memorialLoveStatus" aria-live="polite">Elige un saludo para esta estrella</p>' : ""}
         ${item.photo_path ? '<div class="memorial-detail-photo-slot"></div>' : ""}
         <div class="star-story-divider" aria-hidden="true"><span>✦</span></div>
         <div class="memorial-detail-story">${renderStoryParagraphs(item.remembrance)}</div>
@@ -1252,35 +1149,6 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
     `, "star-modal-card");
     window.dispatchEvent(new CustomEvent("skysbridge:open-memorial", { detail: { memorialId: item.id } }));
 
-    const starStyleForm = modalContent.querySelector("#memorialStarStyleForm");
-    const starStyleStatus = modalContent.querySelector("#memorialStarStyleStatus");
-    starStyleForm?.addEventListener("submit", async event => {
-      event.preventDefault();
-      if (!item.is_star_owner || !requireDatabase(starStyleStatus)) return;
-      const selectedStyle = new FormData(starStyleForm).get("star_style");
-      if (!selectedStyle || !currentUser?.id) return;
-      const submitButton = starStyleForm.querySelector('button[type="submit"]');
-      submitButton.disabled = true;
-      setStatus(starStyleStatus, "Guardando la forma de tu estrella…");
-      const { data, error } = await db.from("memorials")
-        .update({ star_style: selectedStyle })
-        .eq("id", item.id)
-        .eq("user_id", currentUser.id)
-        .select("id")
-        .maybeSingle();
-      submitButton.disabled = false;
-      if (error || !data) {
-        setStatus(starStyleStatus, "No se pudo cambiar tu estrella. Inténtalo de nuevo.", "error");
-        if (error) console.error("Could not update owned star style:", error);
-        return;
-      }
-      item.star_style = selectedStyle;
-      setStatus(starStyleStatus, "Tu estrella se ha actualizado.", "success");
-      await loadApprovedMemorials();
-      if (!modal.hidden) openApprovedMemorial(item);
-    });
-    if (!isChristmasSeasonActive()) modalContent.querySelectorAll('[data-seasonal="snow"]').forEach(button => button.remove());
-
     const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
@@ -1297,25 +1165,6 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
       soundToggle.title = label;
       if (!greetingSoundsEnabled) stopGreetingAudio();
     });
-    const seasonalButtons = modalContent.querySelectorAll(".memorial-seasonal-choice");
-    let seasonalAnimationTimer = null;
-    seasonalButtons.forEach(button => button.addEventListener("click", () => {
-      if (!canSendLove || !loveTarget || !isChristmasSeasonActive()) return;
-      const effect = button.dataset.seasonal;
-      if (effect === "snow") {
-        window.clearTimeout(seasonalAnimationTimer);
-        const snowfallWall = ensureMemorialMapSnowfall();
-        if (!snowfallWall) return;
-        if (loveStatus) loveStatus.textContent = "La nieve cae alrededor de la estrella.";
-        if (greetingSoundsEnabled) playGreetingSound("snow");
-        seasonalAnimationTimer = window.setTimeout(() => {
-          stopGreetingAudio(420);
-          snowfallWall.classList.remove("is-seasonal-snowing");
-          if (loveStatus) loveStatus.textContent = "Elige un saludo para esta estrella";
-        }, 4600);
-        return;
-      }
-    }));
     let loveAnimationTimer = null;
     loveButtons.forEach(button => button.addEventListener("click", () => {
       if (!canSendLove || !loveTarget) return;
