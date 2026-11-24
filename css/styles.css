@@ -1975,12 +1975,12 @@ html:not(.skysbridge-native) .help-card>p{
 @media(max-width:520px){.memorial-greeting-controls{gap:6px}.memorial-greeting-sound-toggle{width:30px;height:30px;min-width:30px;min-height:30px}}
 .memorial-greeting-effects{position:absolute;inset:0;z-index:auto;pointer-events:none}
 .memorial-love-target>:first-child{position:relative;z-index:2}
-.memorial-wing-orbit{position:absolute;top:50%;left:50%;width:230px;height:145px;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.42,.68);transform-origin:center}
+.memorial-wing-orbit{position:absolute;top:24%;left:50%;width:172px;height:108px;opacity:0;pointer-events:none;transform:translate(-50%,-44%) scale(.42,.62);transform-origin:center}
 .memorial-wing-orbit img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;overflow:visible;filter:drop-shadow(0 0 10px rgba(255,246,222,.72)) drop-shadow(0 0 24px rgba(218,183,120,.35))}
 .memorial-wing-base{fill:#ead9b7;stroke:#fff0d1;stroke-width:1.4;stroke-linejoin:round;opacity:.9}
 .memorial-wing-feather{fill:#fff2dc;stroke:#e9d5ad;stroke-width:1.05;stroke-linejoin:round}
 .memorial-love-target.is-sending-wings .memorial-wing-orbit{animation:memorialWingsOpen 3.6s cubic-bezier(.2,.8,.2,1) 1}
-@keyframes memorialWingsOpen{0%{opacity:0;transform:translate(-50%,-50%) scale(.38,.66)}42%{opacity:.78}78%{opacity:.94;transform:translate(-50%,-50%) scale(1.04)}100%{opacity:.86;transform:translate(-50%,-50%) scale(1)}}
+@keyframes memorialWingsOpen{0%{opacity:0;transform:translate(-50%,-44%) scale(.36,.58)}42%{opacity:.62}78%{opacity:.82;transform:translate(-50%,-44%) scale(.76,.82)}100%{opacity:.78;transform:translate(-50%,-44%) scale(.72,.78)}}
 
 
 
@@ -2001,6 +2001,15 @@ html:not(.skysbridge-native) .help-card>p{
 @media(prefers-reduced-motion:reduce){.memorial-snowfall i{animation:none!important;opacity:.45;transform:translateY(35px)}}
 
 /* Keep greeting effects behind the star; reserve the status area to prevent layout shift. */
+/* Seasonal snowfall spans the complete memorial map, not just the selected star. */
+.celestial-wall.is-seasonal-snowing{isolation:isolate}
+.memorial-map-snowfall{position:absolute;inset:0;z-index:12;display:none;overflow:hidden;pointer-events:none}
+.celestial-wall.is-seasonal-snowing .memorial-map-snowfall{display:block}
+.memorial-map-snowfall i{position:absolute;top:-22px;left:var(--flake-x);color:#f2f9ff;font:normal 14px/1 Georgia,serif;font-style:normal;opacity:0;text-shadow:0 0 8px rgba(214,241,255,.9);animation:memorialMapSnowFall var(--flake-duration,4s) linear var(--flake-delay,0s) 1 both}
+@keyframes memorialMapSnowFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:.9}100%{opacity:.82;transform:translate3d(14px,var(--flake-fall,600px),0) rotate(240deg)}}
+@media(prefers-reduced-motion:reduce){.memorial-map-snowfall i{animation:none!important;opacity:.45;transform:translateY(35px)}}
+
+
 .memorial-wing-orbit{z-index:1}
 .memorial-love-status{height:2.8em;min-height:2.8em;display:flex;align-items:center;justify-content:center;text-align:center;padding-inline:6px}
 

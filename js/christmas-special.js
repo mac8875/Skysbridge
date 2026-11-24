@@ -1,6 +1,26 @@
 /* Seasonal web-only addition; no memorial or account data accessed. */
 (() => {
   "use strict";
+  const CHRISTMAS_SEASON_END_AT = Date.parse("2026-12-25T20:00:00Z"); // 00:00 on 26 December in Dubai.
+  const isChristmasSeasonActive = () => Date.now() < CHRISTMAS_SEASON_END_AT;
+  window.SkysbridgeChristmasSeason = { endsAt: CHRISTMAS_SEASON_END_AT, isActive: isChristmasSeasonActive };
+  const homeForSeasonPage = () => {
+    const requestedLanguage = new URLSearchParams(location.search).get("lang");
+    const language = ["de", "en", "es"].includes(requestedLanguage) ? requestedLanguage : "de";
+    return ({ de: "index-de.html", en: "index.html", es: "index-es.html" })[language];
+  };
+  const isChristmasPage = /(?:^|\/)christmas\.html$/i.test(location.pathname);
+  const expireSeasonalFeatures = () => {
+    document.querySelectorAll("#christmas-special-link,#christmas-special-sleigh,.sky-objects #sleigh,[data-seasonal-feature='sleigh-toggle'],[data-seasonal='snow'],#christmas-sound-control")
+      .forEach(element => element.remove());
+    document.querySelector(".celestial-wall")?.classList.remove("is-seasonal-snowing");
+    if (isChristmasPage) location.replace(homeForSeasonPage());
+  };
+  if (!isChristmasSeasonActive()) {
+    if (isChristmasPage) location.replace(homeForSeasonPage());
+    return;
+  }
+  window.setTimeout(expireSeasonalFeatures, CHRISTMAS_SEASON_END_AT - Date.now());
   const cap = window.Capacitor;
   if (cap?.isNativePlatform?.() || ["android","ios"].includes(cap?.getPlatform?.()) ||
       ["capacitor:","ionic:","file:"].includes(location.protocol) ||
@@ -301,6 +321,7 @@
   settings.insertAdjacentElement("beforebegin", link);
   const label = document.createElement("label");
   label.className = "sky-layer-toggle";
+  label.dataset.seasonalFeature = "sleigh-toggle";
   const toggle = document.createElement("input");
   toggle.type = "checkbox"; toggle.checked = true; toggle.setAttribute("aria-controls","christmas-special-sleigh");
   const labelText = document.createElement("span"); labelText.textContent = words.sleigh;

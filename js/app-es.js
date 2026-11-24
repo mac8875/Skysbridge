@@ -1,5 +1,12 @@
 // SKYBRIDGE V36 — administrators can manage and delete published memorial stars
 (() => {
+  const CHRISTMAS_SEASON_END_AT = Date.parse("2026-12-25T20:00:00Z"); // 00:00 on 26 December in Dubai.
+  const isChristmasSeasonActive = () => Date.now() < CHRISTMAS_SEASON_END_AT;
+  window.SkysbridgeChristmasSeason = { endsAt: CHRISTMAS_SEASON_END_AT, isActive: isChristmasSeasonActive };
+  window.setTimeout(() => {
+    document.querySelectorAll('[data-seasonal="snow"]').forEach(button => button.remove());
+    document.querySelector(".celestial-wall")?.classList.remove("is-seasonal-snowing");
+  }, Math.max(0, CHRISTMAS_SEASON_END_AT - Date.now()));
   const cfg = window.SKYSBRIDGE_CONFIG || {};
   const configured =
     cfg.SUPABASE_URL &&
@@ -818,7 +825,7 @@
         button.append(glyph, document.createTextNode(label));
         choices.appendChild(button);
       };
-      addSeasonalButton("snow", seasonalCopy.snow, "❄");
+      if (isChristmasSeasonActive()) addSeasonalButton("snow", seasonalCopy.snow, "❄");
       seasonalButtons = [...choices.querySelectorAll(".memorial-seasonal-choice")];
       if (!modalContent.querySelector("#memorialLoveStatus")) {
         const status = document.createElement("p");
@@ -848,17 +855,16 @@
     });
     let seasonalAnimationTimer = null;
     seasonalButtons.forEach(button => button.addEventListener("click", () => {
-      if (!seasonalTarget) return;
+      if (!seasonalTarget || !isChristmasSeasonActive()) return;
       if (button.dataset.seasonal === "snow") {
         window.clearTimeout(seasonalAnimationTimer);
-        seasonalTarget.classList.remove("is-snowing");
-        void seasonalTarget.offsetWidth;
-        seasonalTarget.classList.add("is-snowing");
+        const snowfallWall = ensureMemorialMapSnowfall();
+        if (!snowfallWall) return;
         if (loveStatus) loveStatus.textContent = seasonalCopy.snowing;
         if (greetingSoundsEnabled) playGreetingSound("snow");
         seasonalAnimationTimer = window.setTimeout(() => {
           stopGreetingAudio(420);
-          seasonalTarget.classList.remove("is-snowing");
+          snowfallWall.classList.remove("is-seasonal-snowing");
           if (loveStatus) loveStatus.textContent = seasonalCopy.rest;
         }, 4600);
         return;
@@ -1166,6 +1172,32 @@
   }
 
   function openApprovedMemorial(item) {
+  function ensureMemorialMapSnowfall() {
+    if (!isChristmasSeasonActive()) return null;
+    const wall = document.querySelector(".celestial-wall");
+    if (!wall) return null;
+    let layer = wall.querySelector(".memorial-map-snowfall");
+    if (!layer) {
+      layer = document.createElement("span");
+      layer.className = "memorial-map-snowfall";
+      layer.setAttribute("aria-hidden", "true");
+      for (let index = 0; index < 36; index += 1) {
+        const flake = document.createElement("i");
+        flake.textContent = index % 3 === 0 ? "❅" : "❄";
+        flake.style.setProperty("--flake-x", (Math.random() * 100) + "%");
+        flake.style.setProperty("--flake-delay", (Math.random() * .65) + "s");
+        flake.style.setProperty("--flake-duration", (3.4 + Math.random() * 1.7) + "s");
+        flake.style.setProperty("--flake-fall", (Math.max(wall.clientHeight, 560) + 40) + "px");
+        layer.appendChild(flake);
+      }
+      wall.appendChild(layer);
+    }
+    wall.classList.remove("is-seasonal-snowing");
+    void wall.offsetWidth;
+    wall.classList.add("is-seasonal-snowing");
+    return wall;
+  }
+
     const state = memorialDayState(item);
     const dayLabel =
       state === "anniversary"
@@ -1218,6 +1250,35 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
     `, "star-modal-card");
     window.dispatchEvent(new CustomEvent("skysbridge:open-memorial", { detail: { memorialId: item.id } }));
 
+    const starStyleForm = modalContent.querySelector("#memorialStarStyleForm");
+    const starStyleStatus = modalContent.querySelector("#memorialStarStyleStatus");
+    starStyleForm?.addEventListener("submit", async event => {
+      event.preventDefault();
+      if (!item.is_star_owner || !requireDatabase(starStyleStatus)) return;
+      const selectedStyle = new FormData(starStyleForm).get("star_style");
+      if (!selectedStyle || !currentUser?.id) return;
+      const submitButton = starStyleForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      setStatus(starStyleStatus, "Guardando la forma de tu estrella…");
+      const { data, error } = await db.from("memorials")
+        .update({ star_style: selectedStyle })
+        .eq("id", item.id)
+        .eq("user_id", currentUser.id)
+        .select("id")
+        .maybeSingle();
+      submitButton.disabled = false;
+      if (error || !data) {
+        setStatus(starStyleStatus, "No se pudo cambiar tu estrella. Inténtalo de nuevo.", "error");
+        if (error) console.error("Could not update owned star style:", error);
+        return;
+      }
+      item.star_style = selectedStyle;
+      setStatus(starStyleStatus, "Tu estrella se ha actualizado.", "success");
+      await loadApprovedMemorials();
+      if (!modal.hidden) openApprovedMemorial(item);
+    });
+    if (!isChristmasSeasonActive()) modalContent.querySelectorAll('[data-seasonal="snow"]').forEach(button => button.remove());
+
     const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
@@ -1237,18 +1298,17 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
     const seasonalButtons = modalContent.querySelectorAll(".memorial-seasonal-choice");
     let seasonalAnimationTimer = null;
     seasonalButtons.forEach(button => button.addEventListener("click", () => {
-      if (!canSendLove || !loveTarget) return;
+      if (!canSendLove || !loveTarget || !isChristmasSeasonActive()) return;
       const effect = button.dataset.seasonal;
       if (effect === "snow") {
         window.clearTimeout(seasonalAnimationTimer);
-        loveTarget.classList.remove("is-snowing");
-        void loveTarget.offsetWidth;
-        loveTarget.classList.add("is-snowing");
+        const snowfallWall = ensureMemorialMapSnowfall();
+        if (!snowfallWall) return;
         if (loveStatus) loveStatus.textContent = "La nieve cae alrededor de la estrella.";
         if (greetingSoundsEnabled) playGreetingSound("snow");
         seasonalAnimationTimer = window.setTimeout(() => {
           stopGreetingAudio(420);
-          loveTarget.classList.remove("is-snowing");
+          snowfallWall.classList.remove("is-seasonal-snowing");
           if (loveStatus) loveStatus.textContent = "Elige un saludo para esta estrella";
         }, 4600);
         return;
