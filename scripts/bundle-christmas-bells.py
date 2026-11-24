@@ -13,6 +13,16 @@ def fetch(url):
     req=urllib.request.Request(url,headers={"User-Agent":"Skysbridge/1.0 (https://skysbridge.org; CC0 audio asset)","Accept":"*/*"})
     with urllib.request.urlopen(req,timeout=12) as r:
         return r.read(15*1024*1024)
+# Prefer an authentic recorded harness-bell loop. SFX Jar lists it as CC0.
+try:
+    data=fetch("https://audio.sfxjar.com/audio/0585.mp3")
+    if len(data)>10000 and (data[:3]==b"ID3" or (data[0]==255 and data[1]&224==224)):
+        target.write_bytes(data)
+        print("Bundled CC0 BigSoundBank sleigh bells from SFX Jar:",len(data),"bytes")
+        sys.exit(0)
+except Exception as error:
+    print("SFX Jar bell source unavailable:",error)
+
 for page in pages:
     try:
         source=html.unescape(fetch(page).decode("utf-8","replace")).replace("\\/","/")
