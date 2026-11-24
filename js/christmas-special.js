@@ -46,25 +46,45 @@
   // Recorded sleigh bells: soundstack, "Sleigh bells 90 bpm loop", CC0.
   // https://freesound.org/people/soundstack/sounds/255104/
   let soundEnabled = false;
-  let audioContext = null, currentBells = null, bellBuffer = null, loadingBells = null;
+  let audioContext = null, currentBells = null, bellBuffer = null, loadingBells = null, fallbackAudio = null;
   const audioCtor = window.AudioContext || window.webkitAudioContext;
+  function prepareExternalAudio() {
+    if (!fallbackAudio) {
+      fallbackAudio = new Audio("https://audio.sfxjar.com/audio/0585.mp3");
+      fallbackAudio.preload = "auto";
+      fallbackAudio.loop = true;
+      fallbackAudio.volume = .32;
+      fallbackAudio.load();
+    }
+    return fallbackAudio;
+  }
   function unlockAudio() {
-    if (!soundEnabled || !audioCtor) return;
+    if (!soundEnabled) return;
     try {
-      if (!audioContext || audioContext.state === "closed") audioContext = new audioCtor();
-      if (audioContext.state !== "running") audioContext.resume().catch(()=>{});
-      if (!bellBuffer && !loadingBells) {
+      if (audioCtor) {
+        if (!audioContext || audioContext.state === "closed") audioContext = new audioCtor();
+        if (audioContext.state !== "running") audioContext.resume().catch(()=>{});
+      }
+      if (audioContext && !bellBuffer && !loadingBells) {
         const ctx = audioContext;
         loadingBells=fetch("assets/christmas-sleigh-bells-rhythm.mp3",{credentials:"same-origin"})
-          .then(response=>{if(!response.ok)throw Error("Bells unavailable");return response.arrayBuffer();})
+          .then(response=>{if(!response.ok)throw Error("Bundled sleigh bells unavailable");return response.arrayBuffer();})
           .then(bytes=>ctx.decodeAudioData(bytes))
           .then(buffer=>{bellBuffer=buffer;})
-          .catch(()=>{})
+          .catch(()=>{prepareExternalAudio();})
           .finally(()=>{loadingBells=null;});
+      } else if (!audioContext) {
+        prepareExternalAudio();
       }
-    } catch {}
+    } catch {
+      prepareExternalAudio();
+    }
   }
   function stopBells() {
+    if (fallbackAudio && !fallbackAudio.paused) {
+      fallbackAudio.pause();
+      try { fallbackAudio.currentTime = 0; } catch {}
+    }
     if (!currentBells) return;
     const cue=currentBells; currentBells=null;
     try {
@@ -75,32 +95,44 @@
     } catch {}
   }
   function ringBells(reverse) {
-    if (!soundEnabled || document.hidden || audioContext?.state!=="running" || !bellBuffer) return false;
-    stopBells();
-    try {
-      const ctx=audioContext,t=ctx.currentTime+.025;
-      const source=ctx.createBufferSource(), bus=ctx.createGain();
-      source.buffer=bellBuffer;
-      const panDuration=Math.min(20,bellBuffer.duration);
-      const peak=.32;
-      bus.gain.setValueAtTime(0,t);
-      bus.gain.linearRampToValueAtTime(peak,t+.38);
-      bus.gain.setValueAtTime(peak,t+panDuration);
-      source.loop=true;
-      source.connect(bus);
-      let output=bus;
-      if(ctx.createStereoPanner){
-        const pan=ctx.createStereoPanner();
-        pan.pan.setValueAtTime(reverse ? .42 : -.42,t);
-        pan.pan.linearRampToValueAtTime(reverse ? -.42 : .42,t+panDuration);
-        bus.connect(pan);output=pan;
-      }
-      output.connect(ctx.destination);
-      const cue={source,bus}; currentBells=cue;
-      source.onended=()=>{if(currentBells===cue)currentBells=null;try{source.disconnect();bus.disconnect();if(output!==bus)output.disconnect();}catch{}};
-      source.start(t);
-      return true;
-    }catch{stopBells();return false;}
+    if (!soundEnabled || document.hidden) return false;
+    if (audioContext?.state === "running" && bellBuffer) {
+      stopBells();
+      try {
+        const ctx=audioContext,t=ctx.currentTime+.025;
+        const source=ctx.createBufferSource(), bus=ctx.createGain();
+        source.buffer=bellBuffer;
+        const panDuration=Math.min(20,bellBuffer.duration);
+        const peak=.32;
+        bus.gain.setValueAtTime(0,t);
+        bus.gain.linearRampToValueAtTime(peak,t+.38);
+        bus.gain.setValueAtTime(peak,t+panDuration);
+        source.loop=true;
+        source.connect(bus);
+        let output=bus;
+        if(ctx.createStereoPanner){
+          const pan=ctx.createStereoPanner();
+          pan.pan.setValueAtTime(reverse ? .42 : -.42,t);
+          pan.pan.linearRampToValueAtTime(reverse ? -.42 : .42,t+panDuration);
+          bus.connect(pan);output=pan;
+        }
+        output.connect(ctx.destination);
+        const cue={source,bus}; currentBells=cue;
+        source.onended=()=>{if(currentBells===cue)currentBells=null;try{source.disconnect();bus.disconnect();if(output!==bus)output.disconnect();}catch{}};
+        source.start(t);
+        return true;
+      } catch { stopBells(); }
+    }
+    if (fallbackAudio) {
+      if (!fallbackAudio.paused) return true;
+      try {
+        fallbackAudio.currentTime = 0;
+        const playback = fallbackAudio.play();
+        if (playback && typeof playback.catch === "function") playback.catch(()=>{});
+        return true;
+      } catch {}
+    }
+    return false;
   }
   function enableAutomaticBells() {
     if(!audioCtor)return;
