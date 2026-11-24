@@ -1171,7 +1171,6 @@
     return URL.createObjectURL(data);
   }
 
-  function openApprovedMemorial(item) {
   function ensureMemorialMapSnowfall() {
     if (!isChristmasSeasonActive()) return null;
     const wall = document.querySelector(".celestial-wall");
@@ -1197,6 +1196,9 @@
     wall.classList.add("is-seasonal-snowing");
     return wall;
   }
+
+
+  function openApprovedMemorial(item) {
 
     const state = memorialDayState(item);
     const dayLabel =
