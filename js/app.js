@@ -1,6 +1,6 @@
 // SKYBRIDGE V36 — administrators can manage and delete published memorial stars
 (() => {
-  const CHRISTMAS_SEASON_END_AT = Date.parse("2026-12-25T20:00:00Z"); // 00:00 on 26 December in Dubai.
+  const CHRISTMAS_SEASON_END_AT = Date.parse("2026-12-27T20:00:00Z"); // 00:00 on 28 December in Dubai.
   const isChristmasSeasonActive = () => Date.now() < CHRISTMAS_SEASON_END_AT;
   window.SkysbridgeChristmasSeason = { endsAt: CHRISTMAS_SEASON_END_AT, isActive: isChristmasSeasonActive };
   window.setTimeout(() => {
