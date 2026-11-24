@@ -2008,3 +2008,10 @@ html:not(.skysbridge-native) .help-card>p{
 .site-header .brand img{display:block;width:min(300px,36vw);height:68px;max-width:100%}
 @media(max-width:600px){.site-header .brand img{width:min(260px,52vw)!important;height:64px}}
 @media(max-width:420px){.site-header .brand img{width:min(205px,calc(100vw - 204px))!important;height:64px}}
+
+/* Keep seasonal snowfall inside the visible memorial card, above its contents. */
+.star-modal-card.is-snowing{position:relative}
+.star-modal-card.is-snowing .memorial-card-snowfall{display:block}
+.memorial-card-snowfall{position:absolute;inset:0;z-index:4;display:none;overflow:hidden;pointer-events:none}
+.memorial-card-snowfall i{position:absolute;top:-18px;left:var(--flake-x);color:#f2f9ff;font:normal var(--flake-size,14px)/1 Georgia,serif;font-style:normal;opacity:0;text-shadow:0 0 8px rgba(214,241,255,.9);animation:memorialCardSnowFall var(--flake-duration,3.6s) linear var(--flake-delay,0s) 1 both}
+@keyframes memorialCardSnowFall{0%{opacity:0;transform:translate3d(0,-10px,0) rotate(0)}12%{opacity:.92}78%{opacity:.82}100%{opacity:0;transform:translate3d(var(--flake-drift,12px),var(--snowfall-distance,75vh),0) rotate(240deg)}}
