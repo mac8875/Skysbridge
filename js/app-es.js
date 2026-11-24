@@ -775,6 +775,69 @@
       </article>
     `, "star-modal-card");
 
+
+    const seasonalTarget = slug === "sky" ? modalContent.querySelector(".star-remembrance-symbol") : null;
+    const seasonalCopy = { snow: "Nieve", hat: "Gorro navideño", snowing: "La nieve cae alrededor de la estrella.", hatted: "La estrella está decorada para Navidad.", rest: canSendLove ? "Elige un saludo para esta estrella" : "Elige nieve o gorro para Sky." };
+    let seasonalButtons = [];
+    if (seasonalTarget) {
+      seasonalTarget.classList.add("memorial-love-target");
+      let effects = seasonalTarget.querySelector(".memorial-greeting-effects");
+      if (!effects) {
+        effects = document.createElement("span");
+        effects.className = "memorial-greeting-effects";
+        effects.setAttribute("aria-hidden", "true");
+        seasonalTarget.appendChild(effects);
+      }
+      if (!effects.querySelector(".memorial-snowfall")) {
+        const snowfall = document.createElement("span");
+        snowfall.className = "memorial-snowfall";
+        snowfall.innerHTML = "<i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i>";
+        effects.appendChild(snowfall);
+      }
+      if (!effects.querySelector(".memorial-santa-hat")) {
+        const hat = document.createElement("span");
+        hat.className = "memorial-santa-hat";
+        hat.setAttribute("aria-hidden", "true");
+        effects.appendChild(hat);
+      }
+      let choices = modalContent.querySelector(".memorial-greeting-choices");
+      if (!choices) {
+        const controls = document.createElement("div");
+        controls.className = "memorial-greeting-controls";
+        choices = document.createElement("div");
+        choices.className = "memorial-greeting-choices";
+        choices.setAttribute("role", "group");
+        choices.setAttribute("aria-label", "Elige un saludo o efecto de temporada");
+        controls.appendChild(choices);
+        modalContent.querySelector(".star-remembrance-header")?.appendChild(controls);
+      }
+      const addSeasonalButton = (effect, label, icon) => {
+        if (choices.querySelector('[data-seasonal="' + effect + '"]')) return;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "memorial-love-button memorial-seasonal-choice";
+        button.dataset.seasonal = effect;
+        if (effect === "hat") button.setAttribute("aria-pressed", "false");
+        else button.setAttribute("aria-label", label);
+        const glyph = document.createElement("span");
+        glyph.setAttribute("aria-hidden", "true");
+        glyph.textContent = icon;
+        button.append(glyph, document.createTextNode(label));
+        choices.appendChild(button);
+      };
+      addSeasonalButton("snow", seasonalCopy.snow, "❄");
+      addSeasonalButton("hat", seasonalCopy.hat, "🎅");
+      seasonalButtons = [...choices.querySelectorAll(".memorial-seasonal-choice")];
+      if (!modalContent.querySelector("#memorialLoveStatus")) {
+        const status = document.createElement("p");
+        status.className = "memorial-love-status";
+        status.id = "memorialLoveStatus";
+        status.setAttribute("aria-live", "polite");
+        status.textContent = seasonalCopy.rest;
+        choices.parentElement.appendChild(status);
+      }
+    }
+
     const loveButtons = modalContent.querySelectorAll(".memorial-love-choice");
     const loveTarget = modalContent.querySelector(".memorial-love-target");
     const loveStatus = modalContent.querySelector("#memorialLoveStatus");
@@ -791,6 +854,30 @@
       soundToggle.title = label;
       if (!greetingSoundsEnabled) stopGreetingAudio();
     });
+    let seasonalAnimationTimer = null;
+    seasonalButtons.forEach(button => button.addEventListener("click", () => {
+      if (!seasonalTarget) return;
+      if (button.dataset.seasonal === "snow") {
+        window.clearTimeout(seasonalAnimationTimer);
+        seasonalTarget.classList.remove("is-snowing");
+        void seasonalTarget.offsetWidth;
+        seasonalTarget.classList.add("is-snowing");
+        if (loveStatus) loveStatus.textContent = seasonalCopy.snowing;
+        if (greetingSoundsEnabled) playGreetingSound("snow");
+        seasonalAnimationTimer = window.setTimeout(() => {
+          stopGreetingAudio(420);
+          seasonalTarget.classList.remove("is-snowing");
+          const hatButton = modalContent.querySelector('[data-seasonal="hat"]');
+          if (loveStatus) loveStatus.textContent = hatButton?.getAttribute("aria-pressed") === "true" ? seasonalCopy.hatted : seasonalCopy.rest;
+        }, 4600);
+        return;
+      }
+      if (button.dataset.seasonal === "hat") {
+        const isHatted = seasonalTarget.classList.toggle("is-wearing-santa-hat");
+        button.setAttribute("aria-pressed", String(isHatted));
+        if (loveStatus) loveStatus.textContent = isHatted ? seasonalCopy.hatted : seasonalTarget.classList.contains("is-snowing") ? seasonalCopy.snowing : seasonalCopy.rest;
+      }
+    }));
     let loveAnimationTimer = null;
     loveButtons.forEach(button => button.addEventListener("click", () => {
       if (!canSendLove || !loveTarget) return;
@@ -1172,7 +1259,9 @@ ${canWriteMemory ? `          <p class="memory-intro">Tu recuerdo escrito se rev
         void loveTarget.offsetWidth;
         loveTarget.classList.add("is-snowing");
         if (loveStatus) loveStatus.textContent = "La nieve cae alrededor de la estrella.";
+        if (greetingSoundsEnabled) playGreetingSound("snow");
         seasonalAnimationTimer = window.setTimeout(() => {
+          stopGreetingAudio(420);
           loveTarget.classList.remove("is-snowing");
           const hatButton = modalContent.querySelector('[data-seasonal="hat"]');
           if (loveStatus) loveStatus.textContent = hatButton?.getAttribute("aria-pressed") === "true" ? "La estrella está decorada para Navidad." : "Elige un saludo para esta estrella";
