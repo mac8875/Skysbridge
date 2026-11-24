@@ -43,12 +43,106 @@
 </g></svg>`;
   const random = (min,max) => min + Math.random() * (max-min);
   const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  // Original, gently fading sleigh-bell sound; no music, downloads or external audio.
+  const soundKey = "skysbridge.christmas-bells.v1";
+  let soundEnabled = true;
+  try { soundEnabled = localStorage.getItem(soundKey) !== "off"; } catch {}
+  let audioContext = null, currentBells = null;
+  const soundControls = [];
+  const audioCtor = window.AudioContext || window.webkitAudioContext;
+  function unlockAudio() {
+    if (!soundEnabled || !audioCtor) return;
+    try {
+      if (!audioContext || audioContext.state === "closed") audioContext = new audioCtor();
+      if (audioContext.state !== "running") audioContext.resume().catch(()=>{});
+    } catch {}
+  }
+  function stopBells() {
+    if (!currentBells) return;
+    const cue = currentBells; currentBells = null;
+    try {
+      const t = audioContext.currentTime;
+      cue.bus.gain.cancelScheduledValues(t);
+      cue.bus.gain.setTargetAtTime(0,t,.025);
+      cue.voices.forEach(voice=>{try{voice.stop(t+.15);}catch{}});
+    } catch {}
+  }
+  function ringBells(reverse) {
+    if (!soundEnabled || document.hidden || audioContext?.state !== "running") return false;
+    stopBells();
+    try {
+      const ctx = audioContext, t = ctx.currentTime + .035;
+      const bus = ctx.createGain(), voices = [];
+      bus.gain.value = 0;
+      bus.gain.setValueAtTime(0,t);
+      bus.gain.linearRampToValueAtTime(.12,t+.35);
+      bus.gain.setValueAtTime(.12,t+1.35);
+      bus.gain.linearRampToValueAtTime(0,t+2.85);
+      let output = bus;
+      if (ctx.createStereoPanner) {
+        const pan = ctx.createStereoPanner();
+        pan.pan.setValueAtTime(reverse ? .52 : -.52,t);
+        pan.pan.linearRampToValueAtTime(reverse ? -.52 : .52,t+2.85);
+        bus.connect(pan); output = pan;
+      }
+      output.connect(ctx.destination);
+      // Several overlapping, inharmonic metal resonances create a real jingle-like timbre.
+      const strikes = [0,.13,.32,.48,.74,.91,1.14,1.31,1.57,1.78,2.03,2.19];
+      const pitches = [760,910,1040,1210,1400];
+      strikes.forEach((offset,i)=>{
+        const start = t+offset+random(0,.035), base=pitches[i%pitches.length]*random(.96,1.04);
+        const strength = random(.55,1);
+        [[1,.22,.19],[1.47,.17,.14],[2.09,.13,.105],[2.83,.085,.075],[3.67,.04,.055]].forEach(([ratio,amp,decay])=>{
+          const osc=ctx.createOscillator(), envelope=ctx.createGain();
+          osc.type="sine"; osc.frequency.value=base*ratio;
+          envelope.gain.setValueAtTime(.0001,start);
+          envelope.gain.exponentialRampToValueAtTime(amp*strength,start+.005);
+          envelope.gain.exponentialRampToValueAtTime(.0001,start+decay+.10);
+          osc.connect(envelope); envelope.connect(bus); voices.push(osc);
+          osc.start(start); osc.stop(start+decay+.12);
+        });
+      });
+      const cue={bus,voices}; currentBells=cue;
+      setTimeout(()=>{if(currentBells===cue)currentBells=null;try{bus.disconnect();if(output!==bus)output.disconnect();}catch{}},3400);
+      return true;
+    } catch { stopBells(); return false; }
+  }
+  function updateSoundControls() {
+    const lang=document.documentElement.lang.toLowerCase().slice(0,2);
+    const names=({de:["Rentierglöckchen einschalten","Rentierglöckchen ausschalten"],en:["Turn sleigh bells on","Turn sleigh bells off"],es:["Activar cascabeles","Desactivar cascabeles"]})[lang]||["Turn sleigh bells on","Turn sleigh bells off"];
+    for(const button of soundControls){
+      button.setAttribute("aria-pressed",String(soundEnabled));
+      button.setAttribute("aria-label",names[soundEnabled?1:0]);
+      button.title=names[soundEnabled?1:0];
+      button.querySelector(".sb-bell-mute").style.display=soundEnabled?"none":"";
+    }
+  }
+  function makeSoundControl(parent) {
+    if(!parent || !audioCtor) return;
+    const button=document.createElement("button");
+    button.type="button"; button.className="sb-christmas-sound";
+    button.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/><path class="sb-bell-mute" d="M3 3l18 18" stroke="#e6c78d" stroke-width="2.2"/></svg>';
+    button.addEventListener("click",()=>{
+      soundEnabled=!soundEnabled;
+      try{localStorage.setItem(soundKey,soundEnabled?"on":"off");}catch{}
+      if(soundEnabled)unlockAudio();else stopBells();
+      updateSoundControls();
+    });
+    soundControls.push(button);parent.append(button);updateSoundControls();
+    new MutationObserver(updateSoundControls).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+    document.addEventListener("pointerdown",unlockAudio,{passive:true});
+    document.addEventListener("keydown",unlockAudio);
+    document.addEventListener("visibilitychange",()=>{if(document.hidden)stopBells();});
+    window.addEventListener("pagehide",stopBells);
+    window.addEventListener("storage",event=>{if(event.key===soundKey){soundEnabled=event.newValue!=="off";if(!soundEnabled)stopBells();updateSoundControls();}});
+  }
   function attachFlight(el, area, enabled = () => true) {
-    let flight = null, timer = null, focused = false, hover = false;
+    let flight = null, timer = null, focused = false, hover = false, bellCheck = null;
     el.innerHTML = artwork;
     const graphic = el.querySelector("svg");
     const clear = () => {
       clearTimeout(timer); timer = null;
+      clearInterval(bellCheck); bellCheck = null; stopBells();
       if (flight) { flight.onfinish = null; flight.cancel(); flight = null; }
     };
     const position = (x,y) => "translate3d(" + x + "px," + y + "px,0)";
@@ -87,6 +181,16 @@
         {transform:position(from+(to-from)*.91,endY+(middleY-endY)*.18),opacity:1,offset:.91},
         {transform:position(to,endY),opacity:0,offset:1}
       ],{duration:random(8500,14000),easing:"linear",fill:"both"});
+      let rang=false;
+      bellCheck=setInterval(()=>{
+        if (!flight || flight.playState!=="running" || !enabled() || !soundEnabled || document.hidden) { stopBells(); return; }
+        const r=el.getBoundingClientRect(), a=area.getBoundingClientRect();
+        const visibleX=Math.min(r.right,a.right,window.innerWidth)-Math.max(r.left,a.left,0);
+        const visibleY=Math.min(r.bottom,a.bottom,window.innerHeight)-Math.max(r.top,a.top,0);
+        const modal=document.querySelector("#modal:not([hidden]), dialog[open]");
+        if(visibleX<r.width*.35 || visibleY<r.height*.5 || modal){stopBells();return;}
+        if(!rang)rang=ringBells(reverse);
+      },220);
       if (hover) flight.pause();
       flight.onfinish = () => { clear(); idle(); schedule(random(4500,12000)); };
     }
@@ -111,11 +215,14 @@
     #christmas-special-sleigh svg,.sky-objects #sleigh svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px #e6c78d55);pointer-events:none}
     #christmas-special-sleigh:hover,.sky-objects #sleigh:hover{filter:brightness(1.12)}
     #christmas-special-link:focus-visible,#christmas-special-sleigh:focus-visible,.sky-objects #sleigh:focus-visible{outline:2px solid #f6d79b;outline-offset:3px;border-radius:5px}
+    .sb-christmas-sound,.language .sb-christmas-sound{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;min-width:32px;padding:0;border:1px solid #e6c78d45;border-radius:50%;background:transparent;color:#d8bd89;cursor:pointer;vertical-align:middle}
+    .sb-christmas-sound[aria-pressed="false"]{opacity:.65}
+    .sb-christmas-sound:focus-visible{outline:2px solid #e6c78d;outline-offset:2px}
     @media(max-width:600px){#christmas-special-sleigh,.sky-objects #sleigh{width:142px;height:56px}}
   `;
   document.head.append(style);
   const pageSleigh = document.querySelector(".sky-objects #sleigh");
-  if (pageSleigh) { attachFlight(pageSleigh,pageSleigh.parentElement); return; }
+  if (pageSleigh) { makeSoundControl(document.querySelector(".language")); attachFlight(pageSleigh,pageSleigh.parentElement); return; }
   const now = new Date();
   if (now.getMonth() !== 11 && !(now.getMonth() === 10 && now.getDate() >= 24)) return;
   if (now.getMonth() === 11 && now.getDate() > 26) return;
@@ -137,7 +244,7 @@
   const toggle = document.createElement("input");
   toggle.type = "checkbox"; toggle.checked = true; toggle.setAttribute("aria-controls","christmas-special-sleigh");
   const labelText = document.createElement("span"); labelText.textContent = words.sleigh;
-  label.append(toggle,labelText); settings.append(label);
+  label.append(toggle,labelText); settings.append(label); makeSoundControl(settings);
   const sleigh = document.createElement("a");
   sleigh.id = "christmas-special-sleigh"; sleigh.href = url;
   sleigh.setAttribute("aria-label",words.sleigh + " – " + words.title);
