@@ -5,6 +5,117 @@
   if (cap?.isNativePlatform?.() || ["android","ios"].includes(cap?.getPlatform?.()) ||
       ["capacitor:","ionic:","file:"].includes(location.protocol) ||
       ["localhost","127.0.0.1"].includes(location.hostname) || /\bCapacitor\b/i.test(navigator.userAgent)) return;
+  const artwork = `<svg viewBox="0 0 244 96" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="sbGold" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#fff4cf"/><stop offset=".42" stop-color="#eac78b"/><stop offset="1" stop-color="#a66f35"/></linearGradient>
+  <linearGradient id="sbRed" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d45c61"/><stop offset=".5" stop-color="#a3263e"/><stop offset="1" stop-color="#59152b"/></linearGradient>
+  <linearGradient id="sbTrace"><stop stop-color="#f3d59b" stop-opacity="0"/><stop offset=".8" stop-color="#efd8a1" stop-opacity=".6"/><stop offset="1" stop-color="#fff0ce" stop-opacity=".85"/></linearGradient>
+  <g id="sbDeer" fill="url(#sbGold)" stroke="#f2d69d" stroke-width=".6" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M4 38Q1 33 0 33L5 31Q10 25 22 27L34 28 39 17 44 11 49 13 49 19 55 20 57 23 52 26 43 24 38 37 34 41 23 42 11 41Z"/>
+    <path d="M12 39 8 47 0 51-2 49 6 43 8 36M20 40 24 47 32 49 32 51 22 50 16 43M33 38 39 45 47 44 48 47 38 49 30 42M37 36 45 40 54 37 56 39 46 43 37 41"/>
+    <path d="M43 12 39 4 35 1M39 4 43 0M48 13 51 5 56 2M51 5 51 0M51 5 58 7" fill="none" stroke="#e8c48a" stroke-width="1.65"/>
+    <circle cx="49" cy="19" r="1" fill="#332030" stroke="none"/>
+    <path d="M39 29 44 30" stroke="#a53649" stroke-width="2.3"/>
+  </g>
+</defs>
+<g fill="none" stroke-linecap="round">
+  <path d="M0 63Q19 55 47 59" stroke="url(#sbTrace)" stroke-width="2.3"/>
+  <path d="M9 71Q31 64 50 65" stroke="url(#sbTrace)" stroke-width="1"/>
+</g>
+<g fill="#ffe8b6"><circle cx="10" cy="51" r="1.1" opacity=".65"/><circle cx="27" cy="71" r="1.3" opacity=".9"/><path d="M23 40l1.5 5 5 1.5-5 1.5-1.5 5-1.5-5-5-1.5 5-1.5z"/><circle cx="5" cy="78" r=".8"/></g>
+<g stroke-linecap="round" stroke-linejoin="round">
+  <path d="M103 46Q128 48 147 36T205 30" fill="none" stroke="#edca8e" stroke-width="1.15"/>
+  <use href="#sbDeer" x="120" y="15"/>
+  <use href="#sbDeer" x="180" y="5"/>
+  <path d="M94 50Q132 47 157 45L218 35" fill="none" stroke="#d9b47a" stroke-width=".85" opacity=".9"/>
+  <path d="M53 52Q42 41 47 34Q52 27 61 33L70 47Q75 53 85 53H107Q116 53 118 44L124 43Q126 65 110 72H66Q51 72 48 60Z" fill="url(#sbRed)" stroke="url(#sbGold)" stroke-width="2"/>
+  <path d="M53 48Q56 60 68 62H106Q115 62 121 53M61 68H110" fill="none" stroke="#f4d49a" stroke-width="1.35"/>
+  <path d="M56 72L53 81M105 72L110 81M43 81H114Q127 81 131 70Q134 62 128 63M43 81Q35 81 35 75" fill="none" stroke="url(#sbGold)" stroke-width="3"/>
+  <path d="M57 47Q49 35 54 26Q62 22 71 31L76 47" fill="#b79a65" stroke="#edcc91" stroke-width="1.1"/>
+  <path d="M56 28 64 28" stroke="#ffe4ad" stroke-width="1.5"/>
+  <path d="M79 51Q72 37 80 27L90 24 98 32 100 53" fill="url(#sbRed)" stroke="#edca8c" stroke-width="1.35"/>
+  <path d="M80 31Q88 32 94 36L105 43" fill="none" stroke="#d45761" stroke-width="7"/>
+  <path d="M102 41 108 44" stroke="#fff0da" stroke-width="3.4"/>
+  <circle cx="89" cy="20" r="8" fill="#eec6a1" stroke="#f4d6ad" stroke-width=".8"/>
+  <path d="M82 17Q80 7 88 5Q95 5 100 15L94 13 92 17Z" fill="url(#sbRed)" stroke="#e8c48a" stroke-width="1"/>
+  <path d="M81 17H95M83 24Q89 34 95 23" fill="none" stroke="#fff1dc" stroke-width="3.6"/>
+  <circle cx="100" cy="14" r="2.3" fill="#fff1dc"/>
+</g></svg>`;
+  const random = (min,max) => min + Math.random() * (max-min);
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  function attachFlight(el, area, enabled = () => true) {
+    let flight = null, timer = null, focused = false, hover = false;
+    el.innerHTML = artwork;
+    const graphic = el.querySelector("svg");
+    const clear = () => {
+      clearTimeout(timer); timer = null;
+      if (flight) { flight.onfinish = null; flight.cancel(); flight = null; }
+    };
+    const position = (x,y) => "translate3d(" + x + "px," + y + "px,0)";
+    const parked = () => {
+      const x = Math.max(4, (area.clientWidth - el.offsetWidth) * .5);
+      const y = Math.max(3, Math.min(area.clientHeight - el.offsetHeight - 3, area.clientHeight * .12));
+      el.style.transform = position(x,y);
+      el.style.opacity = "1"; el.style.pointerEvents = "auto";
+      graphic.style.transform = "";
+    };
+    const idle = () => {
+      el.style.transform = position(-el.offsetWidth - 20,0);
+      el.style.opacity = "0"; el.style.pointerEvents = "none";
+    };
+    function schedule(delay) {
+      clearTimeout(timer);
+      timer = setTimeout(run, delay);
+    }
+    function run() {
+      clear();
+      if (!enabled()) { idle(); return; }
+      if (focused || motion.matches || typeof el.animate !== "function") { parked(); return; }
+      if (document.hidden || !area.clientWidth || !area.clientHeight) { idle(); schedule(1200); return; }
+      const w = area.clientWidth, h = area.clientHeight, ew = el.offsetWidth, eh = el.offsetHeight;
+      const pad = Math.min(28, Math.max(4,(h-eh)*.12));
+      const low = pad, high = Math.max(low,h-eh-pad);
+      const startY = random(low,high), endY = random(low,high);
+      const middleY = Math.max(low,Math.min(high,(startY+endY)/2 + random(-1,1)*Math.min(85,(high-low)*.35)));
+      const reverse = Math.random() < .5, from = reverse ? w+ew*.15 : -ew-12, to = reverse ? -ew-12 : w+ew*.15;
+      graphic.style.transform = reverse ? "scaleX(-1)" : "";
+      el.style.opacity = "1"; el.style.pointerEvents = "auto";
+      flight = el.animate([
+        {transform:position(from,startY),opacity:0,offset:0},
+        {transform:position(from+(to-from)*.09,startY+(middleY-startY)*.18),opacity:1,offset:.09},
+        {transform:position((from+to)/2,middleY),opacity:1,offset:.5},
+        {transform:position(from+(to-from)*.91,endY+(middleY-endY)*.18),opacity:1,offset:.91},
+        {transform:position(to,endY),opacity:0,offset:1}
+      ],{duration:random(8500,14000),easing:"linear",fill:"both"});
+      if (hover) flight.pause();
+      flight.onfinish = () => { clear(); idle(); schedule(random(4500,12000)); };
+    }
+    el.addEventListener("focus",() => { focused=true; clear(); if(enabled()) parked(); });
+    el.addEventListener("blur",() => { focused=false; run(); });
+    el.addEventListener("pointerenter",event => { if(event.pointerType==="mouse"){hover=true;flight?.pause();} });
+    el.addEventListener("pointerleave",event => { if(event.pointerType==="mouse"){hover=false;flight?.play();} });
+    motion.addEventListener?.("change",run);
+    let resizeTimer;
+    window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(run,180);},{passive:true});
+    document.addEventListener("visibilitychange",()=>{if(document.hidden){clear();idle();}else run();});
+    idle(); schedule(350);
+    return run;
+  }
+  const style = document.createElement("style");
+  style.textContent = `
+    #christmas-special-link{display:inline-flex;align-items:center;gap:.5rem;color:#f1d7a2;text-decoration:none;font-size:14px;margin:0 0 12px;padding:8px 16px;border:1px solid #e6c78d66;border-radius:30px;line-height:1.4;max-width:100%;background:#11243a}
+    #christmas-special-link:hover{color:#fff2d1}
+    #christmas-special-sleigh,.sky-objects #sleigh{position:absolute;top:0;left:0;display:flex;align-items:center;justify-content:center;width:174px;height:70px;padding:0;border:0;background:transparent;color:#f7dfab;touch-action:manipulation;opacity:0;will-change:transform}
+    #christmas-special-sleigh{z-index:4;text-decoration:none}
+    #christmas-special-sleigh[hidden]{display:none!important}
+    #christmas-special-sleigh svg,.sky-objects #sleigh svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px #e6c78d55);pointer-events:none}
+    #christmas-special-sleigh:hover,.sky-objects #sleigh:hover{filter:brightness(1.12)}
+    #christmas-special-link:focus-visible,#christmas-special-sleigh:focus-visible,.sky-objects #sleigh:focus-visible{outline:2px solid #f6d79b;outline-offset:3px;border-radius:5px}
+    @media(max-width:600px){#christmas-special-sleigh,.sky-objects #sleigh{width:142px;height:56px}}
+  `;
+  document.head.append(style);
+  const pageSleigh = document.querySelector(".sky-objects #sleigh");
+  if (pageSleigh) { attachFlight(pageSleigh,pageSleigh.parentElement); return; }
   const now = new Date();
   if (now.getMonth() !== 11 && !(now.getMonth() === 10 && now.getDate() >= 24)) return;
   if (now.getMonth() === 11 && now.getDate() > 26) return;
@@ -18,22 +129,6 @@
     es:{title:"Navidad entre las estrellas",sleigh:"Trineo navideño"}
   })[lang] || {title:"Christmas in the Stars",sleigh:"Santa’s sleigh"};
   const url = "christmas.html?lang=" + (["de","en","es"].includes(lang) ? lang : "en");
-  const style = document.createElement("style");
-  style.textContent = `
-    #christmas-special-link{display:inline-flex;align-items:center;gap:.5rem;color:#f1d7a2;text-decoration:none;font-size:14px;margin:0 0 12px;padding:8px 16px;border:1px solid #e6c78d66;border-radius:30px;line-height:1.4;max-width:100%;background:#11243a}
-    #christmas-special-link:hover,#christmas-special-sleigh:hover{color:#fff2d1}
-    #christmas-special-sleigh{position:absolute;top:10%;left:-150px;z-index:4;display:flex;align-items:center;justify-content:center;width:132px;height:62px;padding:0;border:0;background:transparent;text-decoration:none;color:#f7dfab;touch-action:manipulation;animation:christmas-sleigh-flight 21s linear infinite;opacity:0}
-    #christmas-special-sleigh[hidden]{display:none!important}
-    #christmas-special-sleigh svg{display:block;width:132px;height:62px;overflow:visible;filter:drop-shadow(0 0 5px #e6c78d66);pointer-events:none}
-    #christmas-special-sleigh::before{content:"";position:absolute;right:76%;top:58%;width:85px;height:8px;border-radius:50%;background:linear-gradient(90deg,transparent,#ead09b55,#fff1c9aa);filter:blur(3px);pointer-events:none}
-    #christmas-special-sleigh:hover{animation-play-state:paused;filter:brightness(1.12)}
-    #christmas-special-link:focus-visible,#christmas-special-sleigh:focus-visible{outline:2px solid #f6d79b;outline-offset:3px}
-    #christmas-special-sleigh:focus-visible{animation:none;left:12px;top:10%;opacity:1}
-    @keyframes christmas-sleigh-flight{0%{left:-150px;top:14%;opacity:0} 5%{opacity:1} 23%{left:24%;top:7%;opacity:1} 43%{left:57%;top:14%;opacity:1} 60%{left:calc(100% + 130px);top:6%;opacity:1} 61%,100%{left:calc(100% + 130px);top:6%;opacity:0}}
-    @media(max-width:600px){#christmas-special-sleigh{width:108px;height:52px}#christmas-special-sleigh svg{width:108px;height:52px}#christmas-special-sleigh::before{width:55px}}
-    @media(prefers-reduced-motion:reduce){#christmas-special-sleigh{animation:none;left:12px;top:10%;opacity:1}}
-  `;
-  document.head.append(style);
   const link = document.createElement("a");
   link.id = "christmas-special-link"; link.href = url; link.textContent = "✦ " + words.title;
   settings.insertAdjacentElement("beforebegin", link);
@@ -46,11 +141,7 @@
   const sleigh = document.createElement("a");
   sleigh.id = "christmas-special-sleigh"; sleigh.href = url;
   sleigh.setAttribute("aria-label",words.sleigh + " – " + words.title);
-  sleigh.innerHTML = `<svg viewBox="0 0 180 80" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sbSleighGold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff5d0"/><stop offset=".45" stop-color="#eac681"/><stop offset="1" stop-color="#bd7834"/></linearGradient><linearGradient id="sbSleighRed" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#db5359"/><stop offset="1" stop-color="#6c182b"/></linearGradient><linearGradient id="sbSleighTrail"><stop stop-color="#e8c98a" stop-opacity="0"/><stop offset="1" stop-color="#fff1bc" stop-opacity=".8"/></linearGradient></defs>
-<g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 56Q23 45 48 49" stroke="url(#sbSleighTrail)" stroke-width="2"/><path d="M10 63Q30 55 48 55" stroke="url(#sbSleighTrail)" stroke-width="1"/>
-<g fill="#fff0c0" stroke="none"><path d="M15 35l1.4 4.6 4.6 1.4-4.6 1.4-1.4 4.6-1.4-4.6-4.6-1.4 4.6-1.4z"/><circle cx="27" cy="59" r="1.5"/><circle cx="6" cy="50" r="1"/><circle cx="35" cy="38" r="1.4"/></g>
-<g stroke="url(#sbSleighGold)" stroke-width="2"><path d="M43 31Q35 25 34 36l5 18q2 8 12 8h47q12 0 18-12l-10 4H76q-10-1-13-17l-5-12q-5-5-15 6Z" fill="url(#sbSleighRed)"/><path d="M43 33q7-7 14 0l7 12M49 57h53"/><path d="M42 64l-2 7m56-9 3 8M35 72h71q13 0 16-10M35 72q-7 0-7-5"/><path d="M66 45q-5-13 4-20l9-3 9 9 2 14" fill="url(#sbSleighRed)"/><path d="M69 28q-6 0-10 5" stroke="#fff3d9" stroke-width="3"/><circle cx="77" cy="20" r="7" fill="#f5d0a0" stroke-width="1"/><path d="M69 17q1-10 9-12 6 1 11 12l-7-3-10 3z" fill="url(#sbSleighRed)"/><path d="M68 17h15M73 23q5 9 10 0" stroke="#fff4de" stroke-width="3"/><circle cx="90" cy="16" r="2" fill="#fff4de" stroke="none"/><path d="M47 44q-8-15 3-20 8 2 11 20" fill="#a58048"/><path d="M52 25l-5 4"/>
-<path d="M94 35Q118 31 139 36" stroke-width="1.1"/><g fill="#d8b475" stroke="#f7dca2" stroke-width="1.2"><path d="M126 39q7-8 20-5l6-11 6 2-2 8 7 3-4 5-11-1-5 7-16-1-7-5z"/><path d="M130 45l-8 9-5 2m21-10 6 9 7 1m-1-13 9 7 5-1m-40-8-7-6" fill="none" stroke-width="2"/><path d="M153 24l-2-8-5-4m5 4 5-6m2 15 5-9 4-2m-4 2 1-6" fill="none" stroke-width="1.5"/></g><circle cx="162" cy="36" r="1.6" fill="#e85e60" stroke="none"/></g></g></svg>`;
   wall.append(sleigh);
-  toggle.addEventListener("change", () => { sleigh.hidden = !toggle.checked; });
+  const restart = attachFlight(sleigh,wall,()=>toggle.checked);
+  toggle.addEventListener("change",()=>{sleigh.hidden=!toggle.checked;restart();});
 })();
