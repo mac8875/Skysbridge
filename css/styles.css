@@ -2010,6 +2010,6 @@ html:not(.skysbridge-native) .help-card>p{
 @media(prefers-reduced-motion:reduce){.memorial-map-snowfall i{animation:none!important;opacity:.45;transform:translateY(35px)}}
 
 
-.memorial-wing-orbit{z-index:1}
+.memorial-wing-orbit{z-index:3}
 .memorial-love-status{height:2.8em;min-height:2.8em;display:flex;align-items:center;justify-content:center;text-align:center;padding-inline:6px}
 
