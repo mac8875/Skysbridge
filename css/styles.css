@@ -2003,3 +2003,8 @@ html:not(.skysbridge-native) .help-card>p{
 .memorial-wing-orbit{z-index:1}
 .memorial-love-status{height:2.8em;min-height:2.8em;display:flex;align-items:center;justify-content:center;text-align:center;padding-inline:6px}
 
+
+/* Shared header wordmark: match the larger Christmas page logo. */
+.site-header .brand img{display:block;width:min(300px,36vw);height:68px;max-width:100%}
+@media(max-width:600px){.site-header .brand img{width:min(260px,52vw)!important;height:64px}}
+@media(max-width:420px){.site-header .brand img{width:min(205px,calc(100vw - 204px))!important;height:64px}}
