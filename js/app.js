@@ -1200,7 +1200,7 @@ ${canWriteMemory ? `          <p class="memory-intro">Your written memory is rev
           modalCard.classList.add("is-snowing");
         }
         button.setAttribute("aria-pressed", "true");
-        if (loveStatus) loveStatus.textContent = "Snow is falling across Sky’s card.";
+        if (loveStatus) loveStatus.textContent = "Snow is falling across " + (item.child_name || "this star") + "’s card.";
         seasonalAnimationTimer = window.setTimeout(() => {
           snowfall.remove();
           modalCard?.classList.remove("is-snowing");
