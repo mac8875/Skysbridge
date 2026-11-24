@@ -1,7 +1,7 @@
 [build]
   publish = "."
-  # Bundle CC0 recording locally; no third-party requests from visitors.
-  command = "mkdir -p assets && curl --fail --location --silent --show-error --retry 2 --max-time 30 https://audio.sfxjar.com/audio/0585.mp3 --output assets/christmas-sleigh-bells.mp3 && test -s assets/christmas-sleigh-bells.mp3"
+  # Optional CC0 seasonal sound; the rest of the website never depends on audio availability.
+  command = "python3 scripts/bundle-christmas-bells.py"
 
 [[headers]]
   for = "/*"
