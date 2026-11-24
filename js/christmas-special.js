@@ -81,24 +81,24 @@
       const ctx=audioContext,t=ctx.currentTime+.025;
       const source=ctx.createBufferSource(), bus=ctx.createGain();
       source.buffer=bellBuffer;
-      const duration=Math.min(6.5,bellBuffer.duration);
+      const panDuration=Math.min(20,bellBuffer.duration);
       const peak=.32;
       bus.gain.setValueAtTime(0,t);
       bus.gain.linearRampToValueAtTime(peak,t+.38);
-      bus.gain.setValueAtTime(peak,t+Math.max(.4,duration-1));
-      bus.gain.linearRampToValueAtTime(0,t+duration);
+      bus.gain.setValueAtTime(peak,t+panDuration);
+      source.loop=true;
       source.connect(bus);
       let output=bus;
       if(ctx.createStereoPanner){
         const pan=ctx.createStereoPanner();
         pan.pan.setValueAtTime(reverse ? .42 : -.42,t);
-        pan.pan.linearRampToValueAtTime(reverse ? -.42 : .42,t+duration);
+        pan.pan.linearRampToValueAtTime(reverse ? -.42 : .42,t+panDuration);
         bus.connect(pan);output=pan;
       }
       output.connect(ctx.destination);
       const cue={source,bus}; currentBells=cue;
       source.onended=()=>{if(currentBells===cue)currentBells=null;try{source.disconnect();bus.disconnect();if(output!==bus)output.disconnect();}catch{}};
-      source.start(t,0,duration);
+      source.start(t);
       return true;
     }catch{stopBells();return false;}
   }
