@@ -1081,12 +1081,12 @@
     };
     const lang = (document.documentElement.lang || "en").slice(0, 2);
     const options = optionsByLanguage[lang] || optionsByLanguage.en;
-    const selectedStyle = options.some(([value]) => value === requestedStyle) ? requestedStyle : "radiant";
+    const selectedStyle = requestedStyle;
     return options.map(([value, label]) => {
       const decoration = value === "christmas"
         ? '<i class="star-decoration star-decoration-hat"><b></b></i>'
         : value === "snow" ? '<i class="star-decoration star-decoration-snow"></i>' : "";
-      return `<label class="star-choice"><input type="radio" name="star_style" value="${value}"${value === selectedStyle ? " checked" : ""}><span class="star-choice-preview star-${value}" aria-hidden="true">${decoration}</span><span>${label}</span></label>`;
+      return `<label class="star-choice"><input type="radio" name="star_style" value="${value}"${value === selectedStyle ? " checked" : ""} required><span class="star-choice-preview star-${value}" aria-hidden="true">${decoration}</span><span>${label}</span></label>`;
     }).join("");
   }
 
