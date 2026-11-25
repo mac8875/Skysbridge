@@ -270,7 +270,7 @@
     .christmas-sound-control:focus-visible{outline:2px solid #f6d79b;outline-offset:3px}
     #christmas-special-link:hover{color:#fff2d1}
     #christmas-special-sleigh,.sky-objects #sleigh{position:absolute;top:0;left:0;display:flex;align-items:center;justify-content:center;width:174px;height:70px;padding:0;border:0;background:transparent;color:#f7dfab;touch-action:manipulation;opacity:0;will-change:transform}
-    #christmas-special-sleigh{z-index:4;text-decoration:none}
+    #christmas-special-sleigh{z-index:12;text-decoration:none}
     #christmas-special-sleigh[hidden]{display:none!important}
     #christmas-special-sleigh svg,.sky-objects #sleigh svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px #e6c78d55);pointer-events:none}
     #christmas-special-sleigh:hover,.sky-objects #sleigh:hover{filter:brightness(1.12)}
