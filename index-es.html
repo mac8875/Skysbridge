@@ -33,6 +33,20 @@
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://skysbridge.org/#website","url":"https://skysbridge.org/","name":"Skysbridge","alternateName":"Sky’s Bridge","inLanguage":["en","de","es"]},{"@type":"WebPage","@id":"https://skysbridge.org/index-es.html#webpage","url":"https://skysbridge.org/index-es.html","name":"Memorial de estrellas para recordar a un hijo | Sky’s Bridge","description":"Un espacio de recuerdo para familias en duelo. Crea una estrella para tu hijo, conserva su historia y elige qué recuerdos permanecen privados.","inLanguage":"es","isPartOf":{"@id":"https://skysbridge.org/#website"}}]}</script>
   <link rel="stylesheet" href="css/sky-3d.css?v=1">
+<style id="homepage-trust-styles">
+  .trust-strip.trust-interactive{box-sizing:border-box;width:min(940px,90vw);max-width:none;margin-inline:auto;padding:.6rem 0;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;align-items:start;position:relative;z-index:3}
+  .trust-interactive .trust-item{min-width:0;text-align:center;padding:0 .65rem}
+  .trust-interactive .trust-item+.trust-item{border-inline-start:1px solid rgba(244,215,146,.16)}
+  .trust-interactive .trust-item summary{display:flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;padding:.35rem .1rem;box-sizing:border-box;cursor:pointer;list-style:none;line-height:1.45;color:inherit;font:inherit}
+  .trust-interactive .trust-item summary::-webkit-details-marker{display:none}
+  .trust-interactive .trust-item summary::after{content:"ⓘ";color:#e8b556;flex:none;font-size:1rem}
+  .trust-interactive .trust-item[open] summary,.trust-interactive .trust-item summary:hover{color:#f4d792}
+  .trust-interactive .trust-item summary:focus-visible{outline:2px solid #e8b556;outline-offset:2px;border-radius:5px}
+  .trust-interactive .trust-item p{margin:.35rem 0 .65rem;padding:.85rem .65rem;border:1px solid rgba(244,215,146,.18);border-radius:10px;background:#0a2032;color:#e0e8ef;font-size:.85rem;line-height:1.65;text-align:start;overflow-wrap:anywhere}
+  @media(max-width:900px){.trust-strip.trust-interactive{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:.35rem}.trust-interactive .trust-item:nth-child(odd){border-inline-start:0}.trust-interactive .trust-item:nth-child(n+3){border-top:1px solid rgba(244,215,146,.12)}}
+  @media(max-width:700px){.trust-strip.trust-interactive{width:100%;padding:.45rem .75rem}}
+  @media(max-width:380px){.trust-strip.trust-interactive{grid-template-columns:minmax(0,1fr)}.trust-interactive .trust-item+.trust-item{border-inline-start:0;border-top:1px solid rgba(244,215,146,.12)}}
+</style>
 </head>
 <body>
   <header class="site-header">
@@ -82,11 +96,23 @@
         </figure>
       </div>
     </section>
-    <section class="trust-strip" aria-label="Skysbridge values">
-      <span>La familia decide qué compartir</span>
-      <span>Revisión personal</span>
-      <span>Sin publicidad en torno al duelo</span>
-      <span>Recuerdos con dignidad</span>
+    <section class="trust-strip trust-interactive" aria-label="Valores de Skysbridge">
+      <details class="trust-item" name="skysbridge-values">
+        <summary>La familia decide qué compartir</summary>
+        <p>Las familias deciden qué recuerdos desean compartir. El nombre del hijo aparece en el cielo de estrellas; las historias privadas y otros datos siguen siendo privados. Las familias pueden solicitar la publicación y cambiar la visibilidad desde su cuenta.</p>
+      </details>
+      <details class="trust-item" name="skysbridge-values">
+        <summary>Revisión personal</summary>
+        <p>Los recuerdos públicos y las fotos enviadas son revisados por una persona antes de su aprobación. Tras la revisión, las fotos solo son visibles para los miembros que han iniciado sesión.</p>
+      </details>
+      <details class="trust-item" name="skysbridge-values">
+        <summary>Sin publicidad en torno al duelo</summary>
+        <p>Sky’s Bridge es un lugar para recordar, no para la publicidad. El duelo y los recuerdos personales nunca deberían utilizarse como una oportunidad para vender productos o servicios.</p>
+      </details>
+      <details class="trust-item" name="skysbridge-values">
+        <summary>Recuerdos con dignidad</summary>
+        <p>Cada hijo y cada familia merecen respeto. No hay una forma correcta o incorrecta de vivir el duelo. Cada recuerdo se trata con cuidado, compasión y dignidad.</p>
+      </details>
     </section>
     <section class="section stars-section" id="stars">
       <div class="wall-first-intro">
