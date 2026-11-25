@@ -57,13 +57,25 @@ jobs:
             grep -q 'native-app-typography.css' "$bundled"
             grep -q "classList.add('skysbridge-native')" "$bundled"
           done < <(find www -type f -name '*.html' -print0)
+      - name: Verify Android Christmas assets are bundled
+        run: |
+          bundle=android/app/src/main/assets/public
+          test -s "$bundle/christmas.html"
+          test -s "$bundle/js/christmas-special.js"
+          test -s "$bundle/assets/christmas-sleigh-bells-rhythm.mp3"
+          grep -q 'platform !== "android"' "$bundle/js/christmas-special.js"
+          node --check "$bundle/js/christmas-special.js"
+          node --check "$bundle/js/sky-3d.js"
+          for page in index.html index-de.html index-es.html christmas.html; do
+            grep -q 'js/christmas-special.js' "$bundle/$page"
+          done
       - name: Isolate pull-request preview from the installed app
         if: github.event_name == 'pull_request'
         run: |
           sed -i 's/applicationId "org.skysbridge.app"/applicationId "org.skysbridge.app.lovepreview"/' android/app/build.gradle
           sed -i 's/<string name="app_name">Skysbridge<\/string>/<string name="app_name">Skysbridge Preview<\/string>/' android/app/src/main/res/values/strings.xml
-      - run: sed -i 's/versionCode 1/versionCode 117/' android/app/build.gradle
-      - run: sed -i 's/versionName ".*"/versionName "1.0.35"/' android/app/build.gradle
+      - run: sed -i 's/versionCode 1/versionCode 118/' android/app/build.gradle
+      - run: sed -i 's/versionName ".*"/versionName "1.0.36"/' android/app/build.gradle
       - run: ./gradlew --no-daemon assembleDebug
         working-directory: android
       - uses: actions/upload-artifact@v4
@@ -130,9 +142,9 @@ jobs:
         run: mv app-debug.apk skysbridge-android.apk
       - uses: softprops/action-gh-release@v3
         with:
-          tag_name: android-v117
-          name: Skysbridge Android v1.0.35
-          body: Skysbridge Android app v1.0.35, build 117. Install on Android to try it.
+          tag_name: android-v118
+          name: Skysbridge Android v1.0.36
+          body: Skysbridge Android app v1.0.36, build 118. Install on Android to try it.
           files: skysbridge-android.apk
           make_latest: true
           overwrite_files: true
