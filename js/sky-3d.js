@@ -27,6 +27,9 @@
   let motionX = 0;
   let motionY = 0;
   let comet = null;
+  let memorialBounds = [];
+  let boundsCheckedAt = -Infinity;
+  const planetOffsets = new Map();
   const capacitor = window.Capacitor;
   const isAndroidApk = Boolean(
     capacitor?.isNativePlatform?.() && capacitor?.getPlatform?.() === "android"
@@ -134,6 +137,8 @@
     canvas.width = Math.round(width * ratio);
     canvas.height = Math.round(height * ratio);
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    boundsCheckedAt = -Infinity;
+    planetOffsets.clear();
     draw(0);
   }
 
@@ -148,10 +153,76 @@
     };
   }
 
-  function drawStar(star, time) {
+  // Memorial positions are authoritative; decorative planets move instead.
+  // Measure symbols and labels in screen space, including the active hover size.
+  function readMemorialBounds() {
+    const now = performance.now();
+    if (!reducedMotion && now - boundsCheckedAt < 120) return;
+    boundsCheckedAt = now;
+    const frame = wall.getBoundingClientRect();
+    memorialBounds = [...wall.querySelectorAll(".memorial-card")].flatMap(card => {
+      const elements = [card, card.querySelector(".memorial-symbol"), card.querySelector("strong")].filter(Boolean);
+      return elements.map(el => {
+        const r = el.getBoundingClientRect();
+        return { left: r.left - frame.left, right: r.right - frame.left,
+          top: r.top - frame.top, bottom: r.bottom - frame.top };
+      }).filter(r => r.right > r.left && r.bottom > r.top);
+    });
+  }
+
+  function planetGeometry(object, time) {
+    const expandedWebsite = wall.classList.contains("is-fullscreen") && !isNativeApp;
+    const spacing = expandedWebsite ? 1.14 : 1;
+    const point = project(object.x * spacing, object.y * spacing, object.z, time);
+    const radius = object.radius
+      * Math.max(.78, Math.min(1.3, point.scale / (Math.min(width, height) * .72)))
+      * (expandedWebsite ? 1.28 : 1);
+    return { point, radius, clearance: radius * (object.ringed ? 2.05 : 1) };
+  }
+
+  function placePlanets(time) {
+    readMemorialBounds();
+    const placed = [];
+    for (const object of objects) {
+      const { point, radius, clearance } = planetGeometry(object, time);
+      const margin = clearance + 12;
+      if (width < margin * 2 || height < margin * 2) continue;
+      const anchor = { x: clamp(point.x, margin, width - margin), y: clamp(point.y, margin, height - margin) };
+      const fits = p => {
+        if (p.x < margin || p.x > width - margin || p.y < margin || p.y > height - margin) return false;
+        if (memorialBounds.some(r => {
+          const dx = p.x - clamp(p.x, r.left, r.right);
+          const dy = p.y - clamp(p.y, r.top, r.bottom);
+          return Math.hypot(dx, dy) < clearance + 18;
+        })) return false;
+        return placed.every(other => Math.hypot(p.x - other.point.x, p.y - other.point.y) >= clearance + other.clearance + 15);
+      };
+      const previous = planetOffsets.get(object.name);
+      let chosen = previous ? { x: anchor.x + previous.x, y: anchor.y + previous.y } : anchor;
+      if (!fits(chosen)) {
+        chosen = fits(anchor) ? anchor : null;
+        for (let distance = 24; !chosen && distance <= Math.hypot(width, height); distance += 24) {
+          for (let i = 0; i < 24; i++) {
+            const angle = i * Math.PI / 12;
+            const candidate = { x: clamp(anchor.x + Math.cos(angle) * distance, margin, width - margin),
+              y: clamp(anchor.y + Math.sin(angle) * distance, margin, height - margin) };
+            if (fits(candidate)) { chosen = candidate; break; }
+          }
+        }
+      }
+      // On extremely crowded maps, omit a decorative planet rather than cover a memorial.
+      if (!chosen) continue;
+      planetOffsets.set(object.name, { x: chosen.x - anchor.x, y: chosen.y - anchor.y });
+      placed.push({ object, point: chosen, radius, clearance });
+    }
+    return placed;
+  }
+
+  function drawStar(star, time, planets) {
     const point = project(star.x, star.y, star.z, time);
     if (point.x < -3 || point.x > width + 3 || point.y < -3 || point.y > height + 3) return;
     const radius = Math.max(.35, star.size * (1.42 / (star.z + .42)));
+    if (planets.some(planet => Math.hypot(point.x - planet.point.x, point.y - planet.point.y) < planet.clearance + radius + 5)) return;
     const shimmer = reducedMotion ? 1 : .72 + .28 * Math.sin(time * .001 + star.x * 16 + star.y * 9);
     context.globalAlpha = star.alpha * shimmer;
     context.fillStyle = star.tint;
@@ -160,13 +231,7 @@
     context.fill();
   }
 
-  function drawObject(object, time) {
-    const expandedWebsite = wall.classList.contains("is-fullscreen") && !isNativeApp;
-    const spacing = expandedWebsite ? 1.14 : 1;
-    const point = project(object.x * spacing, object.y * spacing, object.z, time);
-    const radius = object.radius
-      * Math.max(.78, Math.min(1.3, point.scale / (Math.min(width, height) * .72)))
-      * (expandedWebsite ? 1.28 : 1);
+  function drawObject({ object, point, radius }) {
     const ringRx = radius * 1.92;
     const ringRy = radius * .66;
     if (object.ringed) {
@@ -372,8 +437,9 @@
   function draw(time) {
     context.clearRect(0, 0, width, height);
     const orderedStars = stars.slice().sort((a, b) => b.z - a.z);
-    orderedStars.forEach(star => drawStar(star, time));
-    if (layerSettings.planets) objects.forEach(object => drawObject(object, time));
+    const planets = layerSettings.planets ? placePlanets(time) : [];
+    planets.forEach(drawObject);
+    orderedStars.forEach(star => drawStar(star, time, planets));
     if (layerSettings.comets) drawComet(time);
     context.globalAlpha = 1;
   }
@@ -456,6 +522,19 @@
   document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
   window.addEventListener("resize", resize, { passive: true });
   if ("ResizeObserver" in window) new ResizeObserver(resize).observe(wall);
+  // Dynamic memorial loading and relayout also need a redraw in reduced-motion mode.
+  if ("MutationObserver" in window) {
+    let pending = false;
+    new MutationObserver(records => {
+      if (!records.some(record => record.type === "childList" ||
+          record.target.matches?.(".memorial-card"))) return;
+      boundsCheckedAt = -Infinity;
+      if (reducedMotion && !pending) {
+        pending = true;
+        requestAnimationFrame(() => { pending = false; draw(0); });
+      }
+    }).observe(wall, { childList: true, subtree: true, attributes: true, attributeFilter: ["style", "class"] });
+  }
   resize();
   applyLayerSettings();
   start();
