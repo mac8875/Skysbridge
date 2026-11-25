@@ -1,10 +1,14 @@
-/* Seasonal web-only addition; no memorial or account data accessed. */
+/* Seasonal website and Android addition; no memorial or account data accessed. */
 (() => {
   "use strict";
   const cap = window.Capacitor;
-  if (cap?.isNativePlatform?.() || ["android","ios"].includes(cap?.getPlatform?.()) ||
-      ["capacitor:","ionic:","file:"].includes(location.protocol) ||
-      ["localhost","127.0.0.1"].includes(location.hostname) || /\bCapacitor\b/i.test(navigator.userAgent)) return;
+  const platform = cap?.getPlatform?.();
+  const native = Boolean(cap?.isNativePlatform?.() || ["android","ios"].includes(platform) ||
+    ["capacitor:","ionic:","file:"].includes(location.protocol) ||
+    ["localhost","127.0.0.1"].includes(location.hostname) || /\bCapacitor\b/i.test(navigator.userAgent));
+  // Enable the bundled Christmas experience on Android as well as the website.
+  // Keep other native platforms unchanged.
+  if (native && platform !== "android" && (platform === "ios" || !/\bAndroid\b/i.test(navigator.userAgent))) return;
   const artwork = `<svg viewBox="0 0 244 96" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
 <defs>
   <linearGradient id="sbGold" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#fff4cf"/><stop offset=".42" stop-color="#eac78b"/><stop offset="1" stop-color="#a66f35"/></linearGradient>
