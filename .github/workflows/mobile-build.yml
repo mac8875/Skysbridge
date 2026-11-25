@@ -18,7 +18,11 @@ concurrency:
 
 jobs:
   android:
-    name: Android debug APK
+    name: Android debug APK (${{ matrix.edition }})
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [christmas, classic]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +46,20 @@ jobs:
           fi
       - run: npm ci
       - run: npm run build:mobile
+      - name: Remove seasonal experience from Classic bundle
+        if: matrix.edition == 'classic'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          for page in Path('www').rglob('*.html'):
+              html = page.read_text(encoding='utf-8')
+              html = re.sub(r'<script\b[^>]*src=["\'][^"\']*christmas-special\.js[^"\']*["\'][^>]*>\s*</script>', '', html, flags=re.I)
+              page.write_text(html, encoding='utf-8')
+          Path('www/christmas.html').unlink(missing_ok=True)
+          Path('www/js/christmas-special.js').unlink(missing_ok=True)
+          Path('www/assets/christmas-sleigh-bells-rhythm.mp3').unlink(missing_ok=True)
+          PY
       - run: npx cap add android
       - run: node scripts/patch-android-intro-fullscreen.mjs
       - run: npx @capacitor/assets generate --android
@@ -58,6 +76,7 @@ jobs:
             grep -q "classList.add('skysbridge-native')" "$bundled"
           done < <(find www -type f -name '*.html' -print0)
       - name: Verify Android Christmas assets are bundled
+        if: matrix.edition == 'christmas'
         run: |
           bundle=android/app/src/main/assets/public
           test -s "$bundle/christmas.html"
@@ -69,18 +88,32 @@ jobs:
           for page in index.html index-de.html index-es.html christmas.html; do
             grep -q 'js/christmas-special.js' "$bundle/$page"
           done
+      - name: Verify Classic and shared homepage content
+        run: |
+          bundle=android/app/src/main/assets/public
+          for page in index.html index-de.html index-es.html; do
+            test "$(grep -c 'class="trust-icon"' "$bundle/$page")" -eq 4
+            grep -q 'homepage-trust-styles' "$bundle/$page"
+            if [ "${{ matrix.edition }}" = classic ]; then
+              ! grep -q 'christmas-special.js' "$bundle/$page" || exit 1
+            fi
+          done
+          if [ "${{ matrix.edition }}" = classic ]; then
+            test ! -e "$bundle/christmas.html"
+            test ! -e "$bundle/js/christmas-special.js"
+          fi
       - name: Isolate pull-request preview from the installed app
         if: github.event_name == 'pull_request'
         run: |
           sed -i 's/applicationId "org.skysbridge.app"/applicationId "org.skysbridge.app.lovepreview"/' android/app/build.gradle
           sed -i 's/<string name="app_name">Skysbridge<\/string>/<string name="app_name">Skysbridge Preview<\/string>/' android/app/src/main/res/values/strings.xml
-      - run: sed -i 's/versionCode 1/versionCode 118/' android/app/build.gradle
-      - run: sed -i 's/versionName ".*"/versionName "1.0.36"/' android/app/build.gradle
+      - run: sed -i 's/versionCode 1/versionCode 119/' android/app/build.gradle
+      - run: sed -i 's/versionName ".*"/versionName "1.0.37"/' android/app/build.gradle
       - run: ./gradlew --no-daemon assembleDebug
         working-directory: android
       - uses: actions/upload-artifact@v4
         with:
-          name: skysbridge-android-debug
+          name: skysbridge-android-${{ matrix.edition }}
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
@@ -137,15 +170,26 @@ jobs:
           ref: main
       - uses: actions/download-artifact@v4
         with:
-          name: skysbridge-android-debug
-      - name: Prepare public APK filename
-        run: mv app-debug.apk skysbridge-android.apk
+          name: skysbridge-android-christmas
+          path: christmas-apk
+      - uses: actions/download-artifact@v4
+        with:
+          name: skysbridge-android-classic
+          path: classic-apk
+      - name: Prepare public APK filenames
+        run: |
+          cp christmas-apk/app-debug.apk skysbridge-android.apk
+          cp christmas-apk/app-debug.apk skysbridge-android-christmas.apk
+          cp classic-apk/app-debug.apk skysbridge-android-classic.apk
       - uses: softprops/action-gh-release@v3
         with:
-          tag_name: android-v118
-          name: Skysbridge Android v1.0.36
-          body: Skysbridge Android app v1.0.36, build 118. Install on Android to try it.
-          files: skysbridge-android.apk
+          tag_name: android-v119
+          name: Skysbridge Android v1.0.37
+          body: Skysbridge Android v1.0.37 (build 119), Christmas and Classic editions. Both use the same app ID; choose one to install. The standard download is the Christmas edition.
+          files: |
+            skysbridge-android.apk
+            skysbridge-android-christmas.apk
+            skysbridge-android-classic.apk
           make_latest: true
           overwrite_files: true
           fail_on_unmatched_files: true
